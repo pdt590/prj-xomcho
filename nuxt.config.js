@@ -27,12 +27,14 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    'iview/dist/styles/iview.css'
   ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
+    { src: '~/plugins/iview.js', ssr: true }
   ],
 
   /*
@@ -45,6 +47,9 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    vendor: [
+      'iview'
+    ],
     /*
     ** You can extend webpack config here
     */
