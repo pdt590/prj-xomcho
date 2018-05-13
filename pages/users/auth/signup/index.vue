@@ -1,5 +1,5 @@
 <template>
   <div>
-   Main Page
+    Sign Up Page
   </div>
 </template>
