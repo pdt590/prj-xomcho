@@ -8,12 +8,8 @@
           </div>
           <div class="layout-nav">
             <MenuItem name="1">
-              <Icon type="ios-navigate"></Icon>
-              <nuxt-link to="/users/auth/signup">Đăng Ký</nuxt-link>
-            </MenuItem>
-            <MenuItem name="2">
               <Icon type="log-in"></Icon>
-              <nuxt-link to="/users/auth/signin">Đăng Nhập</nuxt-link>
+              <nuxt-link to="/users/auth">Đăng Ký / Đăng Nhập</nuxt-link>
             </MenuItem>
           </div>
         </Menu>
@@ -47,15 +43,15 @@
     left: 20px;
   }
   .layout-menu {
-    background: #f5f7f9
+    background: #f5f7f9;
   }
   .layout-nav {
-    width: 420px;
+    width: 220px;
     margin: 0 auto;
-    margin-right: 20px;
+    margin-right: 10px;
   }
   .layout-header {
-    position: fixed; 
+    position: fixed;
     width: 100%;
     background: #f5f7f9
   }
