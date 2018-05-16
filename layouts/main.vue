@@ -8,6 +8,14 @@
           </div>
           <div class="layout-nav">
             <MenuItem name="1">
+              <Icon type="log-in"></Icon>
+              <nuxt-link to="/shops/new-shop">Tạo Cửa Hàng</nuxt-link>
+            </MenuItem>
+            <MenuItem name="2">
+              <Icon type="log-in"></Icon>
+              <nuxt-link to="/items">Mua Sản Phẩm</nuxt-link>
+            </MenuItem>
+            <MenuItem name="3">
               <Button @click="modalSignin = true">Đăng Nhập</Button>
             </MenuItem>
           </div>
@@ -20,7 +28,6 @@
         This is Footer
       </Footer>
     </Layout>
-
     <Modal
       title="Đăng nhập"
       v-model="modalSignin"
@@ -103,7 +110,7 @@ export default {
     background: #f5f7f9;
   }
   .layout-nav {
-    width: 220px;
+    width: 470px;
     margin: 0 auto;
     margin-right: 10px;
   }
