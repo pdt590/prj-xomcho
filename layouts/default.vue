@@ -37,7 +37,7 @@
             <Input type="password" v-model="formAuth.password" placeholder="Password">
               <Icon type="ios-locked-outline" slot="prepend"></Icon>
             </Input>
-          </FormItem>  
+          </FormItem>
         </Form>
       </div>
       <div slot="footer">
@@ -49,7 +49,7 @@
 
 <script>
 export default {
-  data () { 
+  data () {
     return {
       modalSignin: false,
       formAuth: {

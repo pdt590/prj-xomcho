@@ -127,4 +127,7 @@ export default {
   .layout-footer {
      text-align: center;
   }
+  .layout-nav a.nuxt-link-active {
+    color: red;
+  }
 </style>
