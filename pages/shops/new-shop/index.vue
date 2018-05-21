@@ -14,13 +14,9 @@ export default {
   },
   methods: {
     onSubmitted(shopData) {
-      axios
-      .post('https://nuxt-blog-12734.firebaseio.com/shops.json', {
-        ...shopData, 
-        updatedDate: new Date()
+      this.$store.dispatch("addShop", shopData).then(() => {
+
       })
-      .then(result => console.log(result))
-      .catch(e => console.log(e))
     }
   }
 }

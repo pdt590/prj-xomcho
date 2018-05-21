@@ -1,17 +1,17 @@
 <template>
   <div>
-    <Form ref="formNewShop" :model="formNewShop" :rules="ruleNewShop" :label-width="130">
+    <Form ref="formNewShop" :model="editedShop" :rules="ruleNewShop" :label-width="130">
       <FormItem label="Tên cửa hàng" prop="title">
-        <Input v-model="formNewShop.title" placeholder="Đặt tên cửa hàng"></Input>
+        <Input v-model="editedShop.title" placeholder="Đặt tên cửa hàng"></Input>
       </FormItem>
       <FormItem label="Miêu tả" prop="desc">
-        <Input v-model="formNewShop.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..."></Input>
+        <Input v-model="editedShop.desc" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..."></Input>
       </FormItem>
       <FormItem label="Url" prop="thumbnail">
-        <Input v-model="formNewShop.thumbnail" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..."></Input>
+        <Input v-model="editedShop.thumbnail" type="textarea" :autosize="{minRows: 2,maxRows: 5}" placeholder="Enter something..."></Input>
       </FormItem>
       <FormItem label="Loại cửa hàng" prop="type">
-        <Select v-model="formNewShop.type" placeholder="Lựa chọn loại cửa hàng">
+        <Select v-model="editedShop.type" placeholder="Lựa chọn loại cửa hàng">
             <Option value="1">Mỹ Phẩm/Thời Trang</Option>
             <Option value="2">Sản Phẩm Nông Nghiệp</Option>
             <Option value="3">Đồ Điện Tử</Option>
@@ -19,7 +19,7 @@
         </Select>
       </FormItem>
       <FormItem label="Tên cửa hàng" prop="title">
-        <Input v-model="formNewShop.author" placeholder="Người tạo"></Input>
+        <Input v-model="editedShop.author" placeholder="Người tạo"></Input>
       </FormItem>
       <FormItem>
         <Button type="primary" @click="onSubmit('formNewShop')">Submit</Button>
@@ -39,7 +39,7 @@ export default {
   },
   data () {
     return {
-      formNewShop: this.shop
+      editedShop: this.shop
       ? {...this.shop}
       : {
         title: '',
@@ -68,7 +68,7 @@ export default {
     onSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$emit('submit', this.formNewShop);
+          this.$emit('submit', this.editedShop);
           this.$Message.success('Success!');
         } else {
           this.$Message.error('Fail!');
