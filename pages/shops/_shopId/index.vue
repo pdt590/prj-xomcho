@@ -1,24 +1,35 @@
 <template>
   <div>
-    <ShopForm :shop="loadedShop"/>
-  </div>
+    <div>
+      {{$route.params.shopId}}
+    </div>
+    <div>
+      Tên: {{loadedShop.title}}
+    </div>
+    <div>
+      Miêu tả: {{loadedShop.desc}}
+    </div>
+    <div>
+      Ngày tạo: {{loadedShop.updatedDate}}
+    </div>
+  </div> 
 </template>
 
 <script>
-import ShopForm from "~/components/Shops/ShopForm";
+import axios from 'axios'
 
 export default {
-  components: {
-    ShopForm
-  },
-  data () {
-    return {
-      loadedShop: {
-        desc: 'Bán rau',
-        type: '3',
-        thumbnail: 'http://images.mentalfloss.com/sites/default/files/styles/mf_image_16x9/public/502435-iStock-157773518.jpg'
-      }
-    }
+  asyncData(context) {
+    return axios.get('https://nuxt-blog-12734.firebaseio.com/shops/' + context.params.shopId + '.json')
+      .then(res => {
+        console.log(res.data)
+        return {
+          loadedShop: res.data
+        }
+      })
+      .catch(e => context.error(e))
   }
 }
 </script>
+
+<!-- Editing shop should be here as a modal form and re-use ShopForm component -->

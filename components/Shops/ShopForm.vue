@@ -18,8 +18,11 @@
             <Option value="4">Khác</Option>
         </Select>
       </FormItem>
+      <FormItem label="Tên cửa hàng" prop="title">
+        <Input v-model="formNewShop.author" placeholder="Người tạo"></Input>
+      </FormItem>
       <FormItem>
-        <Button type="primary" @click.prevent="onSubmit('formNewShop')">Submit</Button>
+        <Button type="primary" @click="onSubmit('formNewShop')">Submit</Button>
         <Button type="ghost" @click="onReset('formNewShop')" style="margin-left: 8px">Reset</Button>
       </FormItem>
     </Form>
@@ -42,7 +45,9 @@ export default {
         title: '',
         desc: '',
         type: '',
-        thumbnail: ''
+        thumbnail: '',
+        updatedDate:'',
+        author: ''
       },
       ruleNewShop: {
         title: [
@@ -63,6 +68,7 @@ export default {
     onSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
+          this.$emit('submit', this.formNewShop);
           this.$Message.success('Success!');
         } else {
           this.$Message.error('Fail!');
