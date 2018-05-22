@@ -22,12 +22,12 @@ const createStore = () => {
     },
     actions: {
       nuxtServerInit(vuexContext, context) {
-        return axios.get('https://nuxt-blog-12734.firebaseio.com/shops.json')
+        return axios
+          .get(process.env.baseUrl + '/shops.json')
           .then( res => {
             const shopsArray = []
             for (const key in res.data) {
               shopsArray.push({...res.data[key], id: key})
-              console.log(key)
             }
             vuexContext.commit('setShops', shopsArray)
           })
@@ -42,7 +42,7 @@ const createStore = () => {
           updatedDate: new Date()
         }
         return axios
-          .post('https://nuxt-blog-12734.firebaseio.com/shops.json', createdShop)
+          .post(process.env.baseUrl + '/shops.json', createdShop)
           .then( res => {
             vuexContext.commit('addShop', {...createdShop, id: res.data.name} )
           })
@@ -50,7 +50,7 @@ const createStore = () => {
       },
       editShop(vuexContext, editedShop){
         return axios
-          .put('https://nuxt-blog-12734.firebaseio.com/shops/' + editedShop.id + '.json', editedShop)
+          .put(process.env.baseUrl + '/shops/' + editedShop.id + '.json', editedShop)
           .then(res => {
             vuexContext.commit('editShop', editedShop)
           })

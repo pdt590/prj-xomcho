@@ -10,7 +10,7 @@
       Miêu tả: {{loadedShop.desc}}
     </div>
     <div>
-      Ngày tạo: {{loadedShop.updatedDate}}
+      Ngày tạo: {{loadedShop.updatedDate | date}}
     </div>
     <div>
       <ShopForm :shop="loadedShop" @submit="onEdited"/>
@@ -20,14 +20,10 @@
 
 <script>
 import axios from 'axios'
-import ShopForm from '~/components/Shops/ShopForm'
 
 export default {
-  components: {
-    ShopForm
-  },
   asyncData(context) {
-    return axios.get('https://nuxt-blog-12734.firebaseio.com/shops/' + context.params.shopId + '.json')
+    return axios.get( process.env.baseUrl + '/shops/' + context.params.shopId + '.json')
       .then(res => {
         return {
           loadedShop: {...res.data, id: context.params.shopId}

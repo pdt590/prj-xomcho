@@ -14,12 +14,8 @@
 </template>
 
 <script>
-import ShopPreview from "~/components/Shops/ShopPreview";
 
 export default {
-  components: {
-    ShopPreview
-  },
   props: {
     isAdmin: {
       type: Boolean,

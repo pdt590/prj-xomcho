@@ -5,12 +5,8 @@
 </template>
 
 <script>
-import ShopList from "~/components/Shops/ShopList"
 
 export default {
-  components: {
-    ShopList
-  },
   computed: {
     loadedShops() {
       return this.$store.getters.loadedShops

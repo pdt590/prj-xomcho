@@ -22,7 +22,7 @@ module.exports = {
   /*
   ** Customize the progress-bar color
   */
-  loading: { color: '#FFFFFF' },
+  loading: { color: '#000000', height: '4px', duration: 5000 },
 
   /*
   ** Global CSS
@@ -35,7 +35,9 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~/plugins/iview.js', ssr: true }
+    { src: '~plugins/iview.js', ssr: true },
+    { src: '~plugins/core-components.js'},
+    { src: '~plugins/date-filter.js'}
   ],
 
   /*
@@ -44,18 +46,26 @@ module.exports = {
   modules: [
   ],
 
+   /*
+  ** Global env setting
+  */
+  env: {
+    baseUrl: process.env.BASE_URL || "https://nuxt-blog-12734.firebaseio.com"
+  },
+
   /*
   ** Build configuration
   */
   build: {
     vendor: [
-      'iview'
+      'iview',
+      'axios'
     ],
     /*
     ** You can extend webpack config here
     */
     extend(config, ctx) {
-      
+
     }
   }
 }
