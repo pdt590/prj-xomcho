@@ -18,7 +18,7 @@
             <Option value="4">Khác</Option>
         </Select>
       </FormItem>
-      <FormItem label="Tên cửa hàng" prop="title">
+      <FormItem label="Người tạo" prop="author">
         <Input v-model="editedShop.author" placeholder="Người tạo"></Input>
       </FormItem>
       <FormItem>
@@ -60,6 +60,10 @@ export default {
         ],
         type: [
           { required: true, message: 'Vui lòng chọn loại cửa hàng', trigger: 'blur' }
+        ],
+        author: [
+          { required: true, message: 'Vui lòng điền tên người tạo', trigger: 'blur' },
+          { type: 'string', trigger: 'blur' }
         ]
       }
     }

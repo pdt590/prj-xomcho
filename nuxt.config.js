@@ -44,7 +44,12 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/axios'
   ],
+  axios: {
+    baseURL: process.env.BASE_URL || "https://nuxt-blog-12734.firebaseio.com",
+    credentials: false
+  },
 
    /*
   ** Global env setting
@@ -59,7 +64,7 @@ module.exports = {
   build: {
     vendor: [
       'iview',
-      'axios'
+      //'axios'
     ],
     /*
     ** You can extend webpack config here

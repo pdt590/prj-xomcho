@@ -19,14 +19,14 @@
 </template>
 
 <script>
-import axios from 'axios'
 
 export default {
   asyncData(context) {
-    return axios.get( process.env.baseUrl + '/shops/' + context.params.shopId + '.json')
-      .then(res => {
+    return context.app.$axios
+      .$get('/shops/' + context.params.shopId + '.json')
+      .then(data => {
         return {
-          loadedShop: {...res.data, id: context.params.shopId}
+          loadedShop: {...data, id: context.params.shopId}
         }
       })
       .catch(e => context.error(e))

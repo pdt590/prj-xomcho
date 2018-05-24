@@ -11,7 +11,7 @@ export default {
   methods: {
     onSubmitted(shopData) {
       this.$store.dispatch("addShop", shopData).then(() => {
-
+        this.$router.push("/shops")
       })
     }
   }
