@@ -48,7 +48,8 @@
         </Form>
       </div>
       <div slot="footer">
-        <Button type="primary" size="large" long @click="onSignin('formAuth')">Đăng nhập</Button>
+        <Button type="primary" size="large" long @click="onSignin('formAuth')" style='margin: 2px'>Đăng nhập</Button>
+        <Button type="primary" size="large" long @click="onSignup('formAuth')" style='margin: 2px'>Đăng kí</Button>    
       </div>
     </Modal>
   </div>
@@ -84,6 +85,16 @@ export default {
         }
       })
     }
+  },
+  onSignup(name) {
+      this.$refs[name].validate((valid) => {
+        if (valid) {
+          this.$axios
+          .$post()
+        } else {
+          this.$Message.error('Lỗi !');
+        }
+      })
   }
 }
 </script>

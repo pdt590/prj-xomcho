@@ -41,7 +41,7 @@ const createStore = () => {
           updatedDate: new Date()
         }
         return this.$axios
-          .$post(process.env.baseUrl + '/shops.json', createdShop)
+          .$post('/shops.json', createdShop)
           .then( data => {
             vuexContext.commit('addShop', {...createdShop, id: data.name} )
           })
@@ -49,7 +49,7 @@ const createStore = () => {
       },
       editShop(vuexContext, editedShop){
         return this.$axios
-          .$put(process.env.baseUrl + '/shops/' + editedShop.id + '.json', editedShop)
+          .$put('/shops/' + editedShop.id + '.json', editedShop)
           .then( data => {
             vuexContext.commit('editShop', editedShop)
           })
