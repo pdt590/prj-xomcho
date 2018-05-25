@@ -16,7 +16,7 @@
               <nuxt-link to="/items">Mua Sản Phẩm</nuxt-link>
             </MenuItem>
             <MenuItem name="3">
-              <Button @click="modalSignin = true">Đăng Nhập</Button>
+              <Button @click="enableModal = true">Tham Gia</Button>
             </MenuItem>
           </div>
         </Menu>
@@ -29,14 +29,14 @@
       </Footer>
     </Layout>
     <Modal
-      title="Đăng nhập"
-      v-model="modalSignin"
+      title="Tham Gia"
+      v-model="enableModal"
       :styles="{top: '120px', width: '500px'}"
     >
       <div>
-        <Form ref="formAuth" :model="formAuth" :rules="ruleAuth" inline>
-          <FormItem prop="user">
-            <Input type="text" v-model="formAuth.user" placeholder="Username">
+        <Form v-if="isLogin" ref="formAuth" :model="formAuth" :rules="ruleAuth" inline>
+          <FormItem prop="email">
+            <Input type="email" v-model="formAuth.email" placeholder="Email">
               <Icon type="ios-person-outline" slot="prepend"></Icon>
             </Input>
           </FormItem>
@@ -46,10 +46,27 @@
             </Input>
           </FormItem>  
         </Form>
+        <Form v-else ref="formAuth" :model="formAuth" :rules="ruleAuth" inline>
+          <FormItem prop="email">
+            <Input type="text" v-model="formAuth.email" placeholder="Email">
+              <Icon type="ios-person-outline" slot="prepend"></Icon>
+            </Input>
+          </FormItem>
+          <FormItem prop="">
+            <Input type="text" placeholder="Username">
+              <Icon type="ios-locked-outline" slot="prepend"></Icon>
+            </Input>
+          </FormItem>  
+          <FormItem prop="password">
+            <Input type="password" v-model="formAuth.password" placeholder="Password">
+              <Icon type="ios-locked-outline" slot="prepend"></Icon>
+            </Input>
+          </FormItem>  
+        </Form>
       </div>
       <div slot="footer">
-        <Button type="primary" size="large" long @click="onSignin('formAuth')" style='margin: 2px'>Đăng nhập</Button>
-        <Button type="primary" size="large" long @click="onSignup('formAuth')" style='margin: 2px'>Đăng kí</Button>    
+        <Button type="primary" size="large" long @click="onSubmit('formAuth')" style='margin: 2px'>{{ isLogin ? 'Đăng nhập' : 'Đăng kí'}}</Button>
+        <Button type="primary" size="large" long @click="isLogin =!isLogin" style='margin: 2px'> Chuyển tới {{ isLogin ? 'Đăng kí' : 'Đăng nhập'}}</Button>    
       </div>
     </Modal>
   </div>
@@ -59,14 +76,15 @@
 export default {
   data () { 
     return {
-      modalSignin: false,
+      enableModal: false,
+      isLogin: false,
       formAuth: {
-        user: '',
+        email: '',
         password: ''
       },
       ruleAuth: {
-        user: [
-          { required: true, message: 'Điền username', trigger: 'blur' }
+        email: [
+          { required: true, message: 'Điền email', trigger: 'blur' }
         ],
         password: [
           { required: true, message: 'Điền mật khẩu', trigger: 'blur' },
@@ -76,7 +94,7 @@ export default {
     }
   },
   methods: {
-    onSignin(name) {
+    onSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.$Message.success('Thành công !');
@@ -85,16 +103,6 @@ export default {
         }
       })
     }
-  },
-  onSignup(name) {
-      this.$refs[name].validate((valid) => {
-        if (valid) {
-          this.$axios
-          .$post()
-        } else {
-          this.$Message.error('Lỗi !');
-        }
-      })
   }
 }
 </script>

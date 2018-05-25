@@ -8,6 +8,7 @@
 import axios from "axios"
 
 export default {
+  layout: 'main',
   methods: {
     onSubmitted(shopData) {
       this.$store.dispatch("addShop", shopData).then(() => {

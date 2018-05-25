@@ -21,6 +21,7 @@
 <script>
 
 export default {
+  layout: 'main',
   asyncData(context) {
     return context.app.$axios
       .$get('/shops/' + context.params.shopId + '.json')
