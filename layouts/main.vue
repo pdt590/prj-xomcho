@@ -18,6 +18,9 @@
             <MenuItem name="3">
               <Button @click="enableModal = true">Tham Gia</Button>
             </MenuItem>
+            <MenuItem name="4">
+              <Button @click="onLogout">Thoát</Button>
+            </MenuItem>
           </div>
         </Menu>
       </Header>
@@ -98,10 +101,23 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.$Message.success('Thành công !');
+          this.$store.dispatch('authenticateUser', {
+            isLogin: this.isLogin,
+            email: this.formAuth.email,
+            password: this.formAuth.password
+          })
+          .then(() => {
+            this.enableModal = false
+            this.$router.push('/shops')
+          })
         } else {
-          this.$Message.error('Lỗi !');
+          this.$Message.error('Lỗi !')
         }
       })
+    },
+    onLogout() {
+      this.$store.dispatch('logOut')
+      this.$router.push('/')
     }
   }
 }

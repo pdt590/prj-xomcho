@@ -22,6 +22,7 @@
 
 export default {
   layout: 'main',
+  middleware: ['check-auth', 'auth'],
   asyncData(context) {
     return context.app.$axios
       .$get('/shops/' + context.params.shopId + '.json')
