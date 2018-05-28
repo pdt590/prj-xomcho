@@ -28,14 +28,13 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    'iview/dist/styles/iview.css'
+    "~assets/styles/main.css"
   ],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~plugins/iview.js', ssr: true },
     { src: '~plugins/core-components.js'},
     { src: '~plugins/date-filter.js'}
   ],
@@ -44,7 +43,10 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    'bootstrap-vue/nuxt',
+    // There is a custom css
+    ['bootstrap-vue/nuxt', { css: false }]
   ],
   axios: {
     baseURL: process.env.BASE_URL || "https://nuxt-blog-12734.firebaseio.com",
@@ -70,10 +72,6 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    vendor: [
-      'iview',
-      //'axios'
-    ],
     /*
     ** You can extend webpack config here
     */
