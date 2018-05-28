@@ -51,13 +51,20 @@ module.exports = {
     credentials: false
   },
 
-   /*
+  /*
   ** Global env setting
   */
   env: {
     baseUrl: process.env.BASE_URL || "https://nuxt-blog-12734.firebaseio.com",
     fbAPIKey: 'AIzaSyC55Vd-gUnnC5VP9wlOzWBgUc61JvVBmCM'
   },
+
+  /*
+  ** Add middleware for all routes
+  */
+  // router: {
+  //   middleware: ['check-auth', 'auth']
+  // },
 
   /*
   ** Build configuration
