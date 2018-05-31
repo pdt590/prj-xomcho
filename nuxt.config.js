@@ -35,9 +35,10 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~plugins/iview.js', ssr: true },
-    { src: '~plugins/core-components.js'},
-    { src: '~plugins/date-filter.js'}
+    { src: '~/plugins/iview.js', ssr: true },
+    { src: '~/plugins/breakpoints.js'},
+    { src: '~/plugins/core-components.js'},
+    { src: '~/plugins/date-filter.js'}
   ],
 
   /*
@@ -70,10 +71,17 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    /*
+    ** Add a module/file inside the vendor bundle
+    */
     vendor: [
-      'iview',
-      //'axios'
+      'js-cookie',
+      '~/plugins/iview.js',
+      '~/plugins/breakpoints.js',
+      '~/plugins/core-components.js',
+      '~/plugins/date-filter.js'
     ],
+
     /*
     ** You can extend webpack config here
     */
