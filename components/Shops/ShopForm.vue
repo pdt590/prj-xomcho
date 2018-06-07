@@ -82,7 +82,6 @@ export default {
     onReset(name) {
       this.$refs[name].resetFields();
     }
-  },
-  layout: 'main'
+  }
 }
 </script>

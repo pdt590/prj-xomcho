@@ -116,7 +116,7 @@ const createStore = () => {
         }
         if(new Date().getTime() > +expirationDate || !token) {
           console.log("No token or invalid token");
-          vuexContext.dispatch("logout");
+          vuexContext.dispatch("logOut");
           return;
         }
         vuexContext.commit("setToken", token)
