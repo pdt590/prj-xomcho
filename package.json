@@ -17,6 +17,8 @@
     "nuxt": "^1.4.0"
   },
   "devDependencies": {
-    "cross-env": "^5.0.1"
+    "cross-env": "^5.0.1",
+    "css-loader": "^0.28.11",
+    "postcss-loader": "^2.1.5"
   }
 }

@@ -1,21 +1,41 @@
 <template>
-  <div style="padding: 32px;">
-    <Button type="success" long size="large" shape="circle" @click="$router.push('/items')">
-      Mua Sản Phẩm
-    </Button>
-    <br><br>
-    <Button type="warning" long size="large" shape="circle" @click="$router.push('/shops')">
-      Khám phá các cửa hàng
-    </Button>
-    <br><br>
-    <Button type="error" long size="large" shape="circle" @click="$router.push('/shops/new-shop')">
-      Tạo cửa hàng online
-    </Button>
-  </div>
+    <section>
+        <b-container fluid class="text-center my-bg-1">
+            <h3>Who Am I?</h3>
+            <img src="https://dummyimage.com/500x600/cc9b3f/040e1a" class="img-fluid" width="350" height="350">
+            <h3>I'm an adventurer</h3>
+        </b-container>
+        <b-container fluid class="text-center my-bg-2">
+            <h3>Who Am I?</h3>
+            <img src="https://dummyimage.com/500x600/cc9b3f/040e1a" class="img-fluid" width="350" height="350">
+            <h3>I'm an adventurer</h3>
+        </b-container>
+        <footer class="py-5 bg-dark">
+            <b-container>
+                <p class="m-0 text-center text-white">Copyright &copy; Your Website 2018</p>
+            </b-container>
+        </footer>
+    </section>
 </template>
 
 <script>
-export default {
-  layout: 'main'
-}
+    export default {
+        layout: 'main',
+        middleware: ['check-auth'],
+    }
 </script>
+
+<style scoped>
+    .my-bg-1 {
+        background-color: white; /* Green */
+        color: dimgrey;
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+    .my-bg-2 {
+        background-color: bisque; /* Dark Blue */
+        color: #ffffff;
+        padding-top: 50px;
+        padding-bottom: 50px;
+    }
+</style>

@@ -1,0 +1,10 @@
+.my-nuxt {
+    padding-top: 100px
+}
+div.modal .modal-dialog {
+    width: 400px;
+    margin-top: 5% !important
+}
+.my-button {
+    width: 150px;
+}

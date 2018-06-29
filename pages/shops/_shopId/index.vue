@@ -1,49 +1,68 @@
 <template>
-  <div>
-    <div>
-      ID: {{loadedShop.id}}
-    </div>
-    <div>
-      Tên: {{loadedShop.title}}
-    </div>
-    <div>
-      Miêu tả: {{loadedShop.desc}}
-    </div>
-    <div>
-      Ngày tạo: {{loadedShop.updatedDate | date}}
-    </div>
-    <div>
-      <ShopForm :shop="loadedShop" @submit="onEdited"/>
-    </div>
-  </div>
+    <section>
+        <b-container>
+            <b-row>
+                <b-col lg="3">
+                    <h1 class="my-4">{{loadedShop.title}}</h1>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item">Category 1</a>
+                        <a href="#" class="list-group-item">Category 2</a>
+                        <a href="#" class="list-group-item">Category 3</a>
+                    </div>
+                </b-col>
+                <b-col lg="9">
+                    <b-card title="Card Title"
+                        img-src="https://picsum.photos/600/300/?image=25"
+                        img-alt="Image"
+                        img-top
+                        tag="article"
+                        class="my-4"
+                    >
+                        <p class="card-text">
+                            Some quick example text to build on the card title and make up the bulk of the card's content.
+                        </p>
+                        <b-button href="#" variant="primary">Go somewhere</b-button>
+                    </b-card>
+                    <b-row>
+                        <b-col lg="4" md="6" class="mb-4">
+                            <b-card title="Card Title"
+                                img-src="https://picsum.photos/600/300/?image=25"
+                                img-alt="Image"
+                                img-top
+                                class="h-100"
+                            >
+                                <p class="card-text">
+                                    Some quick example text to build on the card title and make up the bulk of the card's content.
+                                </p>
+                                <b-button href="#" variant="primary">Go somewhere</b-button>
+                            </b-card>
+                        </b-col>
+                    </b-row>
+                </b-col>
+            </b-row>
+        </b-container>
+    </section>
 </template>
 
 <script>
-
-export default {
-  layout: 'main',
-  middleware: ['check-auth', 'auth'],
-  asyncData(context) {
-    return context.app.$axios
-      .$get('/shops/' + context.params.shopId + '.json')
-      .then(data => {
-        return {
-          loadedShop: {...data, id: context.params.shopId}
+    export default {
+        middleware: ['check-auth', 'auth'],
+        asyncData(context) {
+            return context.app.$axios
+                .$get('/shops/' + context.params.shopId + '.json')
+                .then(data => {
+                    return {
+                        loadedShop: {...data, id: context.params.shopId}
+                    }
+                })
+                .catch(e => context.error(e))
+        },
+        methods: {
+            onEdited(editedShop) {
+                this.$store.dispatch("editShop", editedShop).then(() => {
+                    this.$router.push('/shops/' + this.$route.params.shopId)
+                })
+            }
         }
-      })
-      .catch(e => context.error(e))
-  },
-  methods: {
-    onEdited(editedShop) {
-      this.$store.dispatch("editShop", editedShop).then(() => {
-        this.$router.push('/shops/' + this.$route.params.shopId)
-      })
     }
-  }
-}
 </script>
-
-<!--
-  Editing shop should be here as a modal form and re-use ShopForm component
-  ToDo: Implement Auto refresh to view new change
--->
