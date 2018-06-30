@@ -21,7 +21,7 @@
 <script>
     export default {
         layout: 'main',
-        middleware: ['check-auth'],
+        middleware: ['auth'],
     }
 </script>
 

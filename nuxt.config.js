@@ -36,28 +36,24 @@ module.exports = {
 	** Plugins to load before mounting the App
 	*/
 	plugins: [
-		{ src: '~plugins/date-filter.js'}
+		{ src: '~plugins/date-filter.js'},
+		{ src: '~plugins/firebase.js'},
+		{ src: '~plugins/firebase-auth.js'}
 	],
 
 	/*
 	** Nuxt.js modules
 	*/
 	modules: [
-		'@nuxtjs/axios',
 		// There is a custom css
 		['bootstrap-vue/nuxt', { css: false }]
 	],
-	axios: {
-		baseURL: process.env.BASE_URL || "https://nuxt-blog-12734.firebaseio.com",
-		credentials: false
-	},
 
 	/*
 	** Global env setting
 	*/
 	env: {
-		baseUrl: process.env.BASE_URL || "https://nuxt-blog-12734.firebaseio.com",
-		fbAPIKey: 'AIzaSyC55Vd-gUnnC5VP9wlOzWBgUc61JvVBmCM'
+
 	},
 
 	/*

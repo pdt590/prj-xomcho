@@ -1,155 +1,96 @@
 import Vuex from 'vuex'
-import Cookie from 'js-cookie'
+import firebase from '~/plugins/firebase'
 
 const createStore = () => {
     return new Vuex.Store({
         state: {
-            loadedShops: [],
-            token: null
+            user: null,
+            loading: false,
+            error: null
         },
         mutations: {
-            setShops(state, shops) {
-                state.loadedShops = shops
+            setUser (state, payload) {
+                state.user = payload
             },
-            addShop(state, shop) {
-                state.loadedShops.push(shop)
+            setLoading (state, payload) {
+                state.loading = payload
             },
-            editShop(state, editedShop) {
-                const shopIndex = state.loadedShops.findIndex(
-                    shop => shop.id === editedShop.id
-                );
-                state.loadedShops[shopIndex] = editedShop;
+            setError (state, payload) {
+                state.error = payload
             },
-            setToken(state, token) {
-                state.token = token
-            },
-            clearToken(state) {
-                state.token = null
+            clearError (state) {
+                state.error = null
             }
         },
         actions: {
-            nuxtServerInit(vuexContext, context) {
-                return context.app.$axios
-                    .$get('/shops.json')
-                    .then(data => {
-                        const shopsArray = []
-                        for (const key in data) {
-                            shopsArray.push({ ...data[key],
-                                id: key
-                            });
+            signUserUp (vuexContext, payload) {
+                vuexContext.commit('setLoading', true)
+                vuexContext.commit('clearError')
+                // return the promise of firebase.auth().createUserWithEmailAndPassword.then()
+                return firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+                    .then(
+                        user => {
+                            vuexContext.commit('setLoading', false)
+                            const newUser = {
+                                id: user.uid
+                            }
+                            vuexContext.commit('setUser', newUser)
                         }
-                        vuexContext.commit('setShops', shopsArray);
-                    })
-                    .catch(e => context.error(e));
+                    )
+                    .catch(
+                        error => {
+                            vuexContext.commit('setLoading', false)
+                            vuexContext.commit('setError', error)
+                            console.log('[ERROR]' + error)
+                        }
+                    )
             },
-            setShops(vuexContext, shops) {
-                vuexContext.commit('setShops', shops)
+            signUserIn (vuexContext, payload) {
+                vuexContext.commit('setLoading', true)
+                vuexContext.commit('clearError')
+                return firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+                    .then(
+                        user => {
+                            vuexContext.commit('setLoading', false)
+                            const newUser = {
+                                id: user.uid
+                            }
+                            vuexContext.commit('setUser', newUser)
+                        }
+                    )
+                    .catch(
+                        error => {
+                            vuexContext.commit('setLoading', false)
+                            vuexContext.commit('setError', error)
+                            console.log('[ERROR]' + error)
+                        }
+                    )
             },
-            addShop(vuexContext, shop) {
-                const createdShop = {
-                    ...shop,
-                    updatedDate: new Date()
-                }
-                return this.$axios
-                    .$post('/shops.json?auth=' + vuexContext.state.token, createdShop)
-                    .then(data => {
-                            vuexContext.commit('addShop', { ...createdShop,
-                            id: data.name
-                        });
-                    })
-                    .catch(e => console.log(e));
+            autoSignIn (vuexContext, payload) {
+                vuexContext.commit('setUser', {
+                    id: payload.uid
+                })
             },
-            editShop(vuexContext, editedShop) {
-                return this.$axios
-                    .$put('/shops/' + editedShop.id + '.json?auth=' + vuexContext.state.token, editedShop)
-                    .then(res => {
-                        vuexContext.commit('editShop', editedShop);
-                    })
-                    .catch(e => console.log(e));
+            logOut (vuexContext) {
+                firebase.auth().signOut()
+                vuexContext.commit('setUser', null)
             },
-            authenticateUser(vuexContext, authData) { // Execute when clicking Signin button
-                let authUrl =
-                    "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=" +
-                    process.env.fbAPIKey;
-
-                if (!authData.isLogin) {
-                    authUrl =
-                        "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=" +
-                        process.env.fbAPIKey;
-                }
-
-                return this.$axios
-                    .$post(authUrl, {
-                        username: authData.username,
-                        email: authData.email,
-                        password: authData.password,
-                        returnSecureToken: true
-                    })
-                    .then(res => {
-                        vuexContext.commit('setToken', res.idToken); // Save token in Vuex
-                        localStorage.setItem('token', res.idToken); // Save token in localStorage
-                        localStorage.setItem('tokenExpiration',
-                            new Date().getTime() + Number.parseInt(res.expiresIn) * 1000
-                        );
-                        Cookie.set('jwt', res.idToken); // Save token in Cookie
-                        Cookie.set(
-                            'expirationDate',
-                            new Date().getTime() + Number.parseInt(res.expiresIn) * 1000
-                        );
-                    })
-                    .catch(e => console.log(e))
-            },
-            initAuth(vuexContext, req) {
-                let token;
-                let expirationDate;
-
-                if (req) { // Get token at server-side (Cookie of req)
-                    if (!req.headers.cookie) {
-                        return;
-                    }
-                    const jwtCookie = req.headers.cookie
-                        .split(';')
-                        .find(c => c.trim().startsWith('jwt='));
-                    if (!jwtCookie) {
-                        return;
-                    }
-                    token = jwtCookie.split("=")[1];
-                    expirationDate = req.headers.cookie
-                        .split(';')
-                        .find(c => c.trim().startsWith('expirationDate='))
-                        .split('=')[1];
-                } else { // Get token at client-side (localStorage of browser)
-                    token = localStorage.getItem('token');
-                    expirationDate = localStorage.getItem('tokenExpiration');
-                }
-
-                if (new Date().getTime() > +expirationDate || !token) {
-                    console.log('No token or invalid token');
-                    vuexContext.dispatch('logOut');
-                    return;
-                }
-
-                vuexContext.commit('setToken', token)
-            },
-            logOut(vuexContext) {
-                vuexContext.commit('clearToken');
-                Cookie.remove('jwt');
-                Cookie.remove('expirationDate');
-                if (process.client) {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('tokenExpiration');
-                }
+            clearError (vuexContext) {
+                vuexContext.commit('clearError')
             }
-        },
+        }, 
         getters: {
-            loadedShops(state) {
-                return state.loadedShops;
+            user (state) {
+                return state.user;
             },
-            isAuthenticated(state) {
-                return state.token != null
+            loading (state) {
+                return state.loading
+            },
+            error (state) {
+                return state.error
             }
-        }
+        } 
     })
 }
 
-export default createStore;
+export default createStore

@@ -9,7 +9,10 @@
             </b-navbar-brand>
             <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
             <b-collapse is-nav id="nav_collapse">
-                <b-navbar-nav v-if="isAuth" class="ml-auto">
+                <b-navbar-nav v-if="user" class="ml-auto">
+                    <b-nav-item>
+                        <b-button variant="success" class="my-button" @click="$refs.newShopModal.show()">Tạo cửa hàng</b-button>
+                    </b-nav-item>
                     <b-nav-item-dropdown right>
                         <template slot="button-content">
                             <b-img rounded="circle" fluid src="https://dummyimage.com/40x40/000/0011ff" alt="img"/>
@@ -129,12 +132,11 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
 
     export default {
         computed: {
-            isAuth() {
-                return this.$store.getters.isAuthenticated
-            },
+            ...mapGetters(['user', 'loading']),
             
             // Validate email
             emailState() {
@@ -223,15 +225,14 @@
         methods: {
             onSignin() {
                 if (this.emailState && this.passwordState) {
-                    this.$store.dispatch('authenticateUser', {
-                        isLogin: true,
+                    this.$store.dispatch('signUserIn', {
                         email: this.email,
                         password: this.password
                     })
                     .then(() => {
-                        if (this.isAuth) {
+                        if (this.user) {
                             this.$refs.signinModal.hide()
-                            this.$router.push(this.$route.path) //ToDo: redirect to /users/_id
+                            //this.$router.push(this.$route.path) //ToDo: redirect to /users/_id
                         } else {
                             this.showAlert = true
                         }
@@ -240,15 +241,14 @@
             },
             onSignup() {
                 if ( this.usernameState && this.emailState && this.passwordState) {
-                    this.$store.dispatch('authenticateUser', {
-                        isLogin: false,
+                    this.$store.dispatch('signUserUp', {
                         email: this.email,
                         password: this.password
                     })
                     .then(() => {
-                        if (this.isAuth) {
+                        if (this.user) {
                             this.$refs.signupModal.hide()
-                            this.$router.push(this.$route.path) //ToDo: redirect to /users/_id
+                            //this.$router.push(this.$route.path) //ToDo: redirect to /users/_id
                         } else {
                             this.showAlert = true
                         }
