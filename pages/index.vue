@@ -20,8 +20,7 @@
 
 <script>
     export default {
-        layout: 'main',
-        middleware: ['auth'],
+        layout: 'main'
     }
 </script>
 

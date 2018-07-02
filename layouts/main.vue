@@ -118,7 +118,7 @@
                 :invalid-feedback="invalidDesc"
                 :state="descState"
             >
-                <b-form-input id="shopDesc" type="password" :state="descState" v-model.trim="shopDesc"></b-form-input>
+                <b-form-input id="shopDesc" :state="descState" v-model.trim="shopDesc"></b-form-input>
             </b-form-group>
             <b-btn block @click="onNewShop" variant="success">Tạo cửa hàng</b-btn>
         </b-modal>

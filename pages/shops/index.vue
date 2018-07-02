@@ -27,7 +27,7 @@
 
 <script>
     export default {
-        middleware: ['check-auth', 'auth'],
+        //middleware: ['auth'],
         computed: {
             shopList() {
                 return this.$store.getters.loadedShops
