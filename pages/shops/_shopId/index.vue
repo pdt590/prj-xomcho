@@ -1,119 +1,76 @@
 <template>
     <section>
-        <b-container>
-            <b-row>
-                <b-col lg="3">
-                    <h4 class="my-4"><b>{{shop.title}}</b></h4>
-                    <b-card
-                        no-body
-                        border-variant="success" 
-                        class="my-2"
-                    >
-                        <h5 slot="header" class="mb-0"> <b>Thông tin</b></h5>
-                        <b-list-group flush>
-                            <b-list-group-item>
-                                <h6><b>Chủ cửa hàng</b></h6>
-                                <b-form-input v-model="ownerName" :plaintext= "!enableEdit" ></b-form-input>
-                            </b-list-group-item>
-                            <b-list-group-item>
-                                <h6><b>Điạ chỉ liên hệ</b></h6>
-                                <b-form-textarea v-model="desc" no-resize :rows="2" :max-rows="2" :plaintext= "!enableEdit" ></b-form-textarea>
-                            </b-list-group-item>
-                            <b-list-group-item>
-                                <h6><b>Điện thoại</b></h6>
-                                <b-form-input v-model="phone" :plaintext= "!enableEdit" ></b-form-input>
-                            </b-list-group-item>
-                            <b-list-group-item>
-                                <h6><b>Facebook</b></h6>
-                                <b-form-input v-model="facebook" :plaintext= "!enableEdit" ></b-form-input>
-                            </b-list-group-item>
-                            <b-list-group-item>
-                                <h6><b>Từ khóa</b></h6>
-                                <b-form-input v-model="facebook" :plaintext= "!enableEdit" ></b-form-input>
-                            </b-list-group-item>
-                        </b-list-group>
-                        <b-card-body>
-                            <h6><b>Miêu tả</b></h6>
-                            <b-form-textarea v-model="desc" no-resize :rows="5" :max-rows="5" :plaintext= "!enableEdit" ></b-form-textarea>
-                        </b-card-body>
-                    </b-card>
-                    <b-button @click="onEdit" variant="outline-sucess" block>{{ enableEdit ? "Lưu" : "Sửa thông tin"}}</b-button>
-                    <b-button @click="onNewItem" variant="outline-sucess" block>Thêm sản phẩm</b-button>
-                </b-col>
-                <b-col lg="9">
-                    <b-carousel
-                        style="text-shadow: 1px 1px 2px #333;"
-                        controls
-                        indicators
-                        background="#ababab"
-                        :interval="4000"
-                        img-width="300"
-                        img-height="100"
-                        class="my-4"
-                    >
-                        <!-- Text slides with image -->
-                        <b-carousel-slide caption="First slide"
-                                            text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-                                            img-src="https://picsum.photos/300/100/?image=25"
-                        ></b-carousel-slide>
+        <div class="w3-margin-bottom">
+            <div class="w3-border w3-border-grey w3-padding w3-round w3-white">
+                <h5><strong>Giới thiệu</strong></h5><br>
+                <p>This is my shop</p>
+                <hr>
+                <h6>
+                    <span class="w3-tag w3-yellow w3-margin-right w3-margin-top"
+                        v-for="(type, i) in itemTypes" 
+                        :key="i">
+                        <b>{{ type.title }}</b>
+                    </span>
+                </h6>
+                <hr>
+                <h5><strong>Các mặt hàng hiển thị</strong></h5><br>
+                <form>
+                    <div class="w3-row">
+                        <div class="w3-col l4 m4 s6" 
+                            v-for="(type, i) in itemTypes" 
+                            :key="i">
+                            <p>
+                                <input class="w3-check w3-margin-right" type="checkbox" checked="checked">
+                                <label>
+                                    <img :src="type.icon" class="w3-round w3-margin-right" style="width:10%;">
+                                    {{ type.title }}
+                                </label>
+                            </p>
+                        </div>
+                    </div>
+                </form>
+            </div>      
+        </div>
 
-                        <!-- Slides with custom text -->
-                        <b-carousel-slide img-src="https://picsum.photos/300/100/?image=29">
-                            <h1>Hello world!</h1>
-                        </b-carousel-slide>
-                    </b-carousel>
-                    <b-row>
-                        <b-col lg="4" md="6" class="mb-4">
-                            <b-card title="Card Title"
-                                img-src="https://picsum.photos/600/300/?image=25"
-                                img-alt="Image"
-                                img-top
-                                class="h-100"
-                            >
-                                <p class="card-text">
-                                    Some quick example text to build on the card title and make up the bulk of the card's content.
-                                </p>
-                                <b-button href="#" variant="primary">Go somewhere</b-button>
-                            </b-card>
-                        </b-col>
-                    </b-row>
-                </b-col>
-            </b-row>
-        </b-container>
+        <div class="w3-margin-bottom">
+            <div class="w3-border w3-border-grey w3-padding w3-round w3-white">
+                <!-- Product grid -->
+                <div class="w3-row-padding w3-margin-top">
+                    <div class="w3-col l3 s6 w3-margin-bottom" v-for="i in 15" :key="i">
+                        <div class="w3-border w3-border-grey w3-light-grey">
+                            <div class="w3-display-container">
+                                <img src="https://picsum.photos/1020/600/?image=32" style="width:100%">
+                                <span class="w3-tag w3-display-topleft">New</span>
+                                <div class="w3-display-middle w3-display-hover">
+                                    <nuxt-link to="/items/dsds" class="w3-button w3-black" target="_blank">Chi tiết <i class="fa fa-external-link"></i></nuxt-link>
+                                </div>
+                            </div>
+                            <div class="w3-container w3-padding">
+                                <p>Mega Ripped Jeans<br><b>$19.99</b></p>
+                                <button class="w3-button w3-green w3-right">Lưu <i class=""></i></button>
+                            </div>        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </template>
 
 <script>
     export default {
-        computed : {
-            shop() {
-                return this.$store.getters.loadedShop(this.$route.params.shopId)
-            }
-        },
-        data () {
+        layout: 'shop',
+        data() {
             return {
-                enableEdit: false,
-                ownerName: 'Phan Duy Thang',
-                phone: true,
-                facebook: '@duythang',
-                desc: 'I am Phan Duy Thắng'
-            }
-        },
-        methods: {
-            onEdit(editedShop) {
-                if (this.enableEdit) {
-                    this.enableEdit = !this.enableEdit
-                    this.$store.dispatch("editShop", editedShop).then(
-                        () => {
-                            this.$router.push('/shops/' + this.$route.params.shopId)
-                        }
-                    )
-                }else {
-                    this.enableEdit = !this.enableEdit
-                }   
-            },
-            onNewItem() {
-
+                itemTypes: [
+                    {icon: "/meat.png", title: "Thực phẩm"},
+                    {icon: "/agri.png", title: "Nông sản"},
+                    {icon: "/pot.png", title: "Gia dụng"},
+                    {icon: "/electronic.png", title: "Điện tử"},
+                    {icon: "/medicine.png", title: "Y tế"},
+                    {icon: "/fashion.png", title: "Thời trang"},
+                    {icon: "/others.png", title: "Khác"}
+                ]
             }
         }
     }

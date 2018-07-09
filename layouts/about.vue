@@ -1,6 +1,7 @@
 <template>
     <section>
-
+        About page
+        <nuxt/>
     </section>
 </template>
 

@@ -43,7 +43,7 @@
                         </div>                         
                     </div>
                     <div class="w3-col l3">
-                        <div class="w3-container w3-border w3-border-grey w3-white w3-round w3-hide-medium w3-hide-small">
+                        <div class="w3-border w3-border-grey w3-white w3-round w3-container w3-hide-medium w3-hide-small">
                             <h4><b>Advertisment</b></h4>
                             <hr>
                         </div>                 
@@ -59,10 +59,9 @@
         data() {
             return {
                 navItems: [
-                    {link: "/", icon: "fa fa-globe", title: "Về chúng tôi"},
-                    {link: "/", icon: "fa fa-envelope", title: "Hướng dẫn"} 
-                ],
-                onTab: false
+                    {link: "/", icon: "fa fa-envelope", title: "Hướng dẫn"},
+                    {link: "/", icon: "fa fa-globe", title: "Về chúng tôi"}
+                ]
             }
         },
         methods: {

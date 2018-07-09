@@ -14,7 +14,15 @@
                 </a>
             </div>
             <br><br>
-            <div id="shopList" class=" w3-margin-bottom section">
+            <div id="shopList" class=" w3-margin-bottom section">                                
+                <div class="w3-row">
+                    <nuxt-link to="/shops/new-shop" 
+                        class="w3-button w3-green w3-right w3-quarter">
+                        <i class="fa fa-edit w3-xlarge w3-margin-right"></i> 
+                        Tạo cửa hàng
+                    </nuxt-link>
+                </div>
+                <br>
                 <table class="w3-table w3-bordered">
                     <tr v-for="i in 5" :key="i">
                         <td>
@@ -35,10 +43,6 @@
                         </td>
                     </tr>
                 </table>
-                <br>
-                <div class="w3-row">
-                    <nuxt-link to="/shops/new-shop" class="w3-button w3-green w3-right w3-quarter"><i class="fa fa-edit w3-xlarge w3-margin-right"></i> Tạo cửa hàng</nuxt-link>
-                </div>
             </div>
             <div id="itemList" class=" w3-margin-bottom section" style="display:none">
                 <table class="w3-table w3-bordered">

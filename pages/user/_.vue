@@ -1,11 +1,11 @@
 <template>
     <section>
-        This is about
+        
     </section>
 </template>
 
 <script>
-export default {
-    layout: 'about'
-}
+    export default {
+        layout: 'profile'
+    }
 </script>

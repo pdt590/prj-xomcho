@@ -15,7 +15,8 @@ module.exports = {
 		],
 		link: [
 			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-			{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Montserrat'}
+            { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Nunito'},
+            { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'}
 		]
 	},
 
@@ -28,7 +29,6 @@ module.exports = {
 	** Global CSS
 	*/
 	css: [
-		"~/assets/css/mystyle.css",
     	"~/assets/css/main.css"
 	],
 
@@ -36,6 +36,7 @@ module.exports = {
 	** Plugins to load before mounting the App
 	*/
 	plugins: [
+		{ src: '~plugins/components.js'},
 		{ src: '~plugins/date-filter.js'},
 		{ src: '~plugins/firebase.js'},
 		{ src: '~plugins/firebase-auth.js'}
@@ -45,8 +46,7 @@ module.exports = {
 	** Nuxt.js modules
 	*/
 	modules: [
-		// There is a custom css
-		['bootstrap-vue/nuxt', { css: false }]
+
 	],
 
 	/*

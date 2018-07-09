@@ -11,13 +11,10 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "bootstrap-vue": "^2.0.0-rc.11",
     "firebase": "^5.2.0",
     "nuxt": "^1.4.0"
   },
   "devDependencies": {
-    "cross-env": "^5.0.1",
-    "css-loader": "^0.28.11",
-    "postcss-loader": "^2.1.5"
+    "cross-env": "^5.0.1"
   }
 }
