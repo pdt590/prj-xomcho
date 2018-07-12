@@ -16,7 +16,7 @@
             </div>
 
             <!-- Top menu on small screens -->
-            <header class="w3-bar w3-top w3-hide-large w3-green">
+            <header class="w3-bar w3-top w3-padding w3-hide-large w3-green">
                 <div class="w3-bar-item w3-padding-large">LOGO</div>
                 <a href="javascript:void(0)" class="w3-bar-item w3-padding-large w3-button w3-right" @click="w3_open"><i class="fa fa-bars"></i></a>
                 <nuxt-link
@@ -25,8 +25,6 @@
                     :to="item.link" class="w3-bar-item w3-padding-large w3-button w3-right"> 
                     <i :class="item.icon"></i>
                 </nuxt-link>
-                <a href="#" class="w3-bar-item w3-padding-large w3-button w3-green w3-right"><i class="fa fa-search"></i></a>
-                <input type="text" class="w3-bar-item w3-padding-large w3-input w3-right" style="max-width:20%" placeholder="Tìm ..."> 
             </header>
 
             <!-- Overlay effect when opening sidebar on small screens -->
@@ -43,9 +41,8 @@
                         </div>                         
                     </div>
                     <div class="w3-col l3">
-                        <div class="w3-border w3-border-grey w3-white w3-round w3-container w3-hide-medium w3-hide-small">
-                            <h4><b>Advertisment</b></h4>
-                            <hr>
+                        <div class="w3-border w3-white w3-round w3-container w3-hide-medium w3-hide-small">
+                        <br>
                         </div>                 
                     </div>
                 </div>

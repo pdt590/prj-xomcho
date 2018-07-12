@@ -1,6 +1,6 @@
 <template>
     <section>
-        <div class="w3-border w3-border-grey w3-padding w3-round w3-white w3-margin-bottom">
+        <div class="w3-padding w3-white w3-margin-bottom">
             <form class="w3-container w3-margin-bottom">
                 <h5><strong>Ảnh sản phẩm</strong></h5><br>
                 <input class="w3-input w3-border" type="file" multiple>
@@ -57,13 +57,13 @@
         data() {
             return {
                 itemTypes: [
-                    {icon: "/meat.png", title: "Thực phẩm"},
-                    {icon: "/agri.png", title: "Nông sản"},
-                    {icon: "/pot.png", title: "Gia dụng"},
-                    {icon: "/electronic.png", title: "Điện tử"},
-                    {icon: "/medicine.png", title: "Y tế"},
-                    {icon: "/fashion.png", title: "Thời trang"},
-                    {icon: "/others.png", title: "Khác"}
+                    {icon: "/meat.svg", title: "Thực phẩm"},
+                    {icon: "/agri.svg", title: "Nông sản"},
+                    {icon: "/pot.svg", title: "Gia dụng"},
+                    {icon: "/electronic.svg", title: "Điện tử"},
+                    {icon: "/medicine.svg", title: "Y tế"},
+                    {icon: "/fashion.svg", title: "Thời trang"},
+                    {icon: "/others.svg", title: "Khác"}
                 ]
             }
         }

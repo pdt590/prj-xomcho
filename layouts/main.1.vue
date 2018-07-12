@@ -1,7 +1,7 @@
 <template>
     <section>
         <app-navbar :navItems="navItems"></app-navbar>
-        <div class="w3-padding-48">     
+        <div class="w3-padding-48">
             <!-- Top menu on small screens -->
             <header class="w3-bar w3-top w3-padding w3-hide-large w3-green">
                 <div class="w3-bar-item">LOGO</div>
@@ -27,16 +27,15 @@
                 </form>
             </header>
 
-            <!-- Overlay effect when opening sidebar on small screens -->
-            <div class="w3-overlay w3-hide-large" @click="w3_close" style="cursor:pointer" title="close side menu" ref="myOverlay"></div>
-
             <!-- !PAGE CONTENT! -->
             <div class="w3-main">
                 <nuxt/>
-                <div class="w3-center w3-padding-24">
-                    Powered by 
-                    <a href="https://www.tadicho.net" title="tadicho.net" target="_blank" class="w3-hover-opacity">tadicho.net</a>
-                </div>                         
+                <div class="w3-center w3-padding-64">
+                    <div class="w3-content" style="max-width:1500px">
+                        Powered by 
+                        <a href="https://www.tadicho.net" title="tadicho.net" target="_blank" class="w3-hover-opacity">tadicho.net</a>
+                    </div>  
+                </div>           
             </div>  
         </div>
     </section>
@@ -62,10 +61,10 @@
 </script>
 
 <style>
-    body,h1,h2,h3,h4,h5,p {
+    html,h1,h2,h3,h4,h5,h6,p{
         font-family: "Nunito", sans-serif;
     }
     body {
-        background-color: #f1f1f1;
+        background-color:white;
     }
 </style>

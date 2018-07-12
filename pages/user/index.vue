@@ -1,21 +1,91 @@
 <template>
     <section>
-        <div class="w3-border w3-border-grey w3-padding w3-round w3-white w3-margin-bottom">
+        <div class="w3-padding w3-white w3-margin-bottom">
             <div class="w3-row">
+                <a href="javascript:void(0)" @click="openTab($event, 'ShopList')">
+                    <div class="w3-col l3 m3 tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">
+                        <h5><strong>Cửa hàng</strong></h5>
+                    </div>
+                </a>
+                <a href="javascript:void(0)" @click="openTab($event, 'ItemList')">
+                    <div class="w3-col l3 m3 tablink w3-bottombar w3-hover-light-grey w3-padding">
+                        <h5><strong>Sản phẩm</strong></h5>
+                    </div>
+                </a>
                 <a href="javascript:void(0)" @click="openTab($event, 'Profile')">
-                    <div class="w3-col l6 m6 s6 tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">
+                    <div class="w3-col l2 m2 tablink w3-bottombar w3-hover-light-grey w3-padding">
                         <h5><strong>Thông tin</strong></h5>
                     </div>
                 </a>
                 <a href="javascript:void(0)" @click="openTab($event, 'Image')">
-                    <div class="w3-col l6 m6 s6 tablink w3-bottombar w3-hover-light-grey w3-padding">
+                    <div class="w3-col l2 m2 tablink w3-bottombar w3-hover-light-grey w3-padding">
                         <h5><strong>Ảnh</strong></h5>
+                    </div>
+                </a>
+                <a href="javascript:void(0)" @click="openTab($event, 'Bookmark')">
+                    <div class="w3-col l2 m2 tablink w3-bottombar w3-hover-light-grey w3-padding">
+                        <h5><strong>Lưu</strong></h5>
                     </div>
                 </a>
             </div>
             <hr>
+            
+            <div id="ShopList" class="w3-margin-bottom section">
+                <table class="w3-table w3-bordered">
+                    <tr v-for="i in 5" :key="i">
+                        <td>
+                            <div  class="w3-bar">
+                                <img src="https://picsum.photos/600/600/?image=32" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
+                                <div class="w3-bar-item">
+                                    <span class="w3-large">Mike</span><br>
+                                    <span>Web Designer</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="w3-row">
+                                <div class="w3-col w3-half">
+                                    <button class="w3-button w3-border w3-border-grey w3-right">Xóa</button>
+                                </div>
+                                <div class="w3-col w3-half">
+                                    <nuxt-link to="/"  class="w3-button w3-border w3-border-grey w3-right">Sửa</nuxt-link>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
-            <form id="Profile" class="w3-margin-bottom section">
+            <div id="ItemList" class="w3-margin-bottom section"  style="display:none">
+                <table class="w3-table w3-bordered">
+                    <tr v-for="i in 5" :key="i">
+                        <td>
+                            <div class="w3-bar">
+                                <img src="https://picsum.photos/600/600/?image=54" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
+                                <div class="w3-bar-item">
+                                    <span class="w3-large">Mike</span><br>
+                                    <span>Web Designer</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p>Shop DuyThang</p>
+                        </td>
+                        <td>
+                            <div class="w3-row">
+                                <div class="w3-col w3-half">
+                                    <button class="w3-button w3-border w3-border-grey w3-right">Xóa</button>
+                                </div>
+                                <div class="w3-col w3-half">
+                                    <nuxt-link to="/" class="w3-button w3-border w3-border-grey w3-right">Sửa</nuxt-link>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <form id="Profile" class="w3-margin-bottom section" style="display:none">
                 <h5><strong>Thông tin cá nhân</strong></h5><br>
                 <div class="w3-row-padding" style="margin:0 -16px;">
                     <div class="w3-half w3-margin-bottom">
@@ -61,7 +131,7 @@
                 </div>
             </form>
 
-            <form id="Image" class="w3-margin-bottom section"  style="display:none">
+            <form id="Image" class="w3-margin-bottom section" style="display:none">
                 <h5><strong>Ảnh đại diện</strong></h5><br>
                 <img src="https://picsum.photos/600/600/?image=32" style="width:100px;" class="w3-circle w3-margin-bottom w3-hover-opacity">
                 <input class="w3-input w3-border" type="file" multiple>
@@ -74,6 +144,55 @@
                 </div>
             </form>
 
+            <div id="Bookmark" class="section"  style="display:none">
+                <h5><strong>Cửa hàng</strong></h5>
+                <table class="w3-table w3-bordered w3-margin-bottom">
+                    <tr v-for="i in 5" :key="i">
+                        <td>
+                            <div  class="w3-bar">
+                                <img src="https://picsum.photos/600/600/?image=32" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
+                                <div class="w3-bar-item">
+                                    <span class="w3-large">Mike</span><br>
+                                    <span>Web Designer</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="w3-row">
+                                <div class="w3-col w3-half">
+                                    <button class="w3-button w3-border w3-border-grey w3-right">Hủy</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                
+                <table class="w3-table w3-bordered">
+                    <h5><strong>Sản phẩm</strong></h5>
+                    <tr v-for="i in 5" :key="i">
+                        <td>
+                            <div class="w3-bar">
+                                <img src="https://picsum.photos/600/600/?image=54" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
+                                <div class="w3-bar-item">
+                                    <span class="w3-large">Mike</span><br>
+                                    <span>Web Designer</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <p>Shop DuyThang</p>
+                        </td>
+                        <td>
+                            <div class="w3-row">
+                                <div class="w3-col w3-half">
+                                    <button class="w3-button w3-border w3-border-grey w3-right">Hủy</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
         </div>
     </section>
 </template>
@@ -81,19 +200,6 @@
 <script>
     export default {
         layout: 'profile',
-        data() {
-            return {
-                itemTypes: [
-                    {icon: "/meat.png", title: "Thực phẩm"},
-                    {icon: "/agri.png", title: "Nông sản"},
-                    {icon: "/pot.png", title: "Gia dụng"},
-                    {icon: "/electronic.png", title: "Điện tử"},
-                    {icon: "/medicine.png", title: "Y tế"},
-                    {icon: "/fashion.png", title: "Thời trang"},
-                    {icon: "/others.png", title: "Khác"}
-                ]
-            }
-        },
         methods: {
             openTab(event, arg) {
                 let i, x, tablinks;

@@ -1,6 +1,6 @@
 <template>
     <section>
-        <div class="w3-border w3-border-grey w3-padding w3-round w3-white w3-margin-bottom">
+        <div class="w3-padding w3-white w3-margin-bottom">
             <div class="w3-row">
                 <a href="javascript:void(0)" @click="openTab($event, 'Profile')">
                     <div class="w3-col l6 m6 s6 tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">
@@ -86,13 +86,13 @@
         data() {
             return {
                 itemTypes: [
-                    {icon: "/meat.png", title: "Thực phẩm"},
-                    {icon: "/agri.png", title: "Nông sản"},
-                    {icon: "/pot.png", title: "Gia dụng"},
-                    {icon: "/electronic.png", title: "Điện tử"},
-                    {icon: "/medicine.png", title: "Y tế"},
-                    {icon: "/fashion.png", title: "Thời trang"},
-                    {icon: "/others.png", title: "Khác"}
+                    {icon: "/meat.svg", title: "Thực phẩm"},
+                    {icon: "/agri.svg", title: "Nông sản"},
+                    {icon: "/pot.svg", title: "Gia dụng"},
+                    {icon: "/electronic.svg", title: "Điện tử"},
+                    {icon: "/medicine.svg", title: "Y tế"},
+                    {icon: "/fashion.svg", title: "Thời trang"},
+                    {icon: "/others.svg", title: "Khác"}
                 ]
             }
         },

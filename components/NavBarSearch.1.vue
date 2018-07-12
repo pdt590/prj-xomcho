@@ -1,6 +1,6 @@
 <template>
     <section>
-        <div class="w3-bar w3-top w3-padding w3-green w3-hide-small w3-hide-medium" style="z-index:4">
+        <div class="w3-bar w3-top w3-padding-16 w3-green w3-hide-small w3-hide-medium" style="z-index:4">
             <nuxt-link to="/" class="w3-bar-item w3-button w3-hover-none w3-hover-text-white">LOGO</nuxt-link>
             <button
                 @click="openSignModal"
@@ -57,7 +57,19 @@
                 :key="i"
                 :to="item.link" class="w3-bar-item w3-padding w3-button w3-right"> 
                 <i :class="item.icon"></i> {{item.title}}
-            </nuxt-link>            
+            </nuxt-link>
+            <div class="w3-display-middle w3-border w3-bar-item w3-light-grey w3-round"  style="width:40%">
+                <form>
+                    <button class="w3-bar-item w3-button w3-border w3-light-grey" type="submit" style="margin-right:4px"><i class="fa fa-search"></i></button>
+                    <select class="w3-select w3-bar-item w3-border" name="option">
+                        <option value="" disabled selected>Danh mục</option>
+                        <option value="1">Cửa hàng</option>
+                        <option value="2">Sản phẩm</option>
+                    </select>
+                    <input type="text" class="w3-bar-item w3-input w3-animate-input" placeholder="Tìm kiếm ..." style="width:35%; max-width:70%" required>  
+                </form> 
+            </div>
+            
         </div>
     </section> 
 </template>

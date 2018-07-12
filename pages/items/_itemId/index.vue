@@ -1,6 +1,6 @@
 <template>
     <section>
-        <div class="w3-border w3-border-grey w3-padding w3-round w3-white w3-margin-bottom">
+        <div class="w3-padding w3-white w3-margin-bottom">
             <div class="w3-row-padding">
                 <h5><strong>Hình ảnh sảm phẩm</strong></h5><br>
                 <div class="w3-quarter w3-margin-bottom">
@@ -20,7 +20,7 @@
             <div class="w3-row">
                 <h5><strong>Giá sản phẩm</strong></h5><br>
                 <div class="w3-col s6">
-                    <p class="w3-tag w3-amber"><i class="fa fa-fw fa-dollar"></i> 200.000 VND / 4 cái</p>
+                    <p class="w3-tag w3-yellow"><i class="fa fa-fw fa-dollar"></i> 200.000 VND / 4 cái</p>
                 </div>
                 <div class="w3-col s6">
                     <p><i class="fa fa-fw fa-clock-o"></i> Ngày tạo: 20/10/2018</p>
@@ -33,7 +33,7 @@
                     v-for="(type, i) in itemTypes" 
                     :key="i">
                     <p>
-                        <img :src="type.icon" class="w3-round w3-margin-right" style="width:10%;">
+                        <img :src="type.icon" class="w3-margin-right" style="width:10%;">
                         {{ type.title }}
                     </p>
                 </div>
@@ -47,7 +47,7 @@
                 </nuxt-link>
             </div>
         </div>
-        <div class="w3-border w3-border-grey w3-padding w3-round w3-white w3-margin-bottom">
+        <div class="w3-padding w3-white w3-margin-bottom">
             <form>
                 <h5><strong>Các nhận xét gần đây</strong></h5><br>
                 <p><input class="w3-input w3-border" type="text" placeholder="Name" required name="Name"></p>
@@ -78,26 +78,26 @@
         data() {
             return {
                 itemTypes: [
-                    {icon: "/meat.png", title: "Thực phẩm"},
-                    {icon: "/agri.png", title: "Nông sản"},
-                    {icon: "/pot.png", title: "Gia dụng"},
-                    {icon: "/electronic.png", title: "Điện tử"},
-                    {icon: "/medicine.png", title: "Y tế"},
-                    {icon: "/fashion.png", title: "Thời trang"},
-                    {icon: "/others.png", title: "Khác"}
+                    {icon: "/meat.svg", title: "Thực phẩm"},
+                    {icon: "/agri.svg", title: "Nông sản"},
+                    {icon: "/pot.svg", title: "Gia dụng"},
+                    {icon: "/electronic.svg", title: "Điện tử"},
+                    {icon: "/medicine.svg", title: "Y tế"},
+                    {icon: "/fashion.svg", title: "Thời trang"},
+                    {icon: "/others.svg", title: "Khác"}
                 ]
             }
         },
         methods: {
             openImgModal(event) {
                 let element  = event.currentTarget
-                this.$refs.modal.style.display = "block"
+                this.$refs.modal.style.display = 'block'
                 this.$refs.imgModal.src = element.getAttribute('src')  
                 //this.$refs.captionModal.innerHTML = element.getAttribute('alt')
                 console.log(this.$route.path)
             },
             closeImgModal() {
-                this.$refs.modal.style.display = "none"
+                this.$refs.modal.style.display = 'none'
             }
         }
     }

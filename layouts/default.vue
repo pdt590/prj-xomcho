@@ -1,6 +1,7 @@
 <template>
     <section>
-
+        default
+        <nuxt/>
     </section>
 </template>
 
