@@ -39,7 +39,7 @@
         </div>
 
         <div class="w3-padding w3-margin-bottom">
-            <div class="w3-row w3-content" style="max-width:1400px">
+            <div class="w3-row w3-content" style="max-width:1300px">
                 <div class="w3-col l4">
                     <h3 class="w3-padding"><strong>Cửa hàng</strong></h3>
                 </div>     
@@ -52,15 +52,18 @@
                                     <nuxt-link to="/shops/1re43565hy" class="w3-button w3-black" target="_blank">Chi tiết <i class="fa fa-external-link"></i></nuxt-link>
                                 </div>
                             </div>
-                            <h4><strong>Shop DuyThang</strong></h4>  
+                            <h5><strong>Shop DuyThang</strong></h5>  
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="w3-padding  w3-white w3-margin-bottom">
-            <div class="w3-row w3-content" style="max-width:1400px">  
+        <div class="w3-padding w3-white w3-margin-bottom">
+            <div class="w3-row w3-content" style="max-width:1400px">
+                <div class="w3-col l4 w3-hide-large">
+                    <h3 class="w3-padding"><strong>Các sản phẩm mới nhất</strong></h3>
+                </div>    
                 <div class="w3-col l8 w3-padding-24 w3-margin-bottom">
                     <div class="w3-row-padding">
                         <div class="w3-col l3 m4 s6 w3-margin-bottom" v-for="i in 8" :key="i">
@@ -71,13 +74,13 @@
                                 </div>
                             </div>
                             <div class="w3-container w3-padding">
-                                <h5>Mega Ripped Jeans<br><b>$19.99</b></h5>
+                                <h6>Mega Ripped Jeans<br><b>$19.99</b></h6>
                                 <button class="w3-button w3-green w3-right">Lưu <i class=""></i></button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="w3-col l4">
+                <div class="w3-col l4 w3-hide-medium w3-hide-small">
                     <h3 class="w3-padding w3-right"><strong>Các sản phẩm mới nhất</strong></h3>
                 </div>   
             </div>

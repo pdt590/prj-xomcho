@@ -7,7 +7,8 @@ const createStore = () => {
             user: null,
             loading: false,
             error: null,
-            loadedShops: []
+            loadedShops: [],
+            sideBar: false
         },
         mutations: {
             setLoadedShops (state, payload) {
@@ -33,6 +34,9 @@ const createStore = () => {
             },
             clearError (state) {
                 state.error = null
+            },
+            setSideBar (state, payload) {
+                state.sideBar = payload
             }
         },
         actions: {
@@ -158,6 +162,9 @@ const createStore = () => {
             },
             clearError (vuexContext) {
                 vuexContext.commit('clearError')
+            },
+            openSideBar (vuexContext, payload) {
+                vuexContext.commit('setSideBar', payload)
             }
         }, 
         getters: {
@@ -181,6 +188,9 @@ const createStore = () => {
             },
             error (state) {
                 return state.error
+            },
+            sideBar (state) {
+                return state.sideBar
             }
         } 
     })

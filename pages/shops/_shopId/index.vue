@@ -15,7 +15,7 @@
             <a class="w3-button w3-large w3-black w3-display-right w3-margin-right w3-hide-small w3-hover-light-grey" @click="plusDivs(1)">Khám phá <i class="fa fa-angle-right"></i></a>
             <a class="w3-button w3-block w3-black w3-hide-large w3-hide-medium" @click="plusDivs(1)">Khám phá <i class="fa fa-angle-right"></i></a>
         </div>
-        <div class="w3-padding w3-margin-bottom w3-white">
+        <div class="w3-padding w3-white w3-margin-bottom">
             <h5><strong>Giới thiệu</strong></h5><br>
             <p>This is my shop</p>
             <hr>

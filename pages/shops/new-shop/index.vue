@@ -65,7 +65,6 @@
 
 <script>
     export default {
-        layout: 'new-shop',
         data() {
             return {
                 itemTypes: [

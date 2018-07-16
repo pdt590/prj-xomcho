@@ -199,7 +199,6 @@
 
 <script>
     export default {
-        layout: 'profile',
         methods: {
             openTab(event, arg) {
                 let i, x, tablinks;

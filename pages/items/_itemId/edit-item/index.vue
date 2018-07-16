@@ -1,6 +1,6 @@
 <template>
     <section>
-        <div class="w3-border w3-padding w3-round w3-white w3-margin-bottom">
+        <div class="w3-padding w3-white w3-margin-bottom">
             <div class="w3-row">
                 <a href="javascript:void(0)" @click="openTab($event, 'Profile')">
                     <div class="w3-col l6 m6 s6 tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">
