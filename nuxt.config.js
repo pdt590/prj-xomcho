@@ -29,14 +29,15 @@ module.exports = {
 	** Global CSS
 	*/
 	css: [
-    	"~/assets/css/main.css"
+        "~/assets/styles/w3.css",
+        "~/assets/styles/dropzone.css"
 	],
 
 	/*
 	** Plugins to load before mounting the App
 	*/
 	plugins: [
-		{ src: '~plugins/components.js'},
+        { src: '~plugins/components.js'},
 		{ src: '~plugins/date-filter.js'},
 		{ src: '~plugins/firebase.js'},
 		{ src: '~plugins/firebase-auth.js'}

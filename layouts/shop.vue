@@ -23,7 +23,7 @@
         data() {
             return {
                 navItems: [
-                    {link: '/shops/new-shop', icon: 'fa fa-plus-square', title: ''}
+                    {link: '/shops/new-shop', icon: 'fa fa-plus-square', title: 'Tạo cửa hàng'}
                 ]
             }
         }

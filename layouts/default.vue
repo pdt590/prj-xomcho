@@ -2,7 +2,7 @@
     <section>
         <app-navbar :navItems="navItems" />
         <div class="w3-content w3-padding-64" style="max-width:1030px">     
-            <app-navbar-mobile-main :navItems="navItems" />
+            <app-navbar-mobile :navItems="navItems" :isMainLayout="true" />
             <!-- !PAGE CONTENT! -->
             <div class="w3-main">
                 <nuxt/>
@@ -22,7 +22,7 @@
         data() {
             return {
                 navItems: [
-                    {link: '/shops/new-shop', icon: 'fa fa-plus-square', title: ''}
+                    {link: '/shops/new-shop', icon: 'fa fa-plus-square', title: 'Tạo cửa hàng'}
                 ]
             }
         }

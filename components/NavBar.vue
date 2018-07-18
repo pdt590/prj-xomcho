@@ -1,11 +1,11 @@
 <template>
     <section>
-        <div class="w3-bar w3-top w3-padding w3-green w3-hide-small w3-hide-medium" style="z-index:4">
-            <nuxt-link to="/" class="w3-bar-item w3-button w3-hover-none w3-hover-text-white">LOGO</nuxt-link>
+        <div class="w3-bar w3-top w3-padding w3-green w3-hide-small w3-hide-medium" style="z-index:1001">
+            <nuxt-link to="/" class="w3-bar-item w3-button w3-hover-none w3-hover-text-white"><strong>TA ĐI CHỢ</strong></nuxt-link>
             <button
                 @click="openLoginModal"
                 class="w3-bar-item w3-button w3-right">
-                <i class="fa fa-user-o w3-large"></i>
+                <i class="fa fa-user w3-large"></i>
                 Đăng nhập/Đăng ký
             </button>
             <app-modal-login ref="modalLogin" />
@@ -15,16 +15,17 @@
                 :to="item.link" class="w3-bar-item w3-padding w3-button w3-right"> 
                 <i class="w3-large" :class="item.icon"></i> {{item.title}}
             </nuxt-link>
-            <button @click="onSearch" class="w3-bar-item w3-button w3-right"><i :class="enableSearch ? 'fa fa-close' : 'fa fa-search'" class="w3-large"></i></button>
-            <form ref="search" style="display: block">
-                <button class="w3-button w3-light-grey w3-bar-item w3-right w3-margin-right">Search</button>
-                <select class="w3-select w3-bar-item w3-right" name="option">
+
+            <!--<button @click="onSearch" class="w3-bar-item w3-button"><i :class="enableSearch ? 'fa fa-close' : 'fa fa-search'" class="w3-large"></i></button>-->
+            <form ref="search" class="my-center">
+                <button class="w3-button w3-light-grey w3-bar-item w3-margin-left">Search</button>
+                <select class="w3-select w3-bar-item" name="option">
                     <option value="" disabled selected>Danh mục</option>
                     <option value="1">Cửa hàng</option>
                     <option value="2">Sản phẩm</option>
                 </select>
-                <input  type="text" class="w3-bar-item w3-input w3-right" placeholder="Tìm kiếm ..." style="width:20%" required>
-            </form>
+                <input  type="text" class="w3-bar-item w3-input" placeholder="Tìm kiếm ..." style="width:60%" required>
+            </form> 
         </div>
         
     </section> 
@@ -53,3 +54,11 @@
         }
     }
 </script>
+
+<style>
+    .my-center {
+        display: block;
+        margin: auto;
+        width: 30%;
+    }
+</style>

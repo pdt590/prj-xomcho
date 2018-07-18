@@ -27,7 +27,7 @@
                 </span>
             </h6>
             <hr>
-            <h5><strong>Các mặt hàng hiển thị</strong></h5><br>
+            <h5><strong>Chọn mặt hàng hiển thị</strong></h5><br>
             <form>
                 <div class="w3-row">
                     <div class="w3-col l4 m4 s6" 

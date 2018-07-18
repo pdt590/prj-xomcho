@@ -1,12 +1,12 @@
 <template>
     <section>
-        <header class="w3-bar w3-top w3-padding w3-hide-large w3-green">
-            <div class="w3-bar-item">LOGO</div>
-            <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right" @click="openSideBar"><i class="fa fa-bars"></i></a>
+        <header class="w3-bar w3-top w3-padding w3-hide-large w3-green" style="z-index:1001">
+            <nuxt-link to="/" class="w3-bar-item w3-button w3-hover-none w3-hover-text-white"><strong>TA ĐI CHỢ</strong></nuxt-link>
+            <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right" @click="openSideBar" v-show="!isMainLayout"><i class="fa fa-bars"></i></a>
             <button
                 @click="openLoginModal"
                 class="w3-bar-item w3-button w3-right">
-                <i class="fa fa-user-o w3-large"></i>
+                <i class="fa fa-user w3-large"></i>
             </button>
             <app-modal-login ref="modalLogin" />
             <nuxt-link
@@ -37,6 +37,10 @@
         props: {
             navItems: {
                 type: Array
+            },
+            isMainLayout: {
+                type: Boolean,
+                default: false
             }
         },
         data() {

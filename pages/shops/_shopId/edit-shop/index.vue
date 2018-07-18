@@ -67,14 +67,11 @@
                 </div>
             </form>
 
-            <form id="Image" class="w3-margin-bottom section"  style="display:none">
+            <div id="Image" class="w3-margin-bottom section"  style="display:none">
                 <h5><strong>Ảnh đại diện</strong></h5><br>
-                <input class="w3-input w3-border" type="file">
+                <app-img-upload ></app-img-upload>
                 <br>
-                <div class="w3-row">
-                    <button class="w3-button w3-green w3-right w3-quarter" type="submit"><i class="fa fa-save w3-xlarge w3-margin-right"></i> Lưu ảnh</button>
-                </div>
-            </form>
+            </div>
 
         </div>
     </section>
