@@ -15,12 +15,16 @@
                     <h5 ref="captionModal"></h5>
                 </div>
             </div>
-
-            <hr>       
+            <hr>
+            <div class="w3-row">
+                <h5><strong>Miêu tả sản phẩm</strong></h5><br>
+                <h5>Sản phẩm có những đặc điểm sau</h5>
+            </div>
+            <hr>     
             <div class="w3-row">
                 <h5><strong>Giá sản phẩm</strong></h5><br>
                 <div class="w3-col s6">
-                    <p class="w3-tag w3-yellow"><i class="fa fa-fw fa-dollar"></i> 200.000 VND / 4 cái</p>
+                    <h6 class="w3-tag w3-yellow"><i class="fa fa-fw fa-dollar"></i> <strong>200.000 VND / 4 cái</strong></h6>
                 </div>
                 <div class="w3-col s6">
                     <p><i class="fa fa-fw fa-clock-o"></i> Ngày tạo: 20/10/2018</p>
@@ -39,12 +43,16 @@
                 </div>
             </div>
             <div class="w3-row">
-                <nuxt-link 
+                <nuxt-link
+                    v-if="false"
                     :to="'/items/' + $route.params.itemId + '/edit-item'" 
                     class="w3-button w3-green w3-margin-bottom w3-right w3-quarter">
                     <i class="fa fa-edit w3-xlarge w3-margin-right"></i> 
                     Chỉnh sửa
                 </nuxt-link>
+                <div v-else class="w3-margin-bottom w3-right w3-quarter">
+                    <app-modal-sale />
+                </div>
             </div>
         </div>
         <div class="w3-padding w3-white w3-margin-bottom">
@@ -54,7 +62,7 @@
                 <p><input class="w3-input w3-border" type="email" placeholder="Email" required name="Email"></p>
                 <p><input class="w3-input w3-border" type="text" placeholder="Message" required name="Message"></p>
                 <div class="w3-row">
-                    <button type="submit" class="w3-button w3-green  w3-right w3-quarter"><i class="fa fa-send-o w3-xlarge w3-margin-right"></i>Gửi nhận xét</button>
+                    <button type="submit" class="w3-button w3-green w3-right w3-quarter">Gửi nhận xét <i class="fa fa-send-o w3-large w3-margin-left"></i></button>
                 </div>
             </form>
             <hr>

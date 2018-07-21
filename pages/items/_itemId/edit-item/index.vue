@@ -2,12 +2,12 @@
     <section>
         <div class="w3-padding w3-white w3-margin-bottom">
             <div class="w3-row">
-                <a href="javascript:void(0)" @click="openTab($event, 'Profile')">
+                <a href="javascript:void(0)" @click="openTab($event, 'itemInfo')">
                     <div class="w3-col l6 m6 s6 tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">
                         <h5><strong>Thông tin</strong></h5>
                     </div>
                 </a>
-                <a href="javascript:void(0)" @click="openTab($event, 'Image')">
+                <a href="javascript:void(0)" @click="openTab($event, 'itemImg')">
                     <div class="w3-col l6 m6 s6 tablink w3-bottombar w3-hover-light-grey w3-padding">
                         <h5><strong>Ảnh</strong></h5>
                     </div>
@@ -15,7 +15,7 @@
             </div>
             <hr>
 
-            <form id="Profile" class="w3-margin-bottom section">
+            <form id="itemInfo" class="w3-margin-bottom section">
                 <h5><strong>Thông tin sản phẩm</strong></h5><br>
                 <div class="w3-row-padding" style="margin:0 -16px;">
                     <div class="w3-half w3-margin-bottom">
@@ -42,28 +42,16 @@
                 <textarea class="w3-input w3-border" rows="5" style="resize:none"></textarea>
                 <hr>
                 <h5><strong>Loại sản phẩm</strong></h5><br>
-                <div class="w3-row">
-                    <div class="w3-col l4 m4 s6" 
-                        v-for="(type, i) in itemTypes" 
-                        :key="i">
-                        <p>
-                            <input class="w3-check w3-margin-right" type="checkbox" checked="checked">
-                            <label>
-                                <img :src="type.icon" class="w3-round w3-margin-right" style="width:10%;">
-                                {{ type.title }}
-                            </label>
-                        </p>
-                    </div>
-                </div>
+                <app-product-types/>
                 <br>
                 <div class="w3-row">
                     <button class="w3-button w3-green w3-right w3-quarter" type="submit"><i class="fa fa-save w3-xlarge w3-margin-right"></i> Lưu thay đổi</button>
                 </div>
             </form>
 
-            <div id="Image" class="w3-margin-bottom section" style="display:none">
-                <h5><strong>Ảnh sản phẩm</strong></h5><br>
-                <app-img-upload ></app-img-upload>
+            <div id="itemImg" class="w3-margin-bottom section" style="display:none">
+                <h5><strong>Ảnh sản phẩm (Tối đa 5 ảnh)</strong></h5><br>
+                <app-img-upload :numberImg="5" :section="'itemPreview'"/>
                 <br>
             </div>
 
@@ -74,19 +62,6 @@
 <script>
     export default {
         layout: 'item',
-        data() {
-            return {
-                itemTypes: [
-                    {icon: "/meat.svg", title: "Thực phẩm"},
-                    {icon: "/agri.svg", title: "Nông sản"},
-                    {icon: "/pot.svg", title: "Gia dụng"},
-                    {icon: "/electronic.svg", title: "Điện tử"},
-                    {icon: "/medicine.svg", title: "Y tế"},
-                    {icon: "/fashion.svg", title: "Thời trang"},
-                    {icon: "/others.svg", title: "Khác"}
-                ]
-            }
-        },
         methods: {
             openTab(event, arg) {
                 let i, x, tablinks;

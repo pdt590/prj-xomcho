@@ -26,9 +26,6 @@
                 <input  type="text" class="w3-bar-item w3-input w3-mobile" placeholder="Tìm kiếm ..." required>
             </form>
         </header>
-
-        <!-- Overlay effect when opening sidebar on small screens -->
-        <div class="w3-overlay w3-hide-large" @click="closeSideBar" style="cursor:pointer" title="close side menu" ref="myOverlay"></div>
     </section>
 </template>
 
@@ -50,12 +47,11 @@
         },
         methods: {
             openSideBar() {
-                this.$store.dispatch('openSideBar', true)
-                this.$refs.myOverlay.style.display = 'block'
-            },
-            closeSideBar() {
-                this.$store.dispatch('openSideBar', false)
-                this.$refs.myOverlay.style.display = 'none'
+                if(this.$store.getters.sideBar) {
+                    this.$store.dispatch('openSideBar', false)
+                }else {
+                    this.$store.dispatch('openSideBar', true)
+                }  
             },
             openLoginModal() {
                 this.$refs.modalLogin.$refs.modal.style.display='block'

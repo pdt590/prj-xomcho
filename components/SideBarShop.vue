@@ -1,4 +1,5 @@
 <template>
+    <section>
         <!-- Sidebar left -->
         <div class="w3-sidebar w3-light-grey w3-collapse w3-top w3-padding-64" style="z-index:3;width:270px" ref="mySidebar">
             <div class="w3-container w3-display-container">
@@ -8,7 +9,7 @@
                 <br>
                 <h4><b>Shop Duy Thang</b></h4>
             </div>
-            <hr>
+            <br>
             <div class="w3-bar-block w3-large">
                 <h5 class="w3-bar-item w3-text-grey"><b>Thông tin</b></h5>
                 <div class="w3-bar-item w3-padding">
@@ -36,9 +37,10 @@
                     thangecp@gmail.com
                 </div>
             </div>
-            <hr>
+            <br>
             <div class="w3-bar-block w3-large">
                 <h5 class="w3-bar-item w3-text-grey"><b>Công cụ</b></h5>
+                <app-btn-saveshop class="w3-bar-item"/>
                 <nuxt-link :to="'/shops/' + $route.params.shopId + '/edit-shop'" class="w3-bar-item w3-button">
                     <img src="/config.svg" class="w3-round w3-margin-right" style="width:10%;" alt="Alps">
                     Chỉnh sửa
@@ -50,13 +52,12 @@
                 <nuxt-link :to="'/shops/' + $route.params.shopId + '/comments'" class="w3-bar-item w3-button">
                     <img src="/comment.svg" class="w3-round w3-margin-right" style="width:10%;" alt="Alps">
                     Đánh giá cửa hàng
-                </nuxt-link> 
-                <button  class="w3-bar-item w3-button">
-                    <img src="/bookmark.svg" class="w3-round w3-margin-right" style="width:10%;" alt="Alps">
-                    Lưu cửa hàng
-                </button>  
+                </nuxt-link>
             </div>
         </div>
+        <!-- Overlay effect when opening sidebar on small screens -->
+        <div class="w3-overlay w3-hide-large" @click="closeSideBar" style="cursor:pointer" title="close side menu" ref="myOverlay"></div>
+    </section>
 </template>
 
 <script>
@@ -67,14 +68,21 @@
             }
         },
         watch: {
-            openSideBar(value) {
-                value ? 
-                this.$refs.mySidebar.style.display = 'block' : this.$refs.mySidebar.style.display = 'none'
+            openSideBar(newValue) {
+                if(newValue) {
+                    this.$refs.mySidebar.style.display = 'block'
+                    this.$refs.myOverlay.style.display = 'block'
+                } else {
+                    this.$refs.mySidebar.style.display = 'none'
+                    this.$refs.myOverlay.style.display = 'none'
+                }
+            },
+        },
+        methods: {
+            closeSideBar() {
+                this.$store.dispatch('openSideBar', false)
+                this.$refs.myOverlay.style.display = 'none'
             }
         }
     }
 </script>
-
-<style>
-
-</style>

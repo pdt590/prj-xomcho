@@ -1,14 +1,13 @@
 <template>
     <section>
         <app-navbar :navItems="navItems" />
+        <app-navbar-mobile :navItems="navItems" />
         <div class="w3-content w3-padding-64" style="max-width:1300px">     
-            <app-navbar-mobile :navItems="navItems" />
-            <app-sidebar-item />
+            <app-sidebar-item></app-sidebar-item>
             <!-- !PAGE CONTENT! -->
             <div class="w3-main" style="margin-left:270px;">
                 <nuxt/>
                 <hr>
-                <app-footer/>
                 <div class="w3-center w3-padding-24">
                     Powered by 
                     <a href="https://www.tadicho.net" title="tadicho.net" target="_blank" class="w3-hover-opacity">tadicho.net</a>
@@ -29,12 +28,3 @@
         }
     }
 </script>
-
-<style>
-    body,h1,h2,h3,h4,h5,p {
-        font-family: "Nunito", sans-serif;
-    }
-    body {
-        background-color: #f1f1f1;
-    }
-</style>

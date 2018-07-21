@@ -24,7 +24,7 @@
                     <option value="1">Cửa hàng</option>
                     <option value="2">Sản phẩm</option>
                 </select>
-                <input  type="text" class="w3-bar-item w3-input" placeholder="Tìm kiếm ..." style="width:60%" required>
+                <input  type="text" class="w3-bar-item w3-input" placeholder="Tìm kiếm ..." style="width:30%" required>
             </form> 
         </div>
         
@@ -59,6 +59,6 @@
     .my-center {
         display: block;
         margin: auto;
-        width: 30%;
+        width: 50%;
     }
 </style>

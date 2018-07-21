@@ -1,8 +1,8 @@
 <template>
     <section>
         <app-navbar :navItems="navItems" />
+        <app-navbar-mobile :navItems="navItems" :isMainLayout="true" />
         <div class="w3-padding-48">     
-            <app-navbar-mobile :navItems="navItems" :isMainLayout="true" />
             <!-- !PAGE CONTENT! -->
             <div class="w3-main">
                 <nuxt/>
@@ -34,12 +34,3 @@
         }
     }
 </script>
-
-<style>
-    body,h1,h2,h3,h4,h5,p {
-        font-family: "Nunito", sans-serif;
-    }
-    body {
-        background-color: #f1f1f1;
-    }
-</style>

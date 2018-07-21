@@ -31,7 +31,7 @@
                 </div>
                 <div class="w3-container w3-large w3-third">
                     <h4 class="w3-bottombar w3-border-orange"><strong>Links</strong></h4>
-                    <p><i class="fa fa-facebook-official w3-xxlarge w3-margin-right"></i>Facebook</p>
+                    <p><i class="fa fa-facebook-official w3-xxlarge w3-margin-right" style="color: #2196F3"></i>Facebook</p>
                 </div>
             </div>
         </div>

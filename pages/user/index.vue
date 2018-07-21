@@ -3,28 +3,13 @@
         <div class="w3-padding w3-white w3-margin-bottom">
             <div class="w3-row">
                 <a href="javascript:void(0)" @click="openTab($event, 'Profile')">
-                    <div class="w3-col l4 m4 s6 tablink w3-bottombar w3-hover-light-grey w3-padding">
+                    <div class="w3-col l6 m6 s6 tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">
                         <h5><strong>Thông tin</strong></h5>
                     </div>
                 </a>
                 <a href="javascript:void(0)" @click="openTab($event, 'Image')">
-                    <div class="w3-col l2 m2 s6 tablink w3-bottombar w3-hover-light-grey w3-padding">
+                    <div class="w3-col l6 m6 s6 tablink w3-bottombar w3-hover-light-grey w3-padding">
                         <h5><strong>Ảnh</strong></h5>
-                    </div>
-                </a>
-                <a href="javascript:void(0)" @click="openTab($event, 'ShopList')">
-                    <div class="w3-col l2 m2 s6 tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">
-                        <h5><strong>Cửa hàng</strong></h5>
-                    </div>
-                </a>
-                <a href="javascript:void(0)" @click="openTab($event, 'ItemList')">
-                    <div class="w3-col l2 m2 s6 tablink w3-bottombar w3-hover-light-grey w3-padding">
-                        <h5><strong>Sản phẩm</strong></h5>
-                    </div>
-                </a>
-                <a href="javascript:void(0)" @click="openTab($event, 'Bookmark')">
-                    <div class="w3-col l2 m2 s12 tablink w3-bottombar w3-hover-light-grey w3-padding">
-                        <h5><strong>Lưu</strong></h5>
                     </div>
                 </a>
             </div>
@@ -78,69 +63,8 @@
 
             <div id="Image" class="w3-margin-bottom section" style="display:none">
                 <h5><strong>Ảnh đại diện</strong></h5><br>
-                <app-img-upload ></app-img-upload>
+                <app-img-upload :numberImg="1" :section="'userAvatar'"/>
                 <br>
-            </div>
-
-            <div id="ShopList" class="w3-margin-bottom section" style="display:none">
-                <ul class="w3-ul w3-border">
-                    <li v-for="i in 5" :key="i" class="w3-bar">
-                        <span onclick="this.parentElement.style.display='none'" class="w3-bar-item w3-button w3-white w3-xlarge w3-right"><i class="fa fa-close"></i></span>
-                        <nuxt-link to="/shops/df123/edit-shop" class="w3-bar-item w3-button w3-white w3-xlarge w3-right"><i class="fa fa-edit"></i></nuxt-link>
-                        <nuxt-link to="/shops/df123">
-                            <img src="https://picsum.photos/600/600/?image=35" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
-                        </nuxt-link>
-                        <div class="w3-bar-item">
-                            <span class="w3-large">Mike</span><br>
-                            <span>Web Designer</span>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-
-            <div id="ItemList" class="w3-margin-bottom section" style="display:none">
-                <ul class="w3-ul w3-border">
-                    <li v-for="i in 3" :key="i" class="w3-bar">
-                        <span onclick="this.parentElement.style.display='none'" class="w3-bar-item w3-button w3-white w3-xlarge w3-right"><i class="fa fa-close"></i></span>
-                        <nuxt-link to="/items/df123/edit-shop" class="w3-bar-item w3-button w3-white w3-xlarge w3-right"><i class="fa fa-edit"></i></nuxt-link>
-                        <nuxt-link to="/items/th345">
-                            <img src="https://picsum.photos/600/600/?image=32" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
-                        </nuxt-link>
-                        <div class="w3-bar-item">
-                            <span class="w3-large">Mike</span><br>
-                            <nuxt-link to="/shops/df123">Shop duythang</nuxt-link>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            
-            <div id="Bookmark" class="section" style="display:none">
-                <h5><strong>Cửa hàng</strong></h5>
-                <ul class="w3-ul w3-border">
-                    <li v-for="i in 5" :key="i" class="w3-bar">
-                        <span onclick="this.parentElement.style.display='none'" class="w3-bar-item w3-button w3-white w3-xlarge w3-right"><i class="fa fa-close"></i></span>
-                        <nuxt-link to="/shops/df123">
-                            <img src="https://picsum.photos/600/600/?image=35" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
-                        </nuxt-link>
-                        <div class="w3-bar-item">
-                            <span class="w3-large">Mike</span><br>
-                            <span>Web Designer</span>
-                        </div>
-                    </li>
-                </ul>
-                <h5><strong>Sản phẩm</strong></h5>
-                <ul class="w3-ul w3-border">
-                    <li v-for="i in 3" :key="i" class="w3-bar">
-                        <span onclick="this.parentElement.style.display='none'" class="w3-bar-item w3-button w3-white w3-xlarge w3-right"><i class="fa fa-close"></i></span>
-                        <nuxt-link to="/items/th345">
-                            <img src="https://picsum.photos/600/600/?image=32" class="w3-bar-item w3-circle w3-hide-small" style="width:85px">
-                        </nuxt-link>
-                        <div class="w3-bar-item">
-                            <span class="w3-large">Mike</span><br>
-                            <nuxt-link to="/shops/df123" href="javascript:void(0)">Shop duythang</nuxt-link>
-                        </div>
-                    </li>
-                </ul>
             </div>
         </div>
     </section>

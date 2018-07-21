@@ -48,19 +48,7 @@
                 <textarea class="w3-input w3-border" rows="8" style="resize:none"></textarea>
                 <hr>
                 <h5><strong>Các mặt hàng sẽ bán</strong></h5><br>
-                <div class="w3-row">
-                    <div class="w3-col l4 m4 s6" 
-                        v-for="(type, i) in itemTypes" 
-                        :key="i">
-                        <p>
-                            <input class="w3-check w3-margin-right" type="checkbox" checked="checked">
-                            <label>
-                                <img :src="type.icon" class="w3-round w3-margin-right" style="width:10%;">
-                                {{ type.title }}
-                            </label>
-                        </p>
-                    </div>
-                </div>
+                <app-product-types/>
                 <br>
                 <div class="w3-row">
                     <button class="w3-button w3-green w3-right w3-quarter" type="submit"><i class="fa fa-save w3-xlarge w3-margin-right"></i>Lưu thay đổi</button>
@@ -69,7 +57,10 @@
 
             <div id="Image" class="w3-margin-bottom section"  style="display:none">
                 <h5><strong>Ảnh đại diện</strong></h5><br>
-                <app-img-upload ></app-img-upload>
+                <app-img-upload :numberImg="1" :section="'shopAvatar'"/>
+                <hr>
+                <h5><strong>Ảnh panel (Tối đa 2 ảnh)</strong></h5><br>
+                <app-img-upload :numberImg="2" :section="'shopPanel'"/>
                 <br>
             </div>
 
@@ -80,19 +71,6 @@
 <script>
     export default {
         layout: 'shop',
-        data() {
-            return {
-                itemTypes: [
-                    {icon: "/meat.svg", title: "Thực phẩm"},
-                    {icon: "/agri.svg", title: "Nông sản"},
-                    {icon: "/pot.svg", title: "Gia dụng"},
-                    {icon: "/electronic.svg", title: "Điện tử"},
-                    {icon: "/medicine.svg", title: "Y tế"},
-                    {icon: "/fashion.svg", title: "Thời trang"},
-                    {icon: "/others.svg", title: "Khác"}
-                ]
-            }
-        },
         methods: {
             openTab(event, arg) {
                 let i, x, tablinks;
