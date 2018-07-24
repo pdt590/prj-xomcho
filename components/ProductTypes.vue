@@ -5,10 +5,10 @@
                 v-for="(type, i) in itemTypes" 
                 :key="i">
                 <p>
-                    <label class="my-container">
+                    <label class="myContainer">
                         <input type="checkbox" checked="checked">
-                        <span class="my-checkmark"></span>
-                        <img :src="type.icon" class="w3-round w3-margin-right" style="width:10%;">
+                        <span class="myCheckmark"></span>
+                        <i class="w3-xlarge w3-margin-right" :class="type.icon"></i>
                         {{ type.title }}
                     </label>
                 </p>
@@ -22,13 +22,13 @@
         data() {
             return {
                 itemTypes: [
-                    {icon: "/meat.svg", title: "Thực phẩm"},
-                    {icon: "/agri.svg", title: "Nông sản"},
-                    {icon: "/pot.svg", title: "Gia dụng"},
-                    {icon: "/electronic.svg", title: "Điện tử"},
-                    {icon: "/medicine.svg", title: "Y tế"},
-                    {icon: "/fashion.svg", title: "Thời trang"},
-                    {icon: "/others.svg", title: "Khác"}
+                    {icon: "fa fa-shopping-basket", title: "Thực phẩm"},
+                    {icon: "fa fa-lemon-o", title: "Nông sản"},
+                    {icon: "fa fa-spoon", title: "Gia dụng"},
+                    {icon: "fa fa-camera-retro", title: "Điện tử"},
+                    {icon: "fa fa-medkit", title: "Y tế"},
+                    {icon: "fa fa-shopping-bag", title: "Thời trang"},
+                    {icon: "fa fa-question-circle-o", title: "Khác"}
                 ]
             }
         }
@@ -36,8 +36,8 @@
 </script>
 
 <style scoped>
-    /* The my-container */
-    .my-container {
+    /* The myContainer */
+    .myContainer {
         display: block;
         position: relative;
         padding-left: 35px;
@@ -50,50 +50,50 @@
     }
 
     /* Hide the browser's default checkbox */
-    .my-container input {
+    .myContainer input {
         position: absolute;
         opacity: 0;
         cursor: pointer;
     }
 
     /* Create a custom checkbox */
-    .my-checkmark {
+    .myCheckmark {
         position: absolute;
-        top: 0;
+        top: 4px;
         left: 0;
-        height: 25px;
-        width: 25px;
+        height: 18px;
+        width: 18px;
         background-color: #eee;
     }
 
     /* On mouse-over, add a grey background color */
-    .my-container:hover input ~ .my-checkmark {
+    .myContainer:hover input ~ .myCheckmark {
         background-color: #ccc;
     }
 
     /* When the checkbox is checked, add a blue background */
-    .my-container input:checked ~ .my-checkmark {
+    .myContainer input:checked ~ .myCheckmark {
         background-color: #2196F3;
     }
 
-    /* Create the my-checkmark/indicator (hidden when not checked) */
-    .my-checkmark:after {
+    /* Create the myCheckmark/indicator (hidden when not checked) */
+    .myCheckmark:after {
         content: "";
         position: absolute;
         display: none;
     }
 
-    /* Show the my-checkmark when checked */
-    .my-container input:checked ~ .my-checkmark:after {
+    /* Show the myCheckmark when checked */
+    .myContainer input:checked ~ .myCheckmark:after {
         display: block;
     }
 
-    /* Style the my-checkmark/indicator */
-    .my-container .my-checkmark:after {
-        left: 9px;
-        top: 5px;
-        width: 8px;
-        height: 13px;
+    /* Style the myCheckmark/indicator */
+    .myContainer .myCheckmark:after {
+        left: 6px;
+        top: 2px;
+        width: 7px;
+        height: 12px;
         border: solid white;
         border-width: 0 3px 3px 0;
         -webkit-transform: rotate(45deg);

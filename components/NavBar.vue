@@ -1,6 +1,6 @@
 <template>
     <section>
-        <div class="w3-bar w3-top w3-padding w3-green w3-hide-small w3-hide-medium" style="z-index:1001">
+        <div class="w3-bar w3-top w3-padding w3-blue w3-hide-small w3-hide-medium" style="z-index:1001; font-size: 15px">
             <nuxt-link to="/" class="w3-bar-item w3-button w3-hover-none w3-hover-text-white"><strong>TA ĐI CHỢ</strong></nuxt-link>
             <button
                 @click="openLoginModal"
@@ -18,13 +18,13 @@
 
             <!--<button @click="onSearch" class="w3-bar-item w3-button"><i :class="enableSearch ? 'fa fa-close' : 'fa fa-search'" class="w3-large"></i></button>-->
             <form ref="search" class="my-center">
-                <button class="w3-button w3-light-grey w3-bar-item w3-margin-left">Search</button>
+                <button class="w3-button w3-light-grey w3-bar-item w3-margin-left">Tìm kiếm</button>
                 <select class="w3-select w3-bar-item" name="option">
                     <option value="" disabled selected>Danh mục</option>
                     <option value="1">Cửa hàng</option>
                     <option value="2">Sản phẩm</option>
                 </select>
-                <input  type="text" class="w3-bar-item w3-input" placeholder="Tìm kiếm ..." style="width:30%" required>
+                <input  type="text" class="w3-bar-item w3-input" placeholder="nhập từ khóa..." style="width:50%" required>
             </form> 
         </div>
         

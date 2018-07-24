@@ -19,27 +19,27 @@
                 <h5><strong>Thông tin cửa hàng</strong></h5><br>
                 <div class="w3-row-padding" style="margin:0 -16px;">
                     <div class="w3-half w3-margin-bottom">
-                        <label><i class="fa fa fa-newspaper-o w3-xlarge"></i> Tên cửa hàng</label>
+                        <label><i class="fa fa-file-text-o w3-large"></i> Tên cửa hàng</label>
                         <input class="w3-input w3-border" type="text" required>
                     </div>
                 </div>
                 <div class="w3-row-padding" style="margin:0 -16px;">
                     <div class="w3-half w3-margin-bottom">
-                        <label><i class="fa fa-facebook-square w3-xlarge"></i> Facebook</label>
+                        <label><i class="fa fa-facebook-official w3-large"></i> Facebook</label>
                         <input class="w3-input w3-border" type="text" required>
                     </div>
                     <div class="w3-half">
-                        <label><i class="fa fa-location-arrow w3-xlarge"></i> Vị trí</label>
+                        <label><i class="fa fa-neuter w3-large"></i> Vị trí</label>
                         <input class="w3-input w3-border" type="text" required>
                     </div>
                 </div>
                 <div class="w3-row-padding" style="margin:8px -16px;">
                     <div class="w3-half w3-margin-bottom">
-                        <label><i class="fa fa-phone w3-xlarge"></i> Số điện thoại</label>
+                        <label><i class="fa fa-phone w3-large"></i> Số điện thoại</label>
                         <input class="w3-input w3-border" type="phone" required>
                     </div>
                     <div class="w3-half">
-                        <label><i class="fa fa-envelope-open w3-xlarge"></i> Email</label>
+                        <label><i class="fa fa-envelope-o w3-large"></i> Email</label>
                         <input class="w3-input w3-border" type="email" required>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                 <app-product-types/>
                 <br>
                 <div class="w3-row">
-                    <button class="w3-button w3-green w3-right w3-quarter" type="submit"><i class="fa fa-save w3-xlarge w3-margin-right"></i>Lưu thay đổi</button>
+                    <button class="w3-button w3-border w3-border-blue w3-round-large w3-right w3-quarter" type="submit"><i class="fa fa-save w3-xlarge w3-margin-right"></i>Lưu</button>
                 </div>
             </form>
 

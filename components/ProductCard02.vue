@@ -14,7 +14,7 @@
                     <app-btn-saveitem />
                 </div>
                 <div class="w3-bar-item w3-right">
-                    <app-btn-sale />
+                    <app-btn-salecard />
                 </div>
             </div>        
         </div>

@@ -1,80 +1,61 @@
 <template>
     <section>
-        <div class="w3-display-container w3-center">
-            <div class="mySlides w3-animate-opacity">
-                <img class="w3-image" src="https://picsum.photos/600/150/?image=16" alt="Image 1" style="width: 100%;">
-                <div class="w3-display-left w3-padding w3-hide-small" style="width:35%">
-                    <div class="w3-black w3-opacity w3-hover-opacity-off w3-padding-large w3-round-large">
-                        <h1 class="w3-xlarge">Take photos with our app</h1>
-                        <hr class="w3-opacity">
-                        <p>Super simple installment: free of charge</p>
-                        <p><button class="w3-button w3-block w3-green w3-round" @click="document.getElementById('download').style.display='block'">Download <i class="fa fa-android"></i> <i class="fa fa-apple"></i> <i class="fa fa-windows"></i></button></p>
-                    </div>
-                </div>
-            </div>
-            <div class="mySlides w3-animate-opacity">
-                <img class="w3-image" src="https://picsum.photos/600/150/?image=17" alt="Image 2" style="width: 100%;">
-                <div class="w3-display-left w3-padding w3-hide-small" style="width:35%">
-                <div class="w3-black w3-opacity w3-hover-opacity-off w3-padding-large w3-round-large">
-                    <h1 class="w3-xlarge w3-text-red"><b>CLICK!</b> Fast and Easy</h1>
-                    <hr class="w3-opacity">
-                    <p>Choose from thousands of features</p>
-                    <p><button class="w3-button w3-block w3-red w3-round" @click="document.getElementById('download').style.display='block'">Download <i class="fa fa-android"></i> <i class="fa fa-apple"></i> <i class="fa fa-windows"></i></button></p>
-                </div>
-                </div>
-            </div>
-            <div class="mySlides w3-animate-opacity">
-                <img class="w3-image" src="https://picsum.photos/600/200/?image=18" alt="Image 3" style="width: 100%;">
-                <div class="w3-display-left w3-padding w3-hide-small" style="width:35%">
-                <div class="w3-black w3-opacity w3-hover-opacity-off w3-padding-large w3-round-large">
-                    <h1 class="w3-xlarge">Smart Design</h1>
-                    <hr class="w3-opacity">
-                    <p>Customize photos as you go</p>
-                    <p><button class="w3-button w3-block w3-indigo w3-round" @click="document.getElementById('download').style.display='block'">Download <i class="fa fa-android"></i> <i class="fa fa-apple"></i> <i class="fa fa-windows"></i></button></p>
-                </div>
-                </div>
-            </div>
-            <a class="w3-button w3-large w3-black w3-display-right w3-margin-right w3-hide-small w3-hover-light-grey" @click="plusDivs(1)">Khám phá <i class="fa fa-angle-right"></i></a>
-            <a class="w3-button w3-block w3-black w3-hide-large w3-hide-medium" @click="plusDivs(1)">Khám phá <i class="fa fa-angle-right"></i></a>
-        </div>
+        <app-slider-mainpanel/>
 
-        <div class="w3-padding w3-margin-bottom">
-            <div class="w3-row w3-content" style="max-width:1300px">
-                <div class="w3-col l4">
-                    <h3 class="w3-padding"><strong>Cửa hàng</strong></h3>
-                </div>     
-                <div class="w3-col l8 w3-padding-24 w3-margin-bottom">
-                    <div class="w3-row-padding">
-                        <div class="w3-col l2 m4 s6 w3-margin-bottom" v-for="i in 8" :key="i">
-                            <div class="w3-display-container">
-                                <img src="https://picsum.photos/600/600/?image=45" class="w3-round-xlarge w3-hover-opacity" style="width:100%">
-                                <div class="w3-display-middle w3-display-hover">
-                                    <nuxt-link to="/shops/1re43565hy" class="w3-button w3-black" target="_blank">Chi tiết <i class="fa fa-external-link"></i></nuxt-link>
-                                </div>
-                            </div>
-                            <h6><strong>Shop DuyThang</strong></h6>  
-                        </div>
-                    </div>
+        <div class="w3-margin">
+            <div class="w3-row-padding w3-content" style="max-width:1300px; padding: 0"> 
+                <div class="w3-col l4" style="padding: 0 2px">
+                    <a class="w3-button w3-white w3-border w3-center w3-padding w3-text-blue w3-hover-blue" style="width: 100%;">
+                        <i class="fa fa-smile-o w3-xxlarge"></i>
+                        <h5><b>Đăng nhập / Đăng ký</b></h5>
+                    </a>
+                </div>
+                <div class="w3-col l4" style="padding: 0 2px">
+                    <a class="w3-button w3-white w3-border w3-center w3-padding w3-text-blue w3-hover-blue" style="width: 100%">
+                        <i class="fa fa-plus-square-o w3-xxlarge"></i>
+                        <h5><b>Tạo cửa hàng</b></h5>
+                    </a>
+                </div>
+                <div class="w3-col l4"  style="padding: 0 2px">
+                    <a class="w3-button w3-white w3-border w3-center w3-padding w3-text-blue w3-hover-blue" style="width: 100%">
+                        <i class="fa fa-table w3-xxlarge"></i>
+                        <h5><b>Quản lý đơn hàng</b></h5>
+                    </a>
                 </div>
             </div>
         </div>
 
-        <div class="w3-padding w3-white w3-margin-bottom">
-            <div class="w3-row w3-content" style="max-width:1400px">
-                <div class="w3-col l4 w3-hide-large">
-                    <h3 class="w3-padding"><strong>Các sản phẩm mới nhất</strong></h3>
-                </div>    
-                <div class="w3-col l8 w3-padding-24 w3-margin-bottom">
-                    <div class="w3-row-padding">
-                        <div class="w3-col l3 m6 s6 w3-margin-bottom" v-for="i in 8" :key="i">
-                            <app-product-card01 />
-                            <br>
-                        </div>
+        <div class="w3-margin-bottom">
+            <div class="w3-content w3-white w3-border" style="max-width:1300px">
+                <h5 class="w3-padding w3-border-bottom"><i class="fa fa-bank w3-xlarge w3-margin-right"></i><b>CỬA HÀNG NỔI BẬT</b></h5>
+                <app-slider-mainshop/>
+            </div>
+        </div>
+
+        <!--<div class="w3-margin-bottom">
+            <div class="w3-content w3-white w3-border" style="max-width:1300px">
+                <h5 class="w3-padding"><strong>DANH MỤC CỬA HÀNG</strong></h5>
+                <div class="w3-row-padding">
+                    <div class="w3-col l2 m6 s6 w3-center" style="padding: 0px" v-for="i in 6" :key="i">
+                        <nuxt-link to="/" class="w3-button w3-white w3-border w3-hover-shadow w3-hover-white w3-padding" style="width: 100%;">
+                            <img src="https://picsum.photos/100/100/?image=63" class="w3-margin-top" style="width:60%">
+                            <h6><b>Food</b></h6>
+                        </nuxt-link>
                     </div>
                 </div>
-                <div class="w3-col l4 w3-hide-medium w3-hide-small">
-                    <h3 class="w3-padding w3-right"><strong>Các sản phẩm mới nhất</strong></h3>
-                </div>   
+                <br>
+            </div>
+        </div>-->
+
+        <div class="w3-margin-bottom">
+            <div class="w3-content w3-white w3-border" style="max-width:1300px">
+                <h5 class="w3-padding w3-border-bottom"><i class="fa fa-shopping-bag w3-xlarge w3-margin-right"></i><b>SẢN PHẨM MỚI</b></h5>
+                <div class="w3-row-padding">
+                    <div class="w3-col l2 m3 s6 w3-margin-bottom" v-for="i in 12" :key="i">
+                        <app-product-card03 />
+                        <br>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -82,30 +63,7 @@
 </template>
 
 <script>
-    let slideIndex = 1
     export default {
-        layout: 'main',
-        mounted() {
-            this.showDivs(1)
-        },
-        methods: {
-            showDivs(n) {
-                let i 
-                let x = document.getElementsByClassName("mySlides")
-                if (n > x.length) {slideIndex = 1}    
-                if (n < 1) {slideIndex = x.length}
-                for (i = 0; i < x.length; i++) {
-                    x[i].style.display = "none"
-                }
-                x[slideIndex-1].style.display = "block"
-            },
-            plusDivs(n) {
-                this.showDivs(slideIndex += n)
-            }
-        }
+        layout: 'main'
     }
 </script>
-
-<style>
-    .mySlides {display: none;}
-</style>

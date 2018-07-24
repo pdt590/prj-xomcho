@@ -1,6 +1,7 @@
 <template>
     <section>
-        <i class="w3-margin-right" :class="isSave ? 'my-heart fa fa-star' :'my-heart fa fa-star-o'" @click="onSave()"></i> Lưu cửa hàng
+        <i class="w3-margin-right" :class="isSave ? 'my-heart fa fa-bookmark' :'my-heart fa fa-bookmark-o'" @click="onSave()"></i> 
+        <h6>Lưu cửa hàng</h6>
     </section>
 </template>
 
@@ -21,7 +22,7 @@
 
 <style scoped>
     .my-heart {
-        font-size: 27px;
+        font-size: 22px;
         color:red;
         cursor: pointer;
     }

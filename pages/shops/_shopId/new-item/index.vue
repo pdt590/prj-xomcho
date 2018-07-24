@@ -15,41 +15,53 @@
             </div>
             <hr>
             
-            <form id="itemInfo" class="w3-container w3-margin-bottom section">
+            <form id="itemInfo" class="w3-margin-bottom section">
                 <h5><strong>Thông tin sản phẩm</strong></h5><br>
                 <div class="w3-row-padding" style="margin:0 -16px;">
                     <div class="w3-half w3-margin-bottom">
-                        <label><i class="fa fa fa-object-group w3-xlarge"></i> Tên sản phẩm</label>
+                        <label><i class="fa fa-file-archive-o w3-large"></i> Tên sản phẩm</label>
+                        <input class="w3-input w3-border" type="text" required>
+                    </div>
+                    <div class="w3-half w3-margin-bottom">
+                        <label><i class="fa fa-codepen w3-large"></i> Thương hiệu</label>
                         <input class="w3-input w3-border" type="text" required>
                     </div>
                 </div>
                 <div class="w3-row-padding" style="margin:0 -16px;">
-                    <div class="w3-third w3-margin-bottom">
-                        <label><i class="fa fa-dollar w3-xlarge"></i> Giá</label>
-                        <input class="w3-input w3-border" type="number" required placeholder="200">
+                    <div class="w3-half w3-margin-bottom">
+                        <label><i class="fa fa-dollar w3-large"></i> Giá</label>
+                        <input class="w3-input w3-border" type="text" required>
                     </div>
-                    <div class="w3-third w3-margin-bottom">
-                        <label><i class="fa fa-money w3-xlarge"></i> Loại tiền</label>
-                        <input class="w3-input w3-border" type="text" required placeholder="VNĐ">
+                    <div class="w3-half w3-margin-bottom">
+                        <label><i class="fa fa-dollar w3-large"></i> Giá sale</label>
+                        <input class="w3-input w3-border" type="text" required>
                     </div>
-                    <div class="w3-third">
-                        <label><i class="fa fa-shopping-basket w3-xlarge"></i> Đơn vị</label>
-                        <input class="w3-input w3-border" type="text" placeholder="1 Cái" required>
+                </div>
+                <div class="w3-row-padding" style="margin:0 -16px;">
+                    <div class="w3-half w3-margin-bottom">
+                        <label><i class="fa fa-money w3-large"></i> Loại tiền</label>
+                        <input class="w3-input w3-border" type="text" required>
+                    </div>
+                    <div class="w3-half w3-margin-bottom">
+                        <label><i class="fa fa-balance-scale w3-large"></i> Đơn vị</label>
+                        <input class="w3-input w3-border" type="text" placeholder= "Số lượng sản phẩm có thể mua với giá ở trên" required>
                     </div>
                 </div>
                 <hr>
                 <h5><strong>Miêu tả</strong></h5><br>
-                <textarea class="w3-input w3-border" rows="8" style="resize:none"></textarea>
+                <textarea class="w3-input w3-border" rows="5" style="resize:none"></textarea>
                 <hr>
                 <h5><strong>Loại sản phẩm</strong></h5><br>
                 <app-product-types/>
                 <br>
-                <button class="w3-button w3-green w3-right w3-quarter" type="submit"><i class="fa fa-save w3-xlarge w3-margin-right"></i> Thêm sản phẩm</button>
+                <div class="w3-row">
+                    <button class="w3-button w3-border w3-border-blue w3-round-large w3-right w3-quarter" type="submit"><i class="fa fa-save w3-xlarge w3-margin-right"></i>Thêm sản phẩm</button>
+                </div>
             </form>
 
-            <div id="itemImg" class="w3-container w3-margin-bottom section" style="display:none">
-                <h5><strong>Ảnh sản phẩm (Tối đa 5 ảnh)</strong></h5><br>
-                <app-img-upload :numberImg="5" :section="'itemPreview'"/>
+            <div id="itemImg" class="w3-margin-bottom section" style="display:none">
+                <h5><strong>Ảnh sản phẩm (tối đa 4 ảnh)</strong></h5><br>
+                <app-img-upload :numberImg="4" :section="'itemPreview'"/>
                 <br>
             </div>
         </div>

@@ -1,57 +1,49 @@
 <template>
     <section>
         <div class="w3-padding w3-white w3-margin-bottom">
-            <div class="w3-row-padding">
-                <h5><strong>Hình ảnh sảm phẩm</strong></h5><br>
-                <div class="w3-quarter w3-margin-bottom">
-                    <img src="https://picsum.photos/600/600/?image=58" style="width:100%" class="w3-round" @click="openImgModal" alt="Lost Image">
-                </div>
-            </div>
-            <!-- Modal for full size images on click-->
-            <div ref="modal" class="w3-modal w3-black">
-                <div class="w3-modal-content w3-animate-zoom w3-center w3-transparent w3-padding-64">
-                    <span class="w3-button w3-black w3-xlarge w3-display-topright" @click="closeImgModal">×</span>
-                    <img ref="imgModal" class="w3-image">
-                    <h5 ref="captionModal"></h5>
-                </div>
-            </div>
-            <hr>
             <div class="w3-row">
-                <h5><strong>Miêu tả sản phẩm</strong></h5><br>
-                <h5>Sản phẩm có những đặc điểm sau</h5>
-            </div>
-            <hr>     
-            <div class="w3-row">
-                <h5><strong>Giá sản phẩm</strong></h5><br>
-                <div class="w3-col s6">
-                    <h6 class="w3-tag w3-yellow"><i class="fa fa-fw fa-dollar"></i> <strong>200.000 VND / 4 cái</strong></h6>
+                <div class="w3-col l5">
+                    <app-slider-item />
                 </div>
-                <div class="w3-col s6">
+                <div class="w3-col l7">
+                    <div class="w3-border-bottom">
+                        <h3>Giày Nam ADIDAS HTKONKM90876</h3>
+                        <p><i class="fa fa-codepen"></i> Thương hiệu: <span class="w3-text-blue"><b> ADIDAS</b></span></p>
+                    </div>
+                    <br>
+                    <h6 class="w3-text-grey w3-margin-right">Giá:</h6><h4 class="w3-text-red"><strong> 200.000 VND / 4 cái</strong></h4>
                     <p><i class="fa fa-fw fa-clock-o"></i> Ngày tạo: 20/10/2018</p>
-                </div>
-            </div>
-            <hr>           
-            <div class="w3-row">
-                <h5><strong>Loại sản phẩm</strong></h5><br>
-                <div class="w3-col l4 m4 s6" 
-                    v-for="(type, i) in itemTypes" 
-                    :key="i">
+                    <hr>
                     <p>
-                        <img :src="type.icon" class="w3-margin-right" style="width:10%;">
-                        {{ type.title }}
+                        - Thiết kế trẻ trung, năng động <br>
+                        - Kích thước nhỏ gọn, tiện lợi <br>
+                        - Chất liệu vải oxford dày dặn, độ bền cao <br>
+                        - Thích hợp mang đi học, chơi thể thao <br>
                     </p>
+                    <hr>
+                    <div class="w3-row">
+                        <h6>Loại sản phẩm</h6><br>
+                        <div class="w3-col l4 m4 s6" 
+                            v-for="(type, i) in itemTypes" 
+                            :key="i">
+                            <p>
+                                <i class="w3-text-blue w3-large w3-margin-right" :class="type.icon"></i>
+                                {{ type.title }}
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="w3-row">
-                <nuxt-link
-                    v-if="false"
-                    :to="'/items/' + $route.params.itemId + '/edit-item'" 
-                    class="w3-button w3-green w3-margin-bottom w3-right w3-quarter">
-                    <i class="fa fa-edit w3-xlarge w3-margin-right"></i> 
-                    Chỉnh sửa
-                </nuxt-link>
-                <div v-else class="w3-margin-bottom w3-right w3-quarter">
-                    <app-modal-sale />
+                <div class="w3-row">
+                    <nuxt-link
+                        v-if="false"
+                        :to="'/items/' + $route.params.itemId + '/edit-item'" 
+                        class="w3-button w3-blue w3-margin-bottom w3-right w3-half">
+                        <i class="fa fa-edit w3-large w3-margin-right"></i> 
+                        Chỉnh sửa
+                    </nuxt-link>
+                    <div v-else class="w3-margin-bottom w3-right w3-quarter">
+                        <app-btn-sale />
+                    </div>
                 </div>
             </div>
         </div>
@@ -62,7 +54,7 @@
                 <p><input class="w3-input w3-border" type="email" placeholder="Email" required name="Email"></p>
                 <p><input class="w3-input w3-border" type="text" placeholder="Message" required name="Message"></p>
                 <div class="w3-row">
-                    <button type="submit" class="w3-button w3-green w3-right w3-quarter">Gửi nhận xét <i class="fa fa-send-o w3-large w3-margin-left"></i></button>
+                    <button class="w3-button w3-border w3-border-blue w3-round-large w3-right w3-quarter" type="submit"><i class="fa fa-send-o w3-large w3-margin-right"></i>Gửi nhận xét</button>
                 </div>
             </form>
             <hr>
@@ -86,27 +78,21 @@
         data() {
             return {
                 itemTypes: [
-                    {icon: "/meat.svg", title: "Thực phẩm"},
-                    {icon: "/agri.svg", title: "Nông sản"},
-                    {icon: "/pot.svg", title: "Gia dụng"},
-                    {icon: "/electronic.svg", title: "Điện tử"},
-                    {icon: "/medicine.svg", title: "Y tế"},
-                    {icon: "/fashion.svg", title: "Thời trang"},
-                    {icon: "/others.svg", title: "Khác"}
+                    {icon: "fa fa-shopping-basket", title: "Thực phẩm"},
+                    {icon: "fa fa-lemon-o", title: "Nông sản"},
+                    {icon: "fa fa-spoon", title: "Gia dụng"},
+                    {icon: "fa fa-camera-retro", title: "Điện tử"},
+                    {icon: "fa fa-medkit", title: "Y tế"},
+                    {icon: "fa fa-shopping-bag", title: "Thời trang"},
+                    {icon: "fa fa-question-circle-o", title: "Khác"}
                 ]
-            }
-        },
-        methods: {
-            openImgModal(event) {
-                let element  = event.currentTarget
-                this.$refs.modal.style.display = 'block'
-                this.$refs.imgModal.src = element.getAttribute('src')  
-                //this.$refs.captionModal.innerHTML = element.getAttribute('alt')
-                console.log(this.$route.path)
-            },
-            closeImgModal() {
-                this.$refs.modal.style.display = 'none'
             }
         }
     }
 </script>
+
+<style scoped>
+    h3, h4, h5, h6 {
+        display: inline-block;
+    }
+</style>

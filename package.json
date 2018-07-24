@@ -13,8 +13,7 @@
   "dependencies": {
     "firebase": "^5.2.0",
     "nuxt": "^1.4.0",
-    "nuxt-dropzone": "^0.2.7",
-    "vue-picture-input": "^2.1.6"
+    "nuxt-dropzone": "^0.2.7"
   },
   "devDependencies": {
     "cross-env": "^5.0.1",
