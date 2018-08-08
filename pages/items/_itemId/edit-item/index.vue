@@ -40,7 +40,10 @@
                 <div class="w3-row-padding" style="margin:0 -16px;">
                     <div class="w3-half w3-margin-bottom">
                         <label><i class="fa fa-money w3-large"></i> Loại tiền</label>
-                        <input class="w3-input w3-border" type="text" required>
+                        <select class="w3-select w3-border" name="option">
+                            <option value="1" selected>VND</option>
+                            <option value="2">USD</option>
+                        </select>
                     </div>
                     <div class="w3-half w3-margin-bottom">
                         <label><i class="fa fa-balance-scale w3-large"></i> Đơn vị</label>
@@ -55,7 +58,7 @@
                 <app-product-types/>
                 <br>
                 <div class="w3-row">
-                    <button class="w3-button w3-border w3-border-blue w3-round-large w3-right w3-quarter" type="submit"><i class="fa fa-save w3-xlarge w3-margin-right"></i>Lưu</button>
+                    <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit"><i class="fa fa-save w3-xlarge w3-margin-right"></i>Lưu</button>
                 </div>
             </form>
 

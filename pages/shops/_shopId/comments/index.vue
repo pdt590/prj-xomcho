@@ -19,7 +19,7 @@
                 <p><input class="w3-input w3-border" type="email" placeholder="Email" required name="Email"></p>
                 <p><input class="w3-input w3-border" type="text" placeholder="Message" required name="Message"></p>
                 <div class="w3-row">
-                    <button class="w3-button w3-border w3-border-blue w3-round-large w3-right w3-quarter" type="submit"><i class="fa fa-send-o w3-large w3-margin-right"></i>Gửi nhận xét</button>
+                    <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit"><i class="fa fa-send-o w3-large w3-margin-right"></i>Gửi nhận xét</button>
                 </div>
             </form>
             <hr>

@@ -4,34 +4,34 @@
             <div class="w3-row w3-content" style="max-width:1300px">
                 <div class="w3-container w3-third">
                     <h4 class="w3-bottombar w3-border-green"><strong>Thông tin liên hệ</strong></h4>
-                    <h5>
+                    <h6>
                         <a href="https://maps.google.com/?q=Long Biên, Hà Nội" target=_blank>
-                            <i class="fa fa-map-pin w3-xlarge w3-text-blue w3-margin-right"></i>
+                            <i class="fa fa-map-pin w3-xlarge w3-margin-right"></i>
                         </a>
                         Hà Nội
-                    </h5>
-                    <h5>
+                    </h6>
+                    <h6>
                         <a href="tel:016727735514">
-                            <i class="fa fa-phone w3-xlarge w3-text-blue w3-margin-right"></i>
+                            <i class="fa fa-phone w3-xlarge w3-margin-right"></i>
                         </a>
                         017627735514
-                    </h5>
-                    <h5>
+                    </h6>
+                    <h6>
                         <a href="mailto:thangecp@gmail.com?Subject=Xin%20Chào%20Cửa%20Hàng">
-                            <i class="fa fa-envelope w3-xlarge w3-text-blue w3-margin-right"></i>
+                            <i class="fa fa-envelope w3-xlarge w3-margin-right"></i>
                         </a> 
                         thangecp@gmail.com
-                    </h5>
+                    </h6>
                 </div>
                 <div class="w3-container w3-third">
                     <h4 class="w3-bottombar w3-border-red"><strong>Thông tin chung</strong></h4>
-                    <nuxt-link to="/"><h5>Trang chủ</h5></nuxt-link>
-                    <nuxt-link to="/about"><h5>Giới thiệu</h5></nuxt-link>
-                    <nuxt-link to="/pricing"><h5>Dịch vụ</h5></nuxt-link>
+                    <nuxt-link to="/"><h6>Trang chủ</h6></nuxt-link>
+                    <nuxt-link to="/about"><h6>Giới thiệu</h6></nuxt-link>
+                    <nuxt-link to="/pricing"><h6>Dịch vụ</h6></nuxt-link>
                 </div>
                 <div class="w3-container w3-third">
                     <h4 class="w3-bottombar w3-border-orange"><strong>Links</strong></h4>
-                    <h5><i class="fa fa-facebook-official w3-xlarge w3-text-blue w3-margin-right"></i>Facebook</h5>
+                    <h6><i class="fa fa-facebook-official w3-xlarge w3-margin-right"></i>Facebook</h6>
                 </div>
             </div>
         </div>

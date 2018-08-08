@@ -16,7 +16,7 @@
                     <div class="w3-row">
                         <div class="w3-col l2 m2 s2">
                             <a href="https://maps.google.com/?q=Long Biên, Hà Nội" target=_blank>
-                                <i class="fa fa-map-pin w3-xlarge w3-text-blue"></i>
+                                <i class="fa fa-map-pin w3-xlarge"></i>
                             </a>
                         </div>
                         <div class="w3-col l10 m10 s10">
@@ -28,7 +28,7 @@
                     <div class="w3-row">
                         <div class="w3-col l2 m2 s2">
                             <a href="https://facebook.com" target=_blank>
-                                <i class="fa fa-facebook-official w3-xlarge w3-text-blue"></i>
+                                <i class="fa fa-facebook-official w3-xlarge"></i>
                             </a>
                         </div>
                         <div class="w3-col l10 m10 s10">
@@ -42,7 +42,7 @@
                     <div class="w3-row">
                         <div class="w3-col l2 m2 s2">
                             <a href="tel:016727735514">
-                                <i class="fa fa-phone w3-xlarge w3-text-blue"></i>
+                                <i class="fa fa-phone w3-xlarge"></i>
                             </a>
                         </div>
                         <div class="w3-col l10 m10 s10">
@@ -54,7 +54,7 @@
                     <div class="w3-row">
                         <div class="w3-col l2 m2 s2">
                             <a href="mailto:thangecp@gmail.com?Subject=Xin%20Chào%20Cửa%20Hàng">
-                                <i class="fa fa-envelope w3-xlarge w3-text-blue"></i>
+                                <i class="fa fa-envelope w3-xlarge"></i>
                             </a>
                         </div>
                         <div class="w3-col l10 m10 s10">
@@ -79,7 +79,7 @@
                 <nuxt-link :to="'/shops/' + $route.params.shopId + '/edit-shop'" class="w3-bar-item w3-button">
                     <div class="w3-row">
                         <div class="w3-col l2 m2 s2">
-                            <i class="fa fa-gear w3-xlarge w3-text-blue w3-margin-right"></i>
+                            <i class="fa fa-gear w3-xlarge w3-margin-right"></i>
                         </div>
                         <div class="w3-col l10 m10 s10">                               
                             <h6 class="mySideBar">Chỉnh sửa</h6>
@@ -89,7 +89,7 @@
                 <nuxt-link :to="'/shops/' + $route.params.shopId + '/new-item'" class="w3-bar-item w3-button">
                     <div class="w3-row">
                         <div class="w3-col l2 m2 s2">
-                            <i class="fa fa-plus-square w3-xlarge w3-text-blue w3-margin-right"></i>
+                            <i class="fa fa-plus-square w3-xlarge w3-margin-right"></i>
                         </div>
                         <div class="w3-col l10 m10 s10">                               
                             <h6 class="mySideBar">Thêm sản phẩm</h6>
@@ -99,7 +99,7 @@
                 <nuxt-link :to="'/shops/' + $route.params.shopId + '/comments'" class="w3-bar-item w3-button">       
                     <div class="w3-row">
                         <div class="w3-col l2 m2 s2">
-                            <i class="fa fa-commenting w3-xlarge w3-text-blue w3-margin-right"></i>
+                            <i class="fa fa-commenting w3-xlarge w3-margin-right"></i>
                         </div>
                         <div class="w3-col l10 m10 s10">                               
                             <h6 class="mySideBar">Đánh giá cửa hàng</h6>

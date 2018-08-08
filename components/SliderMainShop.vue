@@ -1,17 +1,17 @@
 <template>
     <section>
         <div class="main-shop w3-row-padding" :class="isLeft ? 'w3-animate-opacity' : 'w3-animate-opacity'">
-            <div class="w3-col l4 m3 s6 w3-margin-bottom" v-for="i in 12" :key="i">
+            <div class="w3-col l4 m3 s6 w3-margin-bottom" v-for="i in 15" :key="i">
                 <app-shop-card02 />
             </div>
         </div>
         <div class="main-shop w3-row-padding"  :class="isLeft ? 'w3-animate-opacity' : 'w3-animate-opacity'">
-            <div class="w3-col l4 m3 s6 w3-margin-bottom" v-for="i in 12" :key="i">
+            <div class="w3-col l4 m3 s6 w3-margin-bottom" v-for="i in 15" :key="i">
                 <app-shop-card02 />
             </div>
         </div>
         <div class="main-shop w3-row-padding"  :class="isLeft ? 'w3-animate-opacity' : 'w3-animate-opacity'">
-            <div class="w3-col l4 m3 s6 w3-margin-bottom" v-for="i in 12" :key="i">
+            <div class="w3-col l4 m3 s6 w3-margin-bottom" v-for="i in 15" :key="i">
                 <app-shop-card02 />
             </div>
         </div>

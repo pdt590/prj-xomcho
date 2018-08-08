@@ -2,9 +2,9 @@
     <section>
         <div class="w3-display-container w3-center">
             <div class="main-panel w3-animate-opacity">
-                <img class="w3-image" src="https://picsum.photos/600/150/?image=16" alt="Image 1" style="width: 100%;">
+                <img class="w3-image" src="https://picsum.photos/600/220/?image=16" alt="Image 1" style="width: 100%;">
                 <div class="w3-display-left w3-padding w3-hide-small" style="width:35%">
-                    <div class="w3-black w3-opacity w3-hover-opacity-off w3-padding-large w3-round-large">
+                    <div class="w3-black w3-opacity w3-hover-opacity-off w3-padding-large ">
                         <h1 class="w3-xlarge">Take photos with our app</h1>
                         <hr class="w3-opacity">
                         <p>Super simple installment: free of charge</p>
@@ -13,9 +13,9 @@
                 </div>
             </div>
             <div class="main-panel w3-animate-opacity">
-                <img class="w3-image" src="https://picsum.photos/600/150/?image=17" alt="Image 2" style="width: 100%;">
+                <img class="w3-image" src="https://picsum.photos/600/200/?image=17" alt="Image 2" style="width: 100%;">
                 <div class="w3-display-left w3-padding w3-hide-small" style="width:35%">
-                    <div class="w3-black w3-opacity w3-hover-opacity-off w3-padding-large w3-round-large">
+                    <div class="w3-black w3-opacity w3-hover-opacity-off w3-padding-large ">
                         <h1 class="w3-xlarge w3-text-red"><b>CLICK!</b> Fast and Easy</h1>
                         <hr class="w3-opacity">
                         <p>Choose from thousands of features</p>
@@ -24,9 +24,9 @@
                 </div>
             </div>
             <div class="main-panel w3-animate-opacity">
-                <img class="w3-image" src="https://picsum.photos/600/150/?image=18" alt="Image 3" style="width: 100%;">
+                <img class="w3-image" src="https://picsum.photos/600/200/?image=18" alt="Image 3" style="width: 100%;">
                 <div class="w3-display-left w3-padding w3-hide-small" style="width:35%">
-                    <div class="w3-black w3-opacity w3-hover-opacity-off w3-padding-large w3-round-large">
+                    <div class="w3-black w3-opacity w3-hover-opacity-off w3-padding-large ">
                         <h1 class="w3-xlarge">Smart Design</h1>
                         <hr class="w3-opacity">
                         <p>Customize photos as you go</p>

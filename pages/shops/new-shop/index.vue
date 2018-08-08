@@ -3,13 +3,18 @@
         <div class="w3-padding w3-white w3-margin-bottom">
             <div class="w3-row">
                 <a href="javascript:void(0)" @click="openTab($event, 'shopInfo')">
-                    <div class="w3-col l6 m6 s6 tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">
+                    <div class="w3-col l4 m4 s4 tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">
                         <h5><strong>Thông tin</strong></h5>
                     </div>
                 </a>
                 <a href="javascript:void(0)" @click="openTab($event, 'shopImg')">
-                    <div class="w3-col l6 m6 s6 tablink w3-bottombar w3-hover-light-grey w3-padding">
-                        <h5><strong>Ảnh</strong></h5>
+                    <div class="w3-col l4 m4 s4 tablink w3-bottombar w3-hover-light-grey w3-padding">
+                        <h5><strong>Ảnh Logo</strong></h5>
+                    </div>
+                </a>
+                <a href="javascript:void(0)" @click="openTab($event, 'panelImg')">
+                    <div class="w3-col l4 m4 s4 tablink w3-bottombar w3-hover-light-grey w3-padding">
+                        <h5><strong>Ảnh Panel</strong></h5>
                     </div>
                 </a>
             </div>
@@ -19,7 +24,7 @@
                 <h5><strong>Thông tin cửa hàng</strong></h5><br>
                 <div class="w3-row-padding" style="margin:0 -16px;">
                     <div class="w3-half w3-margin-bottom">
-                        <label><i class="fa fa-file-text-o w3-large"></i> Tên cửa hàng</label>
+                        <label><i class="fa fa-trello w3-large"></i> Tên cửa hàng</label>
                         <input class="w3-input w3-border" type="text" required>
                     </div>
                 </div>
@@ -29,7 +34,7 @@
                         <input class="w3-input w3-border" type="text" required>
                     </div>
                     <div class="w3-half">
-                        <label><i class="fa fa-neuter w3-large"></i> Vị trí</label>
+                        <label><i class="fa fa-map-pin w3-large"></i> Địa chỉ</label>
                         <input class="w3-input w3-border" type="text" required>
                     </div>
                 </div>
@@ -39,7 +44,7 @@
                         <input class="w3-input w3-border" type="phone" required>
                     </div>
                     <div class="w3-half">
-                        <label><i class="fa fa-envelope-o w3-large"></i> Email</label>
+                        <label><i class="fa fa-envelope w3-large"></i> Email</label>
                         <input class="w3-input w3-border" type="email" required>
                     </div>
                 </div>
@@ -51,14 +56,17 @@
                 <app-product-types/>
                 <br>
                 <div class="w3-row">
-                    <button class="w3-button w3-border w3-border-blue w3-round-large w3-right w3-quarter" type="submit"><i class="fa fa-save w3-xlarge w3-margin-right"></i>Tạo cửa hàng</button>
+                    <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit"><i class="fa fa-save w3-xlarge w3-margin-right"></i>Tạo cửa hàng</button>
                 </div>
             </form>
 
             <div id="shopImg" class="w3-margin-bottom section" style="display:none">
-                <h5><strong>Ảnh đại diện</strong></h5><br>
-                <app-img-upload :numberImg="1" :section="'shopAvatar'"/>
-                <hr>
+                <h5><strong>Ảnh logo</strong></h5><br>
+                <app-img-upload :numberImg="1" :section="'shopPanel'"/>
+                <br>
+            </div>
+
+            <div id="panelImg" class="w3-margin-bottom section" style="display:none">
                 <h5><strong>Ảnh panel (tối đa 2 ảnh)</strong></h5><br>
                 <app-img-upload :numberImg="2" :section="'shopPanel'"/>
                 <br>

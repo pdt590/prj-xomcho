@@ -2,7 +2,7 @@
     <section>
         <app-navbar :navItems="navItems" />
         <app-navbar-mobile :navItems="navItems" :isMainLayout="true" />
-        <div class="w3-padding-48">     
+        <div class="w3-padding-64">     
             <!-- !PAGE CONTENT! -->
             <div class="w3-main">
                 <nuxt/>

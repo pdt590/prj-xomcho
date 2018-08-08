@@ -23,12 +23,12 @@
             return {
                 itemTypes: [
                     {icon: "fa fa-shopping-basket", title: "Thực phẩm"},
-                    {icon: "fa fa-lemon-o", title: "Nông sản"},
-                    {icon: "fa fa-spoon", title: "Gia dụng"},
+                    {icon: "fa fa-leaf", title: "Nông sản"},
+                    {icon: "fa fa-cutlery", title: "Gia dụng"},
                     {icon: "fa fa-camera-retro", title: "Điện tử"},
                     {icon: "fa fa-medkit", title: "Y tế"},
                     {icon: "fa fa-shopping-bag", title: "Thời trang"},
-                    {icon: "fa fa-question-circle-o", title: "Khác"}
+                    {icon: "fa fa-question-circle", title: "Khác"}
                 ]
             }
         }

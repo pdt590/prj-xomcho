@@ -19,7 +19,7 @@
                 <h5><strong>Thông tin cửa hàng</strong></h5><br>
                 <div class="w3-row-padding" style="margin:0 -16px;">
                     <div class="w3-half w3-margin-bottom">
-                        <label><i class="fa fa-file-text-o w3-large"></i> Tên cửa hàng</label>
+                        <label><i class="fa fa-trello w3-large"></i> Tên cửa hàng</label>
                         <input class="w3-input w3-border" type="text" required>
                     </div>
                 </div>
@@ -29,7 +29,7 @@
                         <input class="w3-input w3-border" type="text" required>
                     </div>
                     <div class="w3-half">
-                        <label><i class="fa fa-neuter w3-large"></i> Vị trí</label>
+                        <label><i class="fa fa-map-pin w3-large"></i> Vị trí</label>
                         <input class="w3-input w3-border" type="text" required>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                         <input class="w3-input w3-border" type="phone" required>
                     </div>
                     <div class="w3-half">
-                        <label><i class="fa fa-envelope-o w3-large"></i> Email</label>
+                        <label><i class="fa fa-envelope w3-large"></i> Email</label>
                         <input class="w3-input w3-border" type="email" required>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                 <app-product-types/>
                 <br>
                 <div class="w3-row">
-                    <button class="w3-button w3-border w3-border-blue w3-round-large w3-right w3-quarter" type="submit"><i class="fa fa-save w3-xlarge w3-margin-right"></i>Lưu</button>
+                    <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit"><i class="fa fa-save w3-xlarge w3-margin-right"></i>Lưu</button>
                 </div>
             </form>
 

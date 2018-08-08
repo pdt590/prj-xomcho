@@ -54,7 +54,7 @@
                 <p><input class="w3-input w3-border" type="email" placeholder="Email" required name="Email"></p>
                 <p><input class="w3-input w3-border" type="text" placeholder="Message" required name="Message"></p>
                 <div class="w3-row">
-                    <button class="w3-button w3-border w3-border-blue w3-round-large w3-right w3-quarter" type="submit"><i class="fa fa-send-o w3-large w3-margin-right"></i>Gửi nhận xét</button>
+                    <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit"><i class="fa fa-send-o w3-large w3-margin-right"></i>Gửi nhận xét</button>
                 </div>
             </form>
             <hr>
@@ -79,12 +79,12 @@
             return {
                 itemTypes: [
                     {icon: "fa fa-shopping-basket", title: "Thực phẩm"},
-                    {icon: "fa fa-lemon-o", title: "Nông sản"},
-                    {icon: "fa fa-spoon", title: "Gia dụng"},
+                    {icon: "fa fa-leaf", title: "Nông sản"},
+                    {icon: "fa fa-cutlery", title: "Gia dụng"},
                     {icon: "fa fa-camera-retro", title: "Điện tử"},
                     {icon: "fa fa-medkit", title: "Y tế"},
                     {icon: "fa fa-shopping-bag", title: "Thời trang"},
-                    {icon: "fa fa-question-circle-o", title: "Khác"}
+                    {icon: "fa fa-question-circle", title: "Khác"}
                 ]
             }
         }
