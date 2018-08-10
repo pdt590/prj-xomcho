@@ -74,6 +74,7 @@
 
 <script>
     export default {
+        middleware: 'auth',
         layout: 'item',
         methods: {
             openTab(event, arg) {

@@ -29,15 +29,6 @@
         layout: 'shop',
         data() {
             return {
-                itemTypes: [
-                    {icon: "/meat.svg", title: "Thực phẩm"},
-                    {icon: "/agri.svg", title: "Nông sản"},
-                    {icon: "/pot.svg", title: "Gia dụng"},
-                    {icon: "/electronic.svg", title: "Điện tử"},
-                    {icon: "/medicine.svg", title: "Y tế"},
-                    {icon: "/fashion.svg", title: "Thời trang"},
-                    {icon: "/others.svg", title: "Khác"}
-                ]
             }
         }
     }

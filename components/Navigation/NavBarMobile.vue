@@ -4,28 +4,37 @@
             <div class="w3-bar w3-padding w3-hide-large w3-blue" style="z-index:1001">
                 <nuxt-link to="/" class="w3-bar-item w3-button w3-hover-none w3-hover-text-white"><i class="fa fa-home w3-xlarge"></i> </nuxt-link>
                 <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right" @click="openSideBar" v-show="!isMainLayout"><i class="fa fa-bars"></i></a>
-                <div class="w3-dropdown-hover w3-right">
+                
+                <div v-if="user" class="w3-dropdown-hover w3-right">
                     <a class="w3-button">
-                        <img src="https://picsum.photos/600/600/?image=52" class="w3-circle" style="height:23px;width:23px" alt="Avatar">
+                        <img :src="user.photoUrl" class="w3-circle" style="height:23px;width:23px" alt="Avatar">
                     </a>
                     <div class="w3-dropdown-content w3-bar-block w3-card w3-light-grey" :style="!isMainLayout ? 'right:58px;' : 'right:15px;'">
+                        <p class="w3-bar-item" style="padding-bottom:0">{{user.username}}</p>
                         <nuxt-link to="/user" class="w3-bar-item w3-button"><i class="fa fa-cube w3-large"></i> Trang quản lý</nuxt-link>
                         <a class="w3-bar-item w3-button w3-border-top"><i class="fa fa-sign-out w3-large"></i> Đăng xuất</a>
                     </div>
                 </div>
+
                 <button
+                    v-else
                     @click="openLoginModal"
                     class="w3-bar-item w3-button w3-right">
                     <i class="fa fa-sign-in w3-large"></i>
                 </button>
                 <app-modal-login ref="modalLogin" />
 
-                <nuxt-link
-                    v-for="(item, i) in navItems"
-                    :key="i"
-                    :to="item.link" class="w3-bar-item w3-button w3-right"> 
-                    <i class="w3-large" :class="item.icon"></i>
-                </nuxt-link>
+                <div v-if="user">
+                    <nuxt-link to="/user" 
+                        class="w3-bar-item w3-button w3-right">
+                        <i class="fa fa-bell w3-large"></i><span class="w3-badge w3-right w3-small w3-red">3</span>
+                    </nuxt-link>
+                    <nuxt-link to="/shops/new-shop"
+                        class="w3-bar-item w3-padding w3-button w3-right"> 
+                        <i class="w3-large fa fa-plus-square"></i>
+                    </nuxt-link>
+                </div>
+
                 <button @click="onSearch" class="w3-bar-item w3-button w3-right"><i :class="enableSearch ? 'fa fa-close' : 'fa fa-search'" class="w3-large"></i></button>
                 <form ref="search" style="display: none">
                     <button class="w3-button w3-light-grey w3-bar-item w3-mobile">Tìm kiếm</button>
@@ -42,15 +51,17 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
+
     export default {
         props: {
-            navItems: {
-                type: Array
-            },
             isMainLayout: {
                 type: Boolean,
                 default: false
             }
+        },
+        computed: {
+            ...mapGetters(['user'])
         },
         data() {
             return {

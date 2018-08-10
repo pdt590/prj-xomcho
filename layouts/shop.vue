@@ -1,7 +1,7 @@
 <template>
     <section>
-        <app-navbar :navItems="navItems" />
-        <app-navbar-mobile :navItems="navItems" />
+        <app-navbar />
+        <app-navbar-mobile />
         <div class="w3-content w3-padding-64" style="max-width:1300px">
             <app-sidebar-shop></app-sidebar-shop>
             <!-- !PAGE CONTENT! -->
@@ -16,18 +16,6 @@
         </div>
     </section>
 </template>
-
-<script>
-    export default {
-        data() {
-            return {
-                navItems: [
-                    {link: '/shops/new-shop', icon: 'fa fa-plus-square', title: 'Tạo cửa hàng'}
-                ]
-            }
-        }
-    }
-</script>
 
 <style>
     html,body,h1,h2,h3,h4,h5,h6 {

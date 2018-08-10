@@ -25,48 +25,48 @@
                 <div class="w3-row-padding" style="margin:0 -16px;">
                     <div class="w3-half w3-margin-bottom">
                         <label><i class="fa fa-trello w3-large"></i> Tên cửa hàng</label>
-                        <input class="w3-input w3-border" type="text" required>
+                        <input class="w3-input w3-border" type="text" required v-model="shopTitle">
                     </div>
                 </div>
                 <div class="w3-row-padding" style="margin:0 -16px;">
                     <div class="w3-half w3-margin-bottom">
                         <label><i class="fa fa-facebook-official w3-large"></i> Facebook</label>
-                        <input class="w3-input w3-border" type="text" required>
+                        <input class="w3-input w3-border" type="text" v-model="shopFb">
                     </div>
                     <div class="w3-half">
                         <label><i class="fa fa-map-pin w3-large"></i> Địa chỉ</label>
-                        <input class="w3-input w3-border" type="text" required>
+                        <input class="w3-input w3-border" type="text" required v-model="shopLocation">
                     </div>
                 </div>
                 <div class="w3-row-padding" style="margin:8px -16px;">
                     <div class="w3-half w3-margin-bottom">
                         <label><i class="fa fa-phone w3-large"></i> Số điện thoại</label>
-                        <input class="w3-input w3-border" type="phone" required>
+                        <input class="w3-input w3-border" type="phone" required v-model="shopPhone">
                     </div>
                     <div class="w3-half">
                         <label><i class="fa fa-envelope w3-large"></i> Email</label>
-                        <input class="w3-input w3-border" type="email" required>
+                        <input class="w3-input w3-border" type="email" v-model="shopEmail">
                     </div>
                 </div>
                 <hr>
                 <h5><strong>Miêu tả</strong></h5><br>
-                <textarea class="w3-input w3-border" rows="5" style="resize:none"></textarea>
+                <textarea class="w3-input w3-border" rows="5" style="resize:none" required v-model="shopDesc"></textarea>
                 <hr>
                 <h5><strong>Các mặt hàng sẽ bán</strong></h5><br>
                 <app-product-types/>
                 <br>
                 <div class="w3-row">
-                    <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit"><i class="fa fa-save w3-xlarge w3-margin-right"></i>Tạo cửa hàng</button>
+                    <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" type="submit" @click.prevent="onAddShop"><i class="w3-xlarge w3-margin-right" :class="loading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Tạo cửa hàng</button>
                 </div>
             </form>
 
-            <div id="shopImg" class="w3-margin-bottom section" style="display:none">
+            <div id="shopImg" class="w3-margin-bottom section" style="display:none; min-height: 500px">
                 <h5><strong>Ảnh logo</strong></h5><br>
                 <app-img-upload :numberImg="1" :section="'shopPanel'"/>
                 <br>
             </div>
 
-            <div id="panelImg" class="w3-margin-bottom section" style="display:none">
+            <div id="panelImg" class="w3-margin-bottom section" style="display:none; min-height: 500px">
                 <h5><strong>Ảnh panel (tối đa 2 ảnh)</strong></h5><br>
                 <app-img-upload :numberImg="2" :section="'shopPanel'"/>
                 <br>
@@ -77,14 +77,26 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
 
     export default {
+        middleware: 'auth',
+        computed: {
+            ...mapGetters(['loading'])
+        },
         data() {
             return {
-                options: {
-                    url: "http://httpbin.org/anything"
-                }
-
+                shopTitle: '',
+                shopFb: '',
+                shopLocation: '',
+                shopPhone: '',
+                shopEmail: '',
+                shopDesc: '',
+                shopLogoUrl: 'https://imgplaceholder.com/600x600/cccccc/757575/glyphicon-user',
+                shopPanelUrl: [
+                    'https://picsum.photos/600/200?image=0',
+                    'https://picsum.photos/600/200?image=1'
+                ]
             }
         },
         methods: {
@@ -100,6 +112,21 @@
                 }
                 document.getElementById(arg).style.display = "block";
                 event.currentTarget.firstElementChild.className += " w3-border-red";
+            },
+            onAddShop() {
+                const shopData = {
+                    shopTitle: this.shopTitle,
+                    shopFb: this.shopFb,
+                    shopLocation: this.shopLocation,
+                    shopPhone: this.shopPhone,
+                    shopEmail: this.shopEmail,
+                    shopDesc: this.shopDesc,
+                    shopLogo: this.shopLogo
+                }
+                this.$store.dispatch('addShop', shopData)
+                    .then(() => {
+                        this.$router.push("/") //TODO: redirect to new-shop page
+                    })
             }
         }
     }

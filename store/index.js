@@ -6,7 +6,7 @@ const createStore = () => {
         state: {
             user: null,
             loading: false,
-            error: null,
+            error: null, // error state is just for auth
             loadedShops: [],
             sideBar: false
         },
@@ -40,8 +40,10 @@ const createStore = () => {
             }
         },
         actions: {
+            // nuxtServerInit should be only used for authentication 
             nuxtServerInit (vuexContext, context) {
                 vuexContext.commit('setLoading', true)
+                // return the promise
                 return firebase.database().ref('shops').once('value')
                     .then(
                         data => {
@@ -61,21 +63,26 @@ const createStore = () => {
                     )
                     .catch(
                         error => {
-                            console.log('[ERROR]' + error)
+                            console.log('[ERROR] ' + error)
                         }
                     )
             },
             addShop (vuexContext, payload) {
+                vuexContext.commit('setLoading', true)
+                let now = new Date()
                 const newShop = {
                     ...payload,
+                    updatedDate: now.toISOString(), //TODO: new Date() cannot be used here
                     creatorId: vuexContext.getters.user.id
                 }
                 let key
+                // return the promise
                 return firebase.database().ref('shops').push(newShop)
                     .then( 
                         data => {
+                            vuexContext.commit('setLoading', false)
                             key = data.key
-                            return key 
+                            return key
                         }
                     )
                     .then(
@@ -88,12 +95,14 @@ const createStore = () => {
                     )
                     .catch(
                         error => {
+                            vuexContext.commit('setLoading', false)
                             console.log('[ERROR]' + error)
                         }
                     )
             },
             editShop (vuexContext, payload) {
                 vuexContext.commit('setLoading', true)
+                // return the promise
                 return firebase.database().ref('shops').child(payload.id).update(payload)
                     .then( 
                         () => {
@@ -104,7 +113,7 @@ const createStore = () => {
                     .catch(
                         error => {
                             vuexContext.commit('setLoading', false)
-                            console.log('[ERROR]' + error)
+                            console.log('[ERROR] ' + error)
                         }
                     )
             },
@@ -114,51 +123,121 @@ const createStore = () => {
                 // return the promise of firebase.auth().createUserWithEmailAndPassword.then()
                 return firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
                     .then(
-                        user => {
-                            vuexContext.commit('setLoading', false)
-                            const newUser = {
-                                id: user.uid
+                        data => {
+                            //const user = firebase.auth().currentUser or
+                            //user.updateProfile({
+                            //})
+                            const {user} = data
+                            const userProfile = {
+                                username: payload.username,
+                                fullname: '',
+                                email: payload.email,
+                                phone:'',
+                                photoUrl: 'https://imgplaceholder.com/600x600/cccccc/757575/glyphicon-user'
                             }
-                            vuexContext.commit('setUser', newUser)
+                            firebase.database().ref('/users/' + user.uid).set({profile: {...userProfile}}) //TODO: fix issue reload Signin modal when put return here
+                                .then(
+                                    () => {
+                                        vuexContext.commit('setLoading', false)
+                                        vuexContext.commit('setUser', {
+                                            id: user.uid, 
+                                            ...userProfile
+                                        })
+                                    }
+                                )
                         }
                     )
                     .catch(
                         error => {
                             vuexContext.commit('setLoading', false)
                             vuexContext.commit('setError', error)
-                            console.log('[ERROR]' + error)
+                            console.log('[ERROR] ' + error)
                         }
                     )
             },
             signUserIn (vuexContext, payload) {
                 vuexContext.commit('setLoading', true)
                 vuexContext.commit('clearError')
+                // return the promise
                 return firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
                     .then(
-                        user => {
-                            vuexContext.commit('setLoading', false)
-                            const newUser = {
-                                id: user.uid
-                            }
-                            vuexContext.commit('setUser', newUser)
+                        data => {
+                            //const user = firebase.auth().currentUser
+                            const {user} = data
+                            return firebase.database().ref('/users/' + user.uid + '/profile').once('value')
+                                .then(
+                                    data => {
+                                        const obj = data.val()
+                                        const userProfile = {
+                                            username: obj.username,
+                                            fullname: obj.fullname,
+                                            email: obj.email,
+                                            phone: obj.phone,
+                                            photoUrl: obj.photoUrl,
+                                            favorShops: obj.favorShops,
+                                            favorItems: obj.favorItems
+                                        }
+                                        return userProfile
+                                    }
+                                )
+                                .then(
+                                    userProfile => {
+                                        vuexContext.commit('setLoading', false)
+                                        vuexContext.commit('setUser', {
+                                            id: user.uid,
+                                            ...userProfile
+                                        })
+                                    }
+                                )
+                            
                         }
                     )
                     .catch(
                         error => {
                             vuexContext.commit('setLoading', false)
                             vuexContext.commit('setError', error)
-                            console.log('[ERROR]' + error)
+                            console.log('[ERROR] ' + error)
                         }
                     )
             },
             autoSignIn (vuexContext, payload) {
-                vuexContext.commit('setUser', {
-                    id: payload.uid
-                })
+                return firebase.database().ref('/users/' + payload.uid + '/profile').once('value')
+                    .then(
+                        data => {
+                            const obj = data.val()
+                            const userProfile = {
+                                username: obj.username,
+                                fullname: obj.fullname,
+                                email: obj.email,
+                                phone: obj.phone,
+                                photoUrl: obj.photoUrl,
+                                favorShops: obj.favorShops,
+                                favorItems: obj.favorItems
+                            }
+                            return userProfile
+                        }
+                    )
+                    .then(
+                        userProfile => {
+                            vuexContext.commit('setUser', {
+                                id: payload.uid,
+                                ...userProfile
+                            })
+                        }
+                    )
+                    .catch(
+                        error => {
+                            console.log('[ERROR] ' + error)
+                        }
+                    )
             },
             logOut (vuexContext) {
-                firebase.auth().signOut()
-                vuexContext.commit('setUser', null)
+                return firebase.auth().signOut()
+                    .then(
+                        () => {
+                            vuexContext.commit('setUser', null)
+                        }
+                    )
             },
             clearError (vuexContext) {
                 vuexContext.commit('clearError')

@@ -1,10 +1,11 @@
 import Vue from 'vue'
-import NavBar from "~/components/NavBar"
-import NavBarMobile from "~/components/NavBarMobile"
-import SideBarShop from "~/components/SideBarShop"
-import SideBarItem from "~/components/SideBarItem"
-import SideBarInbox from "~/components/SideBarInbox"
-import Footer from "~/components/Footer"
+import NavBar from "~/components/Navigation/NavBar"
+import NavBarMobile from "~/components/Navigation/NavBarMobile"
+import SideBarShop from "~/components/Navigation/SideBarShop"
+import SideBarItem from "~/components/Navigation/SideBarItem"
+import SideBarInbox from "~/components/Navigation/SideBarInbox"
+import Footer from "~/components/Navigation/Footer"
+
 import ModalLogin from "~/components/ModalLogin"
 import UploadImg from "~/components/UploadImg"
 import ProductTypes from "~/components/ProductTypes"

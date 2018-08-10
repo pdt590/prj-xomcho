@@ -1,7 +1,7 @@
 <template>
     <section>
-        <app-navbar :navItems="navItems" />
-        <app-navbar-mobile :navItems="navItems" :isMainLayout="true" />
+        <app-navbar />
+        <app-navbar-mobile :isMainLayout="true" />
         <div class="w3-padding-64">     
             <!-- !PAGE CONTENT! -->
             <div class="w3-main">
@@ -20,9 +20,6 @@
     export default {
         data() {
             return {
-                navItems: [
-                    {link: '/shops/new-shop', icon: 'fa fa-plus-square', title: 'Tạo cửa hàng'}
-                ],
                 enableSearch: false
             }
         },

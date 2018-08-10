@@ -2,21 +2,23 @@
     <section>
         <div class="w3-top" style="z-index:1001; font-size: 15px">
             <div class="w3-bar w3-padding w3-blue w3-hide-small w3-hide-medium">
-                <nuxt-link to="/" class="w3-bar-item w3-button w3-hover-none" style="padding: 0;">
+                <nuxt-link to="/" class="w3-bar-item w3-hover-none" style="padding: 0;">
                     <img src="/logo.png" style="width: 30%;" alt="Avatar">
                 </nuxt-link>
                 
-                <div class="w3-dropdown-hover w3-right">
+                <div v-if="user" class="w3-dropdown-hover w3-right">
                     <a class="w3-button">
-                        <img src="https://picsum.photos/600/600/?image=52" class="w3-circle" style="height:25px;width:25px" alt="Avatar">
+                        <img :src="user.photoUrl" class="w3-circle" style="height:25px;width:25px" alt="Avatar">
                     </a>
                     <div class="w3-dropdown-content w3-bar-block w3-card w3-light-grey" style="right:15px;">
+                        <p class="w3-bar-item" style="padding-bottom:0">{{user.username}}</p>
                         <nuxt-link to="/user" class="w3-bar-item w3-button"><i class="fa fa-cube w3-large"></i> Trang quản lý</nuxt-link>
-                        <a class="w3-bar-item w3-button w3-border-top"><i class="fa fa-sign-out w3-large"></i> Đăng xuất</a>
+                        <a class="w3-bar-item w3-button w3-border-top" @click="onLogout"><i class="fa fa-sign-out w3-large"></i> Đăng xuất</a>
                     </div>
                 </div>
                 
                 <button
+                    v-else
                     @click="openLoginModal"
                     class="w3-bar-item w3-button w3-padding w3-right">
                     <i class="fa fa-sign-in w3-large"></i>
@@ -24,26 +26,26 @@
                 </button>
                 <app-modal-login ref="modalLogin" />
                 
-                <nuxt-link
-                    v-for="(item, i) in navItems"
-                    :key="i"
-                    :to="item.link" class="w3-bar-item w3-padding w3-button w3-right"> 
-                    <i class="w3-large" :class="item.icon"></i> {{item.title}}
-                </nuxt-link>
-
-                <nuxt-link to="/user" class="w3-bar-item w3-button w3-right">
-                    <i class="fa fa-bell w3-large"></i><span class="w3-badge w3-right w3-small w3-red">3</span>
-                </nuxt-link>
-
+                <div v-if="user">
+                    <nuxt-link to="/user" 
+                        class="w3-bar-item w3-button w3-right">
+                        <i class="fa fa-bell w3-large"></i><span class="w3-badge w3-right w3-small w3-red">3</span>
+                    </nuxt-link>
+                    <nuxt-link to="/shops/new-shop"
+                        class="w3-bar-item w3-padding w3-button w3-right"> 
+                        <i class="w3-large fa fa-plus-square"></i> Tạo cửa hàng
+                    </nuxt-link>
+                </div>
+            
                 <!--<button @click="onSearch" class="w3-bar-item w3-button"><i :class="enableSearch ? 'fa fa-close' : 'fa fa-search'" class="w3-large"></i></button>-->
-                <form ref="search" class="my-center">
+                <form ref="search" class="app-search">
                     <button class="w3-button w3-light-grey w3-bar-item w3-margin-left">Tìm kiếm</button>
                     <select class="w3-select w3-bar-item" name="option">
                         <option value="" disabled selected>Danh mục</option>
                         <option value="1">Cửa hàng</option>
                         <option value="2">Sản phẩm</option>
                     </select>
-                    <input  type="text" class="w3-bar-item w3-input" placeholder="nhập từ khóa..." style="width:50%" required>
+                    <input  type="text" class="w3-bar-item w3-input" placeholder="nhập từ khóa..." style="width:70%" required>
                 </form> 
             </div>
         </div>
@@ -53,11 +55,11 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex'
+
     export default {
-        props: {
-            navItems: {
-                type: Array
-            }      
+        computed: {
+            ...mapGetters(['user'])
         },
         data() {
             return {
@@ -71,13 +73,21 @@
             onSearch() {
                 this.enableSearch = !this.enableSearch;
                 this.enableSearch ? this.$refs.search.style.display = 'block' : this.$refs.search.style.display = 'none'
+            },
+            onLogout() {
+                this.$store.dispatch('logOut')
+                    .then(
+                        () => {
+                            window.location.reload(true)
+                        }
+                    )
             }
         }
     }
 </script>
 
 <style>
-    .my-center {
+    .app-search {
         display: block;
         margin: auto;
         width: 50%;

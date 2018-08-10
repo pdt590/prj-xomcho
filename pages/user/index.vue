@@ -14,7 +14,7 @@
                 </div>
                 <hr><br>
                 <div class="w3-bar-block">
-                    <a class="w3-bar-item w3-button tablink myHover" @click="openTab($event, '01')">                    
+                    <a class="w3-bar-item w3-button tablink app-hover" @click="openTab($event, '01')">                    
                         <div class="w3-row">
                             <div class="w3-col l2 m2 s2">
                                 <i class="fa fa-cube w3-xlarge w3-margin-right"></i>
@@ -113,7 +113,7 @@
 
                     <div id="01" class="w3-padding-32 section" style="min-height: 1300px">
                         <div class="w3-row">
-                            <div class="w3-quarter myPadding">
+                            <div class="w3-quarter app-padding">
                                 <div class="w3-container w3-blue w3-padding-16">
                                     <div class="w3-left"><i class="fa fa-trello w3-xxxlarge"></i></div>
                                     <div class="w3-right">
@@ -123,7 +123,7 @@
                                     <h4>Số cửa hàng</h4>
                                 </div>
                             </div>
-                            <div class="w3-quarter myPadding">
+                            <div class="w3-quarter app-padding">
                                 <div class="w3-container w3-red w3-padding-16">
                                     <div class="w3-left"><i class="fa fa-shopping-bag w3-xxxlarge"></i></div>
                                     <div class="w3-right">
@@ -133,7 +133,7 @@
                                     <h4>Số sản phẩm</h4>
                                 </div>
                             </div>
-                            <div class="w3-quarter myPadding">
+                            <div class="w3-quarter app-padding">
                                 <div class="w3-container w3-teal w3-padding-16">
                                     <div class="w3-left"><i class="fa fa-envelope w3-xxxlarge"></i></div>
                                     <div class="w3-right">
@@ -143,7 +143,7 @@
                                     <h4>Số tin nhắn đặt hàng</h4>
                                 </div>
                             </div>
-                            <div class="w3-quarter myPadding">
+                            <div class="w3-quarter app-padding">
                                 <div class="w3-container w3-orange w3-text-white w3-padding-16">
                                     <div class="w3-left"><i class="fa fa-comment w3-xxxlarge"></i></div>
                                     <div class="w3-right">
@@ -159,7 +159,7 @@
                     <div id="02" class="w3-padding-24 section" style="display: none; min-height: 1300px">
                         <h5><strong>Tin nhắn đặt hàng</strong></h5><br>
                         <ul class="w3-ul" >
-                            <li class="w3-bar w3-button w3-border" :class="on1 ? 'myHover' : ''" @click="on1 = !on1">
+                            <li class="w3-bar w3-button w3-border" :class="on1 ? 'app-hover' : ''" @click="on1 = !on1">
                                 <img src="https://picsum.photos/600/600/?image=35" class="w3-bar-item w3-circle" style="width:85px">
                                 <div class="w3-bar-item">
                                     <span class="w3-xlarge">Mike</span><br>
@@ -188,7 +188,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <li class="w3-bar w3-button w3-border" :class="on2 ? 'myHover' : ''" @click="on2 = !on2">
+                            <li class="w3-bar w3-button w3-border" :class="on2 ? 'app-hover' : ''" @click="on2 = !on2">
                                 <img src="https://picsum.photos/600/600/?image=35" class="w3-bar-item w3-circle" style="width:85px">
                                 <div class="w3-bar-item">
                                     <span class="w3-xlarge">Mike</span><br>
@@ -355,7 +355,8 @@
 
 <script>
     export default {
-        layout: 'test',
+        middleware: 'auth',
+        layout: 'user',
         computed: {
             openSideBar() {
                 return this.$store.getters.sideBar
@@ -371,8 +372,6 @@
                     this.$refs.myOverlay.style.display = 'none'
                 }
             },
-        },
-        mounted() {
         },
         data() {
             return {
@@ -395,11 +394,11 @@
                 }
                 tablinks = document.getElementsByClassName("tablink")
                 for (i = 0; i < x.length; i++) {
-                    tablinks[i].className = tablinks[i].className.replace(" myHover", "")
+                    tablinks[i].className = tablinks[i].className.replace(" app-hover", "")
                 }
                 document.getElementById(arg).style.display = "block"
                 //event.currentTarget.firstElementChild.className.replace("", "")
-                event.currentTarget.className += " myHover"
+                event.currentTarget.className += " app-hover"
             },
             closeSideBar() {
                 this.$store.dispatch('openSideBar', false)
@@ -442,10 +441,10 @@
         display: inline-block;
         margin: 0
     }
-    .myHover {
+    .app-hover {
         background-color: #ccc
     }
-    .myPadding {
+    .app-padding {
         padding: 0 5px
     }
 </style>
