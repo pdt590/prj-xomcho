@@ -27,9 +27,15 @@
 <script>
     export default {
         layout: 'shop',
-        data() {
-            return {
-            }
+        asyncData(context) {
+            return context.store.dispatch('loadShop', context.params.shopId)
+                .then(
+                    data => {
+                        return {
+                            loadedShop: data
+                        }
+                    }
+                )
         }
     }
 </script>

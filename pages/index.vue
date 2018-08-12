@@ -4,21 +4,15 @@
             <app-slider-mainpanel/>
         </div>
 
-        <div class="w3-margin">
+        <div class="w3-margin-bottom w3-margin-top">
             <div class="w3-row w3-content" style="max-width:1300px;"> 
-                <div class="w3-col l4">
-                    <a class="w3-button w3-white w3-border w3-center w3-padding w3-hover-shadow w3-hover-white" style="width: 100%;">
-                        <i class="fa fa-smile-o w3-xxlarge"></i>
-                        <h5><b>Đăng nhập / Đăng ký</b></h5>
-                    </a>
-                </div>
-                <div class="w3-col l4">
+                <div class="w3-col l6 m6 s6">
                     <nuxt-link to="/shops/new-shop" class="w3-button w3-white w3-border w3-center w3-padding w3-hover-shadow w3-hover-white" style="width: 100%">
                         <i class="fa fa-plus-square-o w3-xxlarge"></i>
                         <h5><b>Tạo cửa hàng</b></h5>
                     </nuxt-link>
                 </div>
-                <div class="w3-col l4">
+                <div class="w3-col l6 m6 s6">
                     <nuxt-link to="/user" class="w3-button w3-white w3-border w3-center w3-padding w3-hover-shadow w3-hover-white" style="width: 100%">
                         <i class="fa fa-cube w3-xxlarge"></i>
                         <h5><b>Quản lý đơn hàng</b></h5>

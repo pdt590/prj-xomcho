@@ -9,12 +9,12 @@
                 </a>
                 <a href="javascript:void(0)" @click="openTab($event, 'shopImg')">
                     <div class="w3-col l4 m4 s4 tablink w3-bottombar w3-hover-light-grey w3-padding">
-                        <h5><strong>Ảnh Logo</strong></h5>
+                        <h5><strong>Logo</strong></h5>
                     </div>
                 </a>
                 <a href="javascript:void(0)" @click="openTab($event, 'panelImg')">
                     <div class="w3-col l4 m4 s4 tablink w3-bottombar w3-hover-light-grey w3-padding">
-                        <h5><strong>Ảnh Panel</strong></h5>
+                        <h5><strong>Panel</strong></h5>
                     </div>
                 </a>
             </div>
@@ -121,11 +121,12 @@
                     shopPhone: this.shopPhone,
                     shopEmail: this.shopEmail,
                     shopDesc: this.shopDesc,
-                    shopLogo: this.shopLogo
+                    shopLogoUrl: this.shopLogoUrl,
+                    shopPanelUrl: this.shopPanelUrl
                 }
                 this.$store.dispatch('addShop', shopData)
-                    .then(() => {
-                        this.$router.push("/") //TODO: redirect to new-shop page
+                    .then(key => {
+                        this.$router.push("/shops/" + key) //TODO: redirect to new-shop page
                     })
             }
         }
