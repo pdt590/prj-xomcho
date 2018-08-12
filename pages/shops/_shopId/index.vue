@@ -28,7 +28,7 @@
     export default {
         layout: 'shop',
         asyncData(context) {
-            return context.store.dispatch('loadShop', context.params.shopId)
+            return context.store.dispatch('shops/loadShop', context.params.shopId)
                 .then(
                     data => {
                         return {

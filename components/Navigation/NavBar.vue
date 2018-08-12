@@ -55,11 +55,14 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import { mapGetters } from 'vuex'
 
     export default {
         computed: {
-            ...mapGetters(['user'])
+            // ? Cannot use mapState with state from a module except state from global index.js file
+            ...mapGetters({
+                user: 'users/user'
+            })
         },
         data() {
             return {
@@ -75,7 +78,7 @@
                 this.enableSearch ? this.$refs.search.style.display = 'block' : this.$refs.search.style.display = 'none'
             },
             onLogout() {
-                this.$store.dispatch('logOut')
+                this.$store.dispatch('users/logOut')
                     .then(
                         () => {
                             window.location.reload(true)

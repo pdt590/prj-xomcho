@@ -49,11 +49,12 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import { mapState } from 'vuex'
 
     export default {
         computed: {
-            ...mapGetters(['loading', 'error'])
+            // ? Cannot use mapState with state from a module except state from global index.js file
+            ... mapState(['loading', 'error'])
         },
         data() {
             return {
@@ -70,7 +71,7 @@
             },
             onSignin() {
                 if (this.isSignin) {
-                    this.$store.dispatch('signUserIn', {
+                    this.$store.dispatch('users/signUserIn', {
                         email: this.email,
                         password: this.password
                     })
@@ -78,7 +79,7 @@
                         if (!this.error) this.closeLoginModal()
                     })
                 } else {
-                    this.$store.dispatch('signUserUp', {
+                    this.$store.dispatch('users/signUserUp', {
                         username: this.username,
                         email: this.email,
                         password: this.password

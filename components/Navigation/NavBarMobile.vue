@@ -12,7 +12,7 @@
                     <div class="w3-dropdown-content w3-bar-block w3-card w3-light-grey" :style="!isMainLayout ? 'right:58px;' : 'right:15px;'">
                         <p class="w3-bar-item" style="padding-bottom:0">{{user.username}}</p>
                         <nuxt-link to="/user" class="w3-bar-item w3-button"><i class="fa fa-cube w3-large"></i> Trang quản lý</nuxt-link>
-                        <a class="w3-bar-item w3-button w3-border-top"><i class="fa fa-sign-out w3-large"></i> Đăng xuất</a>
+                        <a class="w3-bar-item w3-button w3-border-top"  @click="onLogout"><i class="fa fa-sign-out w3-large"></i> Đăng xuất</a>
                     </div>
                 </div>
 
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import { mapGetters } from 'vuex'
 
     export default {
         props: {
@@ -61,7 +61,9 @@
             }
         },
         computed: {
-            ...mapGetters(['user'])
+            ...mapGetters({
+                user: 'users/user'
+            })
         },
         data() {
             return {
@@ -82,6 +84,14 @@
             onSearch() {
                 this.enableSearch = !this.enableSearch;
                 this.enableSearch ? this.$refs.search.style.display = 'block' : this.$refs.search.style.display = 'none'
+            },
+            onLogout() {
+                this.$store.dispatch('users/logOut')
+                    .then(
+                        () => {
+                            window.location.reload(true)
+                        }
+                    )
             }
         }
     }
