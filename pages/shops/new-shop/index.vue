@@ -56,17 +56,17 @@
                 <app-product-types/>
                 <br>
                 <div class="w3-row">
-                    <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" type="submit" @click.prevent="onAddShop"><i class="w3-xlarge w3-margin-right" :class="loading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Tạo cửa hàng</button>
+                    <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" type="submit" @click.prevent="onAddShop"><i class="w3-xlarge w3-margin-right" :class="authLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Tạo cửa hàng</button>
                 </div>
             </form>
 
-            <div id="shopImg" class="w3-margin-bottom section" style="display:none; min-height: 500px">
+            <div id="shopImg" class="w3-margin-bottom section" style="display:none; min-height: 1300px">
                 <h5><strong>Ảnh logo</strong></h5><br>
                 <app-img-upload :numberImg="1" :section="'shopPanel'"/>
                 <br>
             </div>
 
-            <div id="panelImg" class="w3-margin-bottom section" style="display:none; min-height: 500px">
+            <div id="panelImg" class="w3-margin-bottom section" style="display:none; min-height: 1300px">
                 <h5><strong>Ảnh panel (tối đa 2 ảnh)</strong></h5><br>
                 <app-img-upload :numberImg="2" :section="'shopPanel'"/>
                 <br>
@@ -77,12 +77,14 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+    import { mapGetters } from 'vuex'
 
     export default {
         middleware: 'auth',
         computed: {
-            ...mapGetters(['loading'])
+            ...mapGetters({
+                authLoading: 'users/authLoading'
+            })
         },
         data() {
             return {
@@ -124,10 +126,12 @@
                     shopLogoUrl: this.shopLogoUrl,
                     shopPanelUrl: this.shopPanelUrl
                 }
-                this.$store.dispatch('addShop', shopData)
-                    .then(key => {
-                        this.$router.push("/shops/" + key) //TODO: redirect to new-shop page
-                    })
+                this.$store.dispatch('shops/addShop', shopData)
+                    .then(
+                        shopId => {
+                            this.$router.push("/shops/" + shopId)
+                        }
+                    )
             }
         }
     }

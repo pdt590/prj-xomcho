@@ -1,73 +1,84 @@
 <template>
     <section>
-        <div class="w3-padding w3-white w3-margin-bottom">
-            <div class="w3-row">
-                <div class="w3-col l5">
-                    <app-slider-item />
-                </div>
-                <div class="w3-col l7">
-                    <div class="w3-border-bottom">
-                        <h3>Giày Nam ADIDAS HTKONKM90876</h3>
-                        <p><i class="fa fa-codepen"></i> Thương hiệu: <span class="w3-text-blue"><b> ADIDAS</b></span></p>
-                    </div>
-                    <br>
-                    <h6 class="w3-text-grey w3-margin-right">Giá:</h6><h4 class="w3-text-red"><strong> 200.000 VND / 4 cái</strong></h4>
-                    <p><i class="fa fa-fw fa-clock-o"></i> Ngày tạo: 20/10/2018</p>
-                    <hr>
-                    <p>
-                        - Thiết kế trẻ trung, năng động <br>
-                        - Kích thước nhỏ gọn, tiện lợi <br>
-                        - Chất liệu vải oxford dày dặn, độ bền cao <br>
-                        - Thích hợp mang đi học, chơi thể thao <br>
-                    </p>
-                    <hr>
+        <div class="w3-content w3-padding-64" style="max-width:1300px">     
+            <app-sidebar-item></app-sidebar-item>
+            <!-- !PAGE CONTENT! -->
+            <div class="w3-main" style="margin-left:270px;">
+                <div class="w3-padding w3-white w3-margin-bottom">
                     <div class="w3-row">
-                        <h6>Loại sản phẩm</h6><br>
-                        <div class="w3-col l4 m4 s6" 
-                            v-for="(type, i) in itemTypes" 
-                            :key="i">
+                        <div class="w3-col l5">
+                            <app-slider-item />
+                        </div>
+                        <div class="w3-col l7">
+                            <div class="w3-border-bottom">
+                                <h3>Giày Nam ADIDAS HTKONKM90876</h3>
+                                <p><i class="fa fa-codepen"></i> Thương hiệu: <span class="w3-text-blue"><b> ADIDAS</b></span></p>
+                            </div>
+                            <br>
+                            <h6 class="w3-text-grey w3-margin-right">Giá:</h6><h4 class="w3-text-red"><strong> 200.000 VND / 4 cái</strong></h4>
+                            <p><i class="fa fa-fw fa-clock-o"></i> Ngày tạo: 20/10/2018</p>
+                            <hr>
                             <p>
-                                <i class="w3-text-blue w3-large w3-margin-right" :class="type.icon"></i>
-                                {{ type.title }}
+                                - Thiết kế trẻ trung, năng động <br>
+                                - Kích thước nhỏ gọn, tiện lợi <br>
+                                - Chất liệu vải oxford dày dặn, độ bền cao <br>
+                                - Thích hợp mang đi học, chơi thể thao <br>
                             </p>
+                            <hr>
+                            <div class="w3-row">
+                                <h6>Loại sản phẩm</h6><br>
+                                <div class="w3-col l4 m4 s6" 
+                                    v-for="(type, i) in itemTypes" 
+                                    :key="i">
+                                    <p>
+                                        <i class="w3-text-blue w3-large w3-margin-right" :class="type.icon"></i>
+                                        {{ type.title }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w3-row">
+                            <nuxt-link
+                                v-if="false"
+                                :to="'/items/' + $route.params.itemId + '/edit-item'" 
+                                class="w3-button w3-blue w3-margin-bottom w3-right w3-half">
+                                <i class="fa fa-edit w3-large w3-margin-right"></i> 
+                                Chỉnh sửa
+                            </nuxt-link>
+                            <div v-else class="w3-margin-bottom w3-right w3-quarter">
+                                <app-btn-sale />
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="w3-row">
-                    <nuxt-link
-                        v-if="false"
-                        :to="'/items/' + $route.params.itemId + '/edit-item'" 
-                        class="w3-button w3-blue w3-margin-bottom w3-right w3-half">
-                        <i class="fa fa-edit w3-large w3-margin-right"></i> 
-                        Chỉnh sửa
-                    </nuxt-link>
-                    <div v-else class="w3-margin-bottom w3-right w3-quarter">
-                        <app-btn-sale />
+                <div class="w3-padding w3-white w3-margin-bottom">
+                    <form>
+                        <h5><strong>Các nhận xét gần đây</strong></h5><br>
+                        <p><input class="w3-input w3-border" type="text" placeholder="Name" required name="Name"></p>
+                        <p><input class="w3-input w3-border" type="email" placeholder="Email" required name="Email"></p>
+                        <p><input class="w3-input w3-border" type="text" placeholder="Message" required name="Message"></p>
+                        <div class="w3-row">
+                            <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit"><i class="fa fa-send-o w3-large w3-margin-right"></i>Gửi nhận xét</button>
+                        </div>
+                    </form>
+                    <hr>
+                    <div class="w3-row">
+                        <div class="w3-col l1 m2 text-center">
+                            <img src="https://picsum.photos/600/600/?image=49" class="w3-circle" style="width:50px;height:50px">
+                        </div>
+                        <div class="w3-col l11 m10">
+                            <h4>Hoa <span class="w3-opacity w3-medium">Sep 29, 2018, 9:12 PM</span></h4>
+                            <p>Chất lượng sản phẩm rất tốt</p>
+                        </div>
                     </div>
+                    <hr>
                 </div>
-            </div>
-        </div>
-        <div class="w3-padding w3-white w3-margin-bottom">
-            <form>
-                <h5><strong>Các nhận xét gần đây</strong></h5><br>
-                <p><input class="w3-input w3-border" type="text" placeholder="Name" required name="Name"></p>
-                <p><input class="w3-input w3-border" type="email" placeholder="Email" required name="Email"></p>
-                <p><input class="w3-input w3-border" type="text" placeholder="Message" required name="Message"></p>
-                <div class="w3-row">
-                    <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit"><i class="fa fa-send-o w3-large w3-margin-right"></i>Gửi nhận xét</button>
-                </div>
-            </form>
-            <hr>
-            <div class="w3-row">
-                <div class="w3-col l1 m2 text-center">
-                    <img src="https://picsum.photos/600/600/?image=49" class="w3-circle" style="width:50px;height:50px">
-                </div>
-                <div class="w3-col l11 m10">
-                    <h4>Hoa <span class="w3-opacity w3-medium">Sep 29, 2018, 9:12 PM</span></h4>
-                    <p>Chất lượng sản phẩm rất tốt</p>
-                </div>
-            </div>
-            <hr>
+                <hr>
+                <div class="w3-center w3-padding-24">
+                    Powered by 
+                    <a href="https://www.tadicho.net" title="tadicho.net" target="_blank" class="w3-hover-opacity">tadicho.net</a>
+                </div>                         
+            </div>  
         </div>
     </section>
 </template>

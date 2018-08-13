@@ -1,69 +1,81 @@
 <template>
     <section>
-        <div class="w3-padding w3-white w3-margin-bottom">
-            <div class="w3-row">
-                <a href="javascript:void(0)" @click="openTab($event, 'Profile')">
-                    <div class="w3-col l6 m6 s6 tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">
-                        <h5><strong>Thông tin</strong></h5>
+        
+        <div class="w3-content w3-padding-64" style="max-width:1300px">
+            <app-sidebar-shop></app-sidebar-shop>
+            <!-- !PAGE CONTENT! -->
+            <div class="w3-main" style="margin-left:270px;">       
+                <div class="w3-padding w3-white w3-margin-bottom">
+                    <div class="w3-row">
+                        <a href="javascript:void(0)" @click="openTab($event, 'Profile')">
+                            <div class="w3-col l6 m6 s6 tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">
+                                <h5><strong>Thông tin</strong></h5>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" @click="openTab($event, 'Image')">
+                            <div class="w3-col l6 m6 s6 tablink w3-bottombar w3-hover-light-grey w3-padding">
+                                <h5><strong>Ảnh</strong></h5>
+                            </div>
+                        </a>
                     </div>
-                </a>
-                <a href="javascript:void(0)" @click="openTab($event, 'Image')">
-                    <div class="w3-col l6 m6 s6 tablink w3-bottombar w3-hover-light-grey w3-padding">
-                        <h5><strong>Ảnh</strong></h5>
-                    </div>
-                </a>
-            </div>
-            <hr>
+                    <hr>
 
-            <form id="Profile" class="w3-margin-bottom section">
-                <h5><strong>Thông tin cửa hàng</strong></h5><br>
-                <div class="w3-row-padding" style="margin:0 -16px;">
-                    <div class="w3-half w3-margin-bottom">
-                        <label><i class="fa fa-trello w3-large"></i> Tên cửa hàng</label>
-                        <input class="w3-input w3-border" type="text" required>
+                    <form id="Profile" class="w3-margin-bottom section">
+                        <h5><strong>Thông tin cửa hàng</strong></h5><br>
+                        <div class="w3-row-padding" style="margin:0 -16px;">
+                            <div class="w3-half w3-margin-bottom">
+                                <label><i class="fa fa-trello w3-large"></i> Tên cửa hàng</label>
+                                <input class="w3-input w3-border" type="text" required>
+                            </div>
+                        </div>
+                        <div class="w3-row-padding" style="margin:0 -16px;">
+                            <div class="w3-half w3-margin-bottom">
+                                <label><i class="fa fa-facebook-official w3-large"></i> Facebook</label>
+                                <input class="w3-input w3-border" type="text" required>
+                            </div>
+                            <div class="w3-half">
+                                <label><i class="fa fa-map-pin w3-large"></i> Vị trí</label>
+                                <input class="w3-input w3-border" type="text" required>
+                            </div>
+                        </div>
+                        <div class="w3-row-padding" style="margin:8px -16px;">
+                            <div class="w3-half w3-margin-bottom">
+                                <label><i class="fa fa-phone w3-large"></i> Số điện thoại</label>
+                                <input class="w3-input w3-border" type="phone" required>
+                            </div>
+                            <div class="w3-half">
+                                <label><i class="fa fa-envelope w3-large"></i> Email</label>
+                                <input class="w3-input w3-border" type="email" required>
+                            </div>
+                        </div>
+                        <hr>
+                        <h5><strong>Miêu tả</strong></h5><br>
+                        <textarea class="w3-input w3-border" rows="8" style="resize:none"></textarea>
+                        <hr>
+                        <h5><strong>Các mặt hàng sẽ bán</strong></h5><br>
+                        <app-product-types/>
+                        <br>
+                        <div class="w3-row">
+                            <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit"><i class="fa fa-save w3-xlarge w3-margin-right"></i>Lưu</button>
+                        </div>
+                    </form>
+
+                    <div id="Image" class="w3-margin-bottom section" style="min-height: 1300px; display:none">
+                        <h5><strong>Ảnh đại diện</strong></h5><br>
+                        <app-img-upload :numberImg="1" :section="'shopAvatar'"/>
+                        <hr>
+                        <h5><strong>Ảnh panel (Tối đa 2 ảnh)</strong></h5><br>
+                        <app-img-upload :numberImg="2" :section="'shopPanel'"/>
+                        <br>
                     </div>
-                </div>
-                <div class="w3-row-padding" style="margin:0 -16px;">
-                    <div class="w3-half w3-margin-bottom">
-                        <label><i class="fa fa-facebook-official w3-large"></i> Facebook</label>
-                        <input class="w3-input w3-border" type="text" required>
-                    </div>
-                    <div class="w3-half">
-                        <label><i class="fa fa-map-pin w3-large"></i> Vị trí</label>
-                        <input class="w3-input w3-border" type="text" required>
-                    </div>
-                </div>
-                <div class="w3-row-padding" style="margin:8px -16px;">
-                    <div class="w3-half w3-margin-bottom">
-                        <label><i class="fa fa-phone w3-large"></i> Số điện thoại</label>
-                        <input class="w3-input w3-border" type="phone" required>
-                    </div>
-                    <div class="w3-half">
-                        <label><i class="fa fa-envelope w3-large"></i> Email</label>
-                        <input class="w3-input w3-border" type="email" required>
-                    </div>
+
                 </div>
                 <hr>
-                <h5><strong>Miêu tả</strong></h5><br>
-                <textarea class="w3-input w3-border" rows="8" style="resize:none"></textarea>
-                <hr>
-                <h5><strong>Các mặt hàng sẽ bán</strong></h5><br>
-                <app-product-types/>
-                <br>
-                <div class="w3-row">
-                    <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit"><i class="fa fa-save w3-xlarge w3-margin-right"></i>Lưu</button>
-                </div>
-            </form>
-
-            <div id="Image" class="w3-margin-bottom section"  style="display:none">
-                <h5><strong>Ảnh đại diện</strong></h5><br>
-                <app-img-upload :numberImg="1" :section="'shopAvatar'"/>
-                <hr>
-                <h5><strong>Ảnh panel (Tối đa 2 ảnh)</strong></h5><br>
-                <app-img-upload :numberImg="2" :section="'shopPanel'"/>
-                <br>
-            </div>
-
+                <div class="w3-center w3-padding-24">
+                    Powered by 
+                    <a href="https://www.tadicho.net" title="tadicho.net" target="_blank" class="w3-hover-opacity">tadicho.net</a>
+                </div>                         
+            </div>  
         </div>
     </section>
 </template>

@@ -51,7 +51,7 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import { mapState } from 'vuex'
 
     export default {
         props: {
@@ -61,8 +61,8 @@
             }
         },
         computed: {
-            ...mapGetters({
-                user: 'users/user'
+            ...mapState({
+                user: state => state.users.user
             })
         },
         data() {

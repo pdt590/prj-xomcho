@@ -10,8 +10,8 @@
                 <form class="w3-container">
                     <div class="w3-section ">
                         <h3 class="w3-center"><strong>{{ isSignin ? 'Đăng nhập' :" Đăng ký" }}</strong></h3>
-                        <p v-if="error" class="w3-text-red">
-                            {{error.message}}
+                        <p v-if="authError" class="w3-text-red">
+                            {{authError.message}}
                         </p>
                         <div v-if="!isSignin">
                             <label>Username</label>
@@ -21,7 +21,7 @@
                         <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Nhập email" required v-model.trim="email">
                         <label>Mật khẩu</label>
                         <input class="w3-input w3-border" type="password" placeholder="Nhập mật khẩu" required v-model.trim="password">
-                        <button class="w3-button w3-block w3-border w3-border-blue w3-section w3-padding" type="submit" @click.prevent="onSignin"><i v-show="loading" class="fa fa-spinner fa-spin w3-xlarge w3-margin-right"></i>{{ isSignin ? 'Đăng nhập' :" Đăng ký" }}</button>
+                        <button class="w3-button w3-block w3-border w3-border-blue w3-section w3-padding" type="submit" @click.prevent="onSignin"><i v-show="authLoading" class="fa fa-spinner fa-spin w3-xlarge w3-margin-right"></i>{{ isSignin ? 'Đăng nhập' :" Đăng ký" }}</button>
                     </div>
                     <hr>
                 </form>
@@ -49,12 +49,16 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
+    import { mapState, mapGetters } from 'vuex'
 
     export default {
         computed: {
-            // ? Cannot use mapState with state from a module except state from global index.js file
-            ... mapState(['loading', 'error'])
+            ... mapState({
+                authLoading: state => state.users.authLoading
+            }),
+            ... mapGetters({
+                authError: 'users/authError'
+            })
         },
         data() {
             return {
@@ -67,7 +71,7 @@
         methods: {
             closeLoginModal() {
                 this.$refs.modal.style.display='none'
-                this.$store.dispatch('clearError')
+                this.$store.dispatch('users/clearAuthError')
             },
             onSignin() {
                 if (this.isSignin) {
@@ -76,7 +80,7 @@
                         password: this.password
                     })
                     .then(() => {
-                        if (!this.error) this.closeLoginModal()
+                        if (!this.authError) this.closeLoginModal()
                     })
                 } else {
                     this.$store.dispatch('users/signUserUp', {
@@ -85,7 +89,7 @@
                         password: this.password
                     })
                     .then(() => {
-                        if (!this.error) this.closeLoginModal()
+                        if (!this.authError) this.closeLoginModal()
                     })
                 }
             }

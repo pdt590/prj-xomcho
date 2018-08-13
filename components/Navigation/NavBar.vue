@@ -55,13 +55,12 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import { mapState } from 'vuex'
 
     export default {
         computed: {
-            // ? Cannot use mapState with state from a module except state from global index.js file
-            ...mapGetters({
-                user: 'users/user'
+            ...mapState({
+                user: state => state.users.user
             })
         },
         data() {

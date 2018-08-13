@@ -1,5 +1,7 @@
 export default function(context) {
-    if (!context.store.state.users.user) {
+    // * It can run on both client and server side
+    // * It is called by server when refeshing a page and by client when clicking a route
+    if (!context.store.getters['users/user']) {
         context.redirect('/')
     }
 }

@@ -1,11 +1,14 @@
 import firebase from '~/plugins/firebase'
-import Cookie from 'js-cookie'
 
 export const state = () => ({
+    shopLoading: false,
     loadedShop: {},
 })
 
 export const mutations = {
+    setShopLoading (state, payload) {
+        state.shopLoading = payload
+    },
     addShop (state, payload) {
         state.loadedShops.push(payload)
     },
@@ -22,41 +25,42 @@ export const mutations = {
 
 export const actions = { 
     addShop (vuexContext, payload) {
-        vuexContext.commit('setLoading', true)
+        vuexContext.commit('setShopLoading', true)
         let now = new Date()
+        console.log(vuexContext.rootState.sideBar)
         const newShop = {
             ...payload,
-            updatedDate: now.toISOString(), //TODO: new Date() cannot be used here
-            creatorId: vuexContext.getters.user.id
+            updatedDate: now.toISOString(), // ? new Date() cannot be used in Firebase
+            creatorId: vuexContext.rootState.users.user.id
         }
         // return the promise
         return firebase.database().ref('shops').push(newShop)
             .then( 
                 data => {
-                    vuexContext.commit('setLoading', false, {root: true})
+                    vuexContext.commit('setShopLoading', false)
                     return data.key
                 }
             )
             .catch(
                 error => {
-                    vuexContext.commit('setLoading', false, {root: true})
+                    vuexContext.commit('setShopLoading', false)
                     console.log('[ERROR]' + error)
                 }
             )
     },
     editShop (vuexContext, payload) {
-        vuexContext.commit('setLoading', true)
+        vuexContext.commit('setShopLoading', true)
         // return the promise
         return firebase.database().ref('shops').child(payload.id).update(payload)
             .then( 
                 () => {
-                    vuexContext.commit('setLoading', false, {root: true})
+                    vuexContext.commit('setShopLoading', false)
                     vuexContext.commit('editShop', payload)
                 }    
             )
             .catch(
                 error => {
-                    vuexContext.commit('setLoading', false, {root: true})
+                    vuexContext.commit('setShopLoading', false)
                     console.log('[ERROR] ' + error)
                 }
             )
@@ -78,6 +82,9 @@ export const actions = {
 }
 
 export const getters = {
+    shopLoading(state) {
+        return state.shopLoading
+    },
     loadedShop (state) {
         return state.loadedShop
     }
