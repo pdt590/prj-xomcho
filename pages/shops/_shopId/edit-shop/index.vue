@@ -2,7 +2,7 @@
     <section>
         
         <div class="w3-content w3-padding-64" style="max-width:1300px">
-            <app-sidebar-shop></app-sidebar-shop>
+            <app-sidebar-shop :shopData="loadedShop" />
             <!-- !PAGE CONTENT! -->
             <div class="w3-main" style="margin-left:270px;">       
                 <div class="w3-padding w3-white w3-margin-bottom">
@@ -81,9 +81,25 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex'
     export default {
         middleware: 'auth',
         layout: 'shop',
+        asyncData(context) {
+            if(context.store.state.shops.loadedShop && context.params.shopId === context.store.state.shops.loadedShop.shopId) {
+                return {
+                    loadedShop : context.store.state.shops.loadedShop
+                }
+            }
+            return context.store.dispatch('shops/loadShop', context.params.shopId)
+                .then(
+                    data => {
+                        return {
+                            loadedShop: data
+                        }
+                    }
+                )
+        },
         methods: {
             openTab(event, arg) {
                 let i, x, tablinks;

@@ -37,9 +37,3 @@ export const actions = {
         vuexContext.commit('setSideBar', payload)
     }
 }
-
-export const getters = {
-    sideBar (state) {
-        return state.sideBar
-    }
-}

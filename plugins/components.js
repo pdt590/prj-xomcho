@@ -38,7 +38,7 @@ Vue.component('app-img-upload', UploadImg)
 Vue.component('app-product-types', ProductTypes)
 
 Vue.component('app-product-card01', ProductCard01)
-Vue.component('app-product-card02', ProductCard02)
+Vue.component('app-product-card', ProductCard02)
 Vue.component('app-product-card03', ProductCard03)
 Vue.component('app-shop-card01', ShopCard01)
 Vue.component('app-shop-card02', ShopCard02)

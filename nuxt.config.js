@@ -39,6 +39,7 @@ module.exports = {
 	plugins: [
         { src: '~plugins/components.js'},
 		{ src: '~plugins/date-filter.js'},
+		{ src: '~plugins/fb-filter.js'},
 		{ src: '~plugins/firebase.js'},
 		{ src: '~plugins/firebase-auth.js'}
 	],

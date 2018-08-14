@@ -170,15 +170,3 @@ export const actions = {
             )
     }
 }
-
-export const getters = {
-    authLoading (state) {
-        return state.authLoading
-    },
-    authError (state) {
-        return state.authError
-    },
-    user (state) {
-        return state.user;
-    }
-}

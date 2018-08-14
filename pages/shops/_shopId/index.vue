@@ -1,7 +1,7 @@
 <template>
     <section>
         <div class="w3-content w3-padding-64" style="max-width:1300px">
-            <app-sidebar-shop></app-sidebar-shop>
+            <app-sidebar-shop :shopData="loadedShop"/>
             <!-- !PAGE CONTENT! -->
             <div class="w3-main" style="margin-left:270px;">
                 <div class="w3-margin-bottom">
@@ -9,7 +9,7 @@
                 </div>
                 <div class="w3-padding w3-white w3-margin-bottom">
                     <h5><strong>Thông tin</strong></h5><hr>
-                    <h6>Đây là cửa hàng DuyThang. Shop chuyên cung cấp các mặt hàng thể thao</h6>
+                    <h6>{{loadedShop.shopDesc}}</h6>
                 </div>
                 <div class="w3-padding w3-white w3-margin-bottom">
                     <h5><strong>Chọn mặt hàng hiển thị</strong></h5><hr>
@@ -19,8 +19,8 @@
                 <div class="w3-padding w3-white w3-margin-bottom">
                     <div class="w3-row-padding" style="padding: 0">
                         <br>
-                        <div class="w3-col l3 m4 s6 w3-margin-bottom" v-for="i in 8" :key="i">
-                            <app-product-card02 />
+                        <div class="w3-col l3 m4 s6 w3-margin-bottom" v-for="(item, i) in loadedShop.loadedItems" :key="i">
+                            <app-product-card :itemData="item" />
                             <br>
                         </div>
                     </div>
@@ -39,6 +39,11 @@
     export default {
         layout: 'shop',
         asyncData(context) {
+            if(context.store.state.shops.loadedShop && context.params.shopId === context.store.state.shops.loadedShop.shopId) {
+                return {
+                    loadedShop : context.store.state.shops.loadedShop
+                }
+            }
             return context.store.dispatch('shops/loadShop', context.params.shopId)
                 .then(
                     data => {

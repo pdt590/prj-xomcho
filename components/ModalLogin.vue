@@ -49,15 +49,13 @@
 </template>
 
 <script>
-    import { mapState, mapGetters } from 'vuex'
+    import { mapState } from 'vuex'
 
     export default {
         computed: {
             ... mapState({
-                authLoading: state => state.users.authLoading
-            }),
-            ... mapGetters({
-                authError: 'users/authError'
+                authLoading: state => state.users.authLoading,
+                authError: state => state.users.authError
             })
         },
         data() {

@@ -77,13 +77,13 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import { mapState } from 'vuex'
 
     export default {
         middleware: 'auth',
         computed: {
-            ...mapGetters({
-                authLoading: 'users/authLoading'
+            ...mapState({
+                authLoading: state => state.users.authLoading
             })
         },
         data() {
