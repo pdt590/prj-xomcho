@@ -76,13 +76,9 @@
                 this.enableSearch = !this.enableSearch;
                 this.enableSearch ? this.$refs.search.style.display = 'block' : this.$refs.search.style.display = 'none'
             },
-            onLogout() {
-                this.$store.dispatch('users/logOut')
-                    .then(
-                        () => {
-                            window.location.reload(true)
-                        }
-                    )
+            async onLogout() {
+                await this.$store.dispatch('users/logOut')
+                window.location.reload(true)
             }
         }
     }

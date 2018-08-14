@@ -115,7 +115,7 @@
                 document.getElementById(arg).style.display = "block";
                 event.currentTarget.firstElementChild.className += " w3-border-red";
             },
-            onAddShop() {
+            async onAddShop() {
                 const shopData = {
                     shopTitle: this.shopTitle,
                     shopFb: this.shopFb,
@@ -126,12 +126,8 @@
                     shopLogoUrl: this.shopLogoUrl,
                     shopPanelUrl: this.shopPanelUrl
                 }
-                this.$store.dispatch('shops/addShop', shopData)
-                    .then(
-                        shopId => {
-                            this.$router.push("/shops/" + shopId)
-                        }
-                    )
+                const shopId = await this.$store.dispatch('shops/addShop', shopData)
+                this.$router.push("/shops/" + shopId)
             }
         }
     }

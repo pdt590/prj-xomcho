@@ -35,89 +35,70 @@ export const mutations = {
 }
 
 export const actions = { 
-    addShop (vuexContext, payload) {
+    async addShop (vuexContext, payload) {
         vuexContext.commit('setShopLoading', true)
-        const newShop = {
-            creatorId: vuexContext.rootState.users.user.id,
-            ...payload,
-            updatedDate: new Date().toISOString() // ? new Date() cannot be used in Firebase
+        try {
+            const newShop = {
+                creatorId: vuexContext.rootState.users.user.id,
+                ...payload,
+                updatedDate: new Date().toISOString() // ? new Date() cannot be used in Firebase
+            }
+            // return the promise
+            const data = await firebase.database().ref('shops').push(newShop)
+            vuexContext.commit('setShopLoading', false)
+            vuexContext.commit('setShop', {
+                shopId: data.key,
+                ...newShop,
+                loadedItems: []
+            })
+            return data.key
+        } catch (error) {
+            vuexContext.commit('setShopLoading', false)
+            console.log('[ERROR]' + error)
         }
-        // return the promise
-        return firebase.database().ref('shops').push(newShop)
-            .then( 
-                data => {
-                    vuexContext.commit('setShopLoading', false)
-                    vuexContext.commit('setShop', {
-                        shopId: data.key,
-                        ...newShop,
-                        loadedItems: []
-                    })
-                    return data.key
-                }
-            )
-            .catch(
-                error => {
-                    vuexContext.commit('setShopLoading', false)
-                    console.log('[ERROR]' + error)
-                }
-            )
     },
-    editShop (vuexContext, payload) {
+    async editShop (vuexContext, payload) {
         vuexContext.commit('setShopLoading', true)
         // return the promise
-        return firebase.database().ref('shops').child(payload.shopId).update(payload)
-            .then( 
-                () => {
-                    vuexContext.commit('setShopLoading', false)
-                    vuexContext.commit('setShop', {
-                        ...payload,
-                        creatorId: vuexContext.rootState.users.user.id,
-                        loadedItems: vuexContext.state.loadedShop.loadedItems, // ? Should update loadedItems or not
-                        updatedDate: new Date().toISOString()
-                    })
-                }    
-            )
-            .catch(
-                error => {
-                    vuexContext.commit('setShopLoading', false)
-                    console.log('[ERROR] ' + error)
-                }
-            )
+        try {
+            await firebase.database().ref('shops').child(payload.shopId).update(payload)
+            vuexContext.commit('setShopLoading', false)
+            vuexContext.commit('setShop', {
+                ...payload,
+                creatorId: vuexContext.rootState.users.user.id,
+                loadedItems: vuexContext.state.loadedShop.loadedItems, // ? Should update loadedItems or not
+                updatedDate: new Date().toISOString()
+            })
+        } catch(error) {
+            vuexContext.commit('setShopLoading', false)
+            console.log('[ERROR] ' + error)
+        }
     },
-    loadShop (vuexContext, payload) {
+    async loadShop (vuexContext, payload) {
         vuexContext.commit('setShopLoading', true)
-        return firebase.database().ref('shops').child(payload).once('value')
-            .then(
-                data => {
-                    const shopObj = data.val()
-                    return firebase.database().ref('items').orderByChild('shopId').equalTo(payload).once('value')
-                        .then(
-                            data => {
-                                vuexContext.commit('setShopLoading', false)
-                                const loadedItems = [] // ? ES6: const array can push new items
-                                const itemObj = data.val()
-                                for (let key in itemObj) {
-                                    loadedItems.push({
-                                        itemId: key,
-                                        ...itemObj[key]
-                                    })
-                                }
-                                let loadedShop = {
-                                    shopId: payload,
-                                    ...shopObj,
-                                    loadedItems: loadedItems
-                                }
-                                vuexContext.commit('setShop', loadedShop)
-                                return loadedShop
-                            }
-                        )
-                }
-            )
-            .catch(
-                error => {
-                    vuexContext.commit('setShopLoading', false)
-                    console.log('[ERROR] ' + error)
-                }
-            )
+        try {
+            const shopData = await firebase.database().ref('shops').child(payload).once('value')
+            const shopObj = shopData.val()
+            const itemsData = await firebase.database().ref('items').orderByChild('shopId').equalTo(payload).once('value')
+            const itemsObj = itemsData.val()
+            const loadedItems = []
+            for (let key in itemsObj) {
+                loadedItems.push({
+                    itemId: key,
+                    ...itemObj[key]
+                })
+            }
+            const loadedShop = {
+                shopId: payload,
+                ...shopObj,
+                loadedItems: loadedItems
+            }
+            vuexContext.commit('setShopLoading', false)
+            vuexContext.commit('setShop', loadedShop)
+            return loadedShop
+        } catch(error) {
+            vuexContext.commit('setShopLoading', false)
+            console.log('[ERROR] ' + error)
+        }
     }
 }

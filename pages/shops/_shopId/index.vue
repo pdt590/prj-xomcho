@@ -38,20 +38,14 @@
 <script>
     export default {
         layout: 'shop',
-        asyncData(context) {
+        async asyncData(context) {
             if(context.store.state.shops.loadedShop && context.params.shopId === context.store.state.shops.loadedShop.shopId) {
                 return {
                     loadedShop : context.store.state.shops.loadedShop
                 }
             }
-            return context.store.dispatch('shops/loadShop', context.params.shopId)
-                .then(
-                    data => {
-                        return {
-                            loadedShop: data
-                        }
-                    }
-                )
+            const data = await context.store.dispatch('shops/loadShop', context.params.shopId)
+            return { loadedShop: data }
         }
     }
 </script>

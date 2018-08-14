@@ -71,24 +71,21 @@
                 this.$refs.modal.style.display='none'
                 this.$store.dispatch('users/clearAuthError')
             },
-            onSignin() {
+            async onSignin() {
                 if (this.isSignin) {
-                    this.$store.dispatch('users/signUserIn', {
+                    await this.$store.dispatch('users/signUserIn', {
                         email: this.email,
                         password: this.password
                     })
-                    .then(() => {
-                        if (!this.authError) this.closeLoginModal()
-                    })
+                    if (!this.authError) this.closeLoginModal()
+
                 } else {
-                    this.$store.dispatch('users/signUserUp', {
+                    await this.$store.dispatch('users/signUserUp', {
                         username: this.username,
                         email: this.email,
                         password: this.password
                     })
-                    .then(() => {
-                        if (!this.authError) this.closeLoginModal()
-                    })
+                    if (!this.authError) this.closeLoginModal()
                 }
             }
         }
