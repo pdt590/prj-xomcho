@@ -72,7 +72,7 @@
         },
         methods: {
             openSideBar() {
-                if(this.$store.getters.sideBar) {
+                if(this.$store.state.sideBar) {
                     this.$store.dispatch('openSideBar', false)
                 }else {
                     this.$store.dispatch('openSideBar', true)
@@ -85,13 +85,9 @@
                 this.enableSearch = !this.enableSearch;
                 this.enableSearch ? this.$refs.search.style.display = 'block' : this.$refs.search.style.display = 'none'
             },
-            onLogout() {
-                this.$store.dispatch('users/logOut')
-                    .then(
-                        () => {
-                            window.location.reload(true)
-                        }
-                    )
+            async onLogout() {
+                await this.$store.dispatch('users/logOut')
+                window.location.reload(true)
             }
         }
     }

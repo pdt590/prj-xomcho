@@ -3,7 +3,7 @@
         <div class="w3-border w3-border-grey w3-white w3-hover-shadow">
             <div class="w3-display-container"> 
                 <span class="w3-tag w3-display-topleft">New</span>
-                <nuxt-link :to="'/items/' + itemData.itemId">
+                <nuxt-link :to="$route.path + '/' + itemData.itemId" target="_blank">
                     <img src="https://picsum.photos/600/600/?image=41" width="200" height="150" style="width:100%">
                 </nuxt-link>
             </div>

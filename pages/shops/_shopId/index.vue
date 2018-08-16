@@ -19,8 +19,8 @@
                 <div class="w3-padding w3-white w3-margin-bottom">
                     <div class="w3-row-padding" style="padding: 0">
                         <br>
-                        <div class="w3-col l3 m4 s6 w3-margin-bottom" v-for="(item, i) in loadedShop.loadedItems" :key="i">
-                            <app-product-card :itemData="item" />
+                        <div class="w3-col l3 m4 s6 w3-margin-bottom" v-for="(item, i) in loadedItems" :key="i">
+                            <app-product-card-shop :itemData="item" />
                             <br>
                         </div>
                     </div>
@@ -41,11 +41,18 @@
         async asyncData(context) {
             if(context.store.state.shops.loadedShop && context.params.shopId === context.store.state.shops.loadedShop.shopId) {
                 return {
-                    loadedShop : context.store.state.shops.loadedShop
+                    loadedShop : context.store.state.shops.loadedShop,
+                    loadedItems: context.store.state.items.loadedItems
                 }
             }
-            const data = await context.store.dispatch('shops/loadShop', context.params.shopId)
-            return { loadedShop: data }
+            const [loadedShop, loadedItems] = await Promise.all([
+                context.store.dispatch('shops/loadShop', context.params.shopId),
+                context.store.dispatch('items/loadItems', context.params.shopId)
+            ])
+            return { 
+                loadedShop: loadedShop,
+                loadedItems: loadedItems
+            }
         }
     }
 </script>

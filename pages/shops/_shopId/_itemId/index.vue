@@ -1,7 +1,7 @@
 <template>
     <section>
         <div class="w3-content w3-padding-64" style="max-width:1300px">     
-            <app-sidebar-item></app-sidebar-item>
+            <app-sidebar-shop :shopData="loadedShop" />
             <!-- !PAGE CONTENT! -->
             <div class="w3-main" style="margin-left:270px;">
                 <div class="w3-padding w3-white w3-margin-bottom">
@@ -85,7 +85,28 @@
 
 <script>
     export default {
-        layout: 'item',
+        layout: 'shop',
+        async asyncData(context) {
+            if(context.store.state.shops.loadedShop && context.store.state.items.loadedItems) {
+                let loadedItem = context.store.state.items.loadedItems.find( item => {
+                    return item.itemId === context.params.itemId && item.shopId === context.params.shopId
+                })
+                if (loadedItem) {
+                    return {
+                        loadedShop: context.store.state.shops.loadedShop,
+                        loadedItem: loadedItem
+                    }
+                }
+            }
+            let [loadedShop, loadedItem] = await Promise.all([
+                context.store.dispatch('shops/loadShop', context.params.shopId),
+                context.store.dispatch('items/loadItem', {shopId: context.params.shopId, itemId: context.params.itemId})
+            ])
+            return { 
+                loadedShop: loadedShop,
+                loadedItem: loadedItem
+            }
+        },
         data() {
             return {
                 itemTypes: [

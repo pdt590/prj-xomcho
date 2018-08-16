@@ -87,7 +87,7 @@
 <script>
     export default {
         middleware: 'auth',
-        layout: 'item',
+        layout: 'shop',
         methods: {
             openTab(event, arg) {
                 let i, x, tablinks;

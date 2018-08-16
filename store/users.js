@@ -30,6 +30,7 @@ export const actions = {
         vuexContext.commit('setAuthLoading', true)
         vuexContext.commit('clearAuthError')
         try {
+            const { user } = await firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
             const userProfile = {
                 id: user.uid,
                 username: payload.username,
@@ -38,13 +39,12 @@ export const actions = {
                 phone:'',
                 photoUrl: 'https://imgplaceholder.com/600x600/cccccc/757575/glyphicon-user'
             }
-            const { user } = await firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
             Cookie.set("jwt", userProfile)
             Cookie.set(
                 "expirationDate",
                 new Date().getTime() + (1 * 3600 * 1000) // 1h expired time
             )
-            await firebase.database().ref('/users/' + user.uid).set({profile: {...userProfile}})
+            firebase.database().ref('/users/' + user.uid).set({profile: {...userProfile}}) //TODO: reload Signin modal when return a promise
             vuexContext.commit('setAuthLoading', false)
             vuexContext.commit('setUser', userProfile)
         } catch(error) {
@@ -86,6 +86,7 @@ export const actions = {
         let expirationDate = Cookie.get("expirationDate")
         if (new Date().getTime() > +expirationDate) {
             console.log("Signin time is expired");
+            vuexContext.commit('setAuthLoading', false)
             vuexContext.dispatch("logOut");
             return
         }

@@ -1,18 +1,18 @@
 <template>
     <section>
-        <div class="main-shop w3-row-padding" :class="isLeft ? 'w3-animate-opacity' : 'w3-animate-opacity'">
-            <div class="w3-col l4 m3 s6 w3-margin-bottom" v-for="i in 15" :key="i">
-                <app-shop-card02 />
+        <div class="app-shop w3-row-padding" :class="isLeft ? 'w3-animate-opacity' : 'w3-animate-opacity'">
+            <div class="w3-col l4 m3 s6 w3-margin-bottom" v-for="(shop, i) in shopsData" :key="i">
+                <app-shop-card-home :shopData="shop"/>
             </div>
         </div>
-        <div class="main-shop w3-row-padding"  :class="isLeft ? 'w3-animate-opacity' : 'w3-animate-opacity'">
+        <div class="app-shop w3-row-padding"  :class="isLeft ? 'w3-animate-opacity' : 'w3-animate-opacity'">
             <div class="w3-col l4 m3 s6 w3-margin-bottom" v-for="i in 15" :key="i">
-                <app-shop-card02 />
+                
             </div>
         </div>
-        <div class="main-shop w3-row-padding"  :class="isLeft ? 'w3-animate-opacity' : 'w3-animate-opacity'">
+        <div class="app-shop w3-row-padding"  :class="isLeft ? 'w3-animate-opacity' : 'w3-animate-opacity'">
             <div class="w3-col l4 m3 s6 w3-margin-bottom" v-for="i in 15" :key="i">
-                <app-shop-card02 />
+                
             </div>
         </div>
         <!-- Slideshow next/previous buttons -->
@@ -31,6 +31,12 @@
 <script>
     let slideIndex = 1
     export default {
+        props: {
+            shopsData: {
+                type: Array,
+                required: true
+            }
+        },
         mounted() {
             this.showDivs(1)
         },
@@ -42,7 +48,7 @@
         methods: {
             showDivs(n) {
                 let i 
-                let x = document.getElementsByClassName("main-shop")
+                let x = document.getElementsByClassName("app-shop")
                 let dots = document.getElementsByClassName("demodots");
                 if (n > x.length) {slideIndex = 1}    
                 if (n < 1) {slideIndex = x.length}
@@ -71,7 +77,7 @@
 </script>
 
 <style scoped>
-    .main-shop {display: none;}
+    .app-shop {display: none;}
     .w3-left, .w3-right, .w3-badge {cursor:pointer}
     .w3-badge {
         height:15px;

@@ -1,7 +1,7 @@
 <template>
     <section>
         <div class="w3-content w3-padding-64" style="max-width:1300px">
-            <app-sidebar-shop></app-sidebar-shop>
+            <app-sidebar-shop :shopData="loadedShop" />
             <!-- !PAGE CONTENT! -->
             <div class="w3-main" style="margin-left:270px;">
                 <div class="w3-padding w3-white w3-margin-bottom">
@@ -24,45 +24,45 @@
                         <div class="w3-row-padding" style="margin:0 -16px;">
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-file-archive-o w3-large"></i> Tên sản phẩm</label>
-                                <input class="w3-input w3-border" type="text" required>
+                                <input class="w3-input w3-border" type="text" required v-model="itemTitle">
                             </div>
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-codepen w3-large"></i> Thương hiệu</label>
-                                <input class="w3-input w3-border" type="text" required>
+                                <input class="w3-input w3-border" type="text" required v-model="itemBrand">
                             </div>
                         </div>
                         <div class="w3-row-padding" style="margin:0 -16px;">
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-dollar w3-large"></i> Giá</label>
-                                <input class="w3-input w3-border" type="text" required>
+                                <input class="w3-input w3-border" type="text" required v-model="itemPrice">
                             </div>
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-dollar w3-large"></i> Giá sale</label>
-                                <input class="w3-input w3-border" type="text" required>
+                                <input class="w3-input w3-border" type="text" required v-model="itemSalePrice">
                             </div>
                         </div>
                         <div class="w3-row-padding" style="margin:0 -16px;">
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-money w3-large"></i> Loại tiền</label>
-                                <select class="w3-select w3-border" name="option">
+                                <select class="w3-select w3-border" name="option" v-model="itemCurrency">
                                     <option value="1" selected>VND</option>
                                     <option value="2">USD</option>
                                 </select>
                             </div>
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-balance-scale w3-large"></i> Đơn vị</label>
-                                <input class="w3-input w3-border" type="text" placeholder= "Số lượng sản phẩm có thể mua với giá ở trên" required>
+                                <input class="w3-input w3-border" type="text" placeholder= "Số lượng sản phẩm có thể mua với giá ở trên" required v-model="itemUnit">
                             </div>
                         </div>
                         <hr>
                         <h5><strong>Miêu tả</strong></h5><br>
-                        <textarea class="w3-input w3-border" rows="5" style="resize:none"></textarea>
+                        <textarea class="w3-input w3-border" rows="5" style="resize:none" v-model="itemDesc"></textarea>
                         <hr>
                         <h5><strong>Loại sản phẩm</strong></h5><br>
                         <app-product-types/>
                         <br>
                         <div class="w3-row">
-                            <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit"><i class="fa fa-save w3-xlarge w3-margin-right"></i>Thêm sản phẩm</button>
+                            <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit" @click.prevent="onAddItem"><i class="fa fa-save w3-xlarge w3-margin-right"></i>Thêm sản phẩm</button>
                         </div>
                     </form>
 
@@ -83,10 +83,26 @@
 </template>
 
 <script>
-
+    import { mapState } from 'vuex'
     export default {
         middleware: 'auth',
         layout: 'shop',
+        computed: {
+            ...mapState({
+                loadedShop: state => state.shops.loadedShop
+            })
+        },
+        data() {
+            return {
+                itemTitle: '',
+                itemBrand: '',
+                itemPrice: '',
+                itemSalePrice: '',
+                itemCurrency: '',
+                itemUnit: '',
+                itemDesc: ''
+            }
+        },
         methods: {
             openTab(event, arg) {
                 let i, x, tablinks;
@@ -100,6 +116,19 @@
                 }
                 document.getElementById(arg).style.display = "block";
                 event.currentTarget.firstElementChild.className += " w3-border-red";
+            },
+            async onAddItem() {
+                const itemData = {
+                    itemTitle: this.itemTitle,
+                    itemBrand: this.itemBrand,
+                    itemPrice: this.itemPrice,
+                    itemSalePrice: this.itemSalePrice,
+                    itemCurrency: this.itemCurrency,
+                    itemUnit: this.itemUnit,
+                    itemDesc: this.itemDesc
+                }
+                const itemId = await this.$store.dispatch('items/addItem', itemData)
+                this.$router.push("/shops/" + this.$route.params.shopId + "/" + itemId)
             }
         }
     }

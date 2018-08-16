@@ -1,7 +1,7 @@
 <template>
     <section>
         <div class="w3-content" style="max-width:1300px">
-            <app-slider-mainpanel/>
+            <app-slider-homepanel />
         </div>
 
         <div class="w3-margin-bottom w3-margin-top">
@@ -24,7 +24,7 @@
         <div class="w3-margin-bottom">
             <div class="w3-content w3-white w3-border" style="max-width:1300px">
                 <h5 class="w3-padding w3-border-bottom"><i class="fa fa-trello w3-xlarge w3-margin-right"></i><b>CỬA HÀNG NỔI BẬT</b></h5>
-                <app-slider-mainshop/>
+                <app-slider-homeshop :shopsData="loadedShops"/>
             </div>
         </div>
 
@@ -32,8 +32,8 @@
             <div class="w3-content w3-white w3-border" style="max-width:1300px">
                 <h5 class="w3-padding w3-border-bottom"><i class="fa fa-shopping-bag w3-xlarge w3-margin-right"></i><b>SẢN PHẨM MỚI</b></h5>
                 <div class="w3-row-padding">
-                    <div class="w3-col l2 m3 s6 w3-margin-bottom" v-for="i in 12" :key="i">
-                        <app-product-card03 />
+                    <div class="w3-col l2 m3 s6 w3-margin-bottom" v-for="(item, i) in loadedItems" :key="i">
+                        <app-product-card-home :itemData="item"/>
                         <br>
                     </div>
                 </div>
@@ -45,6 +45,16 @@
 
 <script>
     export default {
-        layout: 'main'
+        layout: 'home',
+        async asyncData(context) {
+            const [loadedShops, loadedItems] = await Promise.all([
+                context.store.dispatch('shops/loadPreviewShops'),
+                context.store.dispatch('items/loadPreviewItems')
+            ])
+            return {
+                loadedShops: loadedShops,
+                loadedItems: loadedItems
+            }
+        }
     }
 </script>

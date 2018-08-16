@@ -2,7 +2,6 @@ import Vue from 'vue'
 import NavBar from "~/components/Navigation/NavBar"
 import NavBarMobile from "~/components/Navigation/NavBarMobile"
 import SideBarShop from "~/components/Navigation/SideBarShop"
-import SideBarItem from "~/components/Navigation/SideBarItem"
 import SideBarInbox from "~/components/Navigation/SideBarInbox"
 import Footer from "~/components/Navigation/Footer"
 
@@ -10,11 +9,9 @@ import ModalLogin from "~/components/ModalLogin"
 import UploadImg from "~/components/UploadImg"
 import ProductTypes from "~/components/ProductTypes"
 
-import ProductCard01 from "~/components/ProductCard01"
-import ProductCard02 from "~/components/ProductCard02"
-import ProductCard03 from "~/components/ProductCard03"
-import ShopCard01 from "~/components/ShopCard01"
-import ShopCard02 from "~/components/ShopCard02"
+import ProductCardHome from "~/components/ProductCardHome"
+import ProductCardShop from "~/components/ProductCardShop"
+import ShopCardHome from "~/components/ShopCardHome"
 
 import ButtonSaveItem from "~/components/ButtonSaveItem"
 import ButtonSaveShop from "~/components/ButtonSaveShop"
@@ -22,26 +19,23 @@ import ButtonSale from "~/components/ButtonSale"
 import ButtonSaleCard from "~/components/ButtonSaleCard"
 import ButtonSwitch from "~/components/ButtonSwitch"
 
-import SliderMainPanel from "~/components/SliderMainPanel"
-import SliderMainShop from "~/components/SliderMainShop"
+import SliderHomePanel from "~/components/SliderHomePanel"
+import SliderHomeShop from "~/components/SliderHomeShop"
 import SliderShopPanel from "~/components/SliderShopPanel"
-import SliderItem from "~/components/SliderItem"
+import SliderItemImg from "~/components/SliderItemImg"
 
 Vue.component('app-navbar', NavBar)
 Vue.component('app-navbar-mobile', NavBarMobile)
 Vue.component('app-sidebar-shop', SideBarShop)
-Vue.component('app-sidebar-item', SideBarItem)
 Vue.component('app-sidebar-inbox', SideBarInbox)
 Vue.component('app-footer', Footer)
 Vue.component('app-modal-login', ModalLogin)
 Vue.component('app-img-upload', UploadImg)
 Vue.component('app-product-types', ProductTypes)
 
-Vue.component('app-product-card01', ProductCard01)
-Vue.component('app-product-card', ProductCard02)
-Vue.component('app-product-card03', ProductCard03)
-Vue.component('app-shop-card01', ShopCard01)
-Vue.component('app-shop-card02', ShopCard02)
+Vue.component('app-product-card-home', ProductCardHome)
+Vue.component('app-product-card-shop', ProductCardShop)
+Vue.component('app-shop-card-home', ShopCardHome)
 
 Vue.component('app-btn-sale', ButtonSale)
 Vue.component('app-btn-salecard', ButtonSaleCard)
@@ -49,7 +43,7 @@ Vue.component('app-btn-saveshop', ButtonSaveShop)
 Vue.component('app-btn-saveitem', ButtonSaveItem)
 Vue.component('app-btn-switch', ButtonSwitch)
 
-Vue.component('app-slider-mainpanel', SliderMainPanel)
-Vue.component('app-slider-mainshop', SliderMainShop)
+Vue.component('app-slider-homepanel', SliderHomePanel)
+Vue.component('app-slider-homeshop', SliderHomeShop)
 Vue.component('app-slider-shoppanel', SliderShopPanel)
-Vue.component('app-slider-item', SliderItem)
+Vue.component('app-slider-item', SliderItemImg)
