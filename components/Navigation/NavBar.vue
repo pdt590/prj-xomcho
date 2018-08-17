@@ -32,7 +32,7 @@
                         <i class="fa fa-bell w3-large"></i><span class="w3-badge w3-right w3-small w3-red">3</span>
                     </nuxt-link>
                     <nuxt-link to="/shops/new-shop"
-                        class="w3-bar-item w3-padding w3-button w3-right"> 
+                        class="w3-bar-item w3-padding w3-button w3-right" target="_blank"> 
                         <i class="w3-large fa fa-plus-square"></i> Tạo cửa hàng
                     </nuxt-link>
                 </div>
@@ -55,13 +55,19 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
+    import { mapGetters } from 'vuex'
 
     export default {
         computed: {
+            ...mapGetters(['user'])
+            /*
             ...mapState({
-                user: state => state.users.user
+                user: state => state.user.user // ? State is still in namespaced mode, others (actions, getters) can be called directly 
             })
+            or
+            ...mapState('user/state', [
+                'user'])
+            */
         },
         data() {
             return {
@@ -77,7 +83,7 @@
                 this.enableSearch ? this.$refs.search.style.display = 'block' : this.$refs.search.style.display = 'none'
             },
             async onLogout() {
-                await this.$store.dispatch('users/logOut')
+                await this.$store.dispatch('logOut')
                 window.location.reload(true)
             }
         }

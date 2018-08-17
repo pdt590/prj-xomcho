@@ -112,7 +112,7 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
+    import { mapGetters } from 'vuex'
 
     export default {
         props: {
@@ -122,10 +122,7 @@
             }
         },
         computed: {
-            ... mapState({
-                user: state => state.users.user,
-                sideBar: state => state.sideBar
-            })
+            ...mapGetters(['user', 'sideBar'])
         },
         watch: {
             sideBar(newValue) {

@@ -38,20 +38,28 @@
 <script>
     export default {
         layout: 'shop',
-        async asyncData(context) {
-            if(context.store.state.shops.loadedShop && context.params.shopId === context.store.state.shops.loadedShop.shopId) {
+        async asyncData({ store, params }) {
+            if(store.getters.loadedShop) {
+                if (store.getters.loadedItems) {
+                    return {
+                        loadedShop : store.getters.loadedShop,
+                        loadedItems: store.getters.loadedItems
+                    }
+                } 
+                const loadedItems = await store.dispatch('loadItems', params.shopId)
                 return {
-                    loadedShop : context.store.state.shops.loadedShop,
-                    loadedItems: context.store.state.items.loadedItems
+                    loadedShop : store.getters.loadedShop,
+                    loadedItems: loadedItems
                 }
-            }
-            const [loadedShop, loadedItems] = await Promise.all([
-                context.store.dispatch('shops/loadShop', context.params.shopId),
-                context.store.dispatch('items/loadItems', context.params.shopId)
-            ])
-            return { 
-                loadedShop: loadedShop,
-                loadedItems: loadedItems
+            }else {
+                const [loadedShop, loadedItems] = await Promise.all([
+                    store.dispatch('loadShop', params.shopId),
+                    store.dispatch('loadItems', params.shopId)
+                ])
+                return { 
+                    loadedShop: loadedShop,
+                    loadedItems: loadedItems
+                }
             }
         }
     }

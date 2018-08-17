@@ -9,7 +9,7 @@
                     <span class="w3-text-blue" style="font-size: 15px"><strong> {{shopData.shopTitle}}</strong></span><br>
                     <span class="w3-text-grey"><strong>Thời trang, nông sản</strong></span><br>
                     <span class="w3-text-red"><i class="fa fa-neuter"></i> {{shopData.shopLocation}}</span><br>
-                    <span><i class="fa fa-clock-o"></i> {{shopData.updatedDat}}e</span>
+                    <span><i class="fa fa-clock-o"></i> {{shopData.updatedDate | date}}</span>
                 </div>
             </div>  
         </nuxt-link>     

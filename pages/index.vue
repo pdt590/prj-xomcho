@@ -48,8 +48,8 @@
         layout: 'home',
         async asyncData(context) {
             const [loadedShops, loadedItems] = await Promise.all([
-                context.store.dispatch('shops/loadPreviewShops'),
-                context.store.dispatch('items/loadPreviewItems')
+                context.store.dispatch('loadPreviewShops'),
+                context.store.dispatch('loadPreviewItems')
             ])
             return {
                 loadedShops: loadedShops,

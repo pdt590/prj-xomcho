@@ -51,7 +51,7 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
+    import { mapGetters } from 'vuex'
 
     export default {
         props: {
@@ -61,9 +61,12 @@
             }
         },
         computed: {
+            ...mapGetters(['user'])
+            /*
             ...mapState({
-                user: state => state.users.user
+                user: state => state.user.user
             })
+            */
         },
         data() {
             return {
@@ -72,7 +75,7 @@
         },
         methods: {
             openSideBar() {
-                if(this.$store.state.sideBar) {
+                if(this.$store.getters.sideBar) { // ? or this.$store.state.shared.sideBar
                     this.$store.dispatch('openSideBar', false)
                 }else {
                     this.$store.dispatch('openSideBar', true)
@@ -86,7 +89,7 @@
                 this.enableSearch ? this.$refs.search.style.display = 'block' : this.$refs.search.style.display = 'none'
             },
             async onLogout() {
-                await this.$store.dispatch('users/logOut')
+                await this.$store.dispatch('logOut')
                 window.location.reload(true)
             }
         }

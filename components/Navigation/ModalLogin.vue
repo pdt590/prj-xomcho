@@ -40,7 +40,7 @@
                     </div>   
                 </div>
                 <div class="w3-container w3-border-top w3-round w3-padding w3-light-grey">
-                    <button class="w3-button w3-border  w3-light-grey" @click="isSignin = !isSignin">{{ isSignin ? 'Đăng ký' :" Đăng nhập" }}</button>
+                    <button class="w3-button w3-border w3-light-grey" @click="isSignin = !isSignin">{{ isSignin ? 'Đăng ký' :" Đăng nhập" }}</button>
                     <span class="w3-right w3-padding w3-disabled">Quên <a href="">mật khấu?</a></span>
                 </div>
             </div>
@@ -49,14 +49,11 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
+    import { mapGetters } from 'vuex'
 
     export default {
         computed: {
-            ... mapState({
-                authLoading: state => state.users.authLoading,
-                authError: state => state.users.authError
-            })
+            ... mapGetters(['authError', 'authLoading'])
         },
         data() {
             return {
@@ -69,18 +66,18 @@
         methods: {
             closeLoginModal() {
                 this.$refs.modal.style.display='none'
-                this.$store.dispatch('users/clearAuthError')
+                this.$store.dispatch('clearAuthError')
             },
             async onSignin() {
                 if (this.isSignin) {
-                    await this.$store.dispatch('users/signUserIn', {
+                    await this.$store.dispatch('signUserIn', {
                         email: this.email,
                         password: this.password
                     })
                     if (!this.authError) this.closeLoginModal()
 
                 } else {
-                    await this.$store.dispatch('users/signUserUp', {
+                    await this.$store.dispatch('signUserUp', {
                         username: this.username,
                         email: this.email,
                         password: this.password

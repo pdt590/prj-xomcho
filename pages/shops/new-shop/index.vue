@@ -56,7 +56,9 @@
                 <app-product-types/>
                 <br>
                 <div class="w3-row">
-                    <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" type="submit" @click.prevent="onAddShop"><i class="w3-xlarge w3-margin-right" :class="authLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Tạo cửa hàng</button>
+                    <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" type="submit" @click.prevent="onAddShop">
+                        <i class="w3-xlarge w3-margin-right" :class="shopLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Tạo cửa hàng
+                    </button>
                 </div>
             </form>
 
@@ -77,14 +79,12 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex'
+    import { mapGetters } from 'vuex'
 
     export default {
         middleware: 'auth',
         computed: {
-            ...mapState({
-                authLoading: state => state.users.authLoading
-            })
+            ...mapGetters(['shopLoading'])
         },
         data() {
             return {
@@ -126,7 +126,7 @@
                     shopLogoUrl: this.shopLogoUrl,
                     shopPanelUrl: this.shopPanelUrl
                 }
-                const shopId = await this.$store.dispatch('shops/addShop', shopData)
+                const shopId = await this.$store.dispatch('addShop', shopData)
                 this.$router.push("/shops/" + shopId)
             }
         }

@@ -1,28 +1,29 @@
 import Vue from 'vue'
+
 import NavBar from "~/components/Navigation/NavBar"
 import NavBarMobile from "~/components/Navigation/NavBarMobile"
 import SideBarShop from "~/components/Navigation/SideBarShop"
 import SideBarInbox from "~/components/Navigation/SideBarInbox"
 import Footer from "~/components/Navigation/Footer"
+import ModalLogin from "~/components/Navigation/ModalLogin"
 
-import ModalLogin from "~/components/ModalLogin"
-import UploadImg from "~/components/UploadImg"
-import ProductTypes from "~/components/ProductTypes"
+import ProductCardHome from "~/components/Card/ProductCardHome"
+import ProductCardShop from "~/components/Card/ProductCardShop"
+import ShopCardHome from "~/components/Card/ShopCardHome"
 
-import ProductCardHome from "~/components/ProductCardHome"
-import ProductCardShop from "~/components/ProductCardShop"
-import ShopCardHome from "~/components/ShopCardHome"
+import ButtonSaveItem from "~/components/UI/ButtonSaveItem"
+import ButtonSaveShop from "~/components/UI/ButtonSaveShop"
+import ButtonSale from "~/components/UI/ButtonSale"
+import ButtonSaleCard from "~/components/UI/ButtonSaleCard"
+import ButtonSwitch from "~/components/UI/ButtonSwitch"
 
-import ButtonSaveItem from "~/components/ButtonSaveItem"
-import ButtonSaveShop from "~/components/ButtonSaveShop"
-import ButtonSale from "~/components/ButtonSale"
-import ButtonSaleCard from "~/components/ButtonSaleCard"
-import ButtonSwitch from "~/components/ButtonSwitch"
+import SliderHomePanel from "~/components/UI/SliderHomePanel"
+import SliderHomeShop from "~/components/UI/SliderHomeShop"
+import SliderShopPanel from "~/components/UI/SliderShopPanel"
+import SliderItemImg from "~/components/UI/SliderItemImg"
 
-import SliderHomePanel from "~/components/SliderHomePanel"
-import SliderHomeShop from "~/components/SliderHomeShop"
-import SliderShopPanel from "~/components/SliderShopPanel"
-import SliderItemImg from "~/components/SliderItemImg"
+import UploadImg from "~/components/UI/UploadImg"
+import ProductTypes from "~/components/UI/ProductTypes"
 
 Vue.component('app-navbar', NavBar)
 Vue.component('app-navbar-mobile', NavBarMobile)

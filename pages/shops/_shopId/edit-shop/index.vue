@@ -85,20 +85,17 @@
     export default {
         middleware: 'auth',
         layout: 'shop',
-        asyncData(context) {
-            if(context.store.state.shops.loadedShop && context.params.shopId === context.store.state.shops.loadedShop.shopId) {
+        async asyncData({ store, params }) {
+            if(store.getters.loadedShop) {
                 return {
-                    loadedShop : context.store.state.shops.loadedShop
+                    loadedShop : store.getters.loadedShop
+                }
+            }else {
+                let loadedShop = await store.dispatch('loadShop', params.shopId)
+                return { 
+                    loadedShop: loadedShop,
                 }
             }
-            return context.store.dispatch('shops/loadShop', context.params.shopId)
-                .then(
-                    data => {
-                        return {
-                            loadedShop: data
-                        }
-                    }
-                )
         },
         methods: {
             openTab(event, arg) {

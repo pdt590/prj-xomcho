@@ -84,24 +84,37 @@
 </template>
 
 <script>
+    async function loadItem(items, itemId, shopId) {
+        let loadedItem = {}
+        if(items) {
+            loadedItem = items.find( item => {
+                return item.itemId === itemId
+            })
+            return loadedItem
+        }else {
+            let loadedItems = await store.dispatch('loadItems', shopId)
+            loadedItem = loadedItems.find( item => {
+                return item.itemId === itemId
+            })
+            return loadedItem
+        }
+    }
     export default {
         layout: 'shop',
-        async asyncData(context) {
-            if(context.store.state.shops.loadedShop && context.store.state.items.loadedItems) {
-                let loadedItem = context.store.state.items.loadedItems.find( item => {
-                    return item.itemId === context.params.itemId && item.shopId === context.params.shopId
-                })
-                if (loadedItem) {
-                    return {
-                        loadedShop: context.store.state.shops.loadedShop,
-                        loadedItem: loadedItem
-                    }
+        async asyncData({ store, params }) {
+            let loadedItem = {}
+            if(store.getters.loadedShop) {
+                loadedItem = await loadItem(store.getters.loadedItems, params.itemId)
+                return {
+                    loadedShop: store.getters.loadedShop,
+                    loadedItem: loadedItem
                 }
             }
-            let [loadedShop, loadedItem] = await Promise.all([
-                context.store.dispatch('shops/loadShop', context.params.shopId),
-                context.store.dispatch('items/loadItem', {shopId: context.params.shopId, itemId: context.params.itemId})
+            let [loadedShop, loadedItems] = await Promise.all([
+                store.dispatch('loadShop', params.shopId),
+                store.dispatch('loadItems', params.shopId)
             ])
+            loadedItem  = await loadItem(loadedItems, params.itemId, params.shopId)
             return { 
                 loadedShop: loadedShop,
                 loadedItem: loadedItem
