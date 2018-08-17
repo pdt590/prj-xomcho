@@ -1,4 +1,5 @@
 import firebase from '~/plugins/firebase'
+import uuid from '../shared/uuid'
 
 export default {
     state: {
@@ -26,13 +27,14 @@ export default {
                     creatorId: vuexContext.getters.user.id,
                     updatedDate: new Date().toISOString()
                 }
-                const data = await firebase.database().ref('items').push(newItem)
+                const key = payload.itemTitle.replace(/\s+/g, '-').toLowerCase() + '-' + uuid(5)
+                await firebase.database().ref('items').child(key).set(newItem)
                 vuexContext.commit('setItemLoading', false)
                 vuexContext.commit('addItem', {
-                    id: data.key,
+                    id: key,
                     ...newItem
                 })
-                return data.key
+                return key
             } catch(error) {
                 vuexContext.commit('setItemLoading', false)
                 console.log('[ERROR] ' + error)
@@ -61,7 +63,7 @@ export default {
         async loadPreviewItems (vuexContext) {
             vuexContext.commit('setItemLoading', true)
             try {
-                const itemsData = await firebase.database().ref('items').orderByChild('updatedDate').limitToFirst(50).once('value')
+                const itemsData = await firebase.database().ref('items').orderByChild('updatedDate').limitToLast(10).once('value')
                 const itemsObj = itemsData.val()
                 const loadedItems = []
                 for (let key in itemsObj) {
@@ -70,6 +72,7 @@ export default {
                         ...itemsObj[key]
                     })
                 }
+                loadedItems.reverse()
                 vuexContext.commit('setItemLoading', false)
                 return loadedItems
             } catch(error) {

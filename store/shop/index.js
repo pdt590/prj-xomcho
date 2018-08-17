@@ -1,4 +1,5 @@
 import firebase from '~/plugins/firebase'
+import uuid from '../shared/uuid'
 
 export default {
     state: {
@@ -41,14 +42,14 @@ export default {
                     creatorId: vuexContext.getters.user.id,
                     updatedDate: new Date().toISOString() // ? new Date() cannot be used in Firebase
                 }
-                // return the promise
-                const data = await firebase.database().ref('shops').push(newShop)
+                const key = payload.shopTitle.replace(/\s+/g, '-').toLowerCase() + '-' + uuid(5)
+                await firebase.database().ref('shops').child(key).set(newShop)
                 vuexContext.commit('setShopLoading', false)
                 vuexContext.commit('setShop', {
-                    shopId: data.key,
+                    shopId: key,
                     ...newShop
                 })
-                return data.key
+                return key
                 //return payload.shopTitle.replace(/\s+/g, '-').toLowerCase()
             } catch (error) {
                 vuexContext.commit('setShopLoading', false)
@@ -92,7 +93,7 @@ export default {
         async loadPreviewShops (vuexContext) {
             vuexContext.commit('setShopLoading', true)
             try {
-                const shopsData = await firebase.database().ref('shops').orderByChild('updatedDate').limitToFirst(50).once('value')
+                const shopsData = await firebase.database().ref('shops').orderByChild('updatedDate').limitToLast(10).once('value')
                 const shopsObj = shopsData.val()
                 const loadedShops = []
                 for (let key in shopsObj) {
@@ -101,6 +102,7 @@ export default {
                         ...shopsObj[key]
                     })
                 }
+                loadedShops.reverse()
                 vuexContext.commit('setShopLoading', false)
                 return loadedShops
             } catch(error) {
