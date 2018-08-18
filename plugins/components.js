@@ -5,11 +5,11 @@ import NavBarMobile from "~/components/Navigation/NavBarMobile"
 import SideBarShop from "~/components/Navigation/SideBarShop"
 import SideBarInbox from "~/components/Navigation/SideBarInbox"
 import Footer from "~/components/Navigation/Footer"
-import ModalLogin from "~/components/Navigation/ModalLogin"
 
-import ProductCardHome from "~/components/Card/ProductCardHome"
-import ProductCardShop from "~/components/Card/ProductCardShop"
-import ShopCardHome from "~/components/Card/ShopCardHome"
+import ModalLogin from "~/components/UI/ModalLogin"
+import ItemCardHome from "~/components/UI/Card/ItemCardHome"
+import ItemCardShop from "~/components/UI/Card/ItemCardShop"
+import ShopCardHome from "~/components/UI/Card/ShopCardHome"
 
 import ButtonSaveItem from "~/components/UI/ButtonSaveItem"
 import ButtonSaveShop from "~/components/UI/ButtonSaveShop"
@@ -23,7 +23,7 @@ import SliderShopPanel from "~/components/UI/SliderShopPanel"
 import SliderItemImg from "~/components/UI/SliderItemImg"
 
 import UploadImg from "~/components/UI/UploadImg"
-import ProductTypes from "~/components/UI/ProductTypes"
+import ItemTypes from "~/components/UI/ItemTypes"
 
 Vue.component('app-navbar', NavBar)
 Vue.component('app-navbar-mobile', NavBarMobile)
@@ -32,10 +32,10 @@ Vue.component('app-sidebar-inbox', SideBarInbox)
 Vue.component('app-footer', Footer)
 Vue.component('app-modal-login', ModalLogin)
 Vue.component('app-img-upload', UploadImg)
-Vue.component('app-product-types', ProductTypes)
+Vue.component('app-item-types', ItemTypes)
 
-Vue.component('app-product-card-home', ProductCardHome)
-Vue.component('app-product-card-shop', ProductCardShop)
+Vue.component('app-item-card-home', ItemCardHome)
+Vue.component('app-item-card-shop', ItemCardShop)
 Vue.component('app-shop-card-home', ShopCardHome)
 
 Vue.component('app-btn-sale', ButtonSale)

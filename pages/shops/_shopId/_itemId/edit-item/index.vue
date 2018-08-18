@@ -67,7 +67,7 @@
                         </div>
                     </form>
 
-                    <div id="itemImg" class="w3-margin-bottom section" style="min-height: 1300px; display:none">
+                    <div id="itemImg" class="w3-margin-bottom section" style="min-height: 800px; display:none">
                         <h5><strong>Ảnh sản phẩm (tối đa 4 ảnh)</strong></h5><br>
                         <app-img-upload :numberImg="4" :section="'itemPreview'"/>
                         <br>

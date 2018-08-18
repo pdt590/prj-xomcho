@@ -42,15 +42,14 @@ export default {
                     creatorId: vuexContext.getters.user.id,
                     updatedDate: new Date().toISOString() // ? new Date() cannot be used in Firebase
                 }
-                const key = payload.shopTitle.replace(/\s+/g, '-').toLowerCase() + '-' + uuid(5)
-                await firebase.database().ref('shops').child(key).set(newShop)
+                const shopId = payload.title.replace(/\s+/g, '-').toLowerCase() + '-' + uuid(5)
+                await firebase.database().ref('shops').child(shopId).set(newShop)
                 vuexContext.commit('setShopLoading', false)
                 vuexContext.commit('setShop', {
-                    shopId: key,
+                    shopId: shopId,
                     ...newShop
                 })
-                return key
-                //return payload.shopTitle.replace(/\s+/g, '-').toLowerCase()
+                return shopId
             } catch (error) {
                 vuexContext.commit('setShopLoading', false)
                 console.log('[ERROR]' + error)

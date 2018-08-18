@@ -11,12 +11,12 @@
                         </div>
                         <div class="w3-col l7">
                             <div class="w3-border-bottom">
-                                <h3>Giày Nam ADIDAS HTKONKM90876</h3>
-                                <p><i class="fa fa-codepen"></i> Thương hiệu: <span class="w3-text-blue"><b> ADIDAS</b></span></p>
+                                <h3>{{loadedItem.title}}</h3>
+                                <p><i class="fa fa-codepen"></i> Thương hiệu: <span class="w3-text-blue"><b> {{loadedItem.brand}}</b></span></p>
                             </div>
                             <br>
-                            <h6 class="w3-text-grey w3-margin-right">Giá:</h6><h4 class="w3-text-red"><strong> 200.000 VND / 4 cái</strong></h4>
-                            <p><i class="fa fa-fw fa-clock-o"></i> Ngày tạo: 20/10/2018</p>
+                            <h6 class="w3-text-grey w3-margin-right">Giá:</h6><h4 class="w3-text-red"><strong> {{loadedItem.price}} {{loadedItem.currency}} / {{loadedItem.unit}}</strong></h4>
+                            <p><i class="fa fa-fw fa-clock-o"></i> Ngày tạo: {{loadedItem.updatedDate | date}}</p>
                             <hr>
                             <p>
                                 - Thiết kế trẻ trung, năng động <br>
@@ -28,7 +28,7 @@
                             <div class="w3-row">
                                 <h6>Loại sản phẩm</h6><br>
                                 <div class="w3-col l4 m4 s6" 
-                                    v-for="(type, i) in itemTypes" 
+                                    v-for="(type, i) in loadedItem.types" 
                                     :key="i">
                                     <p>
                                         <i class="w3-text-blue w3-large w3-margin-right" :class="type.icon"></i>
@@ -102,22 +102,21 @@
     export default {
         layout: 'shop',
         async asyncData({ store, params }) {
-            let loadedItem = {}
             if(store.getters.loadedShop) {
-                loadedItem = await loadItem(store.getters.loadedItems, params.itemId)
+                let item = await loadItem(store.getters.loadedItems, params.itemId)
                 return {
                     loadedShop: store.getters.loadedShop,
-                    loadedItem: loadedItem
+                    loadedItem: item
                 }
             }
-            let [loadedShop, loadedItems] = await Promise.all([
+            let [shop, items] = await Promise.all([
                 store.dispatch('loadShop', params.shopId),
                 store.dispatch('loadItems', params.shopId)
             ])
-            loadedItem  = await loadItem(loadedItems, params.itemId, params.shopId)
+            let item  = await loadItem(items, params.itemId, params.shopId)
             return { 
-                loadedShop: loadedShop,
-                loadedItem: loadedItem
+                loadedShop: shop,
+                loadedItem: item
             }
         },
         data() {

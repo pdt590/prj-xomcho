@@ -3,13 +3,13 @@
         <div class="w3-top" style="z-index:1001">
             <div class="w3-bar w3-padding w3-hide-large w3-blue" style="z-index:1001">
                 <nuxt-link to="/" class="w3-bar-item w3-button w3-hover-none w3-hover-text-white"><i class="fa fa-home w3-xlarge"></i> </nuxt-link>
-                <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right" @click="openSideBar" v-show="!isMainLayout"><i class="fa fa-bars"></i></a>
+                <a href="javascript:void(0)" class="w3-bar-item w3-button w3-right" @click="openSideBar" v-if="!isHome"><i class="fa fa-bars"></i></a>
                 
                 <div v-if="user" class="w3-dropdown-hover w3-right">
                     <a class="w3-button">
                         <img :src="user.photoUrl" class="w3-circle" style="height:23px;width:23px" alt="Avatar">
                     </a>
-                    <div class="w3-dropdown-content w3-bar-block w3-card w3-light-grey" :style="!isMainLayout ? 'right:58px;' : 'right:15px;'">
+                    <div class="w3-dropdown-content w3-bar-block w3-card w3-light-grey" :style="!isHome ? 'right:58px;' : 'right:15px;'">
                         <p class="w3-bar-item" style="padding-bottom:0">{{user.username}}</p>
                         <nuxt-link to="/user" class="w3-bar-item w3-button"><i class="fa fa-cube w3-large"></i> Trang quản lý</nuxt-link>
                         <a class="w3-bar-item w3-button w3-border-top"  @click="onLogout"><i class="fa fa-sign-out w3-large"></i> Đăng xuất</a>
@@ -29,7 +29,7 @@
                         class="w3-bar-item w3-button w3-right">
                         <i class="fa fa-bell w3-large"></i><span class="w3-badge w3-right w3-small w3-red">3</span>
                     </nuxt-link>
-                    <nuxt-link to="/shops/new-shop"
+                    <nuxt-link v-if="!isHome" to="/shops/new-shop"
                         class="w3-bar-item w3-padding w3-button w3-right"> 
                         <i class="w3-large fa fa-plus-square"></i>
                     </nuxt-link>
@@ -55,7 +55,7 @@
 
     export default {
         props: {
-            isMainLayout: {
+            isHome: {
                 type: Boolean,
                 default: false
             }

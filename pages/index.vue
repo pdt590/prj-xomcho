@@ -33,7 +33,7 @@
                 <h5 class="w3-padding w3-border-bottom"><i class="fa fa-shopping-bag w3-xlarge w3-margin-right"></i><b>SẢN PHẨM MỚI</b></h5>
                 <div class="w3-row-padding">
                     <div class="w3-col l2 m3 s6 w3-margin-bottom" v-for="(item, i) in loadedItems" :key="i">
-                        <app-product-card-home :itemData="item"/>
+                        <app-item-card-home :itemData="item"/>
                         <br>
                     </div>
                 </div>

@@ -2,12 +2,12 @@
     <section>
         <div class="w3-row">
             <div class="w3-col l4 m4 s6" 
-                v-for="(type, i) in itemTypes" 
+                v-for="(type, i) in displayedItemTypes" 
                 :key="i">
                 <p>
-                    <label class="myContainer">
-                        <input type="checkbox" checked="checked">
-                        <span class="myCheckmark"></span>
+                    <label class="app-cb-container">
+                        <input type="checkbox" :value="displayedItemTypes[i]" v-model="itemTypes" @change="$emit('onCheckBox', itemTypes)">
+                        <span class="app-cb-checkmark"></span>
                         <i class="w3-xlarge w3-margin-right" :class="type.icon"></i>
                         {{ type.title }}
                     </label>
@@ -19,9 +19,10 @@
 
 <script>
     export default {
-        data() {
-            return {
-                itemTypes: [
+        props: {
+            displayedItemTypes: {
+                type: Array,
+                default: () => [
                     {icon: "fa fa-shopping-basket", title: "Thực phẩm"},
                     {icon: "fa fa-leaf", title: "Nông sản"},
                     {icon: "fa fa-cutlery", title: "Gia dụng"},
@@ -30,14 +31,23 @@
                     {icon: "fa fa-shopping-bag", title: "Thời trang"},
                     {icon: "fa fa-question-circle", title: "Khác"}
                 ]
+            },
+            selectedItemTypes: {
+                type: Array,
+                default: () => []
+            }
+        },
+        data() {
+            return {
+                itemTypes: this.selectedItemTypes
             }
         }
     } 
 </script>
 
 <style scoped>
-    /* The myContainer */
-    .myContainer {
+    /* The app-cb-container */
+    .app-cb-container {
         display: block;
         position: relative;
         padding-left: 35px;
@@ -49,15 +59,15 @@
         user-select: none;
     }
 
-    /* Hide the browser's default checkbox */
-    .myContainer input {
+    /* Hide the browser's default cb */
+    .app-cb-container input {
         position: absolute;
         opacity: 0;
         cursor: pointer;
     }
 
-    /* Create a custom checkbox */
-    .myCheckmark {
+    /* Create a custom cb */
+    .app-cb-checkmark {
         position: absolute;
         top: 4px;
         left: 0;
@@ -67,29 +77,29 @@
     }
 
     /* On mouse-over, add a grey background color */
-    .myContainer:hover input ~ .myCheckmark {
+    .app-cb-container:hover input ~ .app-cb-checkmark {
         background-color: #ccc;
     }
 
-    /* When the checkbox is checked, add a blue background */
-    .myContainer input:checked ~ .myCheckmark {
+    /* When the cb is checked, add a blue background */
+    .app-cb-container input:checked ~ .app-cb-checkmark {
         background-color: #2196F3;
     }
 
-    /* Create the myCheckmark/indicator (hidden when not checked) */
-    .myCheckmark:after {
+    /* Create the app-cb-checkmark/indicator (hidden when not checked) */
+    .app-cb-checkmark:after {
         content: "";
         position: absolute;
         display: none;
     }
 
-    /* Show the myCheckmark when checked */
-    .myContainer input:checked ~ .myCheckmark:after {
+    /* Show the app-cb-checkmark when checked */
+    .app-cb-container input:checked ~ .app-cb-checkmark:after {
         display: block;
     }
 
-    /* Style the myCheckmark/indicator */
-    .myContainer .myCheckmark:after {
+    /* Style the app-cb-checkmark/indicator */
+    .app-cb-container .app-cb-checkmark:after {
         left: 6px;
         top: 2px;
         width: 7px;

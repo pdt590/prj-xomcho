@@ -24,42 +24,42 @@
                         <div class="w3-row-padding" style="margin:0 -16px;">
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-file-archive-o w3-large"></i> Tên sản phẩm</label>
-                                <input class="w3-input w3-border" type="text" required v-model="itemTitle">
+                                <input class="w3-input w3-border" type="text" required v-model="itemData.title">
                             </div>
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-codepen w3-large"></i> Thương hiệu</label>
-                                <input class="w3-input w3-border" type="text" required v-model="itemBrand">
+                                <input class="w3-input w3-border" type="text" required v-model="itemData.brand">
                             </div>
                         </div>
                         <div class="w3-row-padding" style="margin:0 -16px;">
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-dollar w3-large"></i> Giá</label>
-                                <input class="w3-input w3-border" type="text" required v-model="itemPrice">
+                                <input class="w3-input w3-border" type="text" required v-model="itemData.price">
                             </div>
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-dollar w3-large"></i> Giá sale</label>
-                                <input class="w3-input w3-border" type="text" required v-model="itemSalePrice">
+                                <input class="w3-input w3-border" type="text" required v-model="itemData.salePrice">
                             </div>
                         </div>
                         <div class="w3-row-padding" style="margin:0 -16px;">
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-money w3-large"></i> Loại tiền</label>
-                                <select class="w3-select w3-border" name="option" v-model="itemCurrency">
-                                    <option value="1" selected>VND</option>
-                                    <option value="2">USD</option>
+                                <select class="w3-select w3-border" name="option" v-model="itemData.currency">
+                                    <option value="" disabled selected>Lựa Chọn</option>
+                                    <option value="vnd">VND</option>
                                 </select>
                             </div>
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-balance-scale w3-large"></i> Đơn vị</label>
-                                <input class="w3-input w3-border" type="text" placeholder= "Số lượng sản phẩm có thể mua với giá ở trên" required v-model="itemUnit">
+                                <input class="w3-input w3-border" type="tex" placeholder= "Ví dụ: '5 cái'" required v-model="itemData.unit">
                             </div>
                         </div>
                         <hr>
                         <h5><strong>Miêu tả</strong></h5><br>
-                        <textarea class="w3-input w3-border" rows="5" style="resize:none" v-model="itemDesc"></textarea>
+                        <textarea class="w3-input w3-border" rows="5" style="resize:none" v-model="itemData.description"></textarea>
                         <hr>
                         <h5><strong>Loại sản phẩm</strong></h5><br>
-                        <app-product-types/>
+                        <app-item-types @onCheckBox="itemData.types=$event"/>
                         <br>
                         <div class="w3-row">
                             <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit" @click.prevent="onAddItem">
@@ -67,7 +67,7 @@
                         </div>
                     </form>
 
-                    <div id="itemImg" class="w3-margin-bottom section" style="min-height: 1300px; display:none">
+                    <div id="itemImg" class="w3-margin-bottom section" style="min-height: 800px; display:none">
                         <h5><strong>Ảnh sản phẩm (tối đa 4 ảnh)</strong></h5><br>
                         <app-img-upload :numberImg="4" :section="'itemPreview'"/>
                         <br>
@@ -90,17 +90,32 @@
         middleware: 'auth',
         layout: 'shop',
         computed: {
-            ...mapGetters(['itemLoading','loadedShop'])
+            ...mapGetters(['itemLoading'])
+        },
+        async asyncData({ store, params }) {
+            if(store.getters.loadedShop) {
+                return {
+                    loadedShop: store.getters.loadedShop
+                }
+            }else {
+                const shop = await store.dispatch('loadShop', params.shopId)
+                return { 
+                    loadedShop: shop
+                }
+            }
         },
         data() {
             return {
-                itemTitle: '',
-                itemBrand: '',
-                itemPrice: '',
-                itemSalePrice: '',
-                itemCurrency: '',
-                itemUnit: '',
-                itemDesc: ''
+                itemData: {
+                    title: '',
+                    brand: '',
+                    price: '',
+                    salePrice: '',
+                    currency: '',
+                    unit: '',
+                    description: '',
+                    types: []
+                }
             }
         },
         methods: {
@@ -118,17 +133,8 @@
                 event.currentTarget.firstElementChild.className += " w3-border-red";
             },
             async onAddItem() {
-                const itemData = {
-                    itemTitle: this.itemTitle,
-                    itemBrand: this.itemBrand,
-                    itemPrice: this.itemPrice,
-                    itemSalePrice: this.itemSalePrice,
-                    itemCurrency: this.itemCurrency,
-                    itemUnit: this.itemUnit,
-                    itemDesc: this.itemDesc
-                }
-                const itemId = await this.$store.dispatch('addItem', itemData)
-                this.$router.push('/shops/' + this.$route.params.shopId + '/' + itemId)
+                const itemUrl = await this.$store.dispatch('addItem', this.itemData)
+                this.$router.push('/shops/' + this.$route.params.shopId + '/' + itemUrl)
             }
         }
     }

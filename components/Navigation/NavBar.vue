@@ -31,7 +31,7 @@
                         class="w3-bar-item w3-button w3-right">
                         <i class="fa fa-bell w3-large"></i><span class="w3-badge w3-right w3-small w3-red">3</span>
                     </nuxt-link>
-                    <nuxt-link to="/shops/new-shop"
+                    <nuxt-link v-if="!isHome" to="/shops/new-shop"
                         class="w3-bar-item w3-padding w3-button w3-right" target="_blank"> 
                         <i class="w3-large fa fa-plus-square"></i> Tạo cửa hàng
                     </nuxt-link>
@@ -40,12 +40,12 @@
                 <!--<button @click="onSearch" class="w3-bar-item w3-button"><i :class="enableSearch ? 'fa fa-close' : 'fa fa-search'" class="w3-large"></i></button>-->
                 <form ref="search" class="app-search">
                     <button class="w3-button w3-light-grey w3-bar-item w3-margin-left">Tìm kiếm</button>
-                    <select class="w3-select w3-bar-item" name="option">
+                    <select class="w3-select w3-bar-item" v-model="searchOption">
                         <option value="" disabled selected>Danh mục</option>
-                        <option value="1">Cửa hàng</option>
-                        <option value="2">Sản phẩm</option>
+                        <option value="shop">Cửa hàng</option>
+                        <option value="item">Sản phẩm</option>
                     </select>
-                    <input  type="text" class="w3-bar-item w3-input" placeholder="nhập từ khóa..." style="width:70%" required>
+                    <input type="text" class="w3-bar-item w3-input" placeholder="nhập từ khóa..." style="width:70%" required>
                 </form> 
             </div>
         </div>
@@ -58,6 +58,12 @@
     import { mapGetters } from 'vuex'
 
     export default {
+        props: {
+            isHome: {
+                type: Boolean,
+                default: false
+            }
+        },
         computed: {
             ...mapGetters(['user'])
             /*
@@ -71,7 +77,8 @@
         },
         data() {
             return {
-                enableSearch: true
+                enableSearch: true,
+                searchOption: ''
             }
         },
         methods: {

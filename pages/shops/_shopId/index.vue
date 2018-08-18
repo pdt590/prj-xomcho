@@ -9,18 +9,18 @@
                 </div>
                 <div class="w3-padding w3-white w3-margin-bottom">
                     <h5><strong>Thông tin</strong></h5><hr>
-                    <h6>{{loadedShop.shopDesc}}</h6>
+                    <h6 style="white-space: pre">{{loadedShop.description}}</h6>
                 </div>
                 <div class="w3-padding w3-white w3-margin-bottom">
                     <h5><strong>Chọn mặt hàng hiển thị</strong></h5><hr>
-                    <app-product-types />
+                    <app-item-types :displayedItemTypes="loadedShop.itemTypes" :selectedItemTypes="loadedShop.itemTypes" />
                 </div>
 
                 <div class="w3-padding w3-white w3-margin-bottom">
                     <div class="w3-row-padding" style="padding: 0">
                         <br>
                         <div class="w3-col l3 m4 s6 w3-margin-bottom" v-for="(item, i) in loadedItems" :key="i">
-                            <app-product-card-shop :itemData="item" />
+                            <app-item-card-shop :itemData="item" />
                             <br>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
         layout: 'shop',
         async asyncData({ store, params }) {
             if(store.getters.loadedShop) {
-                if (store.getters.loadedItems) {
+                if (store.getters.loadedItems.length) {
                     return {
                         loadedShop : store.getters.loadedShop,
                         loadedItems: store.getters.loadedItems

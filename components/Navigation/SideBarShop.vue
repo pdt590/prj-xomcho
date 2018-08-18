@@ -4,10 +4,10 @@
         <div class="w3-sidebar w3-light-grey w3-collapse w3-top w3-padding-64" style="z-index:3;width:270px" ref="mySidebar">
             <div class="w3-container">
                 <nuxt-link :to="'/shops/' + $route.params.shopId">
-                    <img :src="shopData.shopLogoUrl" style="width:100%;" class="w3-round">
+                    <img :src="shopData.logoUrl" style="width:100%;" class="w3-round">
                 </nuxt-link>
                 <br>
-                <h4><b>{{shopData.shopTitle}}</b></h4>
+                <h4><b>{{shopData.title}}</b></h4>
             </div>
             <br>
             <div class="w3-bar-block">
@@ -15,48 +15,48 @@
                 <div class="w3-bar-item">
                     <div class="w3-row">
                         <div class="w3-col l2 m2 s2">
-                            <a :href="'https://maps.google.com/?q=' + shopData.shopLocation" target=_blank>
+                            <a :href="'https://maps.google.com/?q=' + shopData.location + ' ' + shopData.province" target=_blank>
                                 <i class="fa fa-map-pin w3-xlarge"></i>
                             </a>
                         </div>
                         <div class="w3-col l10 m10 s10">
-                            <h6 class="app-sidebar">{{shopData.shopLocation}}</h6>
+                            <h6 class="app-sidebar">{{shopData.location}}</h6>
                         </div>
                     </div>
                 </div>
                 <div class="w3-bar-item">
                     <div class="w3-row">
                         <div class="w3-col l2 m2 s2">
-                            <a :href="shopData.shopFb" target=_blank>
+                            <a :href="shopData.facebook" target=_blank>
                                 <i class="fa fa-facebook-official w3-xlarge"></i>
                             </a>
                         </div>
                         <div class="w3-col l10 m10 s10">
-                            <h6 class="app-sidebar">{{shopData.shopFb}}</h6>
+                            <h6 class="app-sidebar">{{shopData.facebook}}</h6>
                         </div>
                     </div>
                 </div>
                 <div class="w3-bar-item">
                     <div class="w3-row">
                         <div class="w3-col l2 m2 s2">
-                            <a :href="'tel:'+ shopData.shopPhone">
+                            <a :href="'tel:'+ shopData.phone">
                                 <i class="fa fa-phone w3-xlarge"></i>
                             </a>
                         </div>
                         <div class="w3-col l10 m10 s10">
-                            <h6 class="app-sidebar">{{shopData.shopPhone}}</h6>
+                            <h6 class="app-sidebar">{{shopData.phone}}</h6>
                         </div>
                     </div>
                 </div>
                 <div class="w3-bar-item">
                     <div class="w3-row">
                         <div class="w3-col l2 m2 s2">
-                            <a :href="'mailto:'+ shopData.shopEmail + '?Subject=Xin%20Chào%20Cửa%20Hàng%20' + shopData.shopTitle">
+                            <a :href="'mailto:'+ shopData.email + '?Subject=Xin%20Chào%20Cửa%20Hàng%20' + shopData.title">
                                 <i class="fa fa-envelope w3-xlarge"></i>
                             </a>
                         </div>
                         <div class="w3-col l10 m10 s10">
-                            <h6 class="app-sidebar">{{shopData.shopEmail}}</h6>
+                            <h6 class="app-sidebar">{{shopData.email}}</h6>
                         </div>
                     </div>
                 </div>

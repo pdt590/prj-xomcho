@@ -8,7 +8,7 @@
                 </nuxt-link>
             </div>
             <div class="w3-container w3-padding">
-                <p>{{itemData.itemTitle}}<br><b>{{itemData.itemPrice}}</b></p>
+                <p>{{itemData.title}}<br><b>{{itemData.price}}</b></p>
                 <div class="w3-bar-item w3-left">
                     <app-btn-saveitem />
                 </div>

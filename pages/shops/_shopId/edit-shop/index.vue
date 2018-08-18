@@ -60,7 +60,7 @@
                         </div>
                     </form>
 
-                    <div id="Image" class="w3-margin-bottom section" style="min-height: 1300px; display:none">
+                    <div id="Image" class="w3-margin-bottom section" style="min-height: 800px; display:none">
                         <h5><strong>Ảnh đại diện</strong></h5><br>
                         <app-img-upload :numberImg="1" :section="'shopAvatar'"/>
                         <hr>

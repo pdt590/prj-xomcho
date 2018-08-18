@@ -4,7 +4,7 @@ import uuid from '../shared/uuid'
 export default {
     state: {
         itemLoading: false,
-        loadedItems: null
+        loadedItems: []
     },
     mutations:  {
         setItemLoading(state, payload) {
@@ -27,14 +27,14 @@ export default {
                     creatorId: vuexContext.getters.user.id,
                     updatedDate: new Date().toISOString()
                 }
-                const key = payload.itemTitle.replace(/\s+/g, '-').toLowerCase() + '-' + uuid(5)
-                await firebase.database().ref('items').child(key).set(newItem)
+                const itemId = payload.title.replace(/\s+/g, '-').toLowerCase() + '-' + uuid(5)
+                await firebase.database().ref('items').child(itemId).set(newItem)
                 vuexContext.commit('setItemLoading', false)
                 vuexContext.commit('addItem', {
-                    id: key,
+                    itemId: itemId,
                     ...newItem
                 })
-                return key
+                return itemId
             } catch(error) {
                 vuexContext.commit('setItemLoading', false)
                 console.log('[ERROR] ' + error)

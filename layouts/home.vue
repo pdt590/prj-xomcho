@@ -1,7 +1,7 @@
 <template>
     <section>
-        <app-navbar />
-        <app-navbar-mobile :isMainLayout="true" />
+        <app-navbar :isHome="true" />
+        <app-navbar-mobile :isHome="true" />
         <div class="w3-padding-64">     
             <!-- !PAGE CONTENT! -->
             <div class="w3-main">
