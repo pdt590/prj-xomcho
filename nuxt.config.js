@@ -23,7 +23,7 @@ module.exports = {
 	/*
 	** Customize the progress-bar color
 	*/
-	loading: { color: '#000000', height: '4px', duration: 5000 },
+	loading: { color: '#DC143C', height: '6px', duration: 5000 },
 
 	/*
 	** Global CSS
@@ -41,7 +41,7 @@ module.exports = {
 		{ src: '~plugins/date-filter.js'},
 		{ src: '~plugins/fb-filter.js'},
 		{ src: '~plugins/firebase.js'},
-		{ src: '~plugins/firebase-auth.js'}
+		{ src: '~plugins/auth-listener.js', ssr: false}
 	],
 
 	/*

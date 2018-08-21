@@ -90,7 +90,13 @@
             },
             async onLogout() {
                 await this.$store.dispatch('logOut')
-                window.location.reload(true)
+                if(this.$route.params.shopId && this.$route.params.itemId) {
+                    this.$router.push('/shops/' + this.$route.params.shopId + '/' + this.$route.params.itemId)
+                }else if(this.$route.params.shopId) {
+                    this.$router.push('/shops/' + this.$route.params.shopId)
+                }else {
+                    this.$router.push('/')
+                }
             }
         }
     }

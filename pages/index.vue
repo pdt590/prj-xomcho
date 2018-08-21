@@ -47,13 +47,18 @@
     export default {
         layout: 'home',
         async asyncData(context) {
-            const [loadedShops, loadedItems] = await Promise.all([
-                context.store.dispatch('loadPreviewShops'),
-                context.store.dispatch('loadPreviewItems')
-            ])
-            return {
-                loadedShops: loadedShops,
-                loadedItems: loadedItems
+            try {
+                const [loadedShops, loadedItems] = await Promise.all([
+                    context.store.dispatch('loadPreviewShops'),
+                    context.store.dispatch('loadPreviewItems')
+                ])
+                return {
+                    loadedShops: loadedShops,
+                    loadedItems: loadedItems
+                }
+            }catch(error) {
+                console.log('[_ERROR] ' + error)
+                context.error({ statusCode: 500, message: '...Lỗi' })
             }
         }
     }

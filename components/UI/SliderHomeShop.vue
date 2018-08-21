@@ -1,18 +1,18 @@
 <template>
     <section>
         <div class="app-shop w3-row-padding" :class="isLeft ? 'w3-animate-opacity' : 'w3-animate-opacity'">
-            <div class="w3-col l4 m3 s6 w3-margin-bottom" v-for="(shop, i) in shopsData" :key="i">
+            <div class="w3-col l4 m3 s6 w3-margin-bottom" v-for="(shop, i) in shopsData.slice(0, 15)" :key="i">
                 <app-shop-card-home :shopData="shop"/>
             </div>
         </div>
-        <div class="app-shop w3-row-padding"  :class="isLeft ? 'w3-animate-opacity' : 'w3-animate-opacity'">
-            <div class="w3-col l4 m3 s6 w3-margin-bottom" v-for="i in 15" :key="i">
-                
+        <div class="app-slider-shop w3-row-padding"  :class="isLeft ? 'w3-animate-opacity' : 'w3-animate-opacity'">
+            <div class="w3-col l4 m3 s6 w3-margin-bottom" v-for="(shop, i) in shopsData.slice(15, 30)" :key="i">
+                <app-shop-card-home :shopData="shop"/>
             </div>
         </div>
-        <div class="app-shop w3-row-padding"  :class="isLeft ? 'w3-animate-opacity' : 'w3-animate-opacity'">
-            <div class="w3-col l4 m3 s6 w3-margin-bottom" v-for="i in 15" :key="i">
-                
+        <div class="app-slider-shop w3-row-padding"  :class="isLeft ? 'w3-animate-opacity' : 'w3-animate-opacity'">
+            <div class="w3-col l4 m3 s6 w3-margin-bottom" v-for="(shop, i) in shopsData.slice(30, 45)" :key="i">
+                <app-shop-card-home :shopData="shop"/>
             </div>
         </div>
         <!-- Slideshow next/previous buttons -->
@@ -77,7 +77,7 @@
 </script>
 
 <style scoped>
-    .app-shop {display: none;}
+    .app-slider-shop {display: none;}
     .w3-left, .w3-right, .w3-badge {cursor:pointer}
     .w3-badge {
         height:15px;

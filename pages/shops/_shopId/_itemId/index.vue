@@ -12,18 +12,19 @@
                         <div class="w3-col l7">
                             <div class="w3-border-bottom">
                                 <h3>{{loadedItem.title}}</h3>
-                                <p><i class="fa fa-codepen"></i> Thương hiệu: <span class="w3-text-blue"><b> {{loadedItem.brand}}</b></span></p>
+                                <p><i class="fa fa-codepen"></i> Thương hiệu: <span class="w3-text-blue"><b> {{loadedItem.brand === '' ? 'Không nắm rõ' : loadedItem.brand}}</b></span></p>
                             </div>
                             <br>
-                            <h6 class="w3-text-grey w3-margin-right">Giá:</h6><h4 class="w3-text-red"><strong> {{loadedItem.price}} {{loadedItem.currency}} / {{loadedItem.unit}}</strong></h4>
+                            <h6 class="w3-text-grey w3-margin-right">Giá:</h6>
+                            <span v-if="loadedItem.salePrice==0" class="w3-tag w3-xlarge w3-orange"> {{loadedItem.price}}</span>
+                            <span v-else>
+                                <span class="w3-tag w3-xlarge w3-orange">{{loadedItem.salePrice}}</span>
+                                <span class="w3-tag w3-xlarge"><strike> {{loadedItem.price}} </strike></span>
+                            </span >
+                            <h4 class="w3-text-red">{{loadedItem.currency}} / {{loadedItem.unit}}</h4>
                             <p><i class="fa fa-fw fa-clock-o"></i> Ngày tạo: {{loadedItem.updatedDate | date}}</p>
                             <hr>
-                            <p>
-                                - Thiết kế trẻ trung, năng động <br>
-                                - Kích thước nhỏ gọn, tiện lợi <br>
-                                - Chất liệu vải oxford dày dặn, độ bền cao <br>
-                                - Thích hợp mang đi học, chơi thể thao <br>
-                            </p>
+                            <p style="white-space: pre">{{loadedItem.description}}</p>
                             <hr>
                             <div class="w3-row">
                                 <h6>Loại sản phẩm</h6><br>
@@ -38,13 +39,11 @@
                             </div>
                         </div>
                         <div class="w3-row">
-                            <nuxt-link
-                                v-if="false"
-                                :to="'/items/' + $route.params.itemId + '/edit-item'" 
-                                class="w3-button w3-blue w3-margin-bottom w3-right w3-half">
-                                <i class="fa fa-edit w3-large w3-margin-right"></i> 
-                                Chỉnh sửa
-                            </nuxt-link>
+                            <div v-if="user && user.id === loadedItem.creatorId" class="w3-margin-bottom w3-right w3-quarter">
+                                <button @click="$router.push($route.params.itemId + '/edit-item')" class="w3-button w3-border w3-border-blue " style="width: 100%;">
+                                    <i class="fa fa-gear w3-xlarge w3-margin-right"></i>Chỉnh sửa
+                                </button>
+                            </div>
                             <div v-else class="w3-margin-bottom w3-right w3-quarter">
                                 <app-btn-sale />
                             </div>
@@ -84,16 +83,19 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
+
     async function loadItem(items, itemId, shopId) {
-        let loadedItem = {}
-        if(items) {
-            loadedItem = items.find( item => {
-                return item.itemId === itemId
-            })
-            return loadedItem
+        if(items.length) {
+            if(items[0].shopId === shopId) {
+                const loadedItem = items.find( item => {
+                    return item.itemId === itemId
+                })
+                return loadedItem
+            }
         }else {
             let loadedItems = await store.dispatch('loadItems', shopId)
-            loadedItem = loadedItems.find( item => {
+            const loadedItem = loadedItems.find( item => {
                 return item.itemId === itemId
             })
             return loadedItem
@@ -101,23 +103,31 @@
     }
     export default {
         layout: 'shop',
+        computed: {
+            ...mapGetters(['user'])
+        },
         async asyncData({ store, params }) {
-            if(store.getters.loadedShop) {
-                let item = await loadItem(store.getters.loadedItems, params.itemId)
-                return {
-                    loadedShop: store.getters.loadedShop,
+            try{
+                if(process.client && Object.keys(store.getters.loadedShop) && store.getters.loadedShop.shopId === params.shopId) {
+                    const item = await loadItem(store.getters.loadedItems, params.itemId, params.shopId)
+                    return {
+                        loadedShop: store.getters.loadedShop,
+                        loadedItem: item
+                    }
+                }
+                const [loadedShop, loadedItems] = await Promise.all([
+                    store.dispatch('loadShop', params.shopId),
+                    store.dispatch('loadItems', params.shopId)
+                ])
+                const item  = await loadItem(loadedItems, params.itemId, params.shopId)
+                return { 
+                    loadedShop: loadedShop,
                     loadedItem: item
                 }
-            }
-            let [shop, items] = await Promise.all([
-                store.dispatch('loadShop', params.shopId),
-                store.dispatch('loadItems', params.shopId)
-            ])
-            let item  = await loadItem(items, params.itemId, params.shopId)
-            return { 
-                loadedShop: shop,
-                loadedItem: item
-            }
+            } catch(error) {
+                console.log('[_ERROR] ' + error)
+                context.error({ statusCode: 500, message: '...Lỗi'})
+            }  
         },
         data() {
             return {

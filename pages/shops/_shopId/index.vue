@@ -5,14 +5,14 @@
             <!-- !PAGE CONTENT! -->
             <div class="w3-main" style="margin-left:270px;">
                 <div class="w3-margin-bottom">
-                    <app-slider-shoppanel/>
+                    <app-slider-shoppanel />
                 </div>
                 <div class="w3-padding w3-white w3-margin-bottom">
-                    <h5><strong>Thông tin</strong></h5><hr>
-                    <h6 style="white-space: pre">{{loadedShop.description}}</h6>
+                    <h6><strong>Thông tin</strong></h6><hr>
+                    <p style="white-space: pre">{{loadedShop.description}}</p>
                 </div>
                 <div class="w3-padding w3-white w3-margin-bottom">
-                    <h5><strong>Chọn mặt hàng hiển thị</strong></h5><hr>
+                    <h6><strong>Chọn mặt hàng hiển thị</strong></h6><hr>
                     <app-item-types :displayedItemTypes="loadedShop.itemTypes" :selectedItemTypes="loadedShop.itemTypes" />
                 </div>
 
@@ -36,22 +36,29 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
+
     export default {
         layout: 'shop',
         async asyncData({ store, params }) {
-            if(store.getters.loadedShop) {
-                if (store.getters.loadedItems.length) {
+            try {
+                if(process.client && Object.keys(store.getters.loadedShop) && store.getters.loadedShop.shopId === params.shopId) {
+                    let items = []
+                    if(store.getters.loadedItems.length) {
+                        items = store.getters.loadedItems
+                        if(items[0].shopId === params.shopId) {
+                            return {
+                                loadedShop : store.getters.loadedShop,
+                                loadedItems: store.getters.loadedItems
+                            }
+                        }
+                    } 
+                    items = await store.dispatch('loadItems', params.shopId)
                     return {
                         loadedShop : store.getters.loadedShop,
-                        loadedItems: store.getters.loadedItems
+                        loadedItems: items
                     }
-                } 
-                const loadedItems = await store.dispatch('loadItems', params.shopId)
-                return {
-                    loadedShop : store.getters.loadedShop,
-                    loadedItems: loadedItems
                 }
-            }else {
                 const [loadedShop, loadedItems] = await Promise.all([
                     store.dispatch('loadShop', params.shopId),
                     store.dispatch('loadItems', params.shopId)
@@ -60,7 +67,11 @@
                     loadedShop: loadedShop,
                     loadedItems: loadedItems
                 }
+            } catch(error) {
+                console.log('[_ERROR] ' + error)
+                context.error({ statusCode: 500, message: '...Lỗi'})
             }
+            
         }
     }
 </script>

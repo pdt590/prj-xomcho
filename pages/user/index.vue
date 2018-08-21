@@ -296,7 +296,6 @@
                                     <label><i class="fa fa-envelope-o w3-large"></i> Email</label>
                                     <input class="w3-input w3-border" type="text" required placeholder="">
                                 </div>
-
                             </div>
                             <div class="w3-row-padding" style="margin:0 -16px;">
                                 <div class="w3-half w3-margin-bottom">

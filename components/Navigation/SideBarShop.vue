@@ -20,7 +20,7 @@
                             </a>
                         </div>
                         <div class="w3-col l10 m10 s10">
-                            <h6 class="app-sidebar">{{shopData.location}}</h6>
+                            <h6 class="app-sidebar">{{shopData.location}}, {{shopData.province}}</h6>
                         </div>
                     </div>
                 </div>

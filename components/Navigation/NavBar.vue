@@ -64,16 +64,9 @@
                 default: false
             }
         },
+        middleware: 'expired-auth',
         computed: {
             ...mapGetters(['user'])
-            /*
-            ...mapState({
-                user: state => state.user.user // ? State is still in namespaced mode, others (actions, getters) can be called directly 
-            })
-            or
-            ...mapState('user/state', [
-                'user'])
-            */
         },
         data() {
             return {
@@ -91,7 +84,13 @@
             },
             async onLogout() {
                 await this.$store.dispatch('logOut')
-                window.location.reload(true)
+                if(this.$route.params.shopId && this.$route.params.itemId) {
+                    this.$router.push('/shops/' + this.$route.params.shopId + '/' + this.$route.params.itemId)
+                }else if(this.$route.params.shopId) {
+                    this.$router.push('/shops/' + this.$route.params.shopId)
+                }else {
+                    this.$router.push('/')
+                }
             }
         }
     }

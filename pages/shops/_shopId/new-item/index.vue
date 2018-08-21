@@ -20,55 +20,54 @@
                     <hr>
                     
                     <form id="itemInfo" class="w3-margin-bottom section">
-                        <h5><strong>Thông tin sản phẩm</strong></h5><br>
+                        <h6><strong>Thông tin sản phẩm</strong></h6><br>
                         <div class="w3-row-padding" style="margin:0 -16px;">
                             <div class="w3-half w3-margin-bottom">
-                                <label><i class="fa fa-file-archive-o w3-large"></i> Tên sản phẩm</label>
-                                <input class="w3-input w3-border" type="text" required v-model="itemData.title">
+                                <label><i class="fa fa-file-archive-o w3-large"></i><strong> Tên sản phẩm </strong>*</label>
+                                <input class="w3-input w3-border" type="text" v-model.trim="itemData.title">
                             </div>
                             <div class="w3-half w3-margin-bottom">
-                                <label><i class="fa fa-codepen w3-large"></i> Thương hiệu</label>
-                                <input class="w3-input w3-border" type="text" required v-model="itemData.brand">
+                                <label><i class="fa fa-codepen w3-large"></i><strong> Thương hiệu </strong></label>
+                                <input class="w3-input w3-border" type="text" v-model.trim="itemData.brand">
                             </div>
                         </div>
                         <div class="w3-row-padding" style="margin:0 -16px;">
                             <div class="w3-half w3-margin-bottom">
-                                <label><i class="fa fa-dollar w3-large"></i> Giá</label>
-                                <input class="w3-input w3-border" type="text" required v-model="itemData.price">
+                                <label><i class="fa fa-dollar w3-large"></i><strong> Giá </strong>*</label>
+                                <input class="w3-input w3-border" type="number" step="0.1" v-model="itemData.price">
                             </div>
                             <div class="w3-half w3-margin-bottom">
-                                <label><i class="fa fa-dollar w3-large"></i> Giá sale</label>
-                                <input class="w3-input w3-border" type="text" required v-model="itemData.salePrice">
+                                <label><i class="fa fa-dollar w3-large"></i><strong> Giá sale </strong></label>
+                                <input class="w3-input w3-border" type="number" step="0.1" v-model="itemData.salePrice">
                             </div>
                         </div>
                         <div class="w3-row-padding" style="margin:0 -16px;">
                             <div class="w3-half w3-margin-bottom">
-                                <label><i class="fa fa-money w3-large"></i> Loại tiền</label>
+                                <label><i class="fa fa-money w3-large"></i><strong> Loại tiền </strong>*</label>
                                 <select class="w3-select w3-border" name="option" v-model="itemData.currency">
                                     <option value="" disabled selected>Lựa Chọn</option>
                                     <option value="vnd">VND</option>
                                 </select>
                             </div>
                             <div class="w3-half w3-margin-bottom">
-                                <label><i class="fa fa-balance-scale w3-large"></i> Đơn vị</label>
-                                <input class="w3-input w3-border" type="tex" placeholder= "Ví dụ: '5 cái'" required v-model="itemData.unit">
+                                <label><i class="fa fa-balance-scale w3-large"></i><strong> Đơn vị sản phẩm </strong>*</label>
+                                <input class="w3-input w3-border" type="tex" placeholder= "Ví dụ: '5 cái'" required v-model.trim="itemData.unit">
                             </div>
                         </div>
-                        <hr>
-                        <h5><strong>Miêu tả</strong></h5><br>
+                        <p><strong>Miêu tả </strong>*</p>
                         <textarea class="w3-input w3-border" rows="5" style="resize:none" v-model="itemData.description"></textarea>
                         <hr>
-                        <h5><strong>Loại sản phẩm</strong></h5><br>
+                        <h6><strong>Loại sản phẩm</strong> *</h6><br>
                         <app-item-types @onCheckBox="itemData.types=$event"/>
                         <br>
                         <div class="w3-row">
-                            <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit" @click.prevent="onAddItem">
-                                <i class="fa fa-save w3-xlarge w3-margin-right" :class="itemLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Thêm sản phẩm</button>
+                            <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit" @click.prevent="onAddItem" :disabled="$v.itemData.$invalid">
+                                <i class="w3-xlarge w3-margin-right" :class="itemLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Thêm sản phẩm</button>
                         </div>
                     </form>
 
                     <div id="itemImg" class="w3-margin-bottom section" style="min-height: 800px; display:none">
-                        <h5><strong>Ảnh sản phẩm (tối đa 4 ảnh)</strong></h5><br>
+                        <h6><strong>Ảnh sản phẩm (tối đa 4 ảnh)</strong></h6><br>
                         <app-img-upload :numberImg="4" :section="'itemPreview'"/>
                         <br>
                     </div>
@@ -85,6 +84,10 @@
 
 <script>
     import { mapGetters } from 'vuex'
+    import { required, email, decimal } from 'vuelidate/lib/validators'
+    import Vue from 'vue'
+    import Vuelidate from 'vuelidate'
+    Vue.use(Vuelidate)
 
     export default {
         middleware: 'auth',
@@ -93,15 +96,19 @@
             ...mapGetters(['itemLoading'])
         },
         async asyncData({ store, params }) {
-            if(store.getters.loadedShop) {
-                return {
-                    loadedShop: store.getters.loadedShop
+            try{
+                if(process.client && Object.keys(store.getters.loadedShop) && store.getters.loadedShop.shopId === params.shopId) {
+                    return {
+                        loadedShop: store.getters.loadedShop
+                    }
                 }
-            }else {
-                const shop = await store.dispatch('loadShop', params.shopId)
+                const loadedShop = await store.dispatch('loadShop', params.shopId)
                 return { 
-                    loadedShop: shop
+                    loadedShop: loadedShop
                 }
+            } catch(error) {
+                console.log('[_ERROR] ' + error)
+                context.error({ statusCode: 500, message: '...Lỗi'})
             }
         },
         data() {
@@ -109,12 +116,39 @@
                 itemData: {
                     title: '',
                     brand: '',
-                    price: '',
-                    salePrice: '',
+                    price: 0,
+                    salePrice: 0,
                     currency: '',
                     unit: '',
                     description: '',
                     types: []
+                }
+            }
+        },
+        validations: {
+            itemData: {
+                title: {
+                    required    
+                },
+                brand: {},
+                price: {
+                    required,
+                    decimal
+                },
+                salePrice: {
+                    decimal
+                },
+                currency: {
+                    required
+                },
+                unit: {
+                    required
+                },
+                description: {
+                    required
+                },
+                types: {
+                    required
                 }
             }
         },

@@ -6,6 +6,12 @@
     </section>
 </template>
 
+<script>
+    export default {
+        middleware: 'check-auth',
+    }
+</script>
+
 <style>
     html,body,h1,h2,h3,h4,h5,h6 {
         font-family: "Nunito", sans-serif;

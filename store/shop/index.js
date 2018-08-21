@@ -4,20 +4,7 @@ import uuid from '../shared/uuid'
 export default {
     state: {
         shopLoading: false,
-        loadedShop: null
-        /*
-            *shopId: '',
-            *creatorId: '',
-            shopTitle: '',
-            shopFb: '',
-            shopLocation: '',
-            shopPhone: '',
-            shopEmail: '',
-            shopDesc: '',
-            shopLogoUrl: '',
-            shopPanelUrl: [],
-            *updatedDate: ''
-        */
+        loadedShop: {}
     },
     mutations: {
         setShopLoading (state, payload) {
@@ -40,7 +27,7 @@ export default {
                 const newShop = {
                     ...payload,
                     creatorId: vuexContext.getters.user.id,
-                    updatedDate: new Date().toISOString() // ? new Date() cannot be used in Firebase
+                    updatedDate: new Date().toISOString()
                 }
                 const shopId = payload.title.replace(/\s+/g, '-').toLowerCase() + '-' + uuid(5)
                 await firebase.database().ref('shops').child(shopId).set(newShop)
@@ -55,18 +42,16 @@ export default {
                 console.log('[ERROR]' + error)
             }
         },
-        async editShop (vuexContext, payload) {
+        async updateShop (vuexContext, payload) {
             vuexContext.commit('setShopLoading', true)
-            // return the promise
             try {
-                await firebase.database().ref('shops').child(payload.shopId).update(payload)
-                vuexContext.commit('setShopLoading', false)
-                vuexContext.commit('setShop', {
+                const updatedShop = {
                     ...payload,
-                    creatorId: vuexContext.getters.user.id,
-                    loadedItems: vuexContext.getters.loadedItems, // ? Should update loadedItems or not
                     updatedDate: new Date().toISOString()
-                })
+                }
+                await firebase.database().ref('shops').child(payload.shopId).update(updatedShop)
+                vuexContext.commit('setShopLoading', false)
+                vuexContext.commit('setShop', updatedShop)
             } catch(error) {
                 vuexContext.commit('setShopLoading', false)
                 console.log('[ERROR] ' + error)
@@ -89,18 +74,30 @@ export default {
                 console.log('[ERROR] ' + error)
             }
         },
+        async deleteShop (vuexContext, payload) {
+            vuexContext.commit('setShopLoading', true)
+            try {
+                await firebase.database().ref('shops').child(payload).remove()
+                await vuexContext.dispatch('removeItems', payload)
+                vuexContext.commit('setShopLoading', false)
+                vuexContext.commit('setShop', null)
+            } catch(error) {
+                vuexContext.commit('setShopLoading', false)
+                console.log('[ERROR] ' + error)
+            }
+        },
         async loadPreviewShops (vuexContext) {
             vuexContext.commit('setShopLoading', true)
             try {
-                const shopsData = await firebase.database().ref('shops').orderByChild('updatedDate').limitToLast(10).once('value')
-                const shopsObj = shopsData.val()
+                const shopsData = await firebase.database().ref('shops').orderByChild('updatedDate').limitToLast(45).once('value')         
                 const loadedShops = []
-                for (let key in shopsObj) {
+                shopsData.forEach(shopData => {
+                    const shopObj = shopData.val()
                     loadedShops.push({
-                        shopId: key,
-                        ...shopsObj[key]
+                        shopId: shopData.key,
+                        ...shopObj
                     })
-                }
+                })
                 loadedShops.reverse()
                 vuexContext.commit('setShopLoading', false)
                 return loadedShops

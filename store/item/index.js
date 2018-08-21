@@ -15,6 +15,15 @@ export default {
         },
         addItem(state, payload) {
             state.loadedItems.push(payload)
+        },
+        updateItem(state, payload) {
+            let item = state.loadedItems.find(item => {
+                return item.itemId === payload.itemId
+            })
+            item = payload
+        },
+        removeItem(state, payload) {
+            state.loadedItems.splice(state.loadedItems.findIndex(item => item.itemId === payload), 1)
         }
     },
     actions: {
@@ -40,6 +49,21 @@ export default {
                 console.log('[ERROR] ' + error)
             }
         },
+        async updateItem(vuexContext, payload) {
+            vuexContext.commit('setItemLoading', true)
+            try {
+                const updatedItem = {
+                    ...payload,
+                    updatedDate: new Date().toISOString()
+                }
+                await firebase.database().ref('items').child(payload.itemId).update(updatedItem)
+                vuexContext.commit('setItemLoading', false)
+                vuexContext.commit('updateItem', updatedItem)
+            } catch(error) {
+                vuexContext.commit('setItemLoading', false)
+                console.log('[ERROR] ' + error)
+            }
+        },
         async loadItems (vuexContext, payload) {
             vuexContext.commit('setItemLoading', true)
             try {
@@ -52,6 +76,7 @@ export default {
                         ...itemsObj[key]
                     })
                 }
+                loadedItems.sort((a, b) => b.updatedDate - a.updatedDate)
                 vuexContext.commit('setItemLoading', false)
                 vuexContext.commit('setItems', loadedItems)
                 return loadedItems
@@ -60,18 +85,43 @@ export default {
                 console.log('[ERROR] ' + error)
             }
         },
+        async deleteItem (vuexContext, payload) {
+            vuexContext.commit('setItemLoading', true)
+            try {
+                await firebase.database().ref('items').child(payload).remove()
+                vuexContext.commit('setItemLoading', false)
+                vuexContext.commit('removeItem', payload)
+            } catch(error) {
+                vuexContext.commit('setItemLoading', false)
+                console.log('[ERROR] ' + error)
+            }
+        },
+        async removeItems (vuexContext, payload) {
+            vuexContext.commit('setItemLoading', true)
+            try {
+                const itemsData = await firebase.database().ref('items').orderByChild('shopId').equalTo(payload).once('value')
+                let updates = {}
+                itemsData.forEach(item => updates[item.key] = null)
+                await firebase.database().ref('items').update(updates)
+                vuexContext.commit('setItemLoading', false)
+                vuexContext.commit('setItems', [])
+            } catch(error) {
+                vuexContext.commit('setItemLoading', false)
+                console.log('[ERROR] ' + error)
+            }
+        },
         async loadPreviewItems (vuexContext) {
             vuexContext.commit('setItemLoading', true)
             try {
-                const itemsData = await firebase.database().ref('items').orderByChild('updatedDate').limitToLast(10).once('value')
-                const itemsObj = itemsData.val()
+                const itemsData = await firebase.database().ref('items').orderByChild('updatedDate').limitToLast(45).once('value')
                 const loadedItems = []
-                for (let key in itemsObj) {
+                itemsData.forEach(itemData => {
+                    const itemObj = itemData.val()
                     loadedItems.push({
-                        itemId: key,
-                        ...itemsObj[key]
+                        itemId: itemData.key,
+                        ...itemObj
                     })
-                }
+                })
                 loadedItems.reverse()
                 vuexContext.commit('setItemLoading', false)
                 return loadedItems
