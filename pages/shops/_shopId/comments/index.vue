@@ -1,24 +1,18 @@
 <template>
     <section>
         <div class="w3-content w3-padding-64" style="max-width:1300px">
-            <app-sidebar-shop></app-sidebar-shop>
+            <app-sidebar-shop :shopData="loadedShop"/>
             <!-- !PAGE CONTENT! -->
             <div class="w3-main" style="margin-left:270px;">
                 <div class="w3-padding w3-white w3-margin-bottom">
-                    <h5 class="w3-text-grey"><strong>Giới thiệu</strong></h5><br>
-                    <p>This is my shop</p>
+                    <h6><strong>Giới thiệu</strong></h6><br>
+                    <p style="white-space: pre">{{loadedShop.description}}</p>
                     <hr>
-                    <h6>
-                        <span class="w3-tag w3-yellow w3-margin-right w3-margin-top"
-                            v-for="(type, i) in itemTypes" 
-                            :key="i">
-                            <b>{{ type.title }}</b>
-                        </span>
-                    </h6>
+                    <app-item-types :displayedItemTypes="loadedShop.itemTypes" :selectedItemTypes="loadedShop.itemTypes" />
                 </div> 
                 <div class="w3-padding w3-white">
                     <form>
-                        <h5><strong>Các nhận xét gần đây</strong></h5><br>
+                        <h6><strong>Các nhận xét gần đây</strong></h6><br>
                         <p><input class="w3-input w3-border" type="text" placeholder="Name" required name="Name"></p>
                         <p><input class="w3-input w3-border" type="email" placeholder="Email" required name="Email"></p>
                         <p><input class="w3-input w3-border" type="text" placeholder="Message" required name="Message"></p>
@@ -50,20 +44,26 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
+
     export default {
         layout: 'shop',
-        data() {
-            return {
-                itemTypes: [
-                    {icon: "/meat.svg", title: "Thực phẩm"},
-                    {icon: "/agri.svg", title: "Nông sản"},
-                    {icon: "/pot.svg", title: "Gia dụng"},
-                    {icon: "/electronic.svg", title: "Điện tử"},
-                    {icon: "/medicine.svg", title: "Y tế"},
-                    {icon: "/fashion.svg", title: "Thời trang"},
-                    {icon: "/others.svg", title: "Khác"}
-                ]
+        computed: {
+            ...mapGetters(['loadedShop', 'loadedItems'])
+        },
+        async fetch({ store, params }) {
+            try {
+                if(!Object.keys(store.getters.loadedShop) || store.getters.loadedShop.shopId != params.shopId) {
+                    await Promise.all([
+                        store.dispatch('loadShop', params.shopId),
+                        store.dispatch('loadItems', params.shopId)
+                    ])
+                }
+            } catch(error) {
+                console.log('[_ERROR] ' + error)
+                context.error({ statusCode: 500, message: '...Lỗi'})
             }
+            
         }
     }
 </script>

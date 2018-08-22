@@ -4,7 +4,8 @@ import uuid from '../shared/uuid'
 export default {
     state: {
         itemLoading: false,
-        loadedItems: []
+        loadedItems: [],
+        loadedItem:  {}
     },
     mutations:  {
         setItemLoading(state, payload) {
@@ -12,6 +13,9 @@ export default {
         },
         setItems(state, payload) {
             state.loadedItems = payload
+        },
+        setItem(state, payload) {
+            state.loadedItem = payload
         },
         addItem(state, payload) {
             state.loadedItems.push(payload)
@@ -85,12 +89,27 @@ export default {
                 console.log('[ERROR] ' + error)
             }
         },
+        async loadItem (vuexContext, payload) {
+            vuexContext.commit('setItemLoading', true)
+            try {
+                const loadedItem = vuexContext.getters.loadedItems.find( item => {
+                    return item.itemId === payload
+                })
+                vuexContext.commit('setItemLoading', false)
+                vuexContext.commit('setItem', loadedItem)
+                return loadedItem
+            } catch(error) {
+                vuexContext.commit('setItemLoading', false)
+                console.log('[ERROR] ' + error)
+            }
+        },
         async deleteItem (vuexContext, payload) {
             vuexContext.commit('setItemLoading', true)
             try {
                 await firebase.database().ref('items').child(payload).remove()
                 vuexContext.commit('setItemLoading', false)
                 vuexContext.commit('removeItem', payload)
+                vuexContext.commit('setItem', {})
             } catch(error) {
                 vuexContext.commit('setItemLoading', false)
                 console.log('[ERROR] ' + error)
@@ -137,6 +156,9 @@ export default {
         },
         loadedItems(state) {
             return state.loadedItems
+        },
+        loadedItem(state) {
+            return state.loadedItem
         }
     }
 }

@@ -80,7 +80,7 @@ export default {
                 await firebase.database().ref('shops').child(payload).remove()
                 await vuexContext.dispatch('removeItems', payload)
                 vuexContext.commit('setShopLoading', false)
-                vuexContext.commit('setShop', null)
+                vuexContext.commit('setShop', {})
             } catch(error) {
                 vuexContext.commit('setShopLoading', false)
                 console.log('[ERROR] ' + error)

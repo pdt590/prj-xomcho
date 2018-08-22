@@ -85,62 +85,24 @@
 <script>
     import { mapGetters } from 'vuex'
 
-    async function loadItem(items, itemId, shopId) {
-        if(items.length) {
-            if(items[0].shopId === shopId) {
-                const loadedItem = items.find( item => {
-                    return item.itemId === itemId
-                })
-                return loadedItem
-            }
-        }else {
-            let loadedItems = await store.dispatch('loadItems', shopId)
-            const loadedItem = loadedItems.find( item => {
-                return item.itemId === itemId
-            })
-            return loadedItem
-        }
-    }
     export default {
         layout: 'shop',
         computed: {
-            ...mapGetters(['user'])
+            ...mapGetters(['user', 'loadedItem', 'loadedShop'])
         },
-        async asyncData({ store, params }) {
+        async fetch({ store, params }) {
             try{
-                if(process.client && Object.keys(store.getters.loadedShop) && store.getters.loadedShop.shopId === params.shopId) {
-                    const item = await loadItem(store.getters.loadedItems, params.itemId, params.shopId)
-                    return {
-                        loadedShop: store.getters.loadedShop,
-                        loadedItem: item
-                    }
+                if(!Object.keys(store.getters.loadedShop) || store.getters.loadedShop.shopId != params.shopId) {
+                    await Promise.all([
+                        store.dispatch('loadShop', params.shopId),
+                        store.dispatch('loadItems', params.shopId)
+                    ])
                 }
-                const [loadedShop, loadedItems] = await Promise.all([
-                    store.dispatch('loadShop', params.shopId),
-                    store.dispatch('loadItems', params.shopId)
-                ])
-                const item  = await loadItem(loadedItems, params.itemId, params.shopId)
-                return { 
-                    loadedShop: loadedShop,
-                    loadedItem: item
-                }
+                await store.dispatch('loadItem', params.itemId)
             } catch(error) {
                 console.log('[_ERROR] ' + error)
                 context.error({ statusCode: 500, message: '...Lỗi'})
-            }  
-        },
-        data() {
-            return {
-                itemTypes: [
-                    {icon: "fa fa-shopping-basket", title: "Thực phẩm"},
-                    {icon: "fa fa-leaf", title: "Nông sản"},
-                    {icon: "fa fa-cutlery", title: "Gia dụng"},
-                    {icon: "fa fa-camera-retro", title: "Điện tử"},
-                    {icon: "fa fa-medkit", title: "Y tế"},
-                    {icon: "fa fa-shopping-bag", title: "Thời trang"},
-                    {icon: "fa fa-question-circle", title: "Khác"}
-                ]
-            }
+            } 
         }
     }
 </script>

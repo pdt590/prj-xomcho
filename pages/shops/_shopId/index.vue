@@ -40,32 +40,16 @@
 
     export default {
         layout: 'shop',
-        async asyncData({ store, params }) {
+        computed: {
+            ...mapGetters(['loadedShop', 'loadedItems'])
+        },
+        async fetch({ store, params }) {
             try {
-                if(process.client && Object.keys(store.getters.loadedShop) && store.getters.loadedShop.shopId === params.shopId) {
-                    let items = []
-                    if(store.getters.loadedItems.length) {
-                        items = store.getters.loadedItems
-                        if(items[0].shopId === params.shopId) {
-                            return {
-                                loadedShop : store.getters.loadedShop,
-                                loadedItems: store.getters.loadedItems
-                            }
-                        }
-                    } 
-                    items = await store.dispatch('loadItems', params.shopId)
-                    return {
-                        loadedShop : store.getters.loadedShop,
-                        loadedItems: items
-                    }
-                }
-                const [loadedShop, loadedItems] = await Promise.all([
-                    store.dispatch('loadShop', params.shopId),
-                    store.dispatch('loadItems', params.shopId)
-                ])
-                return { 
-                    loadedShop: loadedShop,
-                    loadedItems: loadedItems
+                if(!Object.keys(store.getters.loadedShop) || store.getters.loadedShop.shopId != params.shopId) {
+                    await Promise.all([
+                        store.dispatch('loadShop', params.shopId),
+                        store.dispatch('loadItems', params.shopId)
+                    ])
                 }
             } catch(error) {
                 console.log('[_ERROR] ' + error)

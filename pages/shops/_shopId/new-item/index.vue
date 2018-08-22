@@ -93,18 +93,12 @@
         middleware: 'auth',
         layout: 'shop',
         computed: {
-            ...mapGetters(['itemLoading'])
+            ...mapGetters(['itemLoading', 'loadedShop'])
         },
-        async asyncData({ store, params }) {
+        async fetch({ store, params }) {
             try{
-                if(process.client && Object.keys(store.getters.loadedShop) && store.getters.loadedShop.shopId === params.shopId) {
-                    return {
-                        loadedShop: store.getters.loadedShop
-                    }
-                }
-                const loadedShop = await store.dispatch('loadShop', params.shopId)
-                return { 
-                    loadedShop: loadedShop
+                if(!Object.keys(store.getters.loadedShop) || store.getters.loadedShop.shopId != params.shopId) {
+                    await store.dispatch('loadShop', params.shopId)
                 }
             } catch(error) {
                 console.log('[_ERROR] ' + error)

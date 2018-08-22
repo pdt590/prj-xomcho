@@ -109,7 +109,6 @@
                         </form>
                         <br>
                     </div>
-
                 </div>
                 <hr>
                 <div class="w3-center w3-padding-24">
@@ -135,10 +134,13 @@
         computed: {
             ...mapGetters(['shopLoading', 'loadedShop'])
         },
-        async asyncData({ store, params }) {
+        async fetch({ store, params }) {
             try{
                 if(!Object.keys(store.getters.loadedShop) || store.getters.loadedShop.shopId != params.shopId) {
-                    await store.dispatch('loadShop', params.shopId)
+                    await Promise.all([
+                        store.dispatch('loadShop', params.shopId),
+                        store.dispatch('loadItems', params.shopId)
+                    ])
                 }
             } catch(error) {
                 console.log('[_ERROR] ' + error)
@@ -208,7 +210,6 @@
             },
             async onDeleteShop() {
                 try{
-                    console.log(this.loadedShop.title)
                     await this.$store.dispatch('deleteShop', this.loadedShop.shopId)
                     this.$router.push('/')
                 } catch(error){
