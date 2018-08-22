@@ -18,13 +18,14 @@ export default {
             state.loadedItem = payload
         },
         addItem(state, payload) {
-            state.loadedItems.push(payload)
+            state.loadedItems.splice(0, 0, payload)
         },
         updateItem(state, payload) {
             let item = state.loadedItems.find(item => {
                 return item.itemId === payload.itemId
             })
             item = payload
+            state.loadedItems.sort((a, b) => Date.parse(b.updatedDate) - Date.parse(a.updatedDate))
         },
         removeItem(state, payload) {
             state.loadedItems.splice(state.loadedItems.findIndex(item => item.itemId === payload), 1)
@@ -73,14 +74,14 @@ export default {
             try {
                 const itemsData = await firebase.database().ref('items').orderByChild('shopId').equalTo(payload).once('value')
                 const itemsObj = itemsData.val()
-                const loadedItems = []
+                let loadedItems = []
                 for (let key in itemsObj) {
                     loadedItems.push({
                         itemId: key,
                         ...itemsObj[key]
                     })
                 }
-                loadedItems.sort((a, b) => b.updatedDate - a.updatedDate)
+                loadedItems.sort((a, b) => Date.parse(b.updatedDate) - Date.parse(a.updatedDate))
                 vuexContext.commit('setItemLoading', false)
                 vuexContext.commit('setItems', loadedItems)
                 return loadedItems
