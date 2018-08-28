@@ -12,6 +12,6 @@
 <script>
 export default {
     props: ['error'],
-    layout: 'home' // you can set a custom layout for the error page
+    layout: 'home'
 }
 </script>

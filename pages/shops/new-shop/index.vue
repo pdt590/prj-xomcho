@@ -2,25 +2,20 @@
     <section>
         <div class="w3-padding w3-white w3-margin-bottom">
             <div class="w3-row">
-                <a href="javascript:void(0)" @click="openTab($event, 'shopData')">
-                    <div class="w3-col l4 m4 s4 tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">
-                        <h5><strong>Thông tin</strong></h5>
-                    </div>
-                </a>
-                <a href="javascript:void(0)" @click="openTab($event, 'shopImg')">
-                    <div class="w3-col l4 m4 s4 tablink w3-bottombar w3-hover-light-grey w3-padding">
-                        <h5><strong>Logo</strong></h5>
-                    </div>
-                </a>
-                <a href="javascript:void(0)" @click="openTab($event, 'panelImg')">
-                    <div class="w3-col l4 m4 s4 tablink w3-bottombar w3-hover-light-grey w3-padding">
-                        <h5><strong>Panel</strong></h5>
+                <a href="javascript:void(0)">
+                    <div class="w3-col w3-bottombar w3-hover-light-grey w3-padding w3-border-red">
+                        <h5><strong>Tạo cửa hàng mới</strong></h5>
                     </div>
                 </a>
             </div>
+            <br>
+            <div class="w3-margin-bottom section">
+                <h6><strong>Ảnh panel (tối đa 2 ảnh)</strong></h6><br>
+                <app-img-uploader :maxImages="2" />
+                <br>
+            </div>
             <hr>
-
-            <form id="shopData" class="w3-margin-bottom section">
+            <form class="w3-margin-bottom section">
                 <h6><strong>Thông tin cửa hàng</strong></h6><br>
                 <div class="w3-row-padding" style="margin:0 -16px;">
                     <div class="w3-half w3-margin-bottom">
@@ -61,25 +56,13 @@
                 <h6><strong>Các mặt hàng sẽ bán</strong> *</h6><br>
                 <app-item-types @onCheckBox="shopData.itemTypes=$event"/>
                 <br>
-                <div class="w3-row">
-                    <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onAddShop" :disabled="$v.shopData.$invalid">
-                        <i class="w3-xlarge w3-margin-right" :class="shopLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Tạo cửa hàng
-                    </button>
-                </div>
             </form>
-
-            <div id="shopImg" class="w3-margin-bottom section" style="display:none; min-height: 800px">
-                <h6><strong>Ảnh logo</strong></h6><br>
-                <app-img-upload :numberImg="1" :section="'shopPanel'"/>
-                <br>
+            <div class="w3-row">
+                <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onAddShop" :disabled="$v.shopData.$invalid">
+                    <i class="w3-xlarge w3-margin-right" :class="shopLoading ? 'fa fa-circle-o-notch fa-spin' : 'fa fa-save'"></i>Tạo cửa hàng
+                </button>
             </div>
-
-            <div id="panelImg" class="w3-margin-bottom section" style="display:none; min-height: 800px">
-                <h6><strong>Ảnh panel (tối đa 2 ảnh)</strong></h6><br>
-                <app-img-upload :numberImg="2" :section="'shopPanel'"/>
-                <br>
-            </div>
-
+            <br>
         </div>
     </section>
 </template>
@@ -107,9 +90,9 @@
                     phone: '',
                     email: '',
                     description: '',
+                    itemTypes: [],
                     logoUrl: '/icon-user.png',
-                    panelUrls: [],
-                    itemTypes: []
+                    panels: []
                 },
                 provinceList: provinceList
             }
@@ -142,19 +125,6 @@
             },
         },
         methods: {
-            openTab(event, arg) {
-                let i, x, tablinks;
-                x = document.getElementsByClassName("section");
-                for (i = 0; i < x.length; i++) {
-                    x[i].style.display = "none";
-                }
-                tablinks = document.getElementsByClassName("tablink");
-                for (i = 0; i < x.length; i++) {
-                    tablinks[i].className = tablinks[i].className.replace(" w3-border-red", "");
-                }
-                document.getElementById(arg).style.display = "block";
-                event.currentTarget.firstElementChild.className += " w3-border-red";
-            },
             async onAddShop() {
                 const shopUrl = await this.$store.dispatch('addShop', this.shopData)
                 this.$router.push("/shops/" + shopUrl)

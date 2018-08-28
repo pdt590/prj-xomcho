@@ -6,9 +6,9 @@
                     <img src="https://picsum.photos/300/300/?image=35" style="width:100%">
                 </div>
                 <div class="w3-col l9 w3-padding">
-                    <span class="w3-text-blue" style="font-size: 15px"><strong> {{shopData.title}}</strong></span><br>
+                    <span class="w3-text-blue" style="font-size: 15px"><strong> {{shopData.title.substring(0, 10)}}<span v-if="shopData.title.length>10"> ...</span></strong></span><br>
                     <span class="w3-text-grey"><strong>Thời trang, nông sản</strong></span><br>
-                    <span class="w3-text-red"><i class="fa fa-neuter"></i> {{shopData.location}}, {{shopData.province}}</span><br>
+                    <span class="w3-text-red"><i class="fa fa-neuter"></i> {{shopData.location.substring(0, 10)}}<span v-if="(shopData.location.length)>10"> ...</span>, {{shopData.province}}</span><br>
                     <span><i class="fa fa-clock-o"></i> {{shopData.updatedDate | date}}</span>
                 </div>
             </div>  

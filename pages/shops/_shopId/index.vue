@@ -4,7 +4,7 @@
             <app-sidebar-shop :shopData="loadedShop"/>
             <!-- !PAGE CONTENT! -->
             <div class="w3-main" style="margin-left:270px;">
-                <div class="w3-margin-bottom">
+                <div v-if="loadedShop.panels" class="w3-margin-bottom">
                     <app-slider-shoppanel />
                 </div>
                 <div class="w3-padding w3-white w3-margin-bottom">
@@ -45,12 +45,10 @@
         },
         async fetch({ store, params }) {
             try {
-                if(!Object.keys(store.getters.loadedShop) || store.getters.loadedShop.shopId != params.shopId) {
-                    await Promise.all([
-                        store.dispatch('loadShop', params.shopId),
-                        store.dispatch('loadItems', params.shopId)
-                    ])
-                }
+                await Promise.all([
+                    store.dispatch('loadShop', params.shopId),
+                    store.dispatch('loadItems', params.shopId)
+                ])
             } catch(error) {
                 console.log('[_ERROR] ' + error)
                 context.error({ statusCode: 500, message: '...Lỗi'})

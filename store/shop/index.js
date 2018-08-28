@@ -1,95 +1,120 @@
 import firebase from '~/plugins/firebase'
-import uuid from '../shared/uuid'
+import { uuid } from '~/plugins/funcs'
+const db = firebase.database()
+const shopsRef = db.ref('shops')
 
 export default {
     state: {
         shopLoading: false,
-        loadedShop: {}
+        loadedShop: null
     },
     mutations: {
         setShopLoading (state, payload) {
             state.shopLoading = payload
-        },
-        editShop (state, payload) {
-            const editedShopIndex = state.loadedShops.findIndex(
-                shop => shop.id === payload.id
-            )
-            state.loadedShops[editedShopIndex] = payload
         },
         setShop (state, payload) {
             state.loadedShop = payload
         }
     },
     actions: { 
-        async addShop (vuexContext, payload) {
+        async addShop (vuexContext, shop) {
             vuexContext.commit('setShopLoading', true)
             try {
                 const newShop = {
-                    ...payload,
+                    ...shop,
                     creatorId: vuexContext.getters.user.id,
                     updatedDate: new Date().toISOString()
                 }
-                const shopId = payload.title.replace(/\s+/g, '-').toLowerCase() + '-' + uuid(5)
-                await firebase.database().ref('shops').child(shopId).set(newShop)
-                vuexContext.commit('setShopLoading', false)
+                const shopId = uuid(shop.title, 5)
+                await shopsRef.child(shopId).set(newShop)
                 vuexContext.commit('setShop', {
                     shopId: shopId,
                     ...newShop
                 })
+                vuexContext.commit('setShopLoading', false)
                 return shopId
             } catch (error) {
-                vuexContext.commit('setShopLoading', false)
                 console.log('[ERROR]' + error)
+                vuexContext.commit('setShopLoading', false)
             }
         },
-        async updateShop (vuexContext, payload) {
+        async updateShop (vuexContext, editedShop) {
             vuexContext.commit('setShopLoading', true)
             try {
                 const updatedShop = {
-                    ...payload,
+                    ...editedShop,
                     updatedDate: new Date().toISOString()
                 }
-                await firebase.database().ref('shops').child(payload.shopId).update(updatedShop)
-                vuexContext.commit('setShopLoading', false)
+                await shopsRef.child(editedShop.shopId).update(updatedShop)
                 vuexContext.commit('setShop', updatedShop)
-            } catch(error) {
                 vuexContext.commit('setShopLoading', false)
+            } catch(error) {
                 console.log('[ERROR] ' + error)
+                vuexContext.commit('setShopLoading', false)
             }
         },
-        async loadShop (vuexContext, payload) {
+        async loadShop (vuexContext, shopId) {
             vuexContext.commit('setShopLoading', true)
             try {
-                const shopData = await firebase.database().ref('shops').child(payload).once('value')
+                let panelUrls = []
+                const shopData = await shopsRef.child(shopId).once('value')
                 const shopObj = shopData.val()
-                const loadedShop = {
-                    shopId: payload,
-                    ...shopObj
+                if(Array.isArray(shopObj.panelUrls) && !shopObj.panelUrls.length) {
+                    panelUrls = shopObj.panelUrls
                 }
-                vuexContext.commit('setShopLoading', false)
+                const loadedShop = {
+                    shopId: shopId,
+                    ...shopObj,
+                    panelUrls: panelUrls
+                }
                 vuexContext.commit('setShop', loadedShop)
+                vuexContext.commit('setShopLoading', false)
                 return loadedShop
             } catch(error) {
-                vuexContext.commit('setShopLoading', false)
                 console.log('[ERROR] ' + error)
+                vuexContext.commit('setShopLoading', false)
+            }
+        },
+        async editShopTitle (vuexContext, shop) { // TODO:
+            vuexContext.commit('setShopLoading', true)
+            try {
+                let update = {}
+                const shopData = await shopsRef.child(shop.shopId).once('value')
+                const shopObj = shopData.val()
+                const newShopId = uuid(shop.newShopTitle, 5)
+                shopObj.title = shop.newShopTitle
+                update[shop.shopId] = null
+                update[newShopId] = shopObj
+                await shopsRef.update(update)
+                await vuexContext.dispatch('updateItems', {oldShopId: shop.shopId, newShopId: newShopId})
+                const editedShop = {
+                    shopId: newShopId,
+                    ...shopObj
+                }
+                vuexContext.commit('setShop', editedShop)
+                vuexContext.commit('setShopLoading', false)
+                return newShopId
+            } catch(error) {
+                console.log('[ERROR] ' + error)
+                vuexContext.commit('setShopLoading', false)
             }
         },
         async deleteShop (vuexContext, payload) {
             vuexContext.commit('setShopLoading', true)
             try {
-                await firebase.database().ref('shops').child(payload).remove()
+                await shopsRef.child(payload).remove()
                 await vuexContext.dispatch('removeItems', payload)
-                vuexContext.commit('setShopLoading', false)
                 vuexContext.commit('setShop', {})
-            } catch(error) {
                 vuexContext.commit('setShopLoading', false)
+            } catch(error) {
                 console.log('[ERROR] ' + error)
+                vuexContext.commit('setShopLoading', false)
             }
         },
         async loadPreviewShops (vuexContext) {
             vuexContext.commit('setShopLoading', true)
             try {
-                const shopsData = await firebase.database().ref('shops').orderByChild('updatedDate').limitToLast(45).once('value')         
+                const shopsData = await shopsRef.orderByChild('updatedDate').limitToLast(45).once('value')         
                 const loadedShops = []
                 shopsData.forEach(shopData => {
                     const shopObj = shopData.val()
@@ -102,8 +127,8 @@ export default {
                 vuexContext.commit('setShopLoading', false)
                 return loadedShops
             } catch(error) {
-                vuexContext.commit('setShopLoading', false)
                 console.log('[ERROR] ' + error)
+                vuexContext.commit('setShopLoading', false)
             }
         }
     },

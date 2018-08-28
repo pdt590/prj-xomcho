@@ -80,7 +80,7 @@
                             @click.prevent="onSignin" 
                             :disabled="isSignin ? $v.userSignInData.$invalid : $v.userSignUpData.$invalid" 
                         >
-                            <i v-show="authLoading" class="fa fa-spinner fa-spin w3-xlarge w3-margin-right"></i>
+                            <i v-show="authLoading" class="fa fa-circle-o-notch fa-spin w3-xlarge w3-margin-right"></i>
                             {{ isSignin ? 'Đăng nhập' :" Đăng ký" }}
                         </button>
                     </div>

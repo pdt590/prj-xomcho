@@ -7,7 +7,7 @@
             <div class="w3-main" style="margin-left:270px;">       
                 <div class="w3-padding w3-white w3-margin-bottom">
                     <div class="w3-row">
-                        <a href="javascript:void(0)" @click="openTab($event, 'shopInfo')">
+                        <a href="javascript:void(0)" @click="openTab($event, 'updateShop')">
                             <div class="w3-col l3 m3 s3 tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">
                                 <h5><strong>Sửa</strong></h5>
                             </div>
@@ -30,7 +30,7 @@
                     </div>
                     <hr>
 
-                    <form id="shopInfo" class="w3-margin-bottom section">
+                    <form id="updateShop" class="w3-margin-bottom section">
                         <h6><strong>Thông tin cửa hàng</strong></h6><br>
                         <div class="w3-row-padding" style="margin:0 -16px;">
                             <div class="w3-half w3-margin-bottom">
@@ -73,24 +73,37 @@
                         <br>
                         <div class="w3-row">
                             <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdateShop" :disabled="$v.loadedShop.$invalid">
-                                <i class="w3-xlarge w3-margin-right" :class="shopLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Sửa cửa hàng
+                                <i class="w3-xlarge w3-margin-right" :class="shopLoading ? 'fa fa-circle-o-notch fa-spin' : 'fa fa-save'"></i>Sửa cửa hàng
                             </button>
                         </div>
                     </form>
 
                     <div id="shopImg" class="w3-margin-bottom section" style="display:none; min-height: 800px">
                         <h6><strong>Ảnh logo</strong></h6><br>
-                        <app-img-upload :numberImg="1" :section="'shopPanel'"/>
+                        <app-img-uploader :maxImages="1" />
                         <br>
                     </div>
 
                     <div id="panelImg" class="w3-margin-bottom section" style="display:none; min-height: 800px">
                         <h6><strong>Ảnh panel (tối đa 2 ảnh)</strong></h6><br>
-                        <app-img-upload :numberImg="2" :section="'shopPanel'"/>
+                        <app-img-uploader :maxImages="2" />
                         <br>
                     </div>
 
                     <div id="delShop" class="w3-margin-bottom section" style="display:none; min-height: 800px">
+                        <h6><strong>Đổi tên cửa hàng</strong></h6><br>
+                        <form style="max-width:500px; margin: auto"> 
+                            <div class="w3-margin-bottom">
+                                <label><strong> Nhập tên cửa hàng </strong></label>
+                                <input class="w3-input w3-border" type="text" v-model.trim="editedShopTitle">
+                            </div>
+                            <div class="w3-row">
+                                <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onEditShopTitle" :disabled="$v.editedShopTitle.$invalid">
+                                    <i class="w3-xlarge w3-margin-right" :class="shopLoading ? 'fa fa-circle-o-notch fa-spin' : 'fa fa-save'"></i>Đổi tên
+                                </button>
+                            </div>
+                        </form>
+                        <br>
                         <h6><strong>Xóa cửa hàng</strong></h6><br>
                         <form style="max-width:500px; margin: auto"> 
                             <div class="w3-margin-bottom">
@@ -103,7 +116,7 @@
                             </div>
                             <div class="w3-row">
                                 <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onDeleteShop" :disabled="$v.deletedShopTitle.$invalid">
-                                    <i class="fa fa-close w3-xlarge w3-margin-right"></i>Xóa
+                                    <i class="w3-xlarge w3-margin-right" :class="shopLoading ? 'fa fa-circle-o-notch fa-spin' : 'fa fa-close'"></i>Xóa
                                 </button>
                             </div>
                         </form>
@@ -136,7 +149,18 @@
         },
         async fetch({ store, params }) {
             try{
-                if(!Object.keys(store.getters.loadedShop) || store.getters.loadedShop.shopId != params.shopId) {
+                // ? Issue when using multi tabs
+                // ? When refreshing, new ``params.shopId`` from client will be tranferred to 
+                // ? server. So, there is a conflict bw new ``params.shopId`` and the old ``shopId`` 
+                // ? at store of server, which is rendered for previous page. 
+                if(process.client) {
+                    if(!store.getters.loadedShop) { 
+                        await Promise.all([
+                            store.dispatch('loadShop', params.shopId),
+                            store.dispatch('loadItems', params.shopId)
+                        ])
+                    }
+                }else {
                     await Promise.all([
                         store.dispatch('loadShop', params.shopId),
                         store.dispatch('loadItems', params.shopId)
@@ -149,6 +173,7 @@
         },
         data() {
             return {
+                editedShopTitle: '',
                 deletedShopTitle: '',
                 loadedShopTitle: this.$store.getters.loadedShop.title,
                 provinceList: provinceList
@@ -180,6 +205,9 @@
                     required
                 }
             },
+            editedShopTitle: {
+                required
+            },
             deletedShopTitle: {
                 required,
                 sameAs: sameAs('loadedShopTitle')
@@ -203,6 +231,15 @@
                 try{
                     await this.$store.dispatch('updateShop', this.loadedShop)
                     this.$router.push("/shops/" + this.$route.params.shopId)
+                } catch(error){
+                    console.log('[_ERROR] ' + error)
+                    context.error({ statusCode: 500, message: '...Lỗi' })
+                }
+            },
+            async onEditShopTitle() {
+                try{
+                    const newShopId = await this.$store.dispatch('editShopTitle', {shopId: this.loadedShop.shopId, newShopTitle: this.editedShopTitle})
+                    this.$router.push('/shops/' + newShopId)
                 } catch(error){
                     console.log('[_ERROR] ' + error)
                     context.error({ statusCode: 500, message: '...Lỗi' })

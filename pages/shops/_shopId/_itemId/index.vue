@@ -7,7 +7,7 @@
                 <div class="w3-padding w3-white w3-margin-bottom">
                     <div class="w3-row">
                         <div class="w3-col l5">
-                            <app-slider-item />
+                            <app-slider-item :images="loadedItem.images.length ? loadedItem.images : [{url: '/icon-user.png'}]" />
                         </div>
                         <div class="w3-col l7">
                             <div class="w3-border-bottom">
@@ -88,17 +88,30 @@
     export default {
         layout: 'shop',
         computed: {
-            ...mapGetters(['user', 'loadedItem', 'loadedShop'])
+            ...mapGetters(['user', 'loadedShop']),
+            loadedItem() {
+                return this.$store.getters.loadedItem(this.$route.params.itemId)
+            }
         },
         async fetch({ store, params }) {
             try{
-                if(!Object.keys(store.getters.loadedShop) || store.getters.loadedShop.shopId != params.shopId) {
+                // ? Issue when using multi tabs
+                // ? When refreshing, new ``params.shopId`` from client will be tranferred to 
+                // ? server. So, there is a conflict bw new ``params.shopId`` and the old ``shopId`` 
+                // ? at store of server, which is rendered for previous page. 
+                if(process.client) {
+                    if(!store.getters.loadedShop) { 
+                        await Promise.all([
+                            store.dispatch('loadShop', params.shopId),
+                            store.dispatch('loadItems', params.shopId)
+                        ])
+                    }
+                }else {
                     await Promise.all([
                         store.dispatch('loadShop', params.shopId),
                         store.dispatch('loadItems', params.shopId)
                     ])
                 }
-                await store.dispatch('loadItem', params.itemId)
             } catch(error) {
                 console.log('[_ERROR] ' + error)
                 context.error({ statusCode: 500, message: '...Lỗi'})

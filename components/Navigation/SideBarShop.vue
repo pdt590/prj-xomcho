@@ -7,7 +7,7 @@
                     <img :src="shopData.logoUrl" style="width:100%;" class="w3-round">
                 </nuxt-link>
                 <br>
-                <h4><b>{{shopData.title}}</b></h4>
+                <h4 v-if="shopData.title"><b>{{shopData.title.substring(0, 10)}}</b></h4>
             </div>
             <br>
             <div class="w3-bar-block">
@@ -20,7 +20,7 @@
                             </a>
                         </div>
                         <div class="w3-col l10 m10 s10">
-                            <h6 class="app-sidebar">{{shopData.location}}, {{shopData.province}}</h6>
+                            <h6 v-if="shopData.location" class="app-sidebar">{{shopData.location.substring(0, 10)}}<span v-if="shopData.location.length>10"> ...</span>, {{shopData.province}}</h6>
                         </div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                             </a>
                         </div>
                         <div class="w3-col l10 m10 s10">
-                            <h6 class="app-sidebar">{{shopData.facebook}}</h6>
+                            <h6 v-if="shopData.facebook" class="app-sidebar">{{shopData.facebook.substring(0, 15)}}<span v-if="shopData.facebook.length>15"> ...</span></h6>
                         </div>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                             </a>
                         </div>
                         <div class="w3-col l10 m10 s10">
-                            <h6 class="app-sidebar">{{shopData.phone}}</h6>
+                            <h6 v-if="shopData.phone" class="app-sidebar">{{shopData.phone.substring(0, 15)}}<span v-if="shopData.phone.length>15"> ...</span></h6>
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                             </a>
                         </div>
                         <div class="w3-col l10 m10 s10">
-                            <h6 class="app-sidebar">{{shopData.email}}</h6>
+                            <h6 v-if="shopData.email" class="app-sidebar">{{shopData.email.substring(0, 20)}}<span v-if="shopData.email.length>20"> ...</span></h6>
                         </div>
                     </div>
                 </div>
@@ -117,8 +117,7 @@
     export default {
         props: {
             shopData: {
-                type: Object,
-                required: true
+                type: Object
             }
         },
         computed: {
@@ -155,7 +154,7 @@
 <style>
     h6.app-sidebar {
         display: inline-block;
-        margin: 0
+        margin: 0;
     }
     .app-heart-icon {
         font-size: 22px;

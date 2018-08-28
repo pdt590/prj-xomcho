@@ -1,43 +1,13 @@
 <template>
     <section>
         <div class="w3-container">
-            <div class="w3-display-container mySlides">
-                <img src="https://picsum.photos/600/600/?image=58" style="width:100%;margin-bottom:-6px">
-                <div class="w3-display-bottomleft w3-container w3-black">
-                    <p>Living Room</p>
-                </div>
-            </div>
-            <div class="w3-display-container mySlides">
-                <img src="https://picsum.photos/600/600/?image=59" style="width:100%;margin-bottom:-6px">
-                <div class="w3-display-bottomleft w3-container w3-black">
-                    <p>Dining Room</p>
-                </div>
-            </div>
-            <div class="w3-display-container mySlides">
-                <img src="https://picsum.photos/600/600/?image=60" style="width:100%;margin-bottom:-6px">
-                <div class="w3-display-bottomleft w3-container w3-black">
-                    <p>Bedroom</p>
-                </div>
-            </div>
-            <div class="w3-display-container mySlides">
-                <img src="https://picsum.photos/600/600/?image=61" style="width:100%;margin-bottom:-6px">
-                <div class="w3-display-bottomleft w3-container w3-black">
-                    <p>Living Room II</p>
-                </div>
+            <div class="app-img-slider" v-for="(img, i) in images" :key="i">
+                <img :src="img.url" style="width:100%;margin-bottom:-6px">
             </div>
         </div>
-        <div class="w3-row-padding w3-section">
-            <div class="w3-col s3">
-                <img class="demo w3-opacity w3-hover-opacity-off" src="https://picsum.photos/600/600/?image=58" style="width:100%;cursor:pointer" @click="currentDiv(1)" title="Living room">
-            </div>
-            <div class="w3-col s3">
-                <img class="demo w3-opacity w3-hover-opacity-off" src="https://picsum.photos/600/600/?image=59" style="width:100%;cursor:pointer" @click="currentDiv(2)" title="Dining room">
-            </div>
-            <div class="w3-col s3">
-                <img class="demo w3-opacity w3-hover-opacity-off" src="https://picsum.photos/600/600/?image=60" style="width:100%;cursor:pointer" @click="currentDiv(3)" title="Bedroom">
-            </div>
-            <div class="w3-col s3">
-                <img class="demo w3-opacity w3-hover-opacity-off" src="https://picsum.photos/600/600/?image=61" style="width:100%;cursor:pointer" @click="currentDiv(4)" title="Second Living Room">
+        <div class="w3-row-padding w3-section" >
+            <div class="w3-col s3" v-for="(img, i) in images" :key="i">
+                <img class="smallImg w3-opacity w3-hover-opacity-off" :src="img.url" style="width:100%;cursor:pointer" @click="currentDiv(i+1)">
             </div>
         </div>
     </section>
@@ -46,6 +16,11 @@
 <script>
     let slideIndex = 1;
     export default {
+        props: {
+            images: {
+                type: Array
+            }
+        },
         mounted(){
             this.showDivs(slideIndex)
         },
@@ -58,8 +33,8 @@
             },
             showDivs(n) {
                 let i;
-                let x = document.getElementsByClassName("mySlides");
-                let dots = document.getElementsByClassName("demo");
+                let x = document.getElementsByClassName("app-img-slider");
+                let dots = document.getElementsByClassName("smallImg");
                 if (n > x.length) {slideIndex = 1}
                 if (n < 1) {slideIndex = x.length}
                 for (i = 0; i < x.length; i++) {
@@ -76,5 +51,5 @@
 </script>
 
 <style scoped>
-    .mySlides {display:none}
+    .app-img-slider {display:none}
 </style>

@@ -53,7 +53,18 @@
         },
         async fetch({ store, params }) {
             try {
-                if(!Object.keys(store.getters.loadedShop) || store.getters.loadedShop.shopId != params.shopId) {
+                // ? Issue when using multi tabs
+                // ? When refreshing, new ``params.shopId`` from client will be tranferred to 
+                // ? server. So, there is a conflict bw new ``params.shopId`` and the old ``shopId`` 
+                // ? at store of server, which is rendered for previous page. 
+                if(process.client) {
+                    if(!store.getters.loadedShop) { 
+                        await Promise.all([
+                            store.dispatch('loadShop', params.shopId),
+                            store.dispatch('loadItems', params.shopId)
+                        ])
+                    }
+                }else {
                     await Promise.all([
                         store.dispatch('loadShop', params.shopId),
                         store.dispatch('loadItems', params.shopId)

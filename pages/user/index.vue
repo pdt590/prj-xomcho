@@ -320,7 +320,7 @@
 
                     <div id="08" class="w3-padding-24 section" style="display: none; min-height: 1300px">
                         <h5><strong>Ảnh đại diện</strong></h5><br>
-                        <app-img-upload :numberImg="1" :section="'userAvatar'"/>
+                        <app-img-uploader :maxImages="1" />
                         <br>
                     </div>
 
