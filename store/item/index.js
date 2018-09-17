@@ -45,7 +45,7 @@ export default {
                 const newUnUploadedImages = item.images
                 const itemId = uuid(item.title, 5)
                 if(newUnUploadedImages.length) {
-                    await Promise.all( newUnUploadedImages.map( async (image) => {
+                    for (const image of newUnUploadedImages) {
                         const ext = image.name.slice(image.name.lastIndexOf('.'))
                         const newImgName = uiid(15) + ext
                         const metaData = { 
@@ -58,7 +58,7 @@ export default {
                         await firebase.storage().ref('items/' + newImgName).put(image)
                         const imgDownloadUrl = await firebase.storage().ref('items/' + newImgName).getDownloadURL()
                         newUploadedImages.push({url: imgDownloadUrl, metadata: metaData})
-                    }))
+                    }
                 }
                 const newItem = {
                     ...item,
@@ -182,7 +182,7 @@ export default {
                         }))
                     }
                     if(newUnUploadedImages.length != 0) {
-                        await Promise.all( newUnUploadedImages.map( async (image) => {
+                        for (const image of newUnUploadedImages) {
                             const ext = image.name.slice(image.name.lastIndexOf('.'))
                             const newImgName = uiid(15) + ext
                             const metaData = { 
@@ -195,7 +195,7 @@ export default {
                             await firebase.storage().ref('items/' + newImgName).put(image)
                             const imgDownloadUrl = await firebase.storage().ref('items/' + newImgName).getDownloadURL()
                             newUploadedImages.push({url: imgDownloadUrl, metadata: metaData})
-                        }))
+                        }
                     }
                 }
                 // ? Console.log run async, it is located at various location an it just prints the final value of a var 

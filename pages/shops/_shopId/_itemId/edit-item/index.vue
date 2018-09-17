@@ -66,7 +66,7 @@
                         <br>
                         <div class="w3-row">
                             <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit" @click.prevent="onUpdateItemContent" :disabled="$v.editedItemData.$invalid">
-                                <i class="w3-xlarge w3-margin-right" :class="itemLoading ? 'fa fa-circle-o-notch fa-spin' : 'fa fa-save'"></i>Sửa sản phẩm
+                                <i class="w3-xlarge w3-margin-right" :class="itemLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Sửa sản phẩm
                             </button>
                         </div>
                     </form>
@@ -77,7 +77,7 @@
                         <br>
                         <div class="w3-row">
                             <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdateItemImage" :disabled="$v.editedItemData.images.$invalid">
-                                <i class="w3-xlarge w3-margin-right" :class="itemLoading ? 'fa fa-circle-o-notch fa-spin' : 'fa fa-save'"></i>Lưu thay đổi
+                                <i class="w3-xlarge w3-margin-right" :class="itemLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Lưu thay đổi
                             </button>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                             </div>
                             <div class="w3-row">
                                 <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdateItemTitle" :disabled="$v.editedItemData.title.$invalid">
-                                    <i class="w3-xlarge w3-margin-right" :class="itemLoading ? 'fa fa-circle-o-notch fa-spin' : 'fa fa-save'"></i>Đổi tên
+                                    <i class="w3-xlarge w3-margin-right" :class="itemLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Đổi tên
                                 </button>
                             </div>
                         </form>
@@ -108,7 +108,7 @@
                             </div>
                             <div class="w3-row">
                                 <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onDeleteItem" :disabled="$v.deletedItemTitle.$invalid">
-                                    <i class="w3-xlarge w3-margin-right" :class="itemLoading ? 'fa fa-circle-o-notch fa-spin' : 'fa fa-close'"></i>Xóa
+                                    <i class="w3-xlarge w3-margin-right" :class="itemLoading ? 'fa fa-spinner fa-spin' : 'fa fa-close'"></i>Xóa
                                 </button>
                             </div>
                         </form>

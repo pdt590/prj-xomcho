@@ -62,7 +62,7 @@
                     </form>
                     <div class="w3-row">
                         <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit" @click.prevent="onAddItem" :disabled="$v.itemData.$invalid">
-                        <i class="w3-xlarge w3-margin-right" :class="itemLoading ? 'fa fa-circle-o-notch fa-spin' : 'fa fa-save'"></i>Thêm sản phẩm</button>
+                        <i class="w3-xlarge w3-margin-right" :class="itemLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Thêm sản phẩm</button>
                     </div>
                     <br>
                 </div>

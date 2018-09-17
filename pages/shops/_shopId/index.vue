@@ -3,7 +3,7 @@
         <div class="w3-content w3-padding-64" style="max-width:1300px">
             <app-sidebar-shop :shopData="loadedShop"/>
             <div class="w3-main" style="margin-left:270px;">
-                <div v-if="loadedShop.images" class="w3-margin-bottom">
+                <div class="w3-margin-bottom">
                     <app-slider-shoppanel :images="loadedShop.images"/>
                 </div>
                 <div class="w3-padding w3-white w3-margin-bottom">
@@ -44,10 +44,19 @@
         },
         async fetch({ store, params }) {
             try {
-                await Promise.all([
-                    store.dispatch('loadShop', params.shopId),
-                    store.dispatch('loadItems', params.shopId)
-                ])
+                if(process.client) {
+                    if(!store.getters.loadedShop) { 
+                        await Promise.all([
+                            store.dispatch('loadShop', params.shopId),
+                            store.dispatch('loadItems', params.shopId)
+                        ])
+                    }
+                }else {
+                    await Promise.all([
+                        store.dispatch('loadShop', params.shopId),
+                        store.dispatch('loadItems', params.shopId)
+                    ])
+                }
             } catch(error) {
                 console.log('[_ERROR] ' + error)
                 context.error({ statusCode: 500, message: '...Lỗi'})

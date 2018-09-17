@@ -21,9 +21,10 @@ export default {
             vuexContext.commit('setShopLoading', true)
             try {
                 const images = []
+                const newUnUploadedImages = shop.images
                 const shopId = uuid(shop.title, 5)
-                if(shop.images.length) {
-                    await Promise.all( shop.images.map( async (image) => {
+                if(newUnUploadedImages.length) {
+                    for (const image of newUnUploadedImages) {
                         const ext = image.name.slice(image.name.lastIndexOf('.'))
                         const newImgName = uiid(15) + ext
                         const metaData = { 
@@ -35,7 +36,7 @@ export default {
                         await firebase.storage().ref('shops/' + newImgName).put(image)
                         const imgDownloadUrl = await firebase.storage().ref('shops/' + newImgName).getDownloadURL()
                         images.push({url: imgDownloadUrl, metadata: metaData})
-                    }))
+                    }
                 }
                 const newShop = {
                     ...shop,
@@ -126,7 +127,7 @@ export default {
                         }))
                     }
                     if(newUnUploadedImages.length != 0) {
-                        await Promise.all( newUnUploadedImages.map( async (image) => {
+                        for (const image of newUnUploadedImages) {
                             const ext = image.name.slice(image.name.lastIndexOf('.'))
                             const newImgName = uiid(15) + ext
                             const metaData = { 
@@ -138,7 +139,7 @@ export default {
                             await firebase.storage().ref('shops/' + newImgName).put(image)
                             const imgDownloadUrl = await firebase.storage().ref('shops/' + newImgName).getDownloadURL()
                             newUploadedImages.push({url: imgDownloadUrl, metadata: metaData})
-                        }))
+                        }
                     }
                 }
                 // ? Console.log run async, it is located at various location an it just prints the final value of a var 

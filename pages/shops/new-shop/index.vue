@@ -59,7 +59,7 @@
             </form>
             <div class="w3-row">
                 <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onAddShop" :disabled="$v.shopData.$invalid">
-                    <i class="w3-xlarge w3-margin-right" :class="shopLoading ? 'fa fa-circle-o-notch fa-spin' : 'fa fa-save'"></i>Tạo cửa hàng
+                    <i class="w3-xlarge w3-margin-right" :class="shopLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Tạo cửa hàng
                 </button>
             </div>
             <br>
