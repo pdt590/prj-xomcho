@@ -1,13 +1,13 @@
 <template>
     <section>
         <!-- Sidebar left -->
-        <div class="w3-sidebar w3-light-grey w3-collapse w3-top w3-padding-64" style="z-index:3;width:270px" ref="mySidebar">
+        <div v-if="shopData != null" class="w3-sidebar w3-light-grey w3-collapse w3-top w3-padding-64" style="z-index:3;width:270px" ref="mySidebar">
             <div class="w3-container">
                 <nuxt-link :to="'/shops/' + $route.params.shopId">
-                    <img :src="shopData.logoUrl" style="width:100%;" class="w3-round">
+                    <img :src="shopData.logo" style="width:100%;" class="w3-round">
                 </nuxt-link>
                 <br>
-                <h4 v-if="shopData.title"><b>{{shopData.title.substring(0, 10)}}</b></h4>
+                <h4><b>{{shopData.title.substring(0, 10)}}</b></h4>
             </div>
             <br>
             <div class="w3-bar-block">
@@ -20,11 +20,11 @@
                             </a>
                         </div>
                         <div class="w3-col l10 m10 s10">
-                            <h6 v-if="shopData.location" class="app-sidebar">{{shopData.location.substring(0, 10)}}<span v-if="shopData.location.length>10"> ...</span>, {{shopData.province}}</h6>
+                            <h6 class="app-sidebar">{{shopData.location.substring(0, 10)}}<span v-if="shopData.location.length>10"> ...</span>, {{shopData.province}}</h6>
                         </div>
                     </div>
                 </div>
-                <div class="w3-bar-item">
+                <div v-if="shopData.facebook" class="w3-bar-item">
                     <div class="w3-row">
                         <div class="w3-col l2 m2 s2">
                             <a :href="shopData.facebook" target=_blank>
@@ -32,7 +32,7 @@
                             </a>
                         </div>
                         <div class="w3-col l10 m10 s10">
-                            <h6 v-if="shopData.facebook" class="app-sidebar">{{shopData.facebook.substring(0, 15)}}<span v-if="shopData.facebook.length>15"> ...</span></h6>
+                            <h6 class="app-sidebar">{{shopData.facebook.substring(0, 15)}}<span v-if="shopData.facebook.length>15"> ...</span></h6>
                         </div>
                     </div>
                 </div>
@@ -44,11 +44,11 @@
                             </a>
                         </div>
                         <div class="w3-col l10 m10 s10">
-                            <h6 v-if="shopData.phone" class="app-sidebar">{{shopData.phone.substring(0, 15)}}<span v-if="shopData.phone.length>15"> ...</span></h6>
+                            <h6 class="app-sidebar">{{shopData.phone.substring(0, 15)}}<span v-if="shopData.phone.length>15"> ...</span></h6>
                         </div>
                     </div>
                 </div>
-                <div class="w3-bar-item">
+                <div v-if="shopData.email" class="w3-bar-item">
                     <div class="w3-row">
                         <div class="w3-col l2 m2 s2">
                             <a :href="'mailto:'+ shopData.email + '?Subject=Xin%20Chào%20Cửa%20Hàng%20' + shopData.title">
@@ -56,7 +56,7 @@
                             </a>
                         </div>
                         <div class="w3-col l10 m10 s10">
-                            <h6 v-if="shopData.email" class="app-sidebar">{{shopData.email.substring(0, 20)}}<span v-if="shopData.email.length>20"> ...</span></h6>
+                            <h6 class="app-sidebar">{{shopData.email.substring(0, 20)}}<span v-if="shopData.email.length>20"> ...</span></h6>
                         </div>
                     </div>
                 </div>

@@ -2,8 +2,7 @@
     <section>
         <app-navbar :isHome="true" />
         <app-navbar-mobile :isHome="true" />
-        <div class="w3-padding-64">     
-            <!-- !PAGE CONTENT! -->
+        <div class="w3-padding-64">
             <div class="w3-main">
                 <nuxt/>
                 <app-footer/>

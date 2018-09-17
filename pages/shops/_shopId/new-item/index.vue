@@ -2,7 +2,6 @@
     <section>
         <div class="w3-content w3-padding-64" style="max-width:1300px">
             <app-sidebar-shop :shopData="loadedShop" />
-            <!-- !PAGE CONTENT! -->
             <div class="w3-main" style="margin-left:270px;">
                 <div class="w3-padding w3-white w3-margin-bottom">
                     <div class="w3-row">
@@ -164,14 +163,22 @@
                 const itemUrl = await this.$store.dispatch('addItem', this.itemData)
                 this.$router.push('/shops/' + this.$route.params.shopId + '/' + itemUrl)
             },
-            onImagesAdded(addedImgs) {
-                for(let key in addedImgs) {
-                    this.itemData.images.push(addedImgs[key])
+            onImagesAdded(addedImages) {
+                console.log('thang1', addedImages)
+                addedImages.forEach( addedImage => {
+                    const index = this.itemData.images.findIndex( image => image === addedImage)
+                    if(index >= 0) this.itemData.images.splice(index, 1)
+                })
+                for(let key in addedImages) {
+                    this.itemData.images.push(addedImages[key])
                 }
+                console.log('thang2', this.itemData.images)
             },
-            onImageRemoved(removedImg) {
-                const index = this.itemData.images.findIndex( img => img === removedImg)
-                this.itemData.images.splice(index, 1)
+            onImageRemoved(removedImage) {
+                console.log('thang3', removedImage)
+                const index = this.itemData.images.findIndex( image => image === removedImage )
+                if(index >= 0) this.itemData.images.splice(index, 1)
+                console.log('thang4', this.itemData.images)
             }
         }
     }

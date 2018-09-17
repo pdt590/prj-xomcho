@@ -1,12 +1,12 @@
 <template>
     <section>
         <div class="w3-container">
-            <div class="app-img-slider" v-for="(img, i) in images" :key="i">
+            <div class="app-img-slider" v-for="(img, i) in displayedImages" :key="i">
                 <img :src="img.url" style="width:100%;margin-bottom:-6px">
             </div>
         </div>
         <div class="w3-row-padding w3-section" >
-            <div class="w3-col s3" v-for="(img, i) in images" :key="i">
+            <div class="w3-col s3" v-for="(img, i) in displayedImages" :key="i">
                 <img class="smallImg w3-opacity w3-hover-opacity-off" :src="img.url" style="width:100%;cursor:pointer" @click="currentDiv(i+1)">
             </div>
         </div>
@@ -23,6 +23,15 @@
         },
         mounted(){
             this.showDivs(slideIndex)
+        },
+        computed: {
+            displayedImages() {
+                if(this.images === undefined || !this.images.length) {
+                    return [{url: '/icon-photo.png'}]
+                }else {
+                    return this.images
+                }
+            }
         },
         methods: {
             plusDivs(n) {

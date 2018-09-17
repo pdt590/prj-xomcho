@@ -10,6 +10,7 @@
             @vdropzone-files-added="filesAdded"
             @vdropzone-removed-file="fileRemoved"
         />
+        <!--<button class="w3-button w3-border" @click="test">Test</button>-->
     </section>
 </template>
 
@@ -32,11 +33,6 @@
             resizeHeight: {
                 type: Number,
                 default: null
-            }
-        },
-        watch: {
-            maxImages(newValue) {
-                this.$refs.imgUpdoader.setOption('maxFiles', newValue)
             }
         },
         components: {
@@ -87,6 +83,8 @@
             },
             test() {
                 console.log(this.$refs.imgUpdoader.getAcceptedFiles())
+                console.log(this.$refs.imgUpdoader.getQueuedFiles())
+                console.log(this.$refs.imgUpdoader.getUploadingFiles())
             }
         }
     }

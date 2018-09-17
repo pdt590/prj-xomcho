@@ -2,10 +2,9 @@
     <section>
         <div class="w3-content w3-padding-64" style="max-width:1300px">
             <app-sidebar-shop :shopData="loadedShop"/>
-            <!-- !PAGE CONTENT! -->
             <div class="w3-main" style="margin-left:270px;">
-                <div v-if="loadedShop.panels" class="w3-margin-bottom">
-                    <app-slider-shoppanel />
+                <div v-if="loadedShop.images" class="w3-margin-bottom">
+                    <app-slider-shoppanel :images="loadedShop.images"/>
                 </div>
                 <div class="w3-padding w3-white w3-margin-bottom">
                     <h6><strong>Thông tin</strong></h6><hr>

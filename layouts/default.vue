@@ -1,9 +1,9 @@
 <template>
     <section>
+        <app-loading v-if="itemLoading || shopLoading"/>
         <app-navbar />
-        <app-navbar-mobile :isMainLayout="true" />
-        <div class="w3-content w3-padding-64" style="max-width:1030px">     
-            <!-- !PAGE CONTENT! -->
+        <app-navbar-mobile :isHome="true" />
+        <div class="w3-content w3-padding-64" style="max-width:1030px">
             <div class="w3-main">
                 <nuxt/>
                 <hr>
@@ -16,6 +16,17 @@
         </div>
     </section>
 </template>
+
+<script>
+    import { mapGetters } from 'vuex'
+
+    export default {
+        middleware: 'check-auth',
+        computed: {
+            ...mapGetters(['itemLoading', 'shopLoading'])
+        }
+    }
+</script>
 
 <style>
     html,body,h1,h2,h3,h4,h5,h6 {

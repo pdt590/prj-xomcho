@@ -106,8 +106,6 @@
             </div>
             <!-- Overlay effect when opening sidebar on small screens -->
             <div class="w3-overlay w3-hide-large" @click="closeSideBar" style="cursor:pointer" title="close side menu" ref="myOverlay"></div>
-
-            <!-- !PAGE CONTENT! -->
             <div class="w3-main" style="margin-left:270px;">
                 <div class="w3-padding w3-margin-bottom w3-white">
 

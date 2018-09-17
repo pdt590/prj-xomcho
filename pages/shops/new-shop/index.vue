@@ -11,7 +11,7 @@
             <br>
             <div class="w3-margin-bottom section">
                 <h6><strong>Ảnh panel (tối đa 2 ảnh)</strong></h6><br>
-                <app-img-uploader :maxImages="2" />
+                <app-img-uploader :maxImages="2" @imagesAdded="onImagesAdded" @imageRemoved="onImageRemoved"/>
                 <br>
             </div>
             <hr>
@@ -70,7 +70,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import provinceList from '~/plugins/province-list'
-    import { required, email, numeric } from 'vuelidate/lib/validators'
+    import { required, email, numeric, maxLength } from 'vuelidate/lib/validators'
     import Vue from 'vue'
     import Vuelidate from 'vuelidate'
     Vue.use(Vuelidate)
@@ -91,8 +91,8 @@
                     email: '',
                     description: '',
                     itemTypes: [],
-                    logoUrl: '/icon-user.png',
-                    panels: []
+                    logo: '/icon-photo.png',
+                    images: []
                 },
                 provinceList: provinceList
             }
@@ -121,6 +121,10 @@
                 },
                 itemTypes: {
                     required
+                },
+                logo: {},
+                images: {
+                    maxLen: maxLength(2)
                 }
             },
         },
@@ -128,29 +132,24 @@
             async onAddShop() {
                 const shopUrl = await this.$store.dispatch('addShop', this.shopData)
                 this.$router.push("/shops/" + shopUrl)
+            },
+            onImagesAdded(addedImages) {
+                console.log('thang1', addedImages)
+                addedImages.forEach( addedImage => {
+                    const index = this.shopData.images.findIndex( image => image === addedImage)
+                    if(index >= 0) this.shopData.images.splice(index, 1)
+                })
+                for(let key in addedImages) {
+                    this.shopData.images.push(addedImages[key])
+                }
+                console.log('thang2', this.shopData.images)
+            },
+            onImageRemoved(removedImage) {
+                console.log('thang3', removedImage)
+                const index = this.shopData.images.findIndex( image => image === removedImage )
+                if(index >= 0) this.shopData.images.splice(index, 1)
+                console.log('thang4', this.shopData.images)
             }
         }
     }
 </script>
-
-<style>
-    #dropzoneAva {
-        border-style: dotted; 
-        border-width: medium; 
-        border-color: green;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        width: 35%;
-        background-color: #f1f1f1;
-    }
-    #dropzone {
-        border-style: dotted; 
-        border-width: medium; 
-        border-color: green;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        background-color: #f1f1f1;
-    }
-</style>

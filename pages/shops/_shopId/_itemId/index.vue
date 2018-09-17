@@ -2,12 +2,11 @@
     <section>
         <div class="w3-content w3-padding-64" style="max-width:1300px">     
             <app-sidebar-shop :shopData="loadedShop" />
-            <!-- !PAGE CONTENT! -->
             <div class="w3-main" style="margin-left:270px;">
                 <div class="w3-padding w3-white w3-margin-bottom">
                     <div class="w3-row">
                         <div class="w3-col l5">
-                            <app-slider-item :images="loadedItem.images.length ? loadedItem.images : [{url: '/icon-user.png'}]" />
+                            <app-slider-item :images=loadedItem.images />
                         </div>
                         <div class="w3-col l7">
                             <div class="w3-border-bottom">

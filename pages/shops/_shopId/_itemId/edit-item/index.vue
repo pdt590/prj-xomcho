@@ -2,7 +2,6 @@
     <section>
         <div class="w3-content w3-padding-64" style="max-width:1300px">
             <app-sidebar-shop :shopData="loadedShop" />
-            <!-- !PAGE CONTENT! -->
             <div class="w3-main" style="margin-left:270px;">
                 <div class="w3-padding w3-white w3-margin-bottom">
                     <div class="w3-row">
@@ -73,19 +72,11 @@
                     </form>
 
                     <div id="updateImg" class="w3-margin-bottom section" style="min-height: 800px; display:none">
-                        <div class="w3-row-padding w3-section" >
-                            <div v-if="editedItemData.images.length" class="w3-col s3 w3-display-container" v-for="(img, i) in editedItemData.images" :key="i">
-                                <img :src="img.url" style="width:100%;cursor:pointer">
-                                <div class="w3-display-middle w3-display-hover">
-                                    <button class="w3-button w3-light-grey w3-hover-light-grey" @click.prevent="onDeleteItemImg(i)">Xóa ảnh <i class="fa fa-trash-o w3-large"></i></button>
-                                </div>
-                            </div>
-                        </div>
                         <h6><strong>Ảnh sản phẩm (tối đa 4 ảnh)</strong></h6><br>
-                        <app-img-uploader :maxImages="numImages" @imagesAdded="onImagesAdded" @imageRemoved="onImageRemoved" />
+                        <app-img-uploader :displayedImages="editedItemData.images" :maxImages="4" @imagesAdded="onImagesAdded" @imageRemoved="onImageRemoved" />
                         <br>
                         <div class="w3-row">
-                            <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdateItemImg" :disabled="$v.editedItemData.images.$invalid">
+                            <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdateItemImage" :disabled="$v.editedItemData.images.$invalid">
                                 <i class="w3-xlarge w3-margin-right" :class="itemLoading ? 'fa fa-circle-o-notch fa-spin' : 'fa fa-save'"></i>Lưu thay đổi
                             </button>
                         </div>
@@ -148,26 +139,6 @@
             ...mapGetters(['itemLoading', 'loadedShop']),
             loadedItem() {
                 return this.$store.getters.loadedItem(this.$route.params.itemId)
-            },
-            uploadedImages() {
-                return this.editedItemData.images
-            }
-        },
-        watch: {
-            uploadedImages(newValue) {
-                console.log(newValue.length)
-                if(newValue.length) {
-                    let count = 0
-                    newValue.forEach( image => {
-                        if(image.url !== undefined) {
-                            count = count + 1
-                        }
-                    })
-                    this.numImages = 4 - count
-                    console.log(this.numImages)
-                }else {
-                    this.numImages = 4
-                }
             }
         },
         async fetch({ store, params }) {
@@ -196,12 +167,12 @@
         },
         created() {
             this.editedItemData = JSON.parse(JSON.stringify(this.loadedItem))
+            this.editedItemData = this.editedItemData.images ? this.editedItemData : { ...this.editedItemData, images: []}
         },
         data() {
             return {
                 deletedItemTitle: '',
-                editedItemData: {}, // ? cannot set computed directly to data prop because data() is created before computed()
-                numImages: 0
+                editedItemData: {} // ? cannot set computed directly to data prop because data() is created before computed()
             }   
         },
         validations: {
@@ -270,31 +241,45 @@
                     context.error({ statusCode: 500, message: '...Lỗi' })
                 }
             },
-            async onUpdateItemImg() {
+            async onUpdateItemImage() {
                 await this.$store.dispatch('updateItemImg', this.editedItemData)
                 this.$router.push("/shops/" + this.$route.params.shopId + '/' + this.$route.params.itemId)
             },
             async onDeleteItem() {
                 try{
-                    await this.$store.dispatch('deleteItem', this.loadedItem.itemId)
+                    await this.$store.dispatch('deleteItem', this.loadedItem)
                     this.$router.push('/shops/' + this.$route.params.shopId)
                 } catch(error){
                     console.log('[_ERROR] ' + error)
                     context.error({ statusCode: 500, message: '...Lỗi' })
                 }
             },
-            onDeleteItemImg(index) {
-                this.editedItemData.images.splice(index, 1)
-            },
-            onImagesAdded(addedImgs) {
-                for(let key in addedImgs) {
-                    this.editedItemData.images.push(addedImgs[key])
+            onImagesAdded(addedImages) {
+                console.log('thang1', addedImages)
+                addedImages.forEach( addedImage => {
+                    if(this.editedItemData.images !== undefined) {
+                        const index = this.editedItemData.images.findIndex( image => image === addedImage)
+                        if(index >= 0) this.editedItemData.images.splice(index, 1)
+                    }
+                })
+                for(let key in addedImages) {
+                    this.editedItemData.images.push(addedImages[key])
                 }
+                console.log('thang2', this.editedItemData.images)
             },
-            onImageRemoved(removedImg) {
-                const index = this.editedItemData.images.findIndex( img => img === removedImg)
-                if(index === -1) this.editedItemData.images.splice(0)
-                this.editedItemData.images.splice(index, 1)
+            onImageRemoved(removedImage) {
+                console.log('thang3', removedImage)
+                const index = this.editedItemData.images.findIndex( image => {
+                        if(removedImage.manuallyAdded !== undefined && removedImage.manuallyAdded === true) {
+                            return image.metadata.name === removedImage.name 
+                        } else {
+                            if(removedImage.accepted) {
+                                return image.name === removedImage.name
+                            }
+                        }
+                    })
+                if(index >= 0) this.editedItemData.images.splice(index, 1)
+                console.log('thang4', this.editedItemData.images)
             }
         }
     }

@@ -1,9 +1,7 @@
 <template>
     <section>
-        
         <div class="w3-content w3-padding-64" style="max-width:1300px">
             <app-sidebar-shop :shopData="loadedShop" />
-            <!-- !PAGE CONTENT! -->
             <div class="w3-main" style="margin-left:270px;">       
                 <div class="w3-padding w3-white w3-margin-bottom">
                     <div class="w3-row">
@@ -35,44 +33,44 @@
                         <div class="w3-row-padding" style="margin:0 -16px;">
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-trello w3-large"></i><strong> Tên cửa hàng </strong>*</label>
-                                <input class="w3-input w3-border" type="text" disabled v-model.trim="loadedShop.title">
+                                <input class="w3-input w3-border" type="text" disabled v-model.trim="editedShopData.title">
                             </div>
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-facebook-official w3-large"></i><strong> Facebook</strong></label>
-                                <input class="w3-input w3-border" type="text" v-model.trim="loadedShop.facebook">
+                                <input class="w3-input w3-border" type="text" v-model.trim="editedShopData.facebook">
                             </div>
                         </div>
                         <div class="w3-row-padding" style="margin:0 -16px;">
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-phone w3-large"></i><strong> Số điện thoại </strong>*</label>
-                                <input class="w3-input w3-border" type="tel" v-model.trim="loadedShop.phone">
+                                <input class="w3-input w3-border" type="tel" v-model.trim="editedShopData.phone">
                             </div>
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-envelope w3-large"></i><strong> Email liên hệ</strong></label>
-                                <input class="w3-input w3-border" type="email" v-model.trim="loadedShop.email">
+                                <input class="w3-input w3-border" type="email" v-model.trim="editedShopData.email">
                             </div>
                         </div>
                         <div class="w3-row-padding" style="margin:0 -16px;">
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-map-pin w3-large"></i><strong> Địa chỉ </strong>*</label>
-                                <input class="w3-input w3-border" type="text" v-model="loadedShop.location">
+                                <input class="w3-input w3-border" type="text" v-model="editedShopData.location">
                             </div>
                             <div class="w3-half w3-margin-bottom">
                                 <label><i class="fa fa-bullseye w3-large"></i><strong> Tỉnh/Thành Phố </strong>*</label>
-                                <select class="w3-select w3-bar-item w3-border" v-model="loadedShop.province">
+                                <select class="w3-select w3-bar-item w3-border" v-model="editedShopData.province">
                                     <option value="" disabled selected>Lựa Chọn</option>
                                     <option v-for="(province, i) in provinceList" :key="i">{{ province }}</option>
                                 </select>
                             </div>
                         </div>
                         <label><strong>Miêu tả</strong> *</label>
-                        <textarea class="w3-input w3-border" rows="5" style="resize:none" v-model="loadedShop.description"></textarea>
+                        <textarea class="w3-input w3-border" rows="5" style="resize:none" v-model="editedShopData.description"></textarea>
                         <hr>
                         <h6><strong>Các mặt hàng sẽ bán</strong> *</h6><br>
-                        <app-item-types :selectedItemTypes="loadedShop.itemTypes" @onCheckBox="loadedShop.itemTypes=$event"/>
+                        <app-item-types :selectedItemTypes="editedShopData.itemTypes" @onCheckBox="editedShopData.itemTypes=$event"/>
                         <br>
                         <div class="w3-row">
-                            <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdateShop" :disabled="$v.loadedShop.$invalid">
+                            <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdateShopContent" :disabled="$v.editedShopData.$invalid">
                                 <i class="w3-xlarge w3-margin-right" :class="shopLoading ? 'fa fa-circle-o-notch fa-spin' : 'fa fa-save'"></i>Sửa cửa hàng
                             </button>
                         </div>
@@ -86,8 +84,13 @@
 
                     <div id="panelImg" class="w3-margin-bottom section" style="display:none; min-height: 800px">
                         <h6><strong>Ảnh panel (tối đa 2 ảnh)</strong></h6><br>
-                        <app-img-uploader :maxImages="2" />
+                        <app-img-uploader :displayedImages="editedShopData.images" :maxImages="2" :resizeWidth="100" :resizeHeight="50" @imagesAdded="onImagesAdded" @imageRemoved="onImageRemoved" />
                         <br>
+                        <div class="w3-row">
+                            <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdateShopImage" :disabled="$v.editedShopData.images.$invalid">
+                                <i class="w3-xlarge w3-margin-right" :class="shopLoading ? 'fa fa-circle-o-notch fa-spin' : 'fa fa-save'"></i>Lưu thay đổi
+                            </button>
+                        </div>
                     </div>
 
                     <div id="delShop" class="w3-margin-bottom section" style="display:none; min-height: 800px">
@@ -95,10 +98,10 @@
                         <form style="max-width:500px; margin: auto"> 
                             <div class="w3-margin-bottom">
                                 <label><strong> Nhập tên cửa hàng </strong></label>
-                                <input class="w3-input w3-border" type="text" v-model.trim="editedShopTitle">
+                                <input class="w3-input w3-border" type="text" v-model.trim="editedShopData.title">
                             </div>
                             <div class="w3-row">
-                                <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onEditShopTitle" :disabled="$v.editedShopTitle.$invalid">
+                                <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdateShopTitle" :disabled="$v.editedShopData.title.$invalid">
                                     <i class="w3-xlarge w3-margin-right" :class="shopLoading ? 'fa fa-circle-o-notch fa-spin' : 'fa fa-save'"></i>Đổi tên
                                 </button>
                             </div>
@@ -108,7 +111,7 @@
                         <form style="max-width:500px; margin: auto"> 
                             <div class="w3-margin-bottom">
                                 <label><i class="fa fa-trello w3-large"></i><strong> Tên cửa hàng </strong></label>
-                                <input class="w3-input w3-border" type="text" disabled v-model.trim="loadedShop.title">
+                                <input class="w3-input w3-border" type="text" disabled v-model.trim="editedShopData.title">
                             </div>
                             <div class="w3-margin-bottom">
                                 <label><strong> Nhập tên cửa hàng </strong></label>
@@ -136,7 +139,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import provinceList from '~/plugins/province-list'
-    import { required, email, numeric, sameAs } from 'vuelidate/lib/validators'
+    import { required, email, numeric, sameAs, maxLength } from 'vuelidate/lib/validators'
     import Vue from 'vue'
     import Vuelidate from 'vuelidate'
     Vue.use(Vuelidate)
@@ -171,16 +174,19 @@
                 context.error({ statusCode: 500, message: '...Lỗi'})
             } 
         },
+        created() {
+            this.editedShopData = JSON.parse(JSON.stringify(this.loadedShop))
+            this.editedShopData = this.editedShopData.images ? this.editedShopData : { ...this.editedShopData, images: []}
+        },
         data() {
             return {
-                editedShopTitle: '',
                 deletedShopTitle: '',
-                loadedShopTitle: this.$store.getters.loadedShop.title,
+                editedShopData: {},
                 provinceList: provinceList
-            }   
+            }
         },
         validations: {
-            loadedShop: {
+            editedShopData: {
                 title: {
                     required
                 },
@@ -203,14 +209,19 @@
                 },
                 itemTypes: {
                     required
+                },
+                logo: {},
+                images: {
+                    maxLen: maxLength(2)
                 }
-            },
-            editedShopTitle: {
-                required
             },
             deletedShopTitle: {
                 required,
-                sameAs: sameAs('loadedShopTitle')
+                sameAs: sameAs(vm => {
+                    if(vm.loadedShop !== null) {
+                        return vm.loadedShop.title
+                    }
+                })
             }
         },
         methods: {
@@ -227,32 +238,56 @@
                 document.getElementById(arg).style.display = "block";
                 event.currentTarget.firstElementChild.className += " w3-border-red";
             },
-            async onUpdateShop() {
-                try{
-                    await this.$store.dispatch('updateShop', this.loadedShop)
-                    this.$router.push("/shops/" + this.$route.params.shopId)
-                } catch(error){
-                    console.log('[_ERROR] ' + error)
-                    context.error({ statusCode: 500, message: '...Lỗi' })
-                }
+            async onUpdateShopContent() {
+                await this.$store.dispatch('updateShopContent', this.editedShopData)
+                this.$router.push("/shops/" + this.$route.params.shopId)
             },
-            async onEditShopTitle() {
+            async onUpdateShopTitle() {
                 try{
-                    const newShopId = await this.$store.dispatch('editShopTitle', {shopId: this.loadedShop.shopId, newShopTitle: this.editedShopTitle})
+                    const newShopId = await this.$store.dispatch('updateShopTitle', this.editedShopData)
                     this.$router.push('/shops/' + newShopId)
                 } catch(error){
                     console.log('[_ERROR] ' + error)
                     context.error({ statusCode: 500, message: '...Lỗi' })
                 }
             },
+            async onUpdateShopImage() {
+                await this.$store.dispatch('updateShopImg', this.editedShopData)
+                this.$router.push("/shops/" + this.$route.params.shopId)
+            },
             async onDeleteShop() {
                 try{
-                    await this.$store.dispatch('deleteShop', this.loadedShop.shopId)
+                    await this.$store.dispatch('deleteShop', this.loadedShop)
                     this.$router.push('/')
                 } catch(error){
                     console.log('[_ERROR] ' + error)
                     context.error({ statusCode: 500, message: '...Lỗi' })
                 }
+            },
+            onImagesAdded(addedImages) {
+                console.log('thang1', addedImages)
+                addedImages.forEach( addedImage => { 
+                    const index = this.editedShopData.images.findIndex( image => image === addedImage)
+                    if(index >= 0) this.editedShopData.images.splice(index, 1)
+                })
+                for(let key in addedImages) {
+                    this.editedShopData.images.push(addedImages[key])
+                }
+                console.log('thang2', this.editedShopData.images)
+            },
+            onImageRemoved(removedImage) {
+                console.log('thang3', removedImage) //TODO: Why the cmd executes after editing images
+                const index = this.editedShopData.images.findIndex( image => {
+                        if(removedImage.manuallyAdded !== undefined && removedImage.manuallyAdded === true) {
+                            return image.metadata.name === removedImage.name 
+                        } else {
+                            if(removedImage.accepted) {
+                                return image.name === removedImage.name
+                            }
+                        }
+                    })
+                if(index >= 0) this.editedShopData.images.splice(index, 1)
+                console.log('thang4', this.editedShopData.images)
             }
         }
     }
