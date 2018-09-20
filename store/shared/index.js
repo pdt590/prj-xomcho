@@ -1,3 +1,7 @@
+import firebase from '~/plugins/firebase'
+const db = firebase.database()
+const usersRef = db.ref('users')
+
 export default {
     state: {
         sideBar: false
@@ -10,13 +14,9 @@ export default {
     actions: {
         // nuxtServerInit should be only used for authentication
         async nuxtServerInit (vuexContext, { req, error }) {
+            vuexContext.commit('setAuthLoading', true)
             try {
                 let uid
-                let username
-                let fullname
-                let email
-                let phone
-                let photoUrl
                 let expirationDate
                 if (req) {
                     if (!req.headers.cookie) {
@@ -31,11 +31,6 @@ export default {
                         return 
                     }
                     uid            = reqCookie.find(c => c.trim().startsWith("uid=")).split("=")[1]
-                    username       = reqCookie.find(c => c.trim().startsWith("username=")).split("=")[1]
-                    fullname       = reqCookie.find(c => c.trim().startsWith("fullname=")).split("=")[1]
-                    email          = reqCookie.find(c => c.trim().startsWith("email=")).split("=")[1]
-                    phone          = reqCookie.find(c => c.trim().startsWith("phone=")).split("=")[1]
-                    photoUrl       = reqCookie.find(c => c.trim().startsWith("photoUrl=")).split("=")[1]
                     expirationDate = reqCookie.find(c => c.trim().startsWith("expirationDate=")).split("=")[1]
                 }
                 if (new Date().getTime() > +expirationDate || !uid) {
@@ -43,15 +38,14 @@ export default {
                     await vuexContext.dispatch("logOut")
                     return
                 }
+                const userData = await usersRef.child(uid).once('value')
+                const userObj = userData.val()
                 const userProfile = {
                     id: uid,
-                    username: username,
-                    fullname: fullname,
-                    email: email,
-                    phone: phone,
-                    photoUrl: photoUrl
+                    ...userObj
                 }
                 vuexContext.commit('setUser', userProfile)
+                vuexContext.commit('setAuthLoading', false)
             }catch (e) {
                 vuexContext.commit('setAuthLoading', false)
                 vuexContext.commit('setAuthError', e)

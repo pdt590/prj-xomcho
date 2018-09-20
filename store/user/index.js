@@ -1,5 +1,7 @@
 import firebase from '~/plugins/firebase'
 import Cookie from 'js-cookie'
+const db = firebase.database()
+const usersRef = db.ref('users')
 
 export default {
     state: {
@@ -35,15 +37,12 @@ export default {
                     fullname: '',
                     email: payload.email,
                     phone:'',
-                    photoUrl: '/icon-user.png'
+                    facebook: '',
+                    address: '',
+                    avatar: ''
                 }
                 // * persistent storage using cookie (or localstorage or firebase.auth().onAuthStateChanged())
                 Cookie.set("uid", user.uid)
-                Cookie.set("username", userProfile.username)
-                Cookie.set("fullname", userProfile.fullname)
-                Cookie.set("email", userProfile.email)
-                Cookie.set("phone", userProfile.phone)
-                Cookie.set("photoUrl", userProfile.photoUrl)
                 Cookie.set(
                     "expirationDate",
                     new Date().getTime() + (2 * 3600 * 1000) // 2h expired time
@@ -65,23 +64,14 @@ export default {
             vuexContext.commit('clearAuthError')
             try {
                 const { user } = await firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
-                const data = await firebase.database().ref('users/' + user.uid).once('value') 
-                const obj = data.val()
+                const userData = await usersRef.child(user.uid).once('value') 
+                const userObj = userData.val()
                 const userProfile = {
                     id: user.uid,
-                    username: obj.username,
-                    fullname: obj.fullname,
-                    email: obj.email,
-                    phone: obj.phone,
-                    photoUrl: obj.photoUrl
+                    ...userObj
                 }
                 // * persistent storage using cookie (or localstorage or firebase.auth().onAuthStateChanged())
                 Cookie.set("uid", user.uid)
-                Cookie.set("username", userProfile.username)
-                Cookie.set("fullname", userProfile.fullname)
-                Cookie.set("email", userProfile.email)
-                Cookie.set("phone", userProfile.phone)
-                Cookie.set("photoUrl", userProfile.photoUrl)
                 Cookie.set(
                     "expirationDate",
                     new Date().getTime() + (2 * 3600 * 1000) // 2h expired time
@@ -98,11 +88,6 @@ export default {
         },
         initAuth (vuexContext) {
             let uid = Cookie.get("uid")
-            let username = Cookie.get("username")
-            let fullname = Cookie.get("fullname")
-            let email = Cookie.get("email")
-            let phone = Cookie.get("phone")
-            let photoUrl = Cookie.get("photoUrl")
             let expirationDate = Cookie.get("expirationDate")
             if (new Date().getTime() > +expirationDate || !uid) {
                 console.log("No token or invalid token");
@@ -113,26 +98,12 @@ export default {
             // re-new expirationDate
             Cookie.set(
                 "expirationDate",
-                new Date().getTime() + (1 * 3600 * 1000) // 1h expired time
+                new Date().getTime() + (2 * 3600 * 1000) // 1h expired time
             )
-            const userProfile = {
-                id: uid,
-                username: username,
-                fullname: fullname,
-                email: email,
-                phone: phone,
-                photoUrl: photoUrl
-            }
-            vuexContext.commit('setUser', userProfile)
         },
         async logOut (vuexContext) {
             await firebase.auth().signOut()
             Cookie.remove("uid")
-            Cookie.remove("username")
-            Cookie.remove("fullname")
-            Cookie.remove("email")
-            Cookie.remove("phone")
-            Cookie.remove("photoUrl") 
             Cookie.remove("expirationDate")
             vuexContext.commit('setUser', null)
             if(process.client) {

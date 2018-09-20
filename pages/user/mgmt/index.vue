@@ -129,7 +129,7 @@
                             <li v-for="(shop, i) in loadedShops" :key="i" class="w3-bar">
                                 <nuxt-link :to="'/shops/' + shop.shopId + '/edit-shop'" target="_blank" class="w3-bar-item w3-button w3-white w3-xlarge w3-right"><i class="fa fa-edit"></i></nuxt-link>
                                 <nuxt-link :to="'/shops/' + shop.shopId" target="_blank">
-                                    <img :src="shop.logo !== undefined ? shop.logo : '/icon-photo.png'" class="w3-bar-item w3-circle" style="width:90px">
+                                    <img :src="shop.logo !== '' ? shop.logo : '/icon-photo.png'" class="w3-bar-item w3-circle" style="width:90px">
                                 </nuxt-link>
                                 <div class="w3-bar-item">
                                     <span class="w3-large">{{shop.title}}</span><br>
@@ -146,7 +146,7 @@
                             <li v-for="(shop, i) in loadedShops" :key="i" class="w3-bar">
                                 <nuxt-link :to="'/shops/' + shop.shopId + '/edit-shop'" target="_blank" class="w3-bar-item w3-button w3-white w3-xlarge w3-right"><i class="fa fa-edit"></i></nuxt-link>
                                 <nuxt-link :to="'/shops/' + shop.shopId" target="_blank">
-                                    <img :src="shop.logo !== undefined ? shop.logo : '/icon-area.png'" class="w3-bar-item w3-circle" style="width:90px">
+                                    <img :src="shop.logo !== '' ? shop.logo : '/icon-photo.png'" class="w3-bar-item w3-circle" style="width:90px">
                                 </nuxt-link>
                                 <div class="w3-bar-item">
                                     <span class="w3-large">{{shop.title}}</span><br>
