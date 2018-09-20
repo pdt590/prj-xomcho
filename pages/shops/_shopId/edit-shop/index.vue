@@ -83,8 +83,8 @@
                     </div>
 
                     <div id="panelImg" class="w3-margin-bottom section" style="display:none; min-height: 800px">
-                        <h6><strong>Ảnh panel (tối đa 2 ảnh)</strong></h6><br>
-                        <app-img-uploader :displayedImages="editedShopData.images" :maxImages="2" :resizeWidth="100" :resizeHeight="50" @imagesAdded="onImagesAdded" @imageRemoved="onImageRemoved" />
+                        <h6><strong>Ảnh panel</strong></h6><br>
+                        <app-img-uploader :displayedImages="editedShopData.images" :maxImages="1" :resizeWidth="100" :resizeHeight="50" @imagesAdded="onImagesAdded" @imageRemoved="onImageRemoved" />
                         <br>
                         <div class="w3-row">
                             <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdateShopImage" :disabled="$v.editedShopData.images.$invalid">

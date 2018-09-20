@@ -212,6 +212,27 @@ export default {
                 console.log('[ERROR] ' + error)
                 vuexContext.commit('setShopLoading', false)
             }
+        },
+        async loadOwnShops (vuexContext) {
+            vuexContext.commit('setShopLoading', true)
+            try {
+                const creatorId = vuexContext.getters.user.id
+                const shopsData = await shopsRef.orderByChild('creatorId').equalTo(creatorId).once('value')     
+                const loadedShops = []
+                shopsData.forEach(shopData => {
+                    const shopObj = shopData.val()
+                    loadedShops.push({
+                        shopId: shopData.key,
+                        ...shopObj
+                    })
+                })
+                loadedShops.reverse()
+                vuexContext.commit('setShopLoading', false)
+                return loadedShops
+            } catch(error) {
+                console.log('[ERROR] ' + error)
+                vuexContext.commit('setShopLoading', false)
+            }
         }
     },
     getters: {

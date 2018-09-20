@@ -10,8 +10,8 @@
             </div>
             <br>
             <div class="w3-margin-bottom section">
-                <h6><strong>Ảnh panel (tối đa 2 ảnh)</strong></h6><br>
-                <app-img-uploader :maxImages="2" @imagesAdded="onImagesAdded" @imageRemoved="onImageRemoved"/>
+                <h6><strong>Ảnh panel</strong></h6><br>
+                <app-img-uploader :maxImages="1" @imagesAdded="onImagesAdded" @imageRemoved="onImageRemoved"/>
                 <br>
             </div>
             <hr>
@@ -91,7 +91,7 @@
                     email: '',
                     description: '',
                     itemTypes: [],
-                    logo: '/icon-photo.png',
+                    logo: '',
                     images: []
                 },
                 provinceList: provinceList

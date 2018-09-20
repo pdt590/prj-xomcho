@@ -13,7 +13,7 @@
                     </nuxt-link>
                 </div>
                 <div class="w3-col l6 m6 s6">
-                    <nuxt-link to="/user" class="w3-button w3-white w3-border w3-center w3-padding w3-hover-shadow w3-hover-white" style="width: 100%">
+                    <nuxt-link to="/user/mgmt" class="w3-button w3-white w3-border w3-center w3-padding w3-hover-shadow w3-hover-white" style="width: 100%">
                         <i class="fa fa-cube w3-xxlarge"></i>
                         <h5><b>Quản lý đơn hàng</b></h5>
                     </nuxt-link>

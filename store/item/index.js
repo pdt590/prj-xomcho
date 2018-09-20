@@ -291,6 +291,27 @@ export default {
                 console.log('[ERROR] ' + error)
                 vuexContext.commit('setItemLoading', false)
             }
+        },
+        async loadOwnItems (vuexContext) {
+            vuexContext.commit('setItemLoading', true)
+            try {
+                const creatorId = vuexContext.getters.user.id
+                const itemsData = await itemsRef.orderByChild('creatorId').equalTo(creatorId).once('value')
+                const loadedItems = []
+                itemsData.forEach(itemData => {
+                    const itemObj = itemData.val()
+                    loadedItems.push({
+                        itemId: itemData.key,
+                        ...itemObj
+                    })
+                })
+                loadedItems.reverse()
+                vuexContext.commit('setItemLoading', false)
+                return loadedItems
+            } catch(error) {
+                console.log('[ERROR] ' + error)
+                vuexContext.commit('setItemLoading', false)
+            }
         }
     },
     getters: {

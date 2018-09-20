@@ -25,7 +25,7 @@ import SliderHomeShop from "~/components/UI/SliderHomeShop"
 import SliderShopPanel from "~/components/UI/SliderShopPanel"
 import SliderItemImage from "~/components/UI/SliderItemImage"
 
-
+//import vuescroll from 'vuescroll'
 
 Vue.component('app-navbar', NavBar)
 Vue.component('app-navbar-mobile', NavBarMobile)
@@ -51,3 +51,6 @@ Vue.component('app-slider-homepanel', SliderHomePanel)
 Vue.component('app-slider-homeshop', SliderHomeShop)
 Vue.component('app-slider-shoppanel', SliderShopPanel)
 Vue.component('app-slider-item', SliderItemImage)
+
+
+//Vue.use(vuescroll)
