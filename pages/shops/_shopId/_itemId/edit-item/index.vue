@@ -228,9 +228,14 @@
                 event.currentTarget.firstElementChild.className += " w3-border-red"
                 this.editedItemData = JSON.parse(JSON.stringify(this.loadedItem)) // ? Reset changes when switching tab
             },
-            async onUpdateItemContent() {
-                await this.$store.dispatch('updateItemContent', this.editedItemData)
-                this.$router.push("/shops/" + this.$route.params.shopId + '/' + this.$route.params.itemId)
+            async onUpdateItemContent() {  
+                try{
+                    await this.$store.dispatch('updateItemContent', this.editedItemData)
+                    this.$router.push("/shops/" + this.$route.params.shopId + '/' + this.$route.params.itemId)
+                } catch(error){
+                    console.log('[_ERROR] ' + error)
+                    context.error({ statusCode: 500, message: '...Lỗi' })
+                }
             },
             async onUpdateItemTitle() {
                 try{
@@ -241,9 +246,14 @@
                     context.error({ statusCode: 500, message: '...Lỗi' })
                 }
             },
-            async onUpdateItemImage() {
-                await this.$store.dispatch('updateItemImg', this.editedItemData)
-                this.$router.push("/shops/" + this.$route.params.shopId + '/' + this.$route.params.itemId)
+            async onUpdateItemImage() { 
+                try{
+                    await this.$store.dispatch('updateItemImg', this.editedItemData)
+                    this.$router.push("/shops/" + this.$route.params.shopId + '/' + this.$route.params.itemId)
+                } catch(error){
+                    console.log('[_ERROR] ' + error)
+                    context.error({ statusCode: 500, message: '...Lỗi' })
+                }
             },
             async onDeleteItem() {
                 try{

@@ -14,7 +14,6 @@ export default {
     actions: {
         // nuxtServerInit should be only used for authentication
         async nuxtServerInit (vuexContext, { req, error }) {
-            vuexContext.commit('setAuthLoading', true)
             try {
                 let uid
                 let expirationDate
@@ -45,9 +44,7 @@ export default {
                     ...userObj
                 }
                 vuexContext.commit('setUser', userProfile)
-                vuexContext.commit('setAuthLoading', false)
             }catch (e) {
-                vuexContext.commit('setAuthLoading', false)
                 vuexContext.commit('setAuthError', e)
                 console.log('[ERROR] ' + e)
                 error({ statusCode: 500, message: '...Lỗi' })

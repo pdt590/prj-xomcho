@@ -238,9 +238,14 @@
                 document.getElementById(arg).style.display = "block";
                 event.currentTarget.firstElementChild.className += " w3-border-red";
             },
-            async onUpdateShopContent() {
-                await this.$store.dispatch('updateShopContent', this.editedShopData)
-                this.$router.push("/shops/" + this.$route.params.shopId)
+            async onUpdateShopContent() {       
+                try{
+                    await this.$store.dispatch('updateShopContent', this.editedShopData)
+                    this.$router.push("/shops/" + this.$route.params.shopId)
+                } catch(error){
+                    console.log('[_ERROR] ' + error)
+                    context.error({ statusCode: 500, message: '...Lỗi' })
+                }
             },
             async onUpdateShopTitle() {
                 try{
@@ -251,9 +256,14 @@
                     context.error({ statusCode: 500, message: '...Lỗi' })
                 }
             },
-            async onUpdateShopImage() {
-                await this.$store.dispatch('updateShopImg', this.editedShopData)
-                this.$router.push("/shops/" + this.$route.params.shopId)
+            async onUpdateShopImage() {  
+                try{
+                    await this.$store.dispatch('updateShopImg', this.editedShopData)
+                    this.$router.push("/shops/" + this.$route.params.shopId)
+                } catch(error){
+                    console.log('[_ERROR] ' + error)
+                    context.error({ statusCode: 500, message: '...Lỗi' })
+                }
             },
             async onDeleteShop() {
                 try{

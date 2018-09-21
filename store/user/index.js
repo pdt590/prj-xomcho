@@ -47,15 +47,19 @@ export default {
                     "expirationDate",
                     new Date().getTime() + (2 * 3600 * 1000) // 2h expired time
                 )
-                await firebase.database().ref('users/' + user.uid).set(userProfile)
+                const newUser = {
+                    id: user.uid, 
+                    ...userProfile
+                }
+                await usersRef.child(user.uid).set(userProfile)
+                vuexContext.commit('setUser', newUser)
                 vuexContext.commit('setAuthLoading', false)
-                vuexContext.commit('setUser', {id: user.uid, ...userProfile})
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
 
             } catch(error) {
-                vuexContext.commit('setAuthLoading', false)
                 vuexContext.commit('setAuthError', error)
+                vuexContext.commit('setAuthLoading', false)
                 console.log('[ERROR] ' + error)
             }
         },
@@ -76,13 +80,13 @@ export default {
                     "expirationDate",
                     new Date().getTime() + (2 * 3600 * 1000) // 2h expired time
                 )
-                vuexContext.commit('setAuthLoading', false)
                 vuexContext.commit('setUser', userProfile)
+                vuexContext.commit('setAuthLoading', false)
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
             } catch(error) {
-                vuexContext.commit('setAuthLoading', false)
                 vuexContext.commit('setAuthError', error)
+                vuexContext.commit('setAuthLoading', false)
                 console.log('[ERROR] ' + error)
             }
         },
@@ -90,9 +94,8 @@ export default {
             let uid = Cookie.get("uid")
             let expirationDate = Cookie.get("expirationDate")
             if (new Date().getTime() > +expirationDate || !uid) {
-                console.log("No token or invalid token");
-                vuexContext.commit('setAuthLoading', false)
-                vuexContext.dispatch("logOut");
+                console.log("No token or invalid token")
+                vuexContext.dispatch("logOut")
                 return
             }
             // re-new expirationDate
@@ -112,9 +115,82 @@ export default {
             }
         },
         async isUnique (vuexContext, payload) {
-            const item = await firebase.database().ref('users').orderByChild('email').equalTo(payload).once('value')
+            const item = await usersRef.orderByChild('email').equalTo(payload).once('value')
             if(item.val()) return false
             return true
+        },
+        async updateUserInfo (vuexContext, editedUser) {
+            vuexContext.commit('setAuthLoading', true)
+            try{
+                const updatedUser = {
+                    ...editedUser,
+                    id: null
+                }
+                await usersRef.child(editedUser.id).update(updatedUser)
+
+                updatedUser.id = editedUser.id
+                vuexContext.commit('setUser', updatedUser)
+                vuexContext.commit('setAuthLoading', false)
+                localStorage.setItem('auth-event', '')
+                localStorage.removeItem('auth-event')
+            } catch(error){
+                vuexContext.commit('setAuthLoading', false)
+                console.log('[ERROR] ' + error)
+            }
+        },
+        async updateEmail (vuexContext, editedUser) {
+            vuexContext.commit('setAuthLoading', true)
+            try{
+                
+                const user = firebase.auth().currentUser //? Error
+                await user.updateEmail(editedUser.email)
+                console.log('THANG3')
+                const updatedUser = {
+                    ...editedUser,
+                    id: null
+                }
+                await usersRef.child(editedUser.id).update(updatedUser)
+
+                updatedUser.id = editedUser.id
+                vuexContext.commit('setUser', updatedUser)
+                vuexContext.commit('setAuthLoading', false)
+                localStorage.setItem('auth-event', '')
+                localStorage.removeItem('auth-event')
+            } catch(error){
+                vuexContext.commit('setAuthLoading', false)
+                console.log('[ERROR] ' + error)
+            }
+        },
+        async updatePassword (vuexContext, editedPassword) {
+            vuexContext.commit('setAuthLoading', true)
+            try{
+                const user = firebase.auth().currentUser
+                await user.updatePassword(editedPassword)
+                vuexContext.commit('setAuthLoading', false)
+                localStorage.setItem('auth-event', '')
+                localStorage.removeItem('auth-event')
+            } catch(error){
+                vuexContext.commit('setAuthLoading', false)
+                console.log('[ERROR] ' + error)
+            }
+        },
+        async deleteUser (vuexContext, deletedUser) {
+            vuexContext.commit('setAuthLoading', true)
+            try{
+                const user = firebase.auth().currentUser;
+                await user.delete()
+                await usersRef.child(deletedUser.id).remove()
+                Cookie.remove("uid")
+                Cookie.remove("expirationDate")
+                vuexContext.commit('setAuthLoading', false)
+                if(process.client) {
+                    localStorage.setItem('auth-event', '')
+                    localStorage.removeItem('auth-event')
+                }
+            } catch(error){
+                vuexContext.commit('setAuthLoading', false)
+                console.log('[ERROR] ' + error)
+            }  
         }
     },
     getters: {

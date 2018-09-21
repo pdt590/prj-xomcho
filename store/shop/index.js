@@ -44,7 +44,6 @@ export default {
                     creatorId: vuexContext.getters.user.id,
                     updatedDate: new Date().toISOString()
                 }
-                
                 await shopsRef.child(shopId).set(newShop)
                 vuexContext.commit('setShop', {
                     shopId: shopId,
