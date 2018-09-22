@@ -4,7 +4,7 @@
             <div class="w3-display-container"> 
                 <span class="w3-tag w3-display-topleft">New</span>
                 <nuxt-link :to="$route.path + '/' + itemData.itemId">
-                    <img src="https://picsum.photos/600/600/?image=41" width="200" height="150" style="width:100%">
+                    <img :src="itemData.images !== undefined ? itemData.images[0].url : '/icon-area.png'" width="200" height="150" style="width:100%">
                 </nuxt-link>
             </div>
             <div class="w3-container w3-padding">

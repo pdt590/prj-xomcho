@@ -50,7 +50,7 @@
         computed: {
             ...mapGetters(['loadedShop', 'loadedItems'])
         },
-        async fetch({ store, params }) {
+        async fetch({ store, params, error }) {
             try {
                 // ? Issue when using multi tabs
                 // ? When refreshing, new ``params.shopId`` from client will be tranferred to 
@@ -71,9 +71,11 @@
                 }
             } catch(error) {
                 console.log('[_ERROR] ' + error)
-                context.error({ statusCode: 500, message: '...Lỗi'})
+                error({ statusCode: 500, message: '...Lỗi'})
             }
-            
+            if(!store.getters.loadedShop) {
+                error({ statusCode: 404, message: '...Lỗi'})
+            }
         }
     }
 </script>

@@ -54,7 +54,7 @@
 
 <script>
     export default {
-        middleware: 'auth',
+        middleware: ['check-auth', 'auth'],
         layout: 'user',
         computed: {
             openSideBar() {

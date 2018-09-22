@@ -3,7 +3,7 @@
         <nuxt-link :to="'/shops/' + shopData.shopId" target="_blank">
             <div class="w3-row w3-border w3-hover-shadow">
                 <div class="w3-col l3 w3-padding">
-                    <img src="https://picsum.photos/300/300/?image=35" style="width:100%">
+                    <img :src="shopData.logo !== '' ? shopData.logo : '/icon-photo.png'" style="width:100%">
                 </div>
                 <div class="w3-col l9 w3-padding">
                     <span class="w3-text-blue" style="font-size: 15px"><strong> {{shopData.title.substring(0, 10)}}<span v-if="shopData.title.length>10"> ...</span></strong></span><br>

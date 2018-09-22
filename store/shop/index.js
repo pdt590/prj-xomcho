@@ -22,6 +22,9 @@ export default {
             try {
                 const images = []
                 const newUnUploadedImages = shop.images
+                const storageMetadata = {
+                    cacheControl: 'public,max-age=31536000',
+                }
                 const shopId = uuid(shop.title, 5)
                 if(newUnUploadedImages.length) {
                     for (const image of newUnUploadedImages) {
@@ -33,7 +36,7 @@ export default {
                             creatorId: vuexContext.getters.user.id, 
                             shopId: shopId
                         }
-                        await firebase.storage().ref('shops/' + newImgName).put(image)
+                        await firebase.storage().ref('shops/' + newImgName).put(image, storageMetadata)
                         const imgDownloadUrl = await firebase.storage().ref('shops/' + newImgName).getDownloadURL()
                         images.push({url: imgDownloadUrl, metadata: metaData})
                     }
@@ -103,6 +106,9 @@ export default {
                 const oldUploadedImages = []
                 const newUploadedImages = []
                 const newUnUploadedImages = []
+                const storageMetadata = {
+                    cacheControl: 'public,max-age=31536000',
+                }
                 if(vuexContext.getters.loadedShop.images !== undefined) {
                     vuexContext.getters.loadedShop.images.forEach (
                         image => oldUploadedImages.push(image)
@@ -135,7 +141,7 @@ export default {
                                 creatorId: vuexContext.getters.user.id, 
                                 shopId: shopId
                             }
-                            await firebase.storage().ref('shops/' + newImgName).put(image)
+                            await firebase.storage().ref('shops/' + newImgName).put(image, storageMetadata)
                             const imgDownloadUrl = await firebase.storage().ref('shops/' + newImgName).getDownloadURL()
                             newUploadedImages.push({url: imgDownloadUrl, metadata: metaData})
                         }

@@ -141,7 +141,7 @@
                 return this.$store.getters.loadedItem(this.$route.params.itemId)
             }
         },
-        async fetch({ store, params }) {
+        async fetch({ store, params, error }) {
             try{
                 // ? Issue when using multi tabs
                 // ? When refreshing, new ``params.shopId`` from client will be tranferred to 
@@ -162,8 +162,11 @@
                 }
             } catch(error) {
                 console.log('[_ERROR] ' + error)
-                context.error({ statusCode: 500, message: '...Lỗi'})
-            } 
+                error({ statusCode: 500, message: '...Lỗi'})
+            }
+            if(store.getters.loadedItem(params.itemId) === undefined) {
+                error({ statusCode: 404, message: '...Lỗi'})
+            }
         },
         created() {
             this.editedItemData = JSON.parse(JSON.stringify(this.loadedItem))

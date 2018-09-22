@@ -323,7 +323,7 @@
     Vue.use(Vuelidate)
 
     export default {
-        middleware: 'auth',
+        middleware: ['check-auth', 'auth'],
         layout: 'user',
         computed: {
             ...mapGetters(['authLoading', 'user']),

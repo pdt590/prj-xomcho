@@ -42,7 +42,7 @@
         computed: {
             ...mapGetters(['loadedShop', 'loadedItems'])
         },
-        async fetch({ store, params }) {
+        async fetch({ store, params, error }) {
             try {
                 if(process.client) {
                     if(!store.getters.loadedShop) { 
@@ -61,7 +61,9 @@
                 console.log('[_ERROR] ' + error)
                 context.error({ statusCode: 500, message: '...Lỗi'})
             }
-            
+            if(!store.getters.loadedShop) {
+                error({ statusCode: 404, message: '...Lỗi'})
+            }
         }
     }
 </script>

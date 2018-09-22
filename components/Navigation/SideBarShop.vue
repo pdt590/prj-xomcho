@@ -8,21 +8,6 @@
                 </nuxt-link>
                 <br>
                 <h4><b>{{shopData.title.substring(0, 10)}}</b></h4>
-                <!--
-                <picture-input 
-                    ref="pictureInput"
-                    width="600" 
-                    height="600" 
-                    margin="16" 
-                    accept="image/jpeg,image/png" 
-                    size="10" 
-                    button-class="btn"
-                    :custom-strings="{
-                        upload: '<h1>Bummer!</h1>',
-                        drag: 'Drag a 😺 GIF or GTFO'
-                    }"
-                    @change="onChange">
-                </picture-input>-->
             </div>
             <br>
             <div class="w3-bar-block">
@@ -161,15 +146,6 @@
             },
             onSave() {
                 this.isSave = !this.isSave
-            },
-            onChange (image) {
-                console.log('New picture selected!')
-                if (image) {
-                    console.log('Picture loaded.')
-                    this.image = image
-                } else {
-                    console.log('FileReader API not supported: use the <form>, Luke!')
-                }
             }
         }
     }
