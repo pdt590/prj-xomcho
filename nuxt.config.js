@@ -31,7 +31,8 @@ module.exports = {
 	css: [
         "~/assets/styles/w3.css",
         "~/assets/styles/dropzone.css",
-        "~/assets/styles/scrollbar.css",
+		"~/assets/styles/scrollbar.css",
+		"~/assets/styles/test.css"
 	],
 
 	/*
@@ -42,7 +43,7 @@ module.exports = {
 		{ src: '~plugins/date-filter.js'},
 		{ src: '~plugins/fb-filter.js'},
 		{ src: '~plugins/firebase.js'},
-		{ src: '~plugins/auth-listener.js', ssr: false},
+		{ src: '~plugins/auth-listener.js'},
 		{ src: '~plugins/test.js'}
 	],
 

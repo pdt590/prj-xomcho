@@ -1,0 +1,25 @@
+{
+  "rules": {
+    ".read": "true",
+    ".write": "auth != false",
+    "items": {
+      ".indexOn": [
+        "shopId",
+        "creatorId",
+        "updatedDate"
+      ]
+    },
+    "shops": {
+      ".indexOn": [
+        "shopId",
+        "creatorId",
+        "updatedDate"
+      ]
+    },
+    "users": {
+      ".indexOn": [
+        "email"
+      ]
+    }
+  }
+}

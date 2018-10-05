@@ -1,4 +1,3 @@
-<!-- https://github.com/alessiomaffeis/vue-picture-input -->
 <template>
     <section>
         <dropzone
@@ -10,7 +9,6 @@
             @vdropzone-files-added="filesAdded"
             @vdropzone-removed-file="fileRemoved"
         />
-        <!--<button class="w3-button w3-border" @click="test">Test</button>-->
     </section>
 </template>
 
@@ -50,12 +48,15 @@
                     autoProcessQueue: false,
                     maxFiles: this.maxImages,
                     maxFilesize: 2,
-                    acceptedFiles: 'image/jpeg, image/jpg, image/png',
                     resizeWidth: this.resizeWidth,
                     resizeHeight: this.resizeHeight,
-                    thumbnailWidth: 200,
+                    acceptedFiles: 'image/jpeg, image/jpg, image/png',
+                    thumbnailWidth: null,
                     addRemoveLinks: true,
                     dictDefaultMessage: "<i class='fa fa-cloud-upload w3-xxlarge'></i>",
+                    dictRemoveFile: "<div class= 'w3-large'> Xóa ảnh</div>",
+                    dictMaxFilesExceeded: "Lỗi! Số ảnh cho phép là {{maxFiles}}",
+                    dictFileTooBig: "Lỗi! Kích thước ảnh lớn nhất cho phép là {{maxFilesize}}MB"
                 }
             }
         },
@@ -80,11 +81,6 @@
                             <div class="dz-success-mark"><i class="fa fa-check"></i></div>
                             <div class="dz-error-mark"><i class="fa fa-close"></i></div>
                         </div>`
-            },
-            test() {
-                console.log(this.$refs.imgUpdoader.getAcceptedFiles())
-                console.log(this.$refs.imgUpdoader.getQueuedFiles())
-                console.log(this.$refs.imgUpdoader.getUploadingFiles())
             }
         }
     }
