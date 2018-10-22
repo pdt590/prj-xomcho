@@ -29,16 +29,18 @@ module.exports = {
 	** Global CSS
 	*/
 	css: [
-        "~assets/styles/w3.css",
-        "~assets/styles/dropzone.css",
-		"~assets/styles/scrollbar.css",
-		"~assets/styles/test.css"
+		'material-icons/iconfont/material-icons.css',
+        '~assets/styles/w3.css',
+        '~assets/styles/dropzone.css',
+		'~assets/styles/scrollbar.css',
+		'~assets/styles/test.css'
 	],
 
 	/*
 	** Plugins to load before mounting the App
 	*/
 	plugins: [
+		{ src: '~plugins/vuesax.js'},
         { src: '~plugins/components.js'},
 		{ src: '~plugins/date-filter.js'},
 		{ src: '~plugins/fb-filter.js'},
