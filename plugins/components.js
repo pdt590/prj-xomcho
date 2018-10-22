@@ -11,6 +11,8 @@ import ItemCardHome from "~/components/UI/Card/ItemCardHome"
 import ItemCardShop from "~/components/UI/Card/ItemCardShop"
 import ShopCardHome from "~/components/UI/Card/ShopCardHome"
 import ImageUploader from "~/components/UI/ImageUploader"
+import LogoUploader from "~/components/UI/LogoUploader"
+import AvatarUploader from "~/components/UI/AvatarUploader"
 import ItemTypes from "~/components/UI/ItemTypes"
 import Loading from "~/components/UI/Loading"
 
@@ -25,7 +27,6 @@ import SliderHomeShop from "~/components/UI/SliderHomeShop"
 import SliderShopPanel from "~/components/UI/SliderShopPanel"
 import SliderItemImage from "~/components/UI/SliderItemImage"
 
-//import vuescroll from 'vuescroll'
 
 Vue.component('app-navbar', NavBar)
 Vue.component('app-navbar-mobile', NavBarMobile)
@@ -33,6 +34,8 @@ Vue.component('app-sidebar-shop', SideBarShop)
 Vue.component('app-sidebar-inbox', SideBarInbox)
 Vue.component('app-footer', Footer)
 Vue.component('app-img-uploader', ImageUploader)
+Vue.component('app-logo-uploader', LogoUploader)
+Vue.component('app-avatar-uploader', AvatarUploader)
 Vue.component('app-item-types', ItemTypes)
 Vue.component('app-loading', Loading)
 
@@ -51,6 +54,3 @@ Vue.component('app-slider-homepanel', SliderHomePanel)
 Vue.component('app-slider-homeshop', SliderHomeShop)
 Vue.component('app-slider-shoppanel', SliderShopPanel)
 Vue.component('app-slider-item', SliderItemImage)
-
-
-//Vue.use(vuescroll)

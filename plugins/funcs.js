@@ -28,3 +28,7 @@ export function getKey(object, value) {
 export function genUrl(title, key) {
     return title.replace(/\s+/g, '-').toLowerCase() + '-' + key.substring(0, 5)
 }
+
+export function deepCopy(arg) {
+    return JSON.parse(JSON.stringify(arg))
+}

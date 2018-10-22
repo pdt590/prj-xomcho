@@ -38,11 +38,15 @@ export default {
         }
     },
     actions: {
-        async addItem (vuexContext, item) {
+        async addItem (vuexContext, payload) {
             vuexContext.commit('setItemLoading', true)
             try {
-                const newUploadedImages = []
-                const newUnUploadedImages = item.images
+                const shopId = vuexContext.getters.loadedShop.shopId
+                const userId = vuexContext.getters.user.id
+                const item = payload.item
+                const newUnUploadedImages = payload.images
+                const newUploadedImageObjects = []
+                
                 const storageMetadata = {
                     cacheControl: 'public,max-age=31536000',
                 }
@@ -54,24 +58,24 @@ export default {
                         const metaData = { 
                             name: newImgName, 
                             size: image.size, 
-                            creatorId: vuexContext.getters.user.id,
-                            shopId: vuexContext.getters.loadedShop.shopId,
+                            creatorId: userId,
+                            shopId: shopId,
                             itemId: itemId
                         }
                         await firebase.storage().ref('items/' + newImgName).put(image, storageMetadata)
                         const imgDownloadUrl = await firebase.storage().ref('items/' + newImgName).getDownloadURL()
-                        newUploadedImages.push({url: imgDownloadUrl, metadata: metaData})
+                        newUploadedImageObjects.push({url: imgDownloadUrl, metadata: metaData})
                     }
                 }
                 const newItem = {
                     ...item,
-                    images: newUploadedImages,
-                    shopId: vuexContext.getters.loadedShop.shopId,
-                    creatorId: vuexContext.getters.user.id,
+                    images: newUploadedImageObjects,
+                    shopId: shopId,
+                    creatorId: userId,
                     updatedDate: new Date().toISOString()
                 }
-                
                 await itemsRef.child(itemId).set(newItem)
+                if(!newItem.images.length) delete newItem.images
                 vuexContext.commit('addItem', {
                     itemId: itemId,
                     ...newItem
@@ -134,7 +138,8 @@ export default {
                 const updatedItem = {
                     ...editedItem,
                     itemId: null, // ? remove itemId prop in the object when uploading to firebase
-                    title: editedItem.title
+                    title: editedItem.title,
+                    updatedDate: new Date().toISOString()
                 }
                 update[oldItemId] = null
                 update[newItemId] = updatedItem
@@ -154,38 +159,44 @@ export default {
                 vuexContext.commit('setItemLoading', false)
             }
         },
-        async updateItemImg (vuexContext, editedItem) {
+        async updateItemImg (vuexContext, payload) {
             vuexContext.commit('setItemLoading', true)
             try {
-                const itemId = editedItem.itemId
+                const itemId = payload.itemId
                 const loadedItem = vuexContext.getters.loadedItem(itemId)
-                const oldUploadedImages = []
-                const newUploadedImages = []
+                const newImages = payload.images // ? Include Objects and Image Files
+                const oldImageObjects = []
                 const newUnUploadedImages = []
+                const newUploadedImageObjects = []
                 const storageMetadata = {
                     cacheControl: 'public,max-age=31536000',
                 }
                 if(loadedItem.images !== undefined) {
                     loadedItem.images.forEach (
-                        image => oldUploadedImages.push(image)
+                        image => oldImageObjects.push(image)
                     )
                 }
-                if(editedItem.images.length) {
-                    editedItem.images.forEach(image => {
+                if(newImages.length) {
+                    newImages.forEach(image => {
                         if(image.url !== undefined) {
-                            newUploadedImages.push(image)
-                            const index = oldUploadedImages.findIndex(oldImage => {
+                            newUploadedImageObjects.push(image)
+                            const index = oldImageObjects.findIndex(oldImage => {
                                 return image.url === oldImage.url
                             })
-                            if(index >= 0) oldUploadedImages.splice(index, 1)
+                            if(index >= 0) oldImageObjects.splice(index, 1)
                         }else {
                             newUnUploadedImages.push(image)
                         }
-                    })         
-                    if(oldUploadedImages.length !=0) {
-                        await Promise.all(oldUploadedImages.map( async (image) => {
+                    })
+                    // * delete removed images         
+                    if(oldImageObjects.length) {
+                        await Promise.all(oldImageObjects.map( async (image) => {
                             await firebase.storage().ref('items/' + image.metadata.name).delete()
                         }))
+                    }
+                    if(!newUnUploadedImages.length && !oldImageObjects.length){
+                        vuexContext.commit('setItemLoading', false)
+                        return
                     }
                     if(newUnUploadedImages.length != 0) {
                         for (const image of newUnUploadedImages) {
@@ -200,22 +211,23 @@ export default {
                             }
                             await firebase.storage().ref('items/' + newImgName).put(image, storageMetadata)
                             const imgDownloadUrl = await firebase.storage().ref('items/' + newImgName).getDownloadURL()
-                            newUploadedImages.push({url: imgDownloadUrl, metadata: metaData})
+                            newUploadedImageObjects.push({url: imgDownloadUrl, metadata: metaData})
                         }
                     }
                 }
                 // ? Console.log run async, it is located at various location an it just prints the final value of a var 
                 // ? when it is called in a function
-                // ? console.log(oldUploadedImages, newUploadedImages, newUnUploadedImages)
+                // ? console.log(oldImageObjects, newUploadedImageObjects, newUnUploadedImages)
                 const update = {
-                    images: newUploadedImages
+                    images: newUploadedImageObjects,
+                    updatedDate: new Date().toISOString()
                 }
                 await itemsRef.child(itemId).update(update)
                 const updatedItem = {
-                    ...editedItem,
-                    ...update,
-                    updatedDate: new Date().toISOString()
+                    ...loadedItem,
+                    ...update
                 }
+                if(!updatedItem.images.length) delete updatedItem.images
                 vuexContext.commit('updateItemContent', updatedItem)
                 vuexContext.commit('setItemLoading', false)
             } catch(error) {

@@ -73,10 +73,14 @@
 
                     <div id="updateImg" class="w3-margin-bottom section" style="min-height: 800px; display:none">
                         <h6><strong>Ảnh sản phẩm (tối đa 4 ảnh)</strong></h6><br>
-                        <app-img-uploader :displayedImages="editedItemData.images" :maxImages="4" @imagesAdded="onImagesAdded" @imageRemoved="onImageRemoved" />
+                        <app-img-uploader 
+                            :displayedImages="displayedItemImages" 
+                            :maxImages="4" 
+                            @imagesAdded="onImagesAdded" 
+                            @imageRemoved="onImageRemoved" />
                         <br>
                         <div class="w3-row">
-                            <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdateItemImage" :disabled="$v.editedItemData.images.$invalid">
+                            <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdateItemImage">
                                 <i class="w3-xlarge w3-margin-right" :class="itemLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Lưu thay đổi
                             </button>
                         </div>
@@ -127,6 +131,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
+    import { deepCopy } from '~/plugins/funcs'
     import { required, email, decimal, sameAs, maxLength} from 'vuelidate/lib/validators'
     import Vue from 'vue'
     import Vuelidate from 'vuelidate'
@@ -169,13 +174,19 @@
             }
         },
         created() {
-            this.editedItemData = JSON.parse(JSON.stringify(this.loadedItem))
-            this.editedItemData = this.editedItemData.images ? this.editedItemData : { ...this.editedItemData, images: []}
+            this.editedItemData = deepCopy(this.loadedItem)
+            const itemImages = this.loadedItem.images
+            if(itemImages !== undefined) {
+                this.displayedItemImages = deepCopy(itemImages)
+                this.newItemImages = deepCopy(itemImages)
+            }
         },
         data() {
             return {
                 deletedItemTitle: '',
-                editedItemData: {} // ? cannot set computed directly to data prop because data() is created before computed()
+                editedItemData: {},
+                displayedItemImages: [],
+                newItemImages: []
             }   
         },
         validations: {
@@ -202,9 +213,6 @@
                 },
                 types: {
                     required
-                },
-                images: {
-                    maxLen: maxLength(4)
                 }
             },
             deletedItemTitle: {
@@ -229,60 +237,39 @@
                 }
                 document.getElementById(arg).style.display = "block"
                 event.currentTarget.firstElementChild.className += " w3-border-red"
-                this.editedItemData = JSON.parse(JSON.stringify(this.loadedItem)) // ? Reset changes when switching tab
+                this.editedItemData = deepCopy(this.loadedItem) // ? Reset changes when switching tab
             },
             async onUpdateItemContent() {  
-                try{
-                    await this.$store.dispatch('updateItemContent', this.editedItemData)
-                    this.$router.push("/shops/" + this.$route.params.shopId + '/' + this.$route.params.itemId)
-                } catch(error){
-                    console.log('[_ERROR] ' + error)
-                    context.error({ statusCode: 500, message: '...Lỗi' })
-                }
+                await this.$store.dispatch('updateItemContent', this.editedItemData)
+                this.$router.push("/shops/" + this.$route.params.shopId + '/' + this.$route.params.itemId)
             },
             async onUpdateItemTitle() {
-                try{
-                    const newItemId = await this.$store.dispatch('updateItemTitle', this.editedItemData)
-                    this.$router.push('/shops/' + this.$route.params.shopId + '/' + newItemId)
-                } catch(error){
-                    console.log('[_ERROR] ' + error)
-                    context.error({ statusCode: 500, message: '...Lỗi' })
-                }
+                const newItemId = await this.$store.dispatch('updateItemTitle', this.editedItemData)
+                this.$router.push('/shops/' + this.$route.params.shopId + '/' + newItemId)
             },
-            async onUpdateItemImage() { 
-                try{
-                    await this.$store.dispatch('updateItemImg', this.editedItemData)
-                    this.$router.push("/shops/" + this.$route.params.shopId + '/' + this.$route.params.itemId)
-                } catch(error){
-                    console.log('[_ERROR] ' + error)
-                    context.error({ statusCode: 500, message: '...Lỗi' })
+            async onUpdateItemImage() {
+                const payload = {
+                    itemId: this.loadedItem.itemId,
+                    images: this.newItemImages
                 }
+                await this.$store.dispatch('updateItemImg', payload)
+                this.$router.push("/shops/" + this.$route.params.shopId + '/' + this.$route.params.itemId)
             },
             async onDeleteItem() {
-                try{
-                    await this.$store.dispatch('deleteItem', this.loadedItem)
-                    this.$router.push('/shops/' + this.$route.params.shopId)
-                } catch(error){
-                    console.log('[_ERROR] ' + error)
-                    context.error({ statusCode: 500, message: '...Lỗi' })
-                }
+                await this.$store.dispatch('deleteItem', this.loadedItem)
+                this.$router.push('/shops/' + this.$route.params.shopId)
             },
             onImagesAdded(addedImages) {
-                console.log('thang1', addedImages)
                 addedImages.forEach( addedImage => {
-                    if(this.editedItemData.images !== undefined) {
-                        const index = this.editedItemData.images.findIndex( image => image === addedImage)
-                        if(index >= 0) this.editedItemData.images.splice(index, 1)
-                    }
+                    const index = this.newItemImages.findIndex( image => image === addedImage)
+                    if(index >= 0) this.newItemImages.splice(index, 1)
                 })
                 for(let key in addedImages) {
-                    this.editedItemData.images.push(addedImages[key])
+                    this.newItemImages.push(addedImages[key])
                 }
-                console.log('thang2', this.editedItemData.images)
             },
             onImageRemoved(removedImage) {
-                console.log('thang3', removedImage)
-                const index = this.editedItemData.images.findIndex( image => {
+                const index = this.newItemImages.findIndex( image => {
                         if(removedImage.manuallyAdded !== undefined && removedImage.manuallyAdded === true) {
                             return image.metadata.name === removedImage.name 
                         } else {
@@ -291,8 +278,7 @@
                             }
                         }
                     })
-                if(index >= 0) this.editedItemData.images.splice(index, 1)
-                console.log('thang4', this.editedItemData.images)
+                if(index >= 0) this.newItemImages.splice(index, 1)
             }
         }
     }

@@ -1,7 +1,7 @@
 <template>
     <section>
-        <div v-if="displayedImages.length" v-for="(img, i) in displayedImages" :key="i">
-            <img class="w3-image" :src="img.url" style="width: 200%;">
+        <div v-if="displayedImages.length" v-for="(img, i) in displayedImages" :key="i" class="reframe">
+            <img class="w3-image" :src="img.url" >
         </div>
     </section>
 </template>
@@ -16,7 +16,7 @@
         },
         computed: {
             displayedImages() {
-                if(this.images === undefined || !this.images.length) {
+                if(this.images === undefined) {
                     return []
                 }else {
                     return this.images
@@ -25,3 +25,11 @@
         }
     }
 </script>
+
+<style scoped>
+    .reframe {
+        height: 300px;
+        width: 100%;
+        overflow: hidden;
+    }
+</style>

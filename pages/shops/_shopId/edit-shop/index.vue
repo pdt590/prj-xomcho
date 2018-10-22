@@ -7,10 +7,10 @@
                     <div class="w3-row">
                         <a href="javascript:void(0)" @click="openTab($event, 'updateShop')">
                             <div class="w3-col l3 m3 s3 tablink w3-bottombar w3-hover-light-grey w3-padding w3-border-red">
-                                <h5><strong>Sửa</strong></h5>
+                                <h5><strong>Thông tin</strong></h5>
                             </div>
                         </a>
-                        <a href="javascript:void(0)" @click="openTab($event, 'shopImg')">
+                        <a href="javascript:void(0)" @click="openTab($event, 'shopLogo')">
                             <div class="w3-col l3 m3 s3 tablink w3-bottombar w3-hover-light-grey w3-padding">
                                 <h5><strong>Logo</strong></h5>
                             </div>
@@ -76,18 +76,37 @@
                         </div>
                     </form>
 
-                    <div id="shopImg" class="w3-margin-bottom section" style="display:none; min-height: 800px">
-                        <h6><strong>Ảnh logo</strong></h6><br>
-                        <app-img-uploader :maxImages="1" />
-                        <br>
+                    <div id="shopLogo" class="w3-margin-bottom section" style="display:none; min-height: 800px">
+                        <div style="max-width:300px; margin: auto">
+                            <h6><strong>Ảnh logo</strong></h6><br>
+                            <app-logo-uploader 
+                                :displayedLogo="displayedLogo" 
+                                :maxImages="1" 
+                                :resizeWidth="100" 
+                                :resizeHeight="100"
+                                @logoAdded="onLogoAdded" 
+                                @logoRemoved="onLogoRemoved" />
+                            <br>
+                            <div class="w3-row">
+                                <button class="w3-button w3-border w3-border-blue w3-right w3-mobile" @click.prevent="onUpdateShopLogo">
+                                    <i class="w3-xlarge w3-margin-right" :class="shopLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Lưu thay đổi
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <div id="panelImg" class="w3-margin-bottom section" style="display:none; min-height: 800px">
                         <h6><strong>Ảnh panel</strong></h6><br>
-                        <app-img-uploader :displayedImages="editedShopData.images" :maxImages="1" :resizeWidth="100" :resizeHeight="50" @imagesAdded="onImagesAdded" @imageRemoved="onImageRemoved" />
+                        <app-img-uploader 
+                            :displayedImages="displayedImages" 
+                            :maxImages="1" 
+                            :resizeWidth="100" 
+                            :resizeHeight="100"
+                            @imagesAdded="onImagesAdded" 
+                            @imageRemoved="onImageRemoved" />
                         <br>
                         <div class="w3-row">
-                            <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdateShopImage" :disabled="$v.editedShopData.images.$invalid">
+                            <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdateShopImage">
                                 <i class="w3-xlarge w3-margin-right" :class="shopLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Lưu thay đổi
                             </button>
                         </div>
@@ -139,6 +158,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import provinceList from '~/plugins/province-list'
+    import { deepCopy } from '~/plugins/funcs'
     import { required, email, numeric, sameAs, maxLength } from 'vuelidate/lib/validators'
     import Vue from 'vue'
     import Vuelidate from 'vuelidate'
@@ -178,13 +198,30 @@
             }
         },
         created() {
-            this.editedShopData = JSON.parse(JSON.stringify(this.loadedShop))
-            this.editedShopData = this.editedShopData.images ? this.editedShopData : { ...this.editedShopData, images: []}
+            this.editedShopData = deepCopy(this.loadedShop)
+            // TODO: displayedLogo and displayedImages object will be changed when they are assigned to preview mode of dropzone
+            const shopLogo = this.loadedShop.logo
+            const shopImages = this.loadedShop.images
+            if(shopLogo !== undefined) {
+                this.displayedLogo = deepCopy(shopLogo)
+                this.newShopLogo = deepCopy(shopLogo)
+            }
+            if(shopImages !== undefined) {
+                this.displayedImages = deepCopy(shopImages)
+                this.newShopImages = deepCopy(shopImages)
+            }
         },
         data() {
             return {
                 deletedShopTitle: '',
                 editedShopData: {},
+                displayedLogo: {
+                    metadata: null,
+                    url: null
+                },
+                displayedImages: [],
+                newShopLogo: null,
+                newShopImages: [],
                 provinceList: provinceList
             }
         },
@@ -212,10 +249,6 @@
                 },
                 itemTypes: {
                     required
-                },
-                logo: {},
-                images: {
-                    maxLen: maxLength(2)
                 }
             },
             deletedShopTitle: {
@@ -230,77 +263,64 @@
         methods: {
             openTab(event, arg) {
                 let i, x, tablinks;
-                x = document.getElementsByClassName("section");
+                x = document.getElementsByClassName("section")
                 for (i = 0; i < x.length; i++) {
-                    x[i].style.display = "none";
+                    x[i].style.display = "none"
                 }
-                tablinks = document.getElementsByClassName("tablink");
+                tablinks = document.getElementsByClassName("tablink")
                 for (i = 0; i < x.length; i++) {
-                    tablinks[i].className = tablinks[i].className.replace(" w3-border-red", "");
+                    tablinks[i].className = tablinks[i].className.replace(" w3-border-red", "")
                 }
-                document.getElementById(arg).style.display = "block";
-                event.currentTarget.firstElementChild.className += " w3-border-red";
+                document.getElementById(arg).style.display = "block"
+                event.currentTarget.firstElementChild.className += " w3-border-red"
+                this.editedShopData = deepCopy(this.loadedShop)
             },
             async onUpdateShopContent() {       
-                try{
-                    await this.$store.dispatch('updateShopContent', this.editedShopData)
-                    this.$router.push("/shops/" + this.$route.params.shopId)
-                } catch(error){
-                    console.log('[_ERROR] ' + error)
-                    context.error({ statusCode: 500, message: '...Lỗi' })
-                }
+                await this.$store.dispatch('updateShopContent', this.editedShopData)
+                this.$router.push("/shops/" + this.$route.params.shopId + '/edit-shop')
             },
             async onUpdateShopTitle() {
-                try{
-                    const newShopId = await this.$store.dispatch('updateShopTitle', this.editedShopData)
-                    this.$router.push('/shops/' + newShopId)
-                } catch(error){
-                    console.log('[_ERROR] ' + error)
-                    context.error({ statusCode: 500, message: '...Lỗi' })
-                }
+                const newShopId = await this.$store.dispatch('updateShopTitle', this.editedShopData)
+                this.$router.push('/shops/' + newShopId + '/edit-shop')
+            },
+            async onUpdateShopLogo() {
+                await this.$store.dispatch('updateShopLogo', this.newShopLogo)
+                this.$router.push('/shops/' + this.$route.params.shopId + '/edit-shop')
             },
             async onUpdateShopImage() {  
-                try{
-                    await this.$store.dispatch('updateShopImg', this.editedShopData)
-                    this.$router.push("/shops/" + this.$route.params.shopId)
-                } catch(error){
-                    console.log('[_ERROR] ' + error)
-                    context.error({ statusCode: 500, message: '...Lỗi' })
-                }
+                await this.$store.dispatch('updateShopImg', this.newShopImages)
+                this.$router.push('/shops/' + this.$route.params.shopId + '/edit-shop')
             },
             async onDeleteShop() {
-                try{
-                    await this.$store.dispatch('deleteShop', this.loadedShop)
-                    this.$router.push('/')
-                } catch(error){
-                    console.log('[_ERROR] ' + error)
-                    context.error({ statusCode: 500, message: '...Lỗi' })
-                }
+                await this.$store.dispatch('deleteShop', this.loadedShop)
+                this.$router.push('/')
+            },
+            onLogoAdded(addedImages) {
+                this.newShopLogo = addedImages[0]
+            },
+            onLogoRemoved(removedImage) {
+                this.newShopLogo = null
             },
             onImagesAdded(addedImages) {
-                console.log('thang1', addedImages)
                 addedImages.forEach( addedImage => { 
-                    const index = this.editedShopData.images.findIndex( image => image === addedImage)
-                    if(index >= 0) this.editedShopData.images.splice(index, 1)
+                    const index = this.newShopImages.findIndex( image => image === addedImage)
+                    if(index >= 0) this.newShopImages.images.splice(index, 1)
                 })
                 for(let key in addedImages) {
-                    this.editedShopData.images.push(addedImages[key])
+                    this.newShopImages.push(addedImages[key])
                 }
-                console.log('thang2', this.editedShopData.images)
             },
             onImageRemoved(removedImage) {
-                console.log('thang3', removedImage) //TODO: Why the cmd executes after editing images
-                const index = this.editedShopData.images.findIndex( image => {
+                const index = this.newShopImages.findIndex( image => {
                         if(removedImage.manuallyAdded !== undefined && removedImage.manuallyAdded === true) {
                             return image.metadata.name === removedImage.name 
-                        } else {
+                        }else {
                             if(removedImage.accepted) {
                                 return image.name === removedImage.name
                             }
                         }
                     })
-                if(index >= 0) this.editedShopData.images.splice(index, 1)
-                console.log('thang4', this.editedShopData.images)
+                if(index >= 0) this.newShopImages.splice(index, 1)
             }
         }
     }

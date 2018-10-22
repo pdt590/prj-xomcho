@@ -4,9 +4,9 @@
         <app-navbar-mobile :navItems="navItems" />
         <div class="w3-content w3-padding-64" style="max-width:100%">
             <!-- Sidebar left -->
-            <div v-if="user" class="w3-sidebar w3-collapse w3-light-grey w3-top w3-padding-64" style="z-index:1000;width:270px;" ref="mySidebar">
+            <div v-if="user" class="w3-sidebar w3-collapse w3-light-grey w3-top w3-padding-64" style="z-index:3;width:270px;" ref="mySidebar">
                 <div class="w3-container w3-center w3-margin">
-                    <nuxt-link to="/user/profile">
+                    <nuxt-link :to="'/shops/' + $route.params.shopId">
                         <img :src="user.avatar !== undefined ? user.avatar.url : '/icon-user.png'" class="w3-circle reframe">
                     </nuxt-link>
                     <br>
@@ -67,6 +67,38 @@
                         </a>
                     </div>
 
+                    <a class="w3-bar-item w3-button" @click="extInfo()">
+                        <div class="w3-row">
+                            <div class="w3-col l2 m2 s2">
+                                <i class="fa fa-user w3-xlarge w3-margin-right"></i>
+                            </div>
+                            <div class="w3-col l10 m10 s10">
+                                <h6 class="mySideBar">Thông tin cá nhân</h6> <i class="w3-right" :class="caretInfo ? 'fa fa-caret-down' :'fa fa-caret-up'"></i>
+                            </div>
+                        </div>
+                    </a>
+                    <div id="subInfo" class="w3-hide">
+                        <a class="w3-bar-item w3-button tablink" @click="openTab($event, 't_info')">
+                            <i class="fa fa-circle-o w3-margin-left w3-margin-right"></i>
+                            <h6 class="mySideBar">Cài đặt thông tin</h6>
+                        </a>
+                        <a class="w3-bar-item w3-button tablink" @click="openTab($event, 't_avatar')">
+                            <i class="fa fa-circle-o w3-margin-left w3-margin-right"></i>
+                            <h6 class="mySideBar">Ảnh đại diện</h6>
+                        </a>
+                        <a class="w3-bar-item w3-button tablink" @click="openTab($event, 't_email')">
+                            <i class="fa fa-circle-o w3-margin-left w3-margin-right"></i>
+                            <h6 class="mySideBar">Đổi email</h6>
+                        </a>
+                        <a class="w3-bar-item w3-button tablink" @click="openTab($event, 't_password')">
+                            <i class="fa fa-circle-o w3-margin-left w3-margin-right"></i>
+                            <h6 class="mySideBar">Đổi mật khẩu</h6>
+                        </a>
+                        <a class="w3-bar-item w3-button tablink" @click="openTab($event, 't_user')">
+                            <i class="fa fa-circle-o w3-margin-left w3-margin-right"></i>
+                            <h6 class="mySideBar">Xóa tài khoản</h6>
+                        </a>
+                    </div>
                 </div>
             </div>
             <!-- Overlay effect when opening sidebar on small screens -->
@@ -163,7 +195,125 @@
                                 </div>
                             </li>
                         </ul>
-                    </div> 
+                    </div>
+
+                    <div id="t_info" class="w3-padding-24 section" style="display: none; min-height: 1300px">
+                        <form style="max-width:600px; margin: auto">
+                            <h5><strong>Thông tin cá nhân</strong></h5><br>
+                            <div class="w3-row-padding" style="margin:0 -16px;">
+                                <div class="w3-half w3-margin-bottom">
+                                    <label><i class="fa fa-address-book-o w3-large"></i><strong> Username *</strong></label>
+                                    <input class="w3-input w3-border" type="text" v-model.trim="editedUserData.username">
+                                </div>
+                                <div class="w3-half w3-margin-bottom">
+                                    <label><i class="fa fa-address-card-o w3-large"></i><strong> Họ và tên</strong></label>
+                                    <input class="w3-input w3-border" type="text" v-model.trim="editedUserData.fullname">
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="w3-row-padding" style="margin:0 -16px;">
+                                <div class="w3-half w3-margin-bottom">
+                                    <label><i class="fa fa-tablet w3-large"></i><strong> Số điện thoại</strong></label>
+                                    <input class="w3-input w3-border" type="tel" v-model.trim="editedUserData.phone">
+                                </div>
+                                <div class="w3-half w3-margin-bottom">
+                                    <label><i class="fa fa-envelope-o w3-large"></i><strong> Email</strong></label>
+                                    <input class="w3-input w3-border" disabled type="email" v-model.trim="editedUserData.email">
+                                </div>
+                            </div>
+                            <div class="w3-row-padding" style="margin:0 -16px;">
+                                <div class="w3-half w3-margin-bottom">
+                                    <label><i class="fa fa-facebook-f w3-large"></i><strong> Facebook</strong></label>
+                                    <input class="w3-input w3-border" type="text" v-model.trim="editedUserData.facebook" placeholder="">
+                                </div>
+                                <div class="w3-half">
+                                    <label><i class="fa fa-map-o w3-large"></i><strong> Địa chỉ</strong></label>
+                                    <input class="w3-input w3-border" type="text" v-model.trim="editedUserData.address" placeholder="" >
+                                </div>
+                            </div>
+                            <hr>
+                            <br>
+                            <div class="w3-row">
+                                <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdateUserInfo" :disabled="$v.editedUserData.$invalid">
+                                    <i class="w3-xlarge w3-margin-right" :class="authLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Lưu
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="t_avatar" class="w3-padding-24 section" style="display: none; min-height: 1300px">
+                        <h5><strong>Ảnh đại diện</strong></h5><br>
+                        <app-avatar-uploader 
+                            :displayedAvatar="displayedAvatar" 
+                            :maxImages="1" 
+                            :resizeWidth="100" 
+                            :resizeHeight="100"
+                            @avatarAdded="onAvatarAdded" 
+                            @avatarRemoved="onAvatarRemoved" />
+                        <br>
+                        <div class="w3-row">
+                            <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdateAvatar">
+                                <i class="w3-xlarge w3-margin-right" :class="authLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Lưu thay đổi
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="t_email" class="w3-padding-24 section" style="display: none; min-height: 1300px">
+                        <h5><strong>Đổi email</strong></h5><br>
+                        <form style="max-width:600px; margin: auto"> 
+                            <div class="w3-margin-bottom">
+                                <label><strong>Nhập email mới *</strong></label>
+                                <input class="w3-input w3-border" type="text" v-model.trim="editedUserData.email">
+                            </div>
+                            <div class="w3-margin-bottom">
+                                <label><strong>Xác nhận email *</strong></label>
+                                <input class="w3-input w3-border" type="text" v-model.trim="confirmedEmail">
+                            </div>
+                            <div class="w3-row">
+                                <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdateEmail" :disabled="$v.editedUserData.email.$invalid || $v.confirmedEmail.$invalid">
+                                    <i class="w3-xlarge w3-margin-right" :class="authLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Lưu
+                                </button>
+                            </div>
+                        </form>
+                    </div>  
+
+                    <div id="t_password" class="w3-padding-24 section" style="display: none; min-height: 1300px">
+                        <h5><strong>Đổi mật khẩu</strong></h5><br>
+                        <form style="max-width:600px; margin: auto"> 
+                            <div class="w3-margin-bottom">
+                                <label><strong>Nhập mật khẩu mới *</strong></label>
+                                <input class="w3-input w3-border" type="password" v-model.trim="password">
+                            </div>
+                            <div class="w3-margin-bottom">
+                                <label><strong>Xác nhận khẩu *</strong></label>
+                                <input class="w3-input w3-border" type="password" v-model.trim="confirmedPassword">
+                            </div>
+                            <div class="w3-row">
+                                <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onUpdatePassword" :disabled="$v.password.$invalid || $v.confirmedPassword.$invalid">
+                                    <i class="w3-xlarge w3-margin-right" :class="authLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Lưu
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div id="t_user" class="w3-padding-24 section" style="display: none; min-height: 1300px">
+                        <h5><strong>Xóa tài khoản</strong></h5><br>
+                        <form style="max-width:600px; margin: auto"> 
+                            <div class="w3-margin-bottom">
+                                <label><strong> Email</strong></label>
+                                <input class="w3-input w3-border" type="text" disabled v-model.trim="editedUserData.email">
+                            </div>
+                            <div class="w3-margin-bottom">
+                                <label><strong> Nhập tên email *</strong></label>
+                                <input class="w3-input w3-border" type="text" v-model.trim="deletedUserEmail">
+                            </div>
+                            <div class="w3-row">
+                                <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onDeleteUser" :disabled="$v.deletedUserEmail.$invalid">
+                                    <i class="w3-xlarge w3-margin-right" :class="authLoading ? 'fa fa-spinner fa-spin' : 'fa fa-close'"></i>Xóa
+                                </button>
+                            </div>
+                        </form>
+                    </div>    
 
                 </div>
                 <hr>
@@ -178,6 +328,11 @@
 
 <script>
     import { mapGetters } from 'vuex'
+    import { deepCopy } from '~/plugins/funcs'
+    import { required, email, numeric, sameAs, minLength } from 'vuelidate/lib/validators'
+    import Vue from 'vue'
+    import Vuelidate from 'vuelidate'
+    Vue.use(Vuelidate)
 
     export default {
         middleware: ['check-auth', 'auth'],
@@ -214,13 +369,77 @@
                 error({ statusCode: 500, message: '...Lỗi' })
             }
         },
+        created() {
+            this.editedUserData = deepCopy(this.user)
+            const avatar = this.user.avatar
+            if(avatar !== undefined){
+                this.displayedAvatar = deepCopy(avatar)
+                this.newAvatar = deepCopy(avatar)
+            }
+        },
         data() {
             return {
                 navItems: [
                     {link: '/shops/new-shop', icon: 'fa fa-plus-square', title: 'Tạo cửa hàng'}
                 ],
+                deletedUserEmail: '',
+                editedUserData: {},
+                password: '',
+                confirmedPassword: '',
+                confirmedEmail: '',
+                displayedAvatar: {
+                    metadata: null,
+                    url: null
+                },
+                newAvatar: null,
                 caretShop: false,
                 caretItem: false,
+                caretInfo: false
+            }
+        },
+        validations: {
+            editedUserData: {
+                username: {
+                    required,
+                    minLen: minLength(6)
+                },
+                fullname: {},
+                email: {
+                    required,
+                    email
+                },
+                phone: {
+                    numeric
+                },
+                facebook: {},
+                address: {},
+                avatar: {}
+            },
+            deletedUserEmail: {
+                required,
+                sameAs: sameAs(vm => {
+                    if(vm.user !== null) {
+                        return vm.user.email
+                    }
+                })
+            },
+            password: {
+                required,
+                minLen: minLength(6)
+            },
+            confirmedPassword: {
+                required,
+                minLen: minLength(6),
+                sameAs: sameAs('password')
+            },
+            confirmedEmail: {
+                required,
+                email,
+                sameAs: sameAs(vm => {
+                    if(vm.editedUserData !== null) {
+                        return vm.editedUserData.email
+                    }
+                })
             }
         },
         methods: {
@@ -236,6 +455,7 @@
                 }
                 document.getElementById(arg).style.display = "block"
                 event.currentTarget.className += " app-hover"
+                this.editedUserData = deepCopy(this.user)
                 //this.closeSideBar()
             },
             closeSideBar() {
@@ -259,7 +479,42 @@
                     x.className = x.className.replace(" w3-show", "")
                 }
                 this.caretItem = !this.caretItem
-            }
+            },
+            extInfo() {
+                let x = document.getElementById("subInfo")
+                if (x.className.indexOf("w3-show") == -1) {
+                    x.className += " w3-show"
+                } else {
+                    x.className = x.className.replace(" w3-show", "")
+                }
+                this.caretInfo = !this.caretInfo
+            },
+            async onUpdateUserInfo() {
+                await this.$store.dispatch('updateUserInfo', this.editedUserData)
+                this.$router.push("/user/mgmt")
+            },
+            async onUpdateEmail() {
+                await this.$store.dispatch('updateEmail', this.editedUserData)
+                this.$router.push("/user/mgmt")
+            },
+            async onUpdatePassword() {
+                await this.$store.dispatch('updatePassword', this.password)
+                this.$router.push("/user/mgmt")
+            },
+            async onUpdateAvatar() {
+                await this.$store.dispatch('updateAvatar', this.newAvatar)
+                this.$router.push('/user/mgmt')
+            },
+            async onDeleteUser() {
+                await this.$store.dispatch('deleteUser', this.user)
+                this.$router.push('/')
+            },
+            onAvatarAdded(addedImages) {
+                this.newAvatar = addedImages[0]
+            },
+            onAvatarRemoved(removedImage) {
+                this.newAvatar = null
+            },
         }
     }
 </script>

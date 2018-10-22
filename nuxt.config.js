@@ -29,10 +29,10 @@ module.exports = {
 	** Global CSS
 	*/
 	css: [
-        "~/assets/styles/w3.css",
-        "~/assets/styles/dropzone.css",
-		"~/assets/styles/scrollbar.css",
-		"~/assets/styles/test.css"
+        "~assets/styles/w3.css",
+        "~assets/styles/dropzone.css",
+		"~assets/styles/scrollbar.css",
+		"~assets/styles/test.css"
 	],
 
 	/*

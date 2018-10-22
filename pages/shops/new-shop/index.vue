@@ -9,13 +9,21 @@
                 </a>
             </div>
             <br>
-            <div class="w3-margin-bottom section">
-                <h6><strong>Ảnh panel</strong></h6><br>
-                <app-img-uploader :maxImages="1" @imagesAdded="onImagesAdded" @imageRemoved="onImageRemoved"/>
-                <br>
+            <div class="w3-row w3-margin-bottom">
+                <div class="w3-half" style="padding:1px">
+                    <h6><strong>Ảnh logo</strong></h6>
+                    <app-logo-uploader :maxImages="1" @logoAdded="onLogoAdded" @logoRemoved="onLogoRemoved"/>
+                </div>
+                <div class="w3-half" style="padding:1px ">
+                    <h6><strong>Ảnh panel</strong></h6>
+                    <app-img-uploader 
+                        :maxImages="1" 
+                        @imagesAdded="onImagesAdded"
+                        @imageRemoved="onImageRemoved" />  
+                </div>
             </div>
             <hr>
-            <form class="w3-margin-bottom section">
+            <form class="w3-margin-bottom">
                 <h6><strong>Thông tin cửa hàng</strong></h6><br>
                 <div class="w3-row-padding" style="margin:0 -16px;">
                     <div class="w3-half w3-margin-bottom">
@@ -58,7 +66,7 @@
                 <br>
             </form>
             <div class="w3-row">
-                <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onAddShop" :disabled="$v.shopData.$invalid">
+                <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onAddShop" :disabled="$v.shopData.$invalid && $v.newImages.$invalid">
                     <i class="w3-xlarge w3-margin-right" :class="shopLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Tạo cửa hàng
                 </button>
             </div>
@@ -90,10 +98,10 @@
                     phone: '',
                     email: '',
                     description: '',
-                    itemTypes: [],
-                    logo: '',
-                    images: []
+                    itemTypes: []
                 },
+                newLogo: null,
+                newImages: [],
                 provinceList: provinceList
             }
         },
@@ -121,34 +129,41 @@
                 },
                 itemTypes: {
                     required
-                },
-                logo: {},
-                images: {
-                    maxLen: maxLength(2)
                 }
             },
+            newLogo: {},
+            newImages: {
+                maxLen: maxLength(1)
+            }
         },
         methods: {
             async onAddShop() {
-                const shopUrl = await this.$store.dispatch('addShop', this.shopData)
+                const payload = {
+                    shop: this.shopData,
+                    logo: this.newLogo,
+                    images: this.newImages
+                }
+                const shopUrl = await this.$store.dispatch('addShop', payload)
                 this.$router.push("/shops/" + shopUrl)
             },
+            onLogoAdded(addedImages) {
+                this.newLogo = addedImages[0]
+            },
+            onLogoRemoved(removedImage) {
+                this.newLogo = null
+            },
             onImagesAdded(addedImages) {
-                console.log('thang1', addedImages)
                 addedImages.forEach( addedImage => {
-                    const index = this.shopData.images.findIndex( image => image === addedImage)
-                    if(index >= 0) this.shopData.images.splice(index, 1)
+                    const index = this.newImages.findIndex( image => image === addedImage)
+                    if(index >= 0) this.newImages.splice(index, 1)
                 })
                 for(let key in addedImages) {
-                    this.shopData.images.push(addedImages[key])
+                    this.newImages.push(addedImages[key])
                 }
-                console.log('thang2', this.shopData.images)
             },
             onImageRemoved(removedImage) {
-                console.log('thang3', removedImage)
-                const index = this.shopData.images.findIndex( image => image === removedImage )
-                if(index >= 0) this.shopData.images.splice(index, 1)
-                console.log('thang4', this.shopData.images)
+                const index = this.newImages.findIndex( image => image === removedImage )
+                if(index >= 0) this.newImages.splice(index, 1)
             }
         }
     }

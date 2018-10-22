@@ -14,7 +14,10 @@
                     <br>
                     <div id="itemImg" class="w3-margin-bottom section">
                         <h6><strong>Ảnh sản phẩm (tối đa 4 ảnh)</strong></h6><br>
-                        <app-img-uploader :maxImages="4" @imagesAdded="onImagesAdded" @imageRemoved="onImageRemoved"/>
+                        <app-img-uploader 
+                            :maxImages="4" 
+                            @imagesAdded="onImagesAdded" 
+                            @imageRemoved="onImageRemoved" />
                         <br>
                     </div>
                     <hr>
@@ -61,7 +64,7 @@
                         
                     </form>
                     <div class="w3-row">
-                        <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit" @click.prevent="onAddItem" :disabled="$v.itemData.$invalid">
+                        <button class="w3-button w3-border w3-border-blue  w3-right w3-quarter" type="submit" @click.prevent="onAddItem" :disabled="$v.itemData.$invalid && $v.newImages.invalid">
                         <i class="w3-xlarge w3-margin-right" :class="itemLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Thêm sản phẩm</button>
                     </div>
                     <br>
@@ -126,9 +129,9 @@
                     currency: '',
                     unit: '',
                     description: '',
-                    types: [],
-                    images: []
-                }
+                    types: []
+                },
+                newImages: []
             }
         },
         validations: {
@@ -155,33 +158,33 @@
                 },
                 types: {
                     required
-                },
-                images: {
-                    maxLen: maxLength(4)
                 }
+            },
+            newImages: {
+                maxLen: maxLength(4)
             }
         },
         methods: {
             async onAddItem() {
-                const itemUrl = await this.$store.dispatch('addItem', this.itemData)
+                const payload = {
+                    item: this.itemData,
+                    images: this.newImages
+                }
+                const itemUrl = await this.$store.dispatch('addItem', payload)
                 this.$router.push('/shops/' + this.$route.params.shopId + '/' + itemUrl)
             },
             onImagesAdded(addedImages) {
-                console.log('thang1', addedImages)
                 addedImages.forEach( addedImage => {
-                    const index = this.itemData.images.findIndex( image => image === addedImage)
-                    if(index >= 0) this.itemData.images.splice(index, 1)
+                    const index = this.newImages.findIndex( image => image === addedImage)
+                    if(index >= 0) this.newImages.splice(index, 1)
                 })
                 for(let key in addedImages) {
-                    this.itemData.images.push(addedImages[key])
+                    this.newImages.push(addedImages[key])
                 }
-                console.log('thang2', this.itemData.images)
             },
             onImageRemoved(removedImage) {
-                console.log('thang3', removedImage)
-                const index = this.itemData.images.findIndex( image => image === removedImage )
-                if(index >= 0) this.itemData.images.splice(index, 1)
-                console.log('thang4', this.itemData.images)
+                const index = this.newImages.findIndex( image => image === removedImage )
+                if(index >= 0) this.newImages.splice(index, 1)
             }
         }
     }

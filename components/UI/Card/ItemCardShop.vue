@@ -4,7 +4,7 @@
             <div class="w3-display-container"> 
                 <span class="w3-tag w3-display-topleft">New</span>
                 <nuxt-link :to="$route.path + '/' + itemData.itemId">
-                    <img :src="itemData.images !== undefined ? itemData.images[0].url : '/icon-area.png'" width="200" height="150" style="width:100%">
+                    <img :src="itemData.images !== undefined ? itemData.images[0].url : '/icon-photo.png'" class="reframe">
                 </nuxt-link>
             </div>
             <div class="w3-container w3-padding">
@@ -30,3 +30,11 @@
         }   
     }
 </script>
+
+<style scoped>
+    .reframe {
+        height: 200px;
+        width: 100%;
+        overflow: hidden;
+    }
+</style>

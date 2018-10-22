@@ -17,15 +17,36 @@ export default {
         }
     },
     actions: { 
-        async addShop (vuexContext, shop) {
+        async addShop (vuexContext, payload) {
             vuexContext.commit('setShopLoading', true)
             try {
-                const images = []
-                const newUnUploadedImages = shop.images
+                const userId = vuexContext.getters.user.id
+                const shop = payload.shop
+                const newUnUploadedLogo = payload.logo
+                const newUnUploadedImages = payload.images
+                let logoObject = null
+                const newUploadedImageObjects = []
+
                 const storageMetadata = {
                     cacheControl: 'public,max-age=31536000',
                 }
                 const shopId = uuid(shop.title, 5)
+                if(newUnUploadedLogo) {
+                    const ext = newUnUploadedLogo.name.slice(newUnUploadedLogo.name.lastIndexOf('.'))
+                    const newImgName = uiid(15) + ext
+                    const metaData = { 
+                        name: newImgName, 
+                        size: newUnUploadedLogo.size, 
+                        creatorId: userId, 
+                        shopId: shopId
+                    }
+                    await firebase.storage().ref('logos/' + newImgName).put(newUnUploadedLogo, storageMetadata)
+                    const logoDownloadUrl = await firebase.storage().ref('logos/' + newImgName).getDownloadURL()
+                    logoObject = {
+                        url: logoDownloadUrl, 
+                        metadata: metaData
+                    }
+                }
                 if(newUnUploadedImages.length) {
                     for (const image of newUnUploadedImages) {
                         const ext = image.name.slice(image.name.lastIndexOf('.'))
@@ -33,21 +54,27 @@ export default {
                         const metaData = { 
                             name: newImgName, 
                             size: image.size, 
-                            creatorId: vuexContext.getters.user.id, 
+                            creatorId: userId,
                             shopId: shopId
                         }
                         await firebase.storage().ref('shops/' + newImgName).put(image, storageMetadata)
                         const imgDownloadUrl = await firebase.storage().ref('shops/' + newImgName).getDownloadURL()
-                        images.push({url: imgDownloadUrl, metadata: metaData})
+                        newUploadedImageObjects.push({
+                            url: imgDownloadUrl, 
+                            metadata: metaData
+                        })
                     }
                 }
                 const newShop = {
                     ...shop,
-                    images: images,
-                    creatorId: vuexContext.getters.user.id,
+                    logo: logoObject,
+                    images: newUploadedImageObjects,
+                    creatorId: userId,
                     updatedDate: new Date().toISOString()
                 }
                 await shopsRef.child(shopId).set(newShop)
+                if(!newShop.logo) delete newShop.logo
+                if(!newShop.images.length) delete newShop.images
                 vuexContext.commit('setShop', {
                     shopId: shopId,
                     ...newShop
@@ -55,7 +82,7 @@ export default {
                 vuexContext.commit('setShopLoading', false)
                 return shopId
             } catch (error) {
-                console.log('[ERROR]' + error)
+                console.log('[ERROR] ' + error)
                 vuexContext.commit('setShopLoading', false)
             }
         },
@@ -83,7 +110,8 @@ export default {
                 const updatedShop = {
                     ...editedShop,
                     shopId: null, // ? remove shopId prop in the object when uploading to firebase
-                    title: editedShop.title
+                    title: editedShop.title,
+                    updatedDate: new Date().toISOString()
                 }
                 update[oldShopId] = null
                 update[newShopId] = updatedShop
@@ -99,66 +127,140 @@ export default {
                 vuexContext.commit('setShopLoading', false)
             }
         },
-        async updateShopImg (vuexContext, editedShop) {
+        async updateShopLogo (vuexContext, newLogo) {
             vuexContext.commit('setShopLoading', true)
             try {
+                const editedShop = vuexContext.getters.loadedShop
                 const shopId = editedShop.shopId
-                const oldUploadedImages = []
-                const newUploadedImages = []
-                const newUnUploadedImages = []
+                let logoObject = null
+                const oldLogoObject = editedShop.logo
                 const storageMetadata = {
                     cacheControl: 'public,max-age=31536000',
                 }
-                if(vuexContext.getters.loadedShop.images !== undefined) {
-                    vuexContext.getters.loadedShop.images.forEach (
-                        image => oldUploadedImages.push(image)
-                    )
-                }
-                if(editedShop.images.length) {
-                    editedShop.images.forEach(image => {
-                        if(image.url !== undefined) {
-                            newUploadedImages.push(image)
-                            const index = oldUploadedImages.findIndex(oldImage => {
-                                return image.url === oldImage.url
-                            })
-                            if(index >= 0) oldUploadedImages.splice(index, 1)
-                        }else {
-                            newUnUploadedImages.push(image)
-                        }
-                    })         
-                    if(oldUploadedImages.length !=0) {
-                        await Promise.all(oldUploadedImages.map( async (image) => {
-                            await firebase.storage().ref('shops/' + image.metadata.name).delete()
-                        }))
+                if(oldLogoObject === undefined && newLogo === null) {
+                    vuexContext.commit('setShopLoading', false)
+                    return
+                }else if(oldLogoObject !== undefined && newLogo === null) {
+                    await firebase.storage().ref('logos/' + oldLogoObject.metadata.name).delete()
+                }else if(oldLogoObject === undefined && newLogo !== null) {
+                    const ext = newLogo.name.slice(newLogo.name.lastIndexOf('.'))
+                    const newImgName = uiid(15) + ext
+                    const metaData = { 
+                        name: newImgName, 
+                        size: newLogo.size, 
+                        creatorId: vuexContext.getters.user.id, 
+                        shopId: shopId
                     }
-                    if(newUnUploadedImages.length != 0) {
-                        for (const image of newUnUploadedImages) {
-                            const ext = image.name.slice(image.name.lastIndexOf('.'))
-                            const newImgName = uiid(15) + ext
-                            const metaData = { 
-                                name: newImgName, 
-                                size: image.size, 
-                                creatorId: vuexContext.getters.user.id, 
-                                shopId: shopId
-                            }
-                            await firebase.storage().ref('shops/' + newImgName).put(image, storageMetadata)
-                            const imgDownloadUrl = await firebase.storage().ref('shops/' + newImgName).getDownloadURL()
-                            newUploadedImages.push({url: imgDownloadUrl, metadata: metaData})
+                    await firebase.storage().ref('logos/' + newImgName).put(newLogo, storageMetadata)
+                    const logoDownloadUrl = await firebase.storage().ref('logos/' + newImgName).getDownloadURL()
+                    logoObject = {
+                        metadata: metaData,
+                        url: logoDownloadUrl
+                    }
+                }else if(oldLogoObject !== undefined && newLogo !== null){
+                    if(newLogo.url === undefined) {
+                        await firebase.storage().ref('logos/' + oldLogoObject.metadata.name).delete()
+                        const ext = newLogo.name.slice(newLogo.name.lastIndexOf('.'))
+                        const newImgName = uiid(15) + ext
+                        const metaData = { 
+                            name: newImgName, 
+                            size: newLogo.size, 
+                            creatorId: vuexContext.getters.user.id, 
+                            shopId: shopId
                         }
+                        await firebase.storage().ref('logos/' + newImgName).put(newLogo, storageMetadata)
+                        const logoDownloadUrl = await firebase.storage().ref('logos/' + newImgName).getDownloadURL()
+                        logoObject = {
+                            metadata: metaData,
+                            url: logoDownloadUrl
+                        }
+                    }else {
+                        vuexContext.commit('setShopLoading', false)
+                        return
                     }
                 }
-                // ? Console.log run async, it is located at various location an it just prints the final value of a var 
-                // ? when it is called in a function
-                // ? console.log(oldUploadedImages, newUploadedImages, newUnUploadedImages)
                 const update = {
-                    images: newUploadedImages
+                    logo: logoObject,
+                    updatedDate: new Date().toISOString()
                 }
                 await shopsRef.child(shopId).update(update)
                 const updatedShop = {
                     ...editedShop,
-                    ...update,
+                    ...update
+                }
+                if(!updatedShop.logo) delete updatedShop.logo
+                vuexContext.commit('setShop', updatedShop)
+                vuexContext.commit('setShopLoading', false)
+            } catch(error) {
+                console.log('[ERROR] ' + error)
+                vuexContext.commit('setShopLoading', false)
+            }
+        },
+        async updateShopImg (vuexContext, newImages) {
+            vuexContext.commit('setShopLoading', true)
+            try {
+                const editedShop = vuexContext.getters.loadedShop
+                const shopId = editedShop.shopId
+                const oldImageObjects = []
+                const newUnUploadedImages = []
+                const newUploadedImageObjects = []
+                const storageMetadata = {
+                    cacheControl: 'public,max-age=31536000',
+                }
+                if(editedShop.images !== undefined) {
+                    editedShop.images.forEach (
+                        image => oldImageObjects.push(image)
+                    )
+                }
+                if(newImages.length) {
+                    newImages.forEach( image => {
+                        if(image.url !== undefined) {
+                            newUploadedImageObjects.push(image)
+                            const index = oldImageObjects.findIndex(oldImage => {
+                                return image.url === oldImage.url
+                            })
+                            if(index >= 0) oldImageObjects.splice(index, 1)
+                        }else {
+                            newUnUploadedImages.push(image)
+                        }
+                    })
+                    // * delete removed images         
+                    if(oldImageObjects.length) {
+                        await Promise.all(oldImageObjects.map( async (image) => {
+                            await firebase.storage().ref('shops/' + image.metadata.name).delete()
+                        }))
+                    }
+                    if(!newUnUploadedImages.length && !oldImageObjects.length){
+                        vuexContext.commit('setShopLoading', false)
+                        return
+                    }
+                    for (const image of newUnUploadedImages) {
+                        const ext = image.name.slice(image.name.lastIndexOf('.'))
+                        const newImgName = uiid(15) + ext
+                        const metaData = { 
+                            name: newImgName, 
+                            size: image.size, 
+                            creatorId: vuexContext.getters.user.id, 
+                            shopId: shopId
+                        }
+                        await firebase.storage().ref('shops/' + newImgName).put(image, storageMetadata)
+                        const imgDownloadUrl = await firebase.storage().ref('shops/' + newImgName).getDownloadURL()
+                        newUploadedImageObjects.push({url: imgDownloadUrl, metadata: metaData})
+                    }
+                }
+                // ? Console.log run async, it is located at various location an it just prints the final value of a var 
+                // ? when it is called in a function
+                // ? console.log(oldUploadedImages, newUploadedImageObjects, newUnUploadedImages)
+                const update = {
+                    images: newUploadedImageObjects,
                     updatedDate: new Date().toISOString()
                 }
+                await shopsRef.child(shopId).update(update)
+                const updatedShop = {
+                    ...editedShop,
+                    ...update
+                }
+                if(!updatedShop.images.length) delete updatedShop.images
                 vuexContext.commit('setShop', updatedShop)
                 vuexContext.commit('setShopLoading', false)
             } catch(error) {

@@ -59,7 +59,7 @@
                 }
             } catch(error) {
                 console.log('[_ERROR] ' + error)
-                context.error({ statusCode: 500, message: '...Lỗi'})
+                error({ statusCode: 500, message: '...Lỗi'})
             }
             if(!store.getters.loadedShop) {
                 error({ statusCode: 404, message: '...Lỗi'})

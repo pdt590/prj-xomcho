@@ -8,10 +8,11 @@
                 
                 <div v-if="user" class="w3-dropdown-hover w3-right">
                     <a class="w3-button">
-                        <img :src="user.avatar !== '' ? user.avatar : '/icon-user.png'" class="w3-circle" style="height:25px;width:25px" alt="Avatar">
+                        <img :src="user.avatar !== undefined ? user.avatar.url : '/icon-user.png'" class="w3-circle" style="height:30px;width:30px" alt="Avatar">
                     </a>
                     <div class="w3-dropdown-content w3-bar-block w3-card w3-light-grey" style="right:15px;">
                         <p class="w3-bar-item" style="padding-bottom:0">{{user.username}}</p>
+                        <nuxt-link to="/user/profile" class="w3-bar-item w3-button"><i class="fa fa-user w3-large"></i> Cá nhân</nuxt-link>
                         <nuxt-link to="/user/mgmt" class="w3-bar-item w3-button"><i class="fa fa-cube w3-large"></i> Trang quản lý</nuxt-link>
                         <nuxt-link to="/user/messages" class="w3-bar-item w3-button"><i class="fa fa-envelope w3-large"></i> Tin nhắn</nuxt-link>
                         <a class="w3-bar-item w3-button w3-border-top" @click="onLogout"><i class="fa fa-sign-out w3-large"></i> Đăng xuất</a>

@@ -4,7 +4,7 @@
         <div v-if="shopData != null" class="w3-sidebar w3-light-grey w3-collapse w3-top w3-padding-64" style="z-index:3;width:270px" ref="mySidebar">
             <div class="w3-container">
                 <nuxt-link :to="'/shops/' + $route.params.shopId">
-                    <img :src="shopData.logo !== '' ? shopData.logo : '/icon-photo.png'" style="width:100%;" class="w3-round">
+                    <img :src="(shopData.logo !== undefined) ? shopData.logo.url : '/icon-photo.png'" class="w3-round reframe">
                 </nuxt-link>
                 <br>
                 <h4><b>{{shopData.title.substring(0, 10)}}</b></h4>
@@ -151,7 +151,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     h6.app-sidebar {
         display: inline-block;
         margin: 0;
@@ -160,5 +160,10 @@
         font-size: 22px;
         color:red;
         cursor: pointer;
+    }
+    .reframe {
+        height: 250px;
+        width: 100%;
+        overflow: hidden;
     }
 </style>

@@ -46,11 +46,11 @@
 <script>
     export default {
         layout: 'home',
-        async asyncData(context) {
+        async asyncData({ store, error }) {
             try {
                 const [loadedShops, loadedItems] = await Promise.all([
-                    context.store.dispatch('loadPreviewShops'),
-                    context.store.dispatch('loadPreviewItems')
+                    store.dispatch('loadPreviewShops'),
+                    store.dispatch('loadPreviewItems')
                 ])
                 return {
                     loadedShops: loadedShops,
@@ -58,7 +58,7 @@
                 }
             }catch(error) {
                 console.log('[_ERROR] ' + error)
-                context.error({ statusCode: 500, message: '...Lỗi' })
+                error({ statusCode: 500, message: '...Lỗi' })
             }
         }
     }

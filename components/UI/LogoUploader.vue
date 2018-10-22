@@ -1,8 +1,8 @@
 <template>
     <section>
         <dropzone
-            id="imageDropzone"
-            ref="imgUpdoader" 
+            id="logoDropzone"
+            ref="logoUpdoader" 
             :options="options" 
             :destroyDropzone="true"
             :include-styling="false"
@@ -16,9 +16,14 @@
     import dropzone from 'nuxt-dropzone'
     export default {
         props: {
-            displayedImages: {
-                type: Array,
-                default: () => []
+            displayedLogo: {
+                type: Object,
+                default: () => {
+                    return {
+                        metadata: null,
+                        url: null
+                    }
+                }
             },
             maxImages: {
                 type: Number,
@@ -37,9 +42,9 @@
             dropzone
         },
         mounted() {
-            this.displayedImages.forEach( image => {
-                this.$refs.imgUpdoader.manuallyAddFile(image.metadata, image.url)
-            }); 
+            if(this.displayedLogo.url) {
+                this.$refs.logoUpdoader.manuallyAddFile(this.displayedLogo.metadata, this.displayedLogo.url)
+            }
         },
         data() {
             return {
@@ -62,10 +67,10 @@
         },
         methods: {
             filesAdded() {
-                this.$emit('imagesAdded', this.$refs.imgUpdoader.getAcceptedFiles())
+                this.$emit('logoAdded', this.$refs.logoUpdoader.getAcceptedFiles())
             },
             fileRemoved(image) {
-                this.$emit('imageRemoved', image)
+                this.$emit('logoRemoved', image)
             },
             template() {
                 return `<div class="dz-preview dz-file-preview">
