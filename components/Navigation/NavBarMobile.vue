@@ -7,7 +7,7 @@
                 
                 <div v-if="user" class="w3-dropdown-hover w3-right">
                     <a class="w3-button">
-                        <img :src="user.avatar !== '' ? user.avatar.url : '/icon-user.png'" class="w3-circle" style="height:23px;width:23px" alt="Avatar">
+                        <img :src="user.avatar !== undefined ? user.avatar.url : '/icon-user.png'" class="w3-circle" style="height:23px;width:23px" alt="Avatar">
                     </a>
                     <div class="w3-dropdown-content w3-bar-block w3-card w3-light-grey" :style="!isHome ? 'right:58px;' : 'right:15px;'">
                         <p class="w3-bar-item" style="padding-bottom:0">{{user.username}}</p>

@@ -4,7 +4,7 @@
         <div v-if="shopData != null" class="w3-sidebar w3-light-grey w3-collapse w3-top w3-padding-64" style="z-index:3;width:270px" ref="mySidebar">
             <div class="w3-container">
                 <nuxt-link :to="'/shops/' + $route.params.shopId">
-                    <img :src="(shopData.logo !== undefined) ? shopData.logo.url : '/icon-photo.png'" class="w3-round reframe">
+                    <img :src="shopData.logo !== undefined ? shopData.logo.url : '/icon-photo.png'" class="w3-round reframe">
                 </nuxt-link>
                 <br>
                 <h4><b>{{shopData.title.substring(0, 10)}}</b></h4>
