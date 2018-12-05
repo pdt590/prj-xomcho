@@ -1,56 +1,41 @@
 import Vue from 'vue'
 
-import NavBar from "~/components/Navigation/NavBar"
-import NavBarMobile from "~/components/Navigation/NavBarMobile"
-import SideBarShop from "~/components/Navigation/SideBarShop"
-import SideBarInbox from "~/components/Navigation/SideBarInbox"
-import Footer from "~/components/Navigation/Footer"
+import Logo from '~/components/Logo'
+import NavBar from "~/components/NavBar"
+import Footer from "~/components/Footer"
+import ImageFrame from '~/components/ImageFrame'
 
-import ModalLogin from "~/components/UI/ModalLogin"
-import ItemCardHome from "~/components/UI/Card/ItemCardHome"
-import ItemCardShop from "~/components/UI/Card/ItemCardShop"
-import ShopCardHome from "~/components/UI/Card/ShopCardHome"
-import ImageUploader from "~/components/UI/ImageUploader"
-import LogoUploader from "~/components/UI/LogoUploader"
-import AvatarUploader from "~/components/UI/AvatarUploader"
-import ItemTypes from "~/components/UI/ItemTypes"
-import Loading from "~/components/UI/Loading"
+import CardShop from '~/components/CardShop'
+import CardShopMobile from '~/components/CardShopMobile'
+import CardShopMobile4User from '~/components/CardShopMobile4User'
+import CardItem from '~/components/CardItem'
+import CardItemMobile from '~/components/CardItemMobile'
+import CardItem4Shop from '~/components/CardItem4Shop'
+import CardItemMobile4Shop from '~/components/CardItemMobile4Shop'
+import CardItemMobile4User from '~/components/CardItemMobile4User'
 
-import ButtonSaveItem from "~/components/UI/ButtonSaveItem"
-import ButtonSaveShop from "~/components/UI/ButtonSaveShop"
-import ButtonSale from "~/components/UI/ButtonSale"
-import ButtonSaleCard from "~/components/UI/ButtonSaleCard"
-import ButtonSwitch from "~/components/UI/ButtonSwitch"
+import ModalLogin from "~/components/ModalLogin"
+import ModalSignup from '~/components/ModalSignup'
+import ModalJoin from '~/components/ModalJoin'
+import ModalSale from '~/components/ModalSale'
 
-import SliderHomePanel from "~/components/UI/SliderHomePanel"
-import SliderHomeShop from "~/components/UI/SliderHomeShop"
-import SliderShopPanel from "~/components/UI/SliderShopPanel"
-import SliderItemImage from "~/components/UI/SliderItemImage"
+Vue.component('v-logo', Logo)
+Vue.component('v-navbar', NavBar)
+Vue.component('v-footer', Footer)
+Vue.component('v-image-frame', ImageFrame)
 
+// Card
+Vue.component('v-card-shop', CardShop)
+Vue.component('v-card-shop-mobile', CardShopMobile)
+Vue.component('v-card-shop-mobile-4user', CardShopMobile4User)
+Vue.component('v-card-item', CardItem)
+Vue.component('v-card-item-mobile', CardItemMobile)
+Vue.component('v-card-item-4shop', CardItem4Shop)
+Vue.component('v-card-item-mobile-4shop', CardItemMobile4Shop)
+Vue.component('v-card-item-mobile-4user', CardItemMobile4User)
 
-Vue.component('app-navbar', NavBar)
-Vue.component('app-navbar-mobile', NavBarMobile)
-Vue.component('app-sidebar-shop', SideBarShop)
-Vue.component('app-sidebar-inbox', SideBarInbox)
-Vue.component('app-footer', Footer)
-Vue.component('app-img-uploader', ImageUploader)
-Vue.component('app-logo-uploader', LogoUploader)
-Vue.component('app-avatar-uploader', AvatarUploader)
-Vue.component('app-item-types', ItemTypes)
-Vue.component('app-loading', Loading)
-
-Vue.component('app-modal-login', ModalLogin)
-Vue.component('app-item-card-home', ItemCardHome)
-Vue.component('app-item-card-shop', ItemCardShop)
-Vue.component('app-shop-card-home', ShopCardHome)
-
-Vue.component('app-btn-sale', ButtonSale)
-Vue.component('app-btn-salecard', ButtonSaleCard)
-Vue.component('app-btn-saveshop', ButtonSaveShop)
-Vue.component('app-btn-saveitem', ButtonSaveItem)
-Vue.component('app-btn-switch', ButtonSwitch)
-
-Vue.component('app-slider-homepanel', SliderHomePanel)
-Vue.component('app-slider-homeshop', SliderHomeShop)
-Vue.component('app-slider-shoppanel', SliderShopPanel)
-Vue.component('app-slider-item', SliderItemImage)
+// Modal
+Vue.component('v-modal-login', ModalLogin)
+Vue.component('v-modal-signup', ModalSignup)
+Vue.component('v-modal-join', ModalJoin)
+Vue.component('v-modal-sale', ModalSale)

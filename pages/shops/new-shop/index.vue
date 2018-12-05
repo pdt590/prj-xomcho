@@ -1,88 +1,195 @@
 <template>
-    <section>
-        <div class="w3-padding w3-white w3-margin-bottom">
-            <div class="w3-row">
-                <a href="javascript:void(0)">
-                    <div class="w3-col w3-bottombar w3-hover-light-grey w3-padding w3-border-red">
-                        <h5><strong>Tạo cửa hàng mới</strong></h5>
-                    </div>
-                </a>
+    <div class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8 is-offset-2">
+                    <p class="title is-3">Cài đặt</p>
+                    <form>
+                        <div class="card">
+                            <header class="card-header">
+                                <p class="card-header-title">Thông tin cửa hàng</p>
+                            </header>
+                            <div class="card-content">
+                                <!-- Shop info -->
+                                <b-field grouped>
+                                    <b-field label="Tên cửa hàng*" expanded>
+                                        <b-input
+                                            v-model.trim="shopData.title"
+                                            icon="store">
+                                        </b-input>
+                                    </b-field>
+                                    <b-field label="Sản phẩm kinh doanh*">
+                                        <b-select v-model="shopData.category">
+                                            <option v-for="(province, i) in provinces" :key="i">{{province}}</option>
+                                        </b-select>
+                                    </b-field>
+                                </b-field>
+                                
+                                <b-field label="Facebook"
+                                    :type="!$v.shopData.facebook.url ? `is-danger` : ``" 
+                                    :message="!$v.shopData.facebook.url ? `Nhập địa chỉ facebook hợp lệ` : ``">
+                                    <b-input
+                                        type="url"
+                                        v-model.trim="shopData.facebook"
+                                        icon="facebook-box"
+                                        placeholder="Link địa chỉ facebook của cửa hàng hoặc cá nhận">
+                                    </b-input>
+                                </b-field>
+
+                                <b-field label="Số điện thoại*" 
+                                    :type="!$v.shopData.phone.numeric ? `is-danger` : ``" 
+                                    :message="!$v.shopData.phone.numeric ? `Nhập số điện thoại hợp lệ` : ``">
+                                    <b-input
+                                        type="tel"
+                                        v-model="shopData.phone"
+                                        icon="cellphone">
+                                    </b-input>
+                                </b-field>
+
+                                <b-field label="Email" 
+                                    :type="!$v.shopData.email.email ? `is-danger` : ``" 
+                                    :message="!$v.shopData.email.email ? `Nhập email hợp lệ` : ``">
+                                    <b-input
+                                        type="email"
+                                        v-model.trim="shopData.email"
+                                        icon="email">
+                                    </b-input>
+                                </b-field>
+
+                                <b-field grouped>
+                                    <b-field label="Địa chỉ*" expanded>
+                                        <b-input 
+                                            v-model="shopData.address"
+                                            icon="map-marker">
+                                        </b-input>
+                                    </b-field>
+                                    <b-field label="Tỉnh/Thành*">
+                                        <b-select v-model="shopData.province">
+                                            <option v-for="(province, i) in provinces" :key="i">{{province}}</option>
+                                        </b-select>
+                                    </b-field>
+                                </b-field>
+                                
+                                <b-field label="Danh mục sản phẩm*"
+                                    :type="!$v.shopData.itemTypes.minLen ? `is-danger` : ``" 
+                                    :message="!$v.shopData.itemTypes.minLen ? `Nhập ít nhẩt một loại sản phẩm` : ``">
+                                    <b-taginput
+                                        v-model="shopData.itemTypes"
+                                        maxlength="20"
+                                        maxtags="20"
+                                        placeholder="Các loại sản phẩm dự định bán">
+                                    </b-taginput>
+                                </b-field>
+
+                                <b-field label="Miêu tả*">
+                                    <b-input
+                                        type="textarea"
+                                        v-model.trim="shopData.description"
+                                        maxlength="300">
+                                    </b-input>
+                                </b-field>
+                                
+                                <!-- Logo upload -->
+                                <b-field label="Logo (Kích thước < 2MB)"
+                                    :type="!$v.shopData.logoImage.isImg ? `is-danger` : ``"
+                                    :message="!$v.shopData.logoImage.isImg ? `File ảnh không hợp lệ` : ``">
+                                    <b-upload v-model="shopData.logoImage"
+                                        @input="onLogoChange"
+                                        :disabled="$v.shopData.logoImage.$invalid || shopData.logoImage !== null"
+                                        drag-drop>
+                                        <section class="section">
+                                            <div class="content has-text-centered">
+                                                <p>
+                                                    <b-icon
+                                                        icon="upload"
+                                                        size="is-large">
+                                                    </b-icon>
+                                                </p>
+                                                <p>Upload ảnh Logo cho cửa hàng</p>
+                                            </div>
+                                        </section>
+                                    </b-upload>
+                                </b-field>
+                                <div class="level">
+                                    <div class="level-left">
+                                        <div class="level-item" v-if="shopData.logoImage">
+                                            <figure class="image is-128x128 v-image-preview">
+                                                <img :src="previewLogoImage.url" alt="shop_logo">
+                                                <span class="v-image-size">{{previewLogoImage.size | fmBytes}}</span>
+                                                <a class="delete v-image-delete" @click="previewLogoImage = null; shopData.logoImage = null"></a>
+                                            </figure>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <span v-if="shopData.logoImage" class="tags has-addons">
+                                    <span class="tag is-info">{{shopData.logoImage.name}}</span>
+                                    <span class="tag is-light">{{shopData.logoImage.size | fmBytes}}</span>
+                                    <a class="tag is-delete is-light" @click="shopData.logoImage = null"></a>
+                                </span> -->
+
+                                <!-- Cover upload -->
+                                <b-field label="Cover (Kích thước < 2MB)"
+                                    :type="!$v.shopData.coverImage.isImg ? `is-danger` : ``"
+                                    :message="!$v.shopData.coverImage.isImg ? `File ảnh không hợp lệ` : ``">
+                                    <b-upload v-model="shopData.coverImage"
+                                        @input="onCoverChange"
+                                        :disabled="$v.shopData.coverImage.$invalid || shopData.coverImage !== null"
+                                        drag-drop>
+                                        <section class="section">
+                                            <div class="content has-text-centered">
+                                                <p>
+                                                    <b-icon
+                                                        icon="upload"
+                                                        size="is-large">
+                                                    </b-icon>
+                                                </p>
+                                                <p>Upload ảnh Cover cho cửa hàng</p>
+                                            </div>
+                                        </section>
+                                    </b-upload>
+                                </b-field>
+                                <div class="level">
+                                    <div class="level-left">
+                                        <div class="level-item" v-if="shopData.coverImage">
+                                            <figure class="image is-128x128 v-image-preview">
+                                                <img :src="previewCoverImage.url" alt="shop_logo">
+                                                <span class="v-image-size">{{previewCoverImage.size | fmBytes}}</span>
+                                                <a class="delete v-image-delete" @click="previewCoverImage =null; shopData.coverImage = null"></a>
+                                            </figure>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <span v-if="shopData.coverImage" class="tags has-addons">
+                                    <span class="tag is-info">{{shopData.coverImage.name}}</span>
+                                    <span class="tag is-light">{{shopData.coverImage.size | fmBytes}}</span>
+                                    <a class="tag is-delete is-light" @click="shopData.coverImage = null"></a>
+                                </span> -->
+                            </div>
+                            <footer class="card-footer">
+                                <div class="card-footer-item">
+                                    <button class="button is-info is-rounded" 
+                                        :class="{'is-loading': shopLoading}"
+                                        :disabled="$v.shopData.$invalid" 
+                                        type="submit" 
+                                        @click.prevent="onAddShop">
+                                        Tạo cửa hàng
+                                    </button>
+                                </div>
+                            </footer>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <br>
-            <div class="w3-row w3-margin-bottom">
-                <div class="w3-half" style="padding:1px">
-                    <h6><strong>Ảnh logo</strong></h6>
-                    <app-logo-uploader :maxImages="1" @logoAdded="onLogoAdded" @logoRemoved="onLogoRemoved"/>
-                </div>
-                <div class="w3-half" style="padding:1px ">
-                    <h6><strong>Ảnh panel</strong></h6>
-                    <app-img-uploader 
-                        :maxImages="1" 
-                        @imagesAdded="onImagesAdded"
-                        @imageRemoved="onImageRemoved" />  
-                </div>
-            </div>
-            <hr>
-            <form class="w3-margin-bottom">
-                <h6><strong>Thông tin cửa hàng</strong></h6><br>
-                <div class="w3-row-padding" style="margin:0 -16px;">
-                    <div class="w3-half w3-margin-bottom">
-                        <label><i class="fa fa-trello w3-large"></i><strong> Tên cửa hàng </strong>*</label>
-                        <input class="w3-input w3-border" type="text" v-model.trim="shopData.title">
-                    </div>
-                    <div class="w3-half w3-margin-bottom">
-                        <label><i class="fa fa-facebook-official w3-large"></i><strong> Facebook</strong></label>
-                        <input class="w3-input w3-border" type="text" v-model.trim="shopData.facebook">
-                    </div>
-                </div>
-                <div class="w3-row-padding" style="margin:0 -16px;">
-                    <div class="w3-half w3-margin-bottom">
-                        <label><i class="fa fa-phone w3-large"></i><strong> Số điện thoại </strong>*</label>
-                        <input class="w3-input w3-border" type="tel" v-model.trim="shopData.phone">
-                    </div>
-                    <div class="w3-half w3-margin-bottom">
-                        <label><i class="fa fa-envelope w3-large"></i><strong> Email liên hệ</strong></label>
-                        <input class="w3-input w3-border" type="email" v-model.trim="shopData.email">
-                    </div>
-                </div>
-                <div class="w3-row-padding" style="margin:0 -16px;">
-                    <div class="w3-half w3-margin-bottom">
-                        <label><i class="fa fa-map-pin w3-large"></i><strong> Địa chỉ </strong>*</label>
-                        <input class="w3-input w3-border" type="text" v-model="shopData.location">
-                    </div>
-                    <div class="w3-half w3-margin-bottom">
-                        <label><i class="fa fa-bullseye w3-large"></i><strong> Tỉnh/Thành Phố </strong>*</label>
-                        <select class="w3-select w3-bar-item w3-border" v-model="shopData.province">
-                            <option value="" disabled selected>Lựa Chọn</option>
-                            <option v-for="(province, i) in provinceList" :key="i">{{ province }}</option>
-                        </select>
-                    </div>
-                </div>
-                <label><strong>Miêu tả</strong> *</label>
-                <textarea class="w3-input w3-border" rows="5" style="resize:none" v-model="shopData.description"></textarea>
-                <hr>
-                <h6><strong>Các mặt hàng sẽ bán</strong> *</h6><br>
-                <app-item-types @onCheckBox="shopData.itemTypes=$event"/>
-                <br>
-            </form>
-            <div class="w3-row">
-                <button class="w3-button w3-border w3-border-blue w3-right w3-quarter" @click.prevent="onAddShop" :disabled="$v.shopData.$invalid && $v.newImages.$invalid">
-                    <i class="w3-xlarge w3-margin-right" :class="shopLoading ? 'fa fa-spinner fa-spin' : 'fa fa-save'"></i>Tạo cửa hàng
-                </button>
-            </div>
-            <br>
         </div>
-    </section>
+    </div>
 </template>
 
 <script>
     import { mapGetters } from 'vuex'
-    import provinceList from '~/plugins/province-list'
-    import { required, email, numeric, maxLength } from 'vuelidate/lib/validators'
-    import Vue from 'vue'
-    import Vuelidate from 'vuelidate'
-    Vue.use(Vuelidate)
-
+    import { isImage } from '~/plugins/utility-helpers'
+    import { provinces } from '~/plugins/utility-lists'
+    import { required, email, url, numeric, maxLength, minLength } from 'vuelidate/lib/validators'
+    
     export default {
         middleware: 'auth',
         computed: {
@@ -91,18 +198,21 @@
         data() {
             return {
                 shopData: {
-                    title: '',
-                    facebook: '',
-                    location: '',
-                    province: '',
-                    phone: '',
-                    email: '',
-                    description: '',
-                    itemTypes: []
+                    title: null,
+                    category: 'An Giang',
+                    facebook: null,
+                    address: null,
+                    province: 'Hà Nội',
+                    phone: null,
+                    email: null,
+                    itemTypes: [],
+                    description: null,
+                    logoImage: null,
+                    coverImage: null
                 },
-                newLogo: null,
-                newImages: [],
-                provinceList: provinceList
+                provinces: provinces,
+                previewLogoImage: null,
+                previewCoverImage: null
             }
         },
         validations: {
@@ -110,8 +220,13 @@
                 title: {
                     required
                 },
-                facebook: {},
-                location: {
+                category: {
+                    required
+                },
+                facebook: {
+                    url
+                },
+                address: {
                     required
                 },
                 province: {
@@ -124,47 +239,54 @@
                 email: {
                     email
                 },
+                itemTypes: {
+                    required,
+                    minLen: minLength(1),
+                },
                 description: {
                     required
                 },
-                itemTypes: {
-                    required
+                logoImage: {
+                    isImg: isImage(2097152) // <2MB
+                },
+                coverImage: {
+                    isImg: isImage(2097152) // <2MB
                 }
-            },
-            newLogo: {},
-            newImages: {
-                maxLen: maxLength(1)
             }
         },
         methods: {
             async onAddShop() {
-                const payload = {
-                    shop: this.shopData,
-                    logo: this.newLogo,
-                    images: this.newImages
-                }
-                const shopUrl = await this.$store.dispatch('addShop', payload)
-                this.$router.push("/shops/" + shopUrl)
+                const shopUrl = await this.$store.dispatch('addShop', this.shopData)
+                window.location.href = `/shops/${shopUrl}`
             },
-            onLogoAdded(addedImages) {
-                this.newLogo = addedImages[0]
-            },
-            onLogoRemoved(removedImage) {
-                this.newLogo = null
-            },
-            onImagesAdded(addedImages) {
-                addedImages.forEach( addedImage => {
-                    const index = this.newImages.findIndex( image => image === addedImage)
-                    if(index >= 0) this.newImages.splice(index, 1)
-                })
-                for(let key in addedImages) {
-                    this.newImages.push(addedImages[key])
+            onLogoChange() {
+                this.previewLogoImage = null
+                this.previewLogoImage = {
+                    url: URL.createObjectURL(this.shopData.logoImage),
+                    size: this.shopData.logoImage.size
                 }
             },
-            onImageRemoved(removedImage) {
-                const index = this.newImages.findIndex( image => image === removedImage )
-                if(index >= 0) this.newImages.splice(index, 1)
+            onCoverChange() {
+                this.previewCoverImage = null
+                this.previewCoverImage = {
+                    url: URL.createObjectURL(this.shopData.coverImage),
+                    size: this.shopData.coverImage.size
+                }
             }
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    .card {
+        border-radius: 0.3rem;
+        box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);
+        .card-header {
+            padding: 1rem;
+        }
+        .card-footer .card-footer-item {
+            justify-content: flex-end;
+            padding: 1rem;
+        }
+    }
+</style>

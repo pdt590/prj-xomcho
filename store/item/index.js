@@ -1,12 +1,13 @@
-import firebase from '~/plugins/firebase'
-import { uuid, uiid } from '~/plugins/funcs'
+import firebase from '~/plugins/plugin-firebase'
+import { genId, genUrl, fetchId, cleanObject } from '~/plugins/utility-helpers'
 const db = firebase.database()
 const itemsRef = db.ref('items')
 
 export default {
     state: {
         itemLoading: false,
-        loadedItems: []
+        loadedItems: [],
+        loadedOwnItems: [],
     },
     mutations:  {
         setItemLoading(state, payload) {
@@ -16,280 +17,213 @@ export default {
             state.loadedItems = payload
             state.loadedItems.sort((a, b) => Date.parse(b.updatedDate) - Date.parse(a.updatedDate))
         },
+        setOwnItems(state, payload) {
+            state.loadedOwnItems = payload
+        },
         addItem(state, payload) {
             state.loadedItems.splice(0, 0, payload) // Push to top
             //state.loadedItems.push(payload) // Push to bottom
         },
-        updateItemContent(state, payload) {
+        updateItem(state, payload) {
             const itemIndex = state.loadedItems.findIndex(item => {
-                return item.itemId === payload.itemId
+                return fetchId(item.url) === fetchId(payload.url)
             })
             state.loadedItems[itemIndex] = payload
-            state.loadedItems.sort((a, b) => Date.parse(b.updatedDate) - Date.parse(a.updatedDate))
-        },
-        updateItemTitle(state, payload) {
-            const itemIndex = state.loadedItems.findIndex(item => {
-                return item.itemId === payload.oldItemId
-            })
-            state.loadedItems[itemIndex] = payload.updatedItem
         },
         removeItem(state, payload) {
-            state.loadedItems.splice(state.loadedItems.findIndex(item => item.itemId === payload), 1)
+            state.loadedItems.splice(state.loadedItems.findIndex(item => fetchId(item.url) === payload), 1)
         }
     },
     actions: {
-        async addItem (vuexContext, payload) {
+        //? DONE
+        async addItem (vuexContext, newItem) {
             vuexContext.commit('setItemLoading', true)
             try {
-                const shopId = vuexContext.getters.loadedShop.shopId
-                const userId = vuexContext.getters.user.id
-                const item = payload.item
-                const newUnUploadedImages = payload.images
-                const newUploadedImageObjects = []
-                
+                const itemId  = genId(5)
+                const itemUrl = genUrl(newItem.title, itemId)
+                const _creator = {
+                    id: vuexContext.getters.user.id,
+                    username: vuexContext.getters.user.username,
+                    avatar: vuexContext.getters.user.avatar ? vuexContext.getters.user.avatar : null
+                }
+                const _shop = {
+                    id: fetchId(vuexContext.getters.loadedShop.url),
+                    title:  vuexContext.getters.loadedShop.title,
+                    logoImage:  vuexContext.getters.loadedShop.logoImage ? vuexContext.getters.loadedShop.logoImage : null
+                }
+
+                const newImages = newItem.images
+                const newImageObjects = []
                 const storageMetadata = {
                     cacheControl: 'public,max-age=31536000',
                 }
-                const itemId = uuid(item.title, 5)
-                if(newUnUploadedImages.length) {
-                    for (const image of newUnUploadedImages) {
-                        const ext = image.name.slice(image.name.lastIndexOf('.'))
-                        const newImgName = uiid(15) + ext
-                        const metaData = { 
-                            name: newImgName, 
-                            size: image.size, 
-                            creatorId: userId,
-                            shopId: shopId,
-                            itemId: itemId
-                        }
-                        await firebase.storage().ref('items/' + newImgName).put(image, storageMetadata)
-                        const imgDownloadUrl = await firebase.storage().ref('items/' + newImgName).getDownloadURL()
-                        newUploadedImageObjects.push({url: imgDownloadUrl, metadata: metaData})
-                    }
-                }
-                const newItem = {
-                    ...item,
-                    images: newUploadedImageObjects,
-                    shopId: shopId,
-                    creatorId: userId,
-                    updatedDate: new Date().toISOString()
-                }
-                await itemsRef.child(itemId).set(newItem)
-                if(!newItem.images.length) delete newItem.images
-                vuexContext.commit('addItem', {
-                    itemId: itemId,
-                    ...newItem
-                })
-                vuexContext.commit('setItemLoading', false)
-                return itemId
-            } catch(error) {
-                console.log('[ERROR] ' + error)
-                vuexContext.commit('setItemLoading', false)
-            }
-        },
-        async updateItems(vuexContext, shopInfo) {
-            vuexContext.commit('setItemLoading', true)
-            try {
-                const itemsData = await itemsRef.orderByChild('shopId').equalTo(shopInfo.oldShopId).once('value')
-                let updates = {}
-                let loadedItems = []
-                itemsData.forEach(itemData => {
-                    const itemObj = itemData.val()
-                    updates[itemData.key] = {
-                        ...itemObj,
-                        shopId: shopInfo.newShopId
-                    }
-                    loadedItems.push({
-                        itemId: itemData.key,
-                        ...updates[itemData.key]
-                    })
-                })
-                await itemsRef.update(updates)
-                vuexContext.commit('setItems', loadedItems)
-                vuexContext.commit('setItemLoading', false)
-            } catch(error) {
-                console.log('[ERROR] ' + error)
-                vuexContext.commit('setItemLoading', false)
-            }
-        },
-        async updateItemContent (vuexContext, editedItem) {
-            vuexContext.commit('setItemLoading', true)
-            try {
-                const updatedItem = {
-                    ...editedItem,
-                    updatedDate: new Date().toISOString()
-                }
-                await itemsRef.child(editedItem.itemId).update(updatedItem)
 
-                vuexContext.commit('updateItemContent', updatedItem)
-                vuexContext.commit('setItemLoading', false)
-            } catch(error) {
-                console.log('[ERROR] ' + error)
-                vuexContext.commit('setItemLoading', false)
-            }
-        },
-        async updateItemTitle (vuexContext, editedItem) {
-            vuexContext.commit('setItemLoading', true)
-            try {
-                const update = {}
-                const oldItemId = editedItem.itemId
-                //delete newContent.itemId // ? Or set itemId: null beforing updating on fb
-                const newItemId = uuid(editedItem.title, 5)
-                const updatedItem = {
-                    ...editedItem,
-                    itemId: null, // ? remove itemId prop in the object when uploading to firebase
-                    title: editedItem.title,
-                    updatedDate: new Date().toISOString()
-                }
-                update[oldItemId] = null
-                update[newItemId] = updatedItem
-                await itemsRef.update(update)
-
-                updatedItem.itemId = newItemId
-                vuexContext.commit('updateItemTitle',
-                    {
-                        oldItemId: oldItemId, 
-                        updatedItem: updatedItem
-                    }
-                )
-                vuexContext.commit('setItemLoading', false)
-                return newItemId
-            } catch(error) {
-                console.log('[ERROR] ' + error)
-                vuexContext.commit('setItemLoading', false)
-            }
-        },
-        async updateItemImg (vuexContext, payload) {
-            vuexContext.commit('setItemLoading', true)
-            try {
-                const itemId = payload.itemId
-                const loadedItem = vuexContext.getters.loadedItem(itemId)
-                const newImages = payload.images // ? Include Objects and Image Files
-                const oldImageObjects = []
-                const newUnUploadedImages = []
-                const newUploadedImageObjects = []
-                const storageMetadata = {
-                    cacheControl: 'public,max-age=31536000',
-                }
-                if(loadedItem.images !== undefined) {
-                    loadedItem.images.forEach (
-                        image => oldImageObjects.push(image)
-                    )
-                }
                 if(newImages.length) {
-                    newImages.forEach(image => {
-                        if(image.url !== undefined) {
-                            newUploadedImageObjects.push(image)
-                            const index = oldImageObjects.findIndex(oldImage => {
-                                return image.url === oldImage.url
-                            })
-                            if(index >= 0) oldImageObjects.splice(index, 1)
-                        }else {
-                            newUnUploadedImages.push(image)
+                    for (const image of newImages) {
+                        const ext = image.name.slice(image.name.lastIndexOf('.'))
+                        const newImageName = genId(15) + ext
+                        const metaData = { 
+                            name: newImageName, 
+                            size: image.size, 
+                            _creator: vuexContext.getters.user.id
                         }
-                    })
-                    // * delete removed images         
-                    if(oldImageObjects.length) {
-                        await Promise.all(oldImageObjects.map( async (image) => {
-                            await firebase.storage().ref('items/' + image.metadata.name).delete()
-                        }))
-                    }
-                    if(!newUnUploadedImages.length && !oldImageObjects.length){
-                        vuexContext.commit('setItemLoading', false)
-                        return
-                    }
-                    if(newUnUploadedImages.length != 0) {
-                        for (const image of newUnUploadedImages) {
-                            const ext = image.name.slice(image.name.lastIndexOf('.'))
-                            const newImgName = uiid(15) + ext
-                            const metaData = { 
-                                name: newImgName, 
-                                size: image.size, 
-                                creatorId: vuexContext.getters.user.id,
-                                shopId: vuexContext.getters.loadedShop.shopId, 
-                                itemId: itemId
-                            }
-                            await firebase.storage().ref('items/' + newImgName).put(image, storageMetadata)
-                            const imgDownloadUrl = await firebase.storage().ref('items/' + newImgName).getDownloadURL()
-                            newUploadedImageObjects.push({url: imgDownloadUrl, metadata: metaData})
-                        }
+                        await firebase.storage().ref('items/' + newImageName).put(image, storageMetadata)
+                        const imgDownloadUrl = await firebase.storage().ref('items/' + newImageName).getDownloadURL()
+                        newImageObjects.push({
+                            url: imgDownloadUrl, 
+                            metadata: metaData
+                        })
                     }
                 }
-                // ? Console.log run async, it is located at various location an it just prints the final value of a var 
-                // ? when it is called in a function
-                // ? console.log(oldImageObjects, newUploadedImageObjects, newUnUploadedImages)
-                const update = {
-                    images: newUploadedImageObjects,
+
+                const item = {
+                    ...newItem,
+                    url: itemUrl,
+                    images: newImageObjects,
+                    _creator: _creator,
+                    _shop: _shop,
                     updatedDate: new Date().toISOString()
+                }
+                await itemsRef.child(itemId).set(item)
+                vuexContext.commit('addItem', item)
+                vuexContext.commit('setItemLoading', false)
+                return itemUrl
+            } catch(error) {
+                console.log('[ERROR-addItem]', error)
+                vuexContext.commit('setItemLoading', false)
+            }
+        },
+        async updateItemContent (vuexContext, newItemContent) {
+            vuexContext.commit('setItemLoading', true)
+            try {
+                const loadedItem = vuexContext.getters.loadedItem(newItemContent.url)
+                const itemId = fetchId(loadedItem.url)
+                await itemsRef.child(itemId).update(newItemContent)
+                vuexContext.commit('updateItem', {
+                    ...loadedItem,
+                    ...newItemContent
+                })
+                vuexContext.commit('setItemLoading', false)
+            } catch(error) {
+                console.log('[ERROR-updateItemContent] ' + error)
+                vuexContext.commit('setItemLoading', false)
+            }
+        },
+        //? DONE
+        async updateItemTitle (vuexContext, payload) {
+            vuexContext.commit('setItemLoading', true)
+            try {
+                const loadedItem = vuexContext.getters.loadedItem(payload.url)
+                const itemId = fetchId(loadedItem.url)
+                const newItemUrl = genUrl(payload.newItemTitle, itemId)
+                const update = {
+                    title: payload.newItemTitle,
+                    url: newItemUrl
                 }
                 await itemsRef.child(itemId).update(update)
-                const updatedItem = {
+                vuexContext.commit('updateItem', {
                     ...loadedItem,
                     ...update
-                }
-                if(!updatedItem.images.length) delete updatedItem.images
-                vuexContext.commit('updateItemContent', updatedItem)
+                })
                 vuexContext.commit('setItemLoading', false)
+                return newItemUrl
             } catch(error) {
-                console.log('[ERROR] ' + error)
+                console.log('[ERROR-updateItemTitle]', error)
                 vuexContext.commit('setItemLoading', false)
             }
         },
-        async loadItems (vuexContext, shopId) {
+        //? DONE
+        async updateItemImages (vuexContext, payload) {
             vuexContext.commit('setItemLoading', true)
             try {
-                const itemsData = await itemsRef.orderByChild('shopId').equalTo(shopId).once('value')
+                const loadedItem = vuexContext.getters.loadedItem(payload.url)
+                const itemId = fetchId(loadedItem.url)
+                const newImages = payload.newImages
+                const oldImageObjects = payload.oldImages
+                const newImageObjects = []
+                const removedOldImageObjects = loadedItem.images.filter(image => !oldImageObjects.some(el => el.url === image.url))
+                const storageMetadata = {
+                    cacheControl: 'public,max-age=31536000',
+                }
+                if(removedOldImageObjects.length) {
+                    await Promise.all(removedOldImageObjects.map( async (image) => {
+                        await firebase.storage().ref('items/' + image.metadata.name).delete()
+                    }))
+                }
+                if(newImages.length) {
+                    for (const image of newImages) {
+                        const ext = image.name.slice(image.name.lastIndexOf('.'))
+                        const newImageName = genId(15) + ext
+                        const metaData = { 
+                            name: newImageName, 
+                            size: image.size, 
+                            _creator: vuexContext.getters.user.id,
+                        }
+                        await firebase.storage().ref('items/' + newImageName).put(image, storageMetadata)
+                        const imgDownloadUrl = await firebase.storage().ref('items/' + newImageName).getDownloadURL()
+                        newImageObjects.push({
+                            url: imgDownloadUrl, 
+                            metadata: metaData
+                        })
+                    }
+                }
+                const update = {
+                    images: [
+                        ...oldImageObjects,
+                        ...newImageObjects
+                    ]
+                }
+                await itemsRef.child(itemId).update(update)
+                if(!update.images.length) delete update.images
+                vuexContext.commit('updateItem', {
+                    ...loadedItem,
+                    ...update
+                })
+                vuexContext.commit('setItemLoading', false)
+            } catch(error) {
+                console.log('[ERROR-updateItemImages]', error)
+                vuexContext.commit('setItemLoading', false)
+            }
+        },
+        //? DONE
+        async deleteItem (vuexContext, itemUrl) {
+            vuexContext.commit('setItemLoading', true)
+            try {
+                const loadedItem = vuexContext.getters.loadedItem(itemUrl)
+                const itemId = fetchId(loadedItem.url)
+                if(loadedItem.images) {
+                    await Promise.all(loadedItem.images.map( async (image) => {
+                        await firebase.storage().ref('items/' + image.metadata.name).delete()
+                    }))
+                }
+                await itemsRef.child(itemId).remove()
+                vuexContext.commit('removeItem', itemId)
+                vuexContext.commit('setItemLoading', false)
+            } catch(error) {
+                console.log('[ERROR-deleteItem]', error)
+                vuexContext.commit('setItemLoading', false)
+            }
+        },
+        //? DONE
+        async loadItems (vuexContext, shopUrl) {
+            vuexContext.commit('setItemLoading', true)
+            try {
+                const shopId = fetchId(shopUrl)
+                const itemsData = await itemsRef.orderByChild('_shop/id').equalTo(shopId).once('value')
                 const itemsObj = itemsData.val()
                 let loadedItems = []
                 for (let key in itemsObj) {
-                    loadedItems.push({
-                        itemId: key,
-                        ...itemsObj[key]
-                    })
+                    loadedItems.push(itemsObj[key])
                 }
                 vuexContext.commit('setItems', loadedItems)
                 vuexContext.commit('setItemLoading', false)
                 return loadedItems
             } catch(error) {
-                console.log('[ERROR] ' + error)
+                console.log('[ERROR-loadItems]', error)
                 vuexContext.commit('setItemLoading', false)
             }
         },
-        async deleteItem (vuexContext, deletedItem) {
-            vuexContext.commit('setItemLoading', true)
-            try {
-                await Promise.all(deletedItem.images.map( async (image) => {
-                    await firebase.storage().ref('items/' + image.metadata.name).delete()
-                }))
-                await itemsRef.child(deletedItem.itemId).remove()
-                vuexContext.commit('removeItem', deletedItem.itemId)
-                vuexContext.commit('setItemLoading', false)
-            } catch(error) {
-                console.log('[ERROR] ' + error)
-                vuexContext.commit('setItemLoading', false)
-            }
-        },
-        async removeItems (vuexContext, shopId) {
-            vuexContext.commit('setItemLoading', true)
-            try {
-                const itemsData = await itemsRef.orderByChild('shopId').equalTo(shopId).once('value')
-                const updates = {}
-                const itemsObj = itemsData.val()
-                // ? Cannot use "itemsData.forEach(async (itemData) =>" or "for (itemData of itemsData)"
-                Object.keys(itemsObj).forEach( async (key) =>  {
-                    updates[key] = null
-                    await Promise.all(itemsObj[key].images.map( async (image) => {
-                        await firebase.storage().ref('items/' + image.metadata.name).delete()
-                    }))
-                })
-                await itemsRef.update(updates)
-                vuexContext.commit('setItems', [])
-                vuexContext.commit('setItemLoading', false)
-            } catch(error) {
-                console.log('[ERROR] ' + error)
-                vuexContext.commit('setItemLoading', false)
-            }
-        },
+        //? DONE
         async loadPreviewItems (vuexContext) {
             vuexContext.commit('setItemLoading', true)
             try {
@@ -297,40 +231,157 @@ export default {
                 const loadedItems = []
                 itemsData.forEach(itemData => {
                     const itemObj = itemData.val()
-                    loadedItems.push({
-                        itemId: itemData.key,
-                        ...itemObj
-                    })
+                    loadedItems.push(itemObj)
                 })
                 loadedItems.reverse()
                 vuexContext.commit('setItemLoading', false)
                 return loadedItems
             } catch(error) {
-                console.log('[ERROR] ' + error)
+                console.log('[ERROR-loadPreviewItems]', error)
                 vuexContext.commit('setItemLoading', false)
             }
         },
+        //? DONE
         async loadOwnItems (vuexContext) {
             vuexContext.commit('setItemLoading', true)
             try {
-                const creatorId = vuexContext.getters.user.id
-                const itemsData = await itemsRef.orderByChild('creatorId').equalTo(creatorId).once('value')
+                const userId = vuexContext.getters.user.id
+                const itemsData = await itemsRef.orderByChild('_creator/id').equalTo(userId).once('value')
                 const loadedItems = []
                 itemsData.forEach(itemData => {
                     const itemObj = itemData.val()
-                    loadedItems.push({
-                        itemId: itemData.key,
-                        ...itemObj
-                    })
+                    loadedItems.push(itemObj)
                 })
                 loadedItems.reverse()
+                vuexContext.commit('setOwnItems', loadedItems)
                 vuexContext.commit('setItemLoading', false)
                 return loadedItems
             } catch(error) {
-                console.log('[ERROR] ' + error)
+                console.log('[ERROR-loadOwnItems]', error)
                 vuexContext.commit('setItemLoading', false)
             }
-        }
+        },
+
+        /**
+         * Actions called by Shop
+         */
+        //? DONE
+        async updateItemsByShop(vuexContext, payload) {
+            vuexContext.commit('setItemLoading', true)
+            try {
+                const shopId = fetchId(vuexContext.getters.loadedShop.url)
+                const itemsData = await itemsRef.orderByChild('_shop/id').equalTo(shopId).once('value')
+                let updates = {}
+                let loadedItems = []
+                itemsData.forEach(itemData => {
+                    const itemObj = itemData.val()
+                    updates[itemData.key] = {
+                        ...itemObj,
+                        _shop: {
+                            id: shopId,
+                            title: payload.newShopTitle,
+                            logoImage: payload.newShopLogo
+                        }
+                    }
+                    loadedItems.push({
+                        id: itemData.key,
+                        ...updates[itemData.key]
+                    })
+                })
+                await itemsRef.update(updates)
+                vuexContext.commit('setItems', loadedItems)
+                vuexContext.commit('setItemLoading', false)
+            } catch(error) {
+                console.log('[ERROR-updateItemsByShop]', error)
+                vuexContext.commit('setItemLoading', false)
+            }
+        },
+        //? DONE
+        async deleteItemsByShop (vuexContext, shopId) {
+            vuexContext.commit('setItemLoading', true)
+            try {
+                const itemsData = await itemsRef.orderByChild('_shop/id').equalTo(shopId).once('value')
+                const updates = {}
+                const itemsObj = itemsData.val()
+                if(!itemsObj) {
+                    vuexContext.commit('setItemLoading', false)
+                    return
+                }
+                Object.keys(itemsObj).forEach( async (key) =>  {
+                    updates[key] = null
+                    if(itemsObj[key].images) {
+                        await Promise.all(itemsObj[key].images.map( async (image) => {
+                            await firebase.storage().ref('items/' + image.metadata.name).delete()
+                        }))
+                    }
+                })
+                await itemsRef.update(updates)
+                vuexContext.commit('setItems', [])
+                vuexContext.commit('setItemLoading', false)
+            } catch(error) {
+                console.log('[ERROR-deleteItemsByShop]', error)
+                vuexContext.commit('setItemLoading', false)
+            }
+        },
+
+        /**
+         * Actions called by User
+         */
+        async updateItemsByUser(vuexContext, payload) {
+            vuexContext.commit('setItemLoading', true)
+            try {
+                const userId = vuexContext.getters.user.id
+                const itemsData = await itemsRef.orderByChild('_creator/id').equalTo(userId).once('value')
+                let updates = {}
+                let loadedItems = []
+                itemsData.forEach(itemData => {
+                    const itemObj = itemData.val()
+                    updates[itemData.key] = {
+                        ...itemObj,
+                        _creator: {
+                            id: userId,
+                            username: payload.newUsername,
+                            avatar: payload.newAvatar
+                        }
+                    }
+                    loadedItems.push({
+                        id: itemData.key,
+                        ...updates[itemData.key]
+                    })
+                })
+                await itemsRef.update(updates)
+                vuexContext.commit('setItems', loadedItems)
+                vuexContext.commit('setItemLoading', false)
+            } catch(error) {
+                console.log('[ERROR-updateItemsByShop]', error)
+                vuexContext.commit('setItemLoading', false)
+            }
+        },
+        async deleteItemsByUser (vuexContext, userId) {
+            vuexContext.commit('setItemLoading', true)
+            try {
+                const itemsData = await itemsRef.orderByChild('_creator/id').equalTo(userId).once('value')
+                const updates = {}
+                const itemsObj = itemsData.val()
+                if(!itemsObj) {
+                    vuexContext.commit('setItemLoading', false)
+                    return
+                }
+                Object.keys(itemsObj).forEach( async (key) =>  {
+                    updates[key] = null
+                    if(itemsObj[key].images) {
+                        await Promise.all(itemsObj[key].images.map( async (image) => {
+                            await firebase.storage().ref('items/' + image.metadata.name).delete()
+                        }))
+                    }
+                })
+                await itemsRef.update(updates)
+                vuexContext.commit('setItemLoading', false)
+            } catch(error) {
+                console.log('[ERROR-deleteItemsByUser]', error)
+                vuexContext.commit('setItemLoading', false)
+            }
+        },
     },
     getters: {
         itemLoading(state) {
@@ -340,9 +391,19 @@ export default {
             return state.loadedItems
         },
         loadedItem(state) {
-            return (itemId) => {
+            return (itemUrl) => {
                 return state.loadedItems.find(item => {
-                    return item.itemId === itemId
+                    return item.url === itemUrl
+                })
+            }
+        },
+        loadedOwnItems(state) {
+            return state.loadedOwnItems
+        },
+        loadedOwnItem(state) {
+            return (itemUrl) => {
+                return state.loadedOwnItems.find(item => {
+                    return item.url === itemUrl
                 })
             }
         }

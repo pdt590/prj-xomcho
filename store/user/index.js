@@ -1,6 +1,5 @@
-import firebase from '~/plugins/firebase'
+import firebase from '~/plugins/plugin-firebase'
 import Cookie from 'js-cookie'
-import { uiid } from '~/plugins/funcs'
 const db = firebase.database()
 const usersRef = db.ref('users')
 
@@ -35,11 +34,7 @@ export default {
                 const { user } = await firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
                 const userProfile = {
                     username: payload.username,
-                    fullname: '',
                     email: payload.email,
-                    phone:'',
-                    facebook: '',
-                    address: '',
                     updatedDate: new Date().toISOString()
                 }
                 await usersRef.child(user.uid).set(userProfile)
@@ -57,11 +52,12 @@ export default {
                 vuexContext.commit('setAuthLoading', false)
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
-
+                return true
             } catch(error) {
                 vuexContext.commit('setAuthError', error)
                 vuexContext.commit('setAuthLoading', false)
-                console.log('[ERROR] ' + error)
+                console.log('[ERROR-signUserUp]', error)
+                return false
             }
         },
         async signUserIn (vuexContext, payload) {
@@ -85,10 +81,12 @@ export default {
                 vuexContext.commit('setAuthLoading', false)
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
+                return true
             } catch(error) {
                 vuexContext.commit('setAuthError', error)
                 vuexContext.commit('setAuthLoading', false)
-                console.log('[ERROR] ' + error)
+                console.log('[ERROR-signUserIn]', error)
+                return false
             }
         },
         initAuth (vuexContext) {
@@ -115,155 +113,228 @@ export default {
                 localStorage.removeItem('auth-event')
             }
         },
-        async isUnique (vuexContext, payload) {
-            const item = await usersRef.orderByChild('email').equalTo(payload).once('value')
-            if(item.val()) return false
-            return true
-        },
-        async updateUserInfo (vuexContext, editedUser) {
-            vuexContext.commit('setAuthLoading', true)
-            try{
-                const updatedUser = {
-                    ...editedUser,
-                    id: null,
-                    updatedDate: new Date().toISOString()
-                }
-                await usersRef.child(editedUser.id).update(updatedUser)
-                updatedUser.id = editedUser.id
-                vuexContext.commit('setUser', updatedUser)
-                vuexContext.commit('setAuthLoading', false)
-                localStorage.setItem('auth-event', '')
-                localStorage.removeItem('auth-event')
-            } catch(error){
-                vuexContext.commit('setAuthLoading', false)
-                console.log('[ERROR] ' + error)
-            }
-        },
-        async updateEmail (vuexContext, editedUser) {
-            vuexContext.commit('setAuthLoading', true)
-            try{
-                const user = firebase.auth().currentUser //? Error
-                await user.updateEmail(editedUser.email)
-                const updatedUser = {
-                    ...editedUser,
-                    id: null,
-                    updatedDate: new Date().toISOString()
-                }
-                await usersRef.child(editedUser.id).update(updatedUser)
-                updatedUser.id = editedUser.id
-                vuexContext.commit('setUser', updatedUser)
-                vuexContext.commit('setAuthLoading', false)
-                localStorage.setItem('auth-event', '')
-                localStorage.removeItem('auth-event')
-            } catch(error){
-                vuexContext.commit('setAuthLoading', false)
-                console.log('[ERROR] ' + error)
-            }
-        },
-        async updatePassword (vuexContext, editedPassword) {
+        //? DONE
+        async updateUserContent (vuexContext, newUserContent) {
             vuexContext.commit('setAuthLoading', true)
             try{
                 const user = firebase.auth().currentUser
-                const editedUser = vuexContext.getters.user
-                await user.updatePassword(editedPassword)
-                const updatedUser = {
-                    updatedDate: new Date().toISOString()
+                const loadedUser = vuexContext.getters.user
+                const userId = loadedUser.id
+
+                await usersRef.child(userId).update(newUserContent)
+
+                await user.updateProfile({
+                    displayName: newUserContent.fullname
+                })
+                if(newUserContent.username !== loadedUser.username) {
+                    await vuexContext.commit('updateItemsByUser', {
+                        newUsername: newUserContent.username,
+                        newAvatar: loadedUser.avatar
+                    })
+                    await vuexContext.commit('updateItemsByUser', {
+                        newUsername: newUserContent.username,
+                        newAvatar: loadedUser.avatar
+                    })
                 }
-                await usersRef.child(editedUser.uid).update(updatedUser)
+                vuexContext.commit('setUser', {
+                    ...loadedUser,
+                    ...newUserContent
+                })
                 vuexContext.commit('setAuthLoading', false)
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
             } catch(error){
                 vuexContext.commit('setAuthLoading', false)
-                console.log('[ERROR] ' + error)
+                console.log('[ERROR-updateUserContent]', error)
             }
         },
-        async updateAvatar (vuexContext, newAvatar) {
+        // https://firebase.google.com/docs/auth/web/manage-users#re-authenticate_a_user
+        // https://stackoverflow.com/questions/37811684/how-to-create-credential-object-needed-by-firebase-web-user-reauthenticate-m
+        // his operation is sensitive and requires recent au…ation. Log in again before retrying this request.
+        // https://medium.com/@ericmorgan1/change-user-email-password-in-firebase-and-react-native-d0abc8d21618
+        async updateUserEmail (vuexContext, payload) {
+            vuexContext.commit('setAuthLoading', true)
+            try{
+                let user = firebase.auth().currentUser
+                const loadedUser = vuexContext.getters.user
+                const userId = loadedUser.id
+                const confirmPassword = payload.confirmPassword
+                const newEmail = payload.newEmail
+                const credential = await firebase.auth.EmailAuthProvider.credential(
+                    user.email,
+                    confirmPassword
+                )
+                await user.reauthenticateAndRetrieveDataWithCredential(credential)
+                user = firebase.auth().currentUser // RetrieveData
+                await user.updateEmail(newEmail)
+                await usersRef.child(userId).update({
+                    email: newEmail
+                })
+                vuexContext.commit('setUser', {
+                    ...loadedUser,
+                    email: newEmail
+                })
+                vuexContext.commit('setAuthLoading', false)
+                localStorage.setItem('auth-event', '')
+                localStorage.removeItem('auth-event')
+                return true
+            } catch(error){
+                vuexContext.commit('setAuthLoading', false)
+                console.log('[ERROR-updateUserEmail]', error)
+                return false
+            }
+        },
+        //? DONE
+        async updateUserPassword (vuexContext, payload) {
+            vuexContext.commit('setAuthLoading', true)
+            try{
+                let user = firebase.auth().currentUser
+                const confirmPassword = payload.confirmPassword
+                const newPassword = payload.newPassword
+                const credential = await firebase.auth.EmailAuthProvider.credential(
+                    user.email,
+                    confirmPassword
+                )
+                await user.reauthenticateAndRetrieveDataWithCredential(credential)
+                user = firebase.auth().currentUser // RetrieveData
+                await user.updatePassword(newPassword)
+                vuexContext.commit('setAuthLoading', false)
+                localStorage.setItem('auth-event', '')
+                localStorage.removeItem('auth-event')
+                return true
+            } catch(error){
+                vuexContext.commit('setAuthLoading', false)
+                console.log('[ERROR-updateUserPassword]', error)
+                return false
+            }
+        },
+        //? DONE
+        async updateUserAvatar (vuexContext, newAvatar) {
             vuexContext.commit('setAuthLoading', true)
             try {
-                const editedUser = vuexContext.getters.user
-                const userId = editedUser.id
+                const user = firebase.auth().currentUser
+                const loadedUser = vuexContext.getters.user
+                const userId = loadedUser.id
+                const oldAvatar = loadedUser.avatar
+                if(oldAvatar) {
+                    await firebase.storage().ref('users/' + oldAvatar.metadata.name).delete()
+                }
+                if(!newAvatar) {
+                    await usersRef.child(userId).update({
+                        avatar: null
+                    })
+                    await vuexContext.dispatch('updateShopsByUser', {
+                        newUsername: loadedUser.username,
+                        newAvatar: null
+                    })
+                    await vuexContext.dispatch('updateItemsByUser', {
+                        newUsername: loadedUser.username,
+                        newAvatar: null
+                    })
+                    delete loadedUser.avatar
+                    vuexContext.commit('setAuthLoading', false)
+                    return
+                }
+
                 let avatarObject = null
-                const oldAvatarObject = editedUser.avatar
                 const storageMetadata = {
                     cacheControl: 'public,max-age=31536000',
                 }
-                if(oldAvatarObject === undefined && newAvatar === null) {
-                    vuexContext.commit('setAuthLoading', false)
-                    return
-                }else if(oldAvatarObject !== undefined && newAvatar === null) {
-                    await firebase.storage().ref('users/' + oldAvatarObject.metadata.name).delete()
-                }else if(oldAvatarObject === undefined && newAvatar !== null) {
-                    const ext = newAvatar.name.slice(newAvatar.name.lastIndexOf('.'))
-                    const newImgName = uiid(15) + ext
-                    const metaData = { 
-                        name: newImgName, 
-                        size: newAvatar.size,
-                        creatorId: userId
-                    }
-                    await firebase.storage().ref('users/' + newImgName).put(newAvatar, storageMetadata)
-                    const avatarDownloadUrl = await firebase.storage().ref('users/' + newImgName).getDownloadURL()
-                    avatarObject = {
-                        metadata: metaData,
-                        url: avatarDownloadUrl
-                    }
-                }else if(oldAvatarObject !== undefined && newAvatar !== null){
-                    if(newAvatar.url === undefined) {
-                        await firebase.storage().ref('users/' + oldAvatarObject.metadata.name).delete()
-                        const ext = newAvatar.name.slice(newAvatar.name.lastIndexOf('.'))
-                        const newImgName = uiid(15) + ext
-                        const metaData = { 
-                            name: newImgName, 
-                            size: newAvatar.size,
-                            creatorId: userId
-                        }
-                        await firebase.storage().ref('users/' + newImgName).put(newAvatar, storageMetadata)
-                        const avatarDownloadUrl = await firebase.storage().ref('users/' + newImgName).getDownloadURL()
-                        avatarObject = {
-                            metadata: metaData,
-                            url: avatarDownloadUrl
-                        }
-                    }else {
-                        vuexContext.commit('setAuthLoading', false)
-                        return
-                    }
+                const ext = newAvatar.name.slice(newAvatar.name.lastIndexOf('.'))
+                const newAvatarName = userId + ext
+                const metaData = { 
+                    name: newAvatarName, 
+                    size: newAvatar.size, 
+                    _creator: userId
                 }
-                const update = {
-                    avatar: avatarObject,
-                    updatedDate: new Date().toISOString()
+                await firebase.storage().ref('users/' + newAvatarName).put(newAvatar, storageMetadata)
+                const avatarDownloadUrl = await firebase.storage().ref('users/' + newAvatarName).getDownloadURL()
+                avatarObject = {
+                    metadata: metaData,
+                    url: avatarDownloadUrl
                 }
-                await usersRef.child(userId).update(update)
+                
+                await user.updateProfile({
+                    photoURL: avatarObject.url
+                })
+                await usersRef.child(userId).update({
+                    avatar: avatarObject
+                })
+                await vuexContext.dispatch('updateShopsByUser', {
+                    newUsername: loadedUser.username,
+                    newAvatar: avatarObject
+                })
+                await vuexContext.dispatch('updateItemsByUser', {
+                    newUsername: loadedUser.username,
+                    newAvatar: avatarObject
+                })
                 const updatedUser = {
-                    ...editedUser,
-                    ...update
+                    ...loadedUser,
+                    avatar: avatarObject
                 }
-                if(!updatedUser.avatar) delete updatedUser.avatar
                 vuexContext.commit('setUser', updatedUser)
                 vuexContext.commit('setAuthLoading', false)
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
             } catch(error) {
-                console.log('[ERROR] ' + error)
+                console.log('[ERROR-updateAvatar]', error)
                 vuexContext.commit('setAuthLoading', false)
             }
         },
-        async deleteUser (vuexContext, deletedUser) {
+        // TODO: cannot delete images
+        async deleteUser (vuexContext, confirmPassword) {
             vuexContext.commit('setAuthLoading', true)
             try{
-                const user = firebase.auth().currentUser;
+                let user = firebase.auth().currentUser
+                const loadedUser = vuexContext.getters.user
+                const userId = loadedUser.id
+                const credential = await firebase.auth.EmailAuthProvider.credential(
+                    user.email,
+                    confirmPassword
+                )
+                await user.reauthenticateAndRetrieveDataWithCredential(credential)
+                user = firebase.auth().currentUser // RetrieveData
                 await user.delete()
-                await usersRef.child(deletedUser.id).remove()
+                await usersRef.child(userId).remove()
+                await vuexContext.dispatch('deleteItemsByUser', userId)
+                await vuexContext.dispatch('deleteShopsByUser', userId)
                 Cookie.remove("uid")
                 Cookie.remove("expirationDate")
+                vuexContext.commit('setUser', null)
                 vuexContext.commit('setAuthLoading', false)
-                if(process.client) {
-                    localStorage.setItem('auth-event', '')
-                    localStorage.removeItem('auth-event')
-                }
+                localStorage.setItem('auth-event', '')
+                localStorage.removeItem('auth-event')
+                return true
             } catch(error){
                 vuexContext.commit('setAuthLoading', false)
-                console.log('[ERROR] ' + error)
+                console.log('[ERROR-deleteUser]', error)
+                return false
             }  
+        },
+        async isCorrectPassword (vuexContext, confirmPassword) {
+            try{
+                const user = firebase.auth().currentUser
+                const loadedUser = vuexContext.getters.user
+                const credential = await firebase.auth.EmailAuthProvider.credential(
+                    loadedUser.email,
+                    confirmPassword
+                )
+                await user.reauthenticateAndRetrieveDataWithCredential(credential)
+                return true
+            } catch(error) {
+                console.log('[ERROR-isCorrectPassword]', error)
+                return false
+            }
+        },
+        async isUnique (vuexContext, payload) {
+            try{
+                const item = await usersRef.orderByChild('email').equalTo(payload).once('value')
+                if(item.val()) return false
+                return true
+            } catch(error) {
+                console.log('[ERROR-isUnique]', error)
+                return false
+            }
         }
     },
     getters: {

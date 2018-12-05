@@ -328,7 +328,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { deepCopy } from '~/plugins/funcs'
+    import { deepCopy } from '~/plugins/utility-helpers'
     import { required, email, numeric, sameAs, minLength } from 'vuelidate/lib/validators'
     import Vue from 'vue'
     import Vuelidate from 'vuelidate'

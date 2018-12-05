@@ -1,16 +1,8 @@
-import firebase from '~/plugins/firebase'
+import firebase from '~/plugins/plugin-firebase'
 const db = firebase.database()
 const usersRef = db.ref('users')
 
 export default {
-    state: {
-        sideBar: false
-    },
-    mutations: {
-        setSideBar (state, payload) {
-            state.sideBar = payload
-        }
-    },
     actions: {
         // nuxtServerInit should be only used for authentication
         async nuxtServerInit (vuexContext, { req, error }) {
@@ -44,19 +36,11 @@ export default {
                     ...userObj
                 }
                 vuexContext.commit('setUser', userProfile)
-            }catch (e) {
-                vuexContext.commit('setAuthError', e)
-                console.log('[ERROR] ' + e)
+            }catch (error) {
+                vuexContext.commit('setAuthError', error)
+                console.log('[ERROR-nuxtServerInit]', error)
                 error({ statusCode: 500, message: '...Lỗi' })
             } 
-        },
-        openSideBar (vuexContext, payload) {
-            vuexContext.commit('setSideBar', payload)
-        }
-    },
-    getters: {
-        sideBar(state) {
-            return state.sideBar
         }
     }
 }
