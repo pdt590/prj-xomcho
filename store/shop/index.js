@@ -1,13 +1,12 @@
 import firebase from '~/plugins/plugin-firebase'
-import { genId, genUrl, fetchId, cleanObject } from '~/plugins/utility-helpers'
+import { genId, genUrl, fetchId } from '~/plugins/util-helpers'
 const db = firebase.database()
 const shopsRef = db.ref('shops')
 
 export default {
     state: {
         shopLoading: false,
-        loadedShop: null,
-        loadedOwnShops: []
+        loadedShop: null
     },
     mutations: {
         setShopLoading (state, payload) {
@@ -15,10 +14,7 @@ export default {
         },
         setShop (state, payload) {
             state.loadedShop = payload
-        },
-        setOwnShops (state, payload) {
-            state.loadedOwnShops = payload
-        },
+        }
     },
     actions: {
         //? DONE
@@ -94,11 +90,15 @@ export default {
         async updateShopContent (vuexContext, newShopContent) {
             vuexContext.commit('setShopLoading', true)
             try {
-                cleanObject(newShopContent)
                 const loadedShop = vuexContext.getters.loadedShop
                 const shopId = fetchId(loadedShop.url)
 
                 await shopsRef.child(shopId).update(newShopContent)
+                if(newShopContent.category !== loadedShop.category) {
+                    await vuexContext.dispatch('updateItemsByShop', {
+                        category: newShopContent.category
+                    })
+                }
 
                 vuexContext.commit('setShop', {
                     ...loadedShop,
@@ -123,8 +123,7 @@ export default {
                 }
                 await shopsRef.child(shopId).update(update)
                 await vuexContext.dispatch('updateItemsByShop', {
-                    newShopTitle: newShopTitle,
-                    newShopLogo: loadedShop.logoImage
+                    title: newShopTitle
                 })
                 vuexContext.commit('setShop', {
                     ...loadedShop,
@@ -152,8 +151,7 @@ export default {
                         logoImage: null
                     })
                     await vuexContext.dispatch('updateItemsByShop', {
-                        newShopTitle: loadedShop.title,
-                        newShopLogo: null
+                        logoImage: null
                     })
                     delete loadedShop.logoImage // or loadedShop.logoImage = null
                     vuexContext.commit('setShopLoading', false)
@@ -182,8 +180,7 @@ export default {
                     logoImage: logoObject
                 })
                 await vuexContext.dispatch('updateItemsByShop', {
-                    newShopTitle: loadedShop.title,
-                    newShopLogo: logoObject
+                    logoImage: logoObject
                 })
                 const updatedShop = {
                     ...loadedShop,
@@ -286,66 +283,43 @@ export default {
                 vuexContext.commit('setShopLoading', false)
             }
         },
-        //? DONE
-        async loadPreviewShops (vuexContext) {
-            vuexContext.commit('setShopLoading', true)
-            try {
-                const shopsData = await shopsRef.orderByChild('updatedDate').limitToLast(45).once('value')         
-                const loadedShops = []
-                shopsData.forEach(shopData => {
-                    const shopObj = shopData.val()
-                    loadedShops.push(shopObj)
-                })
-                loadedShops.reverse()
-                vuexContext.commit('setShopLoading', false)
-                return loadedShops
-            } catch(error) {
-                console.log('[ERROR-loadPreviewShops]', error)
-                vuexContext.commit('setShopLoading', false)
-            }
-        },
-        async loadOwnShops (vuexContext) {
-            vuexContext.commit('setShopLoading', true)
-            try {
-                const userId = vuexContext.getters.user.id
-                const shopsData = await shopsRef.orderByChild('_creator/id').equalTo(userId).once('value')     
-                const loadedShops = []
-                shopsData.forEach(shopData => {
-                    const shopObj = shopData.val()
-                    loadedShops.push(shopObj)
-                })
-                loadedShops.reverse()
-                vuexContext.commit('setOwnShops', loadedShops)
-                vuexContext.commit('setShopLoading', false)
-                return loadedShops
-            } catch(error) {
-                console.log('[ERROR-loadOwnShops]', error)
-                vuexContext.commit('setShopLoading', false)
-            }
-        },
-
         /**
          * Actions called by user
          */
         async updateShopsByUser(vuexContext, payload) {
             vuexContext.commit('setShopLoading', true)
             try {
-                const userId = vuexContext.getters.user.id
+                const user = vuexContext.getters.user
+                const userId = user.id
                 const shopsData = await shopsRef.orderByChild('_creator/id').equalTo(userId).once('value')
                 let updates = {}
                 shopsData.forEach(shopData => {
-                    const shopObj = shopData.val()
-                    updates[shopData.key] = {
-                        ...shopObj,
-                        _creator: {
-                            id: userId,
-                            username: payload.newUsername,
-                            avatar: payload.newAvatar
-                        }
-                    }
+                    payload.username !== undefined ? updates[`${shopData.key}/_creator/username`] = payload.username : ``
+                    payload.avatar !== undefined ? updates[`${shopData.key}/_creator/avatar`] = payload.avatar : ``
+                    // const shopObj = shopData.val()
+                    // if(payload.username !== undefined) {
+                    //     updates[shopData.key] = {
+                    //         ...shopObj,
+                    //         _creator: {
+                    //             id: userId,
+                    //             username: payload.username,
+                    //             avatar: user.avatar ? user.avatar : null
+                    //         }
+                    //     }
+                    // }
+                    // if(payload.avatar !== undefined) {
+                    //     updates[shopData.key] = {
+                    //         ...shopObj,
+                    //         _creator: {
+                    //             id: userId,
+                    //             username: user.username,
+                    //             avatar: payload.avatar
+                    //         }
+                    //     } 
+                    // }
                 })
                 await shopsRef.update(updates)
-                vuexContext.commit('setShop', )
+                vuexContext.commit('setShop', ) // TODO: how to update current loadedshop
                 vuexContext.commit('setShopLoading', false)
             } catch(error) {
                 console.log('[ERROR-updateShopsByUser]', error)
@@ -385,16 +359,6 @@ export default {
         },
         loadedShop(state) {
             return state.loadedShop
-        },
-        loadedOwnShops(state) {
-            return state.loadedOwnShops
-        },
-        loadedOwnShop(state) {
-            return (itemUrl) => {
-                return state.loadedOwnShops.find(item => {
-                    return item.url === itemUrl
-                })
-            }
         }
     }
 }

@@ -46,7 +46,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import { required, email, minLength } from 'vuelidate/lib/validators'
-    import { authMessage } from '~/plugins/utility-helpers'
+    import { authMessage } from '~/plugins/util-helpers'
 
     export default {
         computed: {

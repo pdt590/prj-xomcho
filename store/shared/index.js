@@ -36,9 +36,9 @@ export default {
                     ...userObj
                 }
                 vuexContext.commit('setUser', userProfile)
-            }catch (error) {
-                vuexContext.commit('setAuthError', error)
-                console.log('[ERROR-nuxtServerInit]', error)
+            }catch (e) {
+                vuexContext.commit('setAuthError', e)
+                console.log('[ERROR-nuxtServerInit]', e)
                 error({ statusCode: 500, message: '...Lỗi' })
             } 
         }

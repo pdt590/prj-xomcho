@@ -127,13 +127,11 @@ export default {
                     displayName: newUserContent.fullname
                 })
                 if(newUserContent.username !== loadedUser.username) {
-                    await vuexContext.commit('updateItemsByUser', {
-                        newUsername: newUserContent.username,
-                        newAvatar: loadedUser.avatar
+                    await vuexContext.dispatch('updateShopsByUser', {
+                        username: newUserContent.username
                     })
-                    await vuexContext.commit('updateItemsByUser', {
-                        newUsername: newUserContent.username,
-                        newAvatar: loadedUser.avatar
+                    await vuexContext.dispatch('updateItemsByUser', {
+                        username: newUserContent.username
                     })
                 }
                 vuexContext.commit('setUser', {
@@ -224,12 +222,10 @@ export default {
                         avatar: null
                     })
                     await vuexContext.dispatch('updateShopsByUser', {
-                        newUsername: loadedUser.username,
-                        newAvatar: null
+                        avatar: null
                     })
                     await vuexContext.dispatch('updateItemsByUser', {
-                        newUsername: loadedUser.username,
-                        newAvatar: null
+                        avatar: null
                     })
                     delete loadedUser.avatar
                     vuexContext.commit('setAuthLoading', false)
@@ -261,12 +257,10 @@ export default {
                     avatar: avatarObject
                 })
                 await vuexContext.dispatch('updateShopsByUser', {
-                    newUsername: loadedUser.username,
-                    newAvatar: avatarObject
+                    avatar: avatarObject
                 })
                 await vuexContext.dispatch('updateItemsByUser', {
-                    newUsername: loadedUser.username,
-                    newAvatar: avatarObject
+                    avatar: avatarObject
                 })
                 const updatedUser = {
                     ...loadedUser,
@@ -281,13 +275,15 @@ export default {
                 vuexContext.commit('setAuthLoading', false)
             }
         },
-        // TODO: cannot delete images
+        //? DONE
         async deleteUser (vuexContext, confirmPassword) {
             vuexContext.commit('setAuthLoading', true)
             try{
                 let user = firebase.auth().currentUser
                 const loadedUser = vuexContext.getters.user
                 const userId = loadedUser.id
+                await vuexContext.dispatch('deleteItemsByUser', userId)
+                await vuexContext.dispatch('deleteShopsByUser', userId)
                 const credential = await firebase.auth.EmailAuthProvider.credential(
                     user.email,
                     confirmPassword
@@ -296,8 +292,6 @@ export default {
                 user = firebase.auth().currentUser // RetrieveData
                 await user.delete()
                 await usersRef.child(userId).remove()
-                await vuexContext.dispatch('deleteItemsByUser', userId)
-                await vuexContext.dispatch('deleteShopsByUser', userId)
                 Cookie.remove("uid")
                 Cookie.remove("expirationDate")
                 vuexContext.commit('setUser', null)

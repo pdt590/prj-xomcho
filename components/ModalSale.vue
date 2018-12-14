@@ -79,7 +79,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { authMessage } from '~/plugins/utility-helpers'
+    import { authMessage } from '~/plugins/util-helpers'
 
     export default {
         computed: {

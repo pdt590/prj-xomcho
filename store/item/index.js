@@ -1,13 +1,12 @@
 import firebase from '~/plugins/plugin-firebase'
-import { genId, genUrl, fetchId, cleanObject } from '~/plugins/utility-helpers'
+import { genId, genUrl, fetchId } from '~/plugins/util-helpers'
 const db = firebase.database()
 const itemsRef = db.ref('items')
 
 export default {
     state: {
         itemLoading: false,
-        loadedItems: [],
-        loadedOwnItems: [],
+        loadedItems: []
     },
     mutations:  {
         setItemLoading(state, payload) {
@@ -16,9 +15,6 @@ export default {
         setItems(state, payload) {
             state.loadedItems = payload
             state.loadedItems.sort((a, b) => Date.parse(b.updatedDate) - Date.parse(a.updatedDate))
-        },
-        setOwnItems(state, payload) {
-            state.loadedOwnItems = payload
         },
         addItem(state, payload) {
             state.loadedItems.splice(0, 0, payload) // Push to top
@@ -223,64 +219,43 @@ export default {
                 vuexContext.commit('setItemLoading', false)
             }
         },
-        //? DONE
-        async loadPreviewItems (vuexContext) {
-            vuexContext.commit('setItemLoading', true)
-            try {
-                const itemsData = await itemsRef.orderByChild('updatedDate').limitToLast(45).once('value')
-                const loadedItems = []
-                itemsData.forEach(itemData => {
-                    const itemObj = itemData.val()
-                    loadedItems.push(itemObj)
-                })
-                loadedItems.reverse()
-                vuexContext.commit('setItemLoading', false)
-                return loadedItems
-            } catch(error) {
-                console.log('[ERROR-loadPreviewItems]', error)
-                vuexContext.commit('setItemLoading', false)
-            }
-        },
-        //? DONE
-        async loadOwnItems (vuexContext) {
-            vuexContext.commit('setItemLoading', true)
-            try {
-                const userId = vuexContext.getters.user.id
-                const itemsData = await itemsRef.orderByChild('_creator/id').equalTo(userId).once('value')
-                const loadedItems = []
-                itemsData.forEach(itemData => {
-                    const itemObj = itemData.val()
-                    loadedItems.push(itemObj)
-                })
-                loadedItems.reverse()
-                vuexContext.commit('setOwnItems', loadedItems)
-                vuexContext.commit('setItemLoading', false)
-                return loadedItems
-            } catch(error) {
-                console.log('[ERROR-loadOwnItems]', error)
-                vuexContext.commit('setItemLoading', false)
-            }
-        },
-
         /**
          * Actions called by Shop
          */
-        //? DONE
         async updateItemsByShop(vuexContext, payload) {
             vuexContext.commit('setItemLoading', true)
             try {
-                const shopId = fetchId(vuexContext.getters.loadedShop.url)
+                const loadedShop = vuexContext.getters.loadedShop
+                const shopId = fetchId(loadedShop.url)
                 const itemsData = await itemsRef.orderByChild('_shop/id').equalTo(shopId).once('value')
                 let updates = {}
                 let loadedItems = []
                 itemsData.forEach(itemData => {
                     const itemObj = itemData.val()
-                    updates[itemData.key] = {
-                        ...itemObj,
-                        _shop: {
-                            id: shopId,
-                            title: payload.newShopTitle,
-                            logoImage: payload.newShopLogo
+                    if(payload.title !== undefined) { // Update title
+                        updates[itemData.key] = {
+                            ...itemObj,
+                            _shop: {
+                                id: shopId,
+                                title: payload.title,
+                                logoImage: loadedShop.logoImage ? loadedShop.logoImage : null
+                            }
+                        }
+                    }
+                    if(payload.logoImage !== undefined) { // Update logoImage
+                        updates[itemData.key] = {
+                            ...itemObj,
+                            _shop: {
+                                id: shopId,
+                                title: loadedShop.title,
+                                logoImage: payload.logoImage
+                            }
+                        }
+                    }
+                    if(payload.category !== undefined) { // Update category
+                        updates[itemData.key] = {
+                            ...itemObj,
+                            category: payload.category
                         }
                     }
                     loadedItems.push({
@@ -330,30 +305,40 @@ export default {
         async updateItemsByUser(vuexContext, payload) {
             vuexContext.commit('setItemLoading', true)
             try {
-                const userId = vuexContext.getters.user.id
+                const user = vuexContext.getters.user
+                const userId = user.id
                 const itemsData = await itemsRef.orderByChild('_creator/id').equalTo(userId).once('value')
                 let updates = {}
-                let loadedItems = []
                 itemsData.forEach(itemData => {
-                    const itemObj = itemData.val()
-                    updates[itemData.key] = {
-                        ...itemObj,
-                        _creator: {
-                            id: userId,
-                            username: payload.newUsername,
-                            avatar: payload.newAvatar
-                        }
-                    }
-                    loadedItems.push({
-                        id: itemData.key,
-                        ...updates[itemData.key]
-                    })
+                    payload.username !== undefined ? updates[`${itemData.key}/_creator/username`] = payload.username : ``
+                    payload.avatar !== undefined ? updates[`${itemData.key}/_creator/avatar`] = payload.avatar : ``
+                    // const itemObj = itemData.val()
+                    // if(payload.username !== undefined) {
+                    //     updates[itemData.key] = {
+                    //         ...itemObj,
+                    //         _creator: {
+                    //             id: userId,
+                    //             username: payload.username,
+                    //             avatar: user.avatar ? user.avatar: null
+                    //         }
+                    //     }
+                    // }
+                    // if(payload.avatar !== undefined) {
+                    //     updates[itemData.key] = {
+                    //         ...itemObj,
+                    //         _creator: {
+                    //             id: userId,
+                    //             username: user.username,
+                    //             avatar: payload.avatar
+                    //         }
+                    //     }
+                    // }
                 })
                 await itemsRef.update(updates)
-                vuexContext.commit('setItems', loadedItems)
+                vuexContext.commit('setItems', ) // TODO: how to update current loadedItems
                 vuexContext.commit('setItemLoading', false)
             } catch(error) {
-                console.log('[ERROR-updateItemsByShop]', error)
+                console.log('[ERROR-updateItemsByUser]', error)
                 vuexContext.commit('setItemLoading', false)
             }
         },
@@ -391,21 +376,7 @@ export default {
             return state.loadedItems
         },
         loadedItem(state) {
-            return (itemUrl) => {
-                return state.loadedItems.find(item => {
-                    return item.url === itemUrl
-                })
-            }
-        },
-        loadedOwnItems(state) {
-            return state.loadedOwnItems
-        },
-        loadedOwnItem(state) {
-            return (itemUrl) => {
-                return state.loadedOwnItems.find(item => {
-                    return item.url === itemUrl
-                })
-            }
+            return (itemUrl) => state.loadedItems.find(item => item.url === itemUrl)
         }
     }
 }

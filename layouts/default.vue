@@ -1,6 +1,7 @@
 <template>
-    <div>
-        <v-navbar/>
+    <div class="v-layout">
+        <v-navbar class="is-hidden-mobile"/>
+        <v-navbar-mobile class="is-hidden-tablet"/>
         <main class="v-main">
             <nuxt/>
         </main>
@@ -15,3 +16,14 @@
         middleware: 'check-auth'
     }
 </script>
+
+<style lang="scss" scoped>
+    .v-layout {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    .v-main {
+        flex: 1;
+    }
+</style>

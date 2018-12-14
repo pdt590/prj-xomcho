@@ -1,44 +1,39 @@
 <template>
     <div class="card">
         <div class="card-image v-card-image">
-			<a :href="`/shops/${genShopUrl(itemData._shop.title, itemData._shop.id)}/${itemData.url}`">
+			<nuxt-link :to="`/shops/${genShopUrl(itemData._shop.title, itemData._shop.id)}/${itemData.url}`">
 				<figure class="image is-4by3">
-					<img :src="itemData.images ? itemData.images[0].url : `/icon-photo.png`" alt="item_image">
+					<img class="v-image-card" v-lazy="itemData.images ? itemData.images[0].url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="item_image">
 				</figure>
-			</a>
-            <div class="v-item-pin" v-if="isSale">
-                Giảm giá
-            </div>
-            <div class="v-item-pin" v-else-if="isNew">
+			</nuxt-link>
+            <div class="v-item-pin-new" v-if="isNew">
                 Mới
             </div>
+            <div class="v-item-pin-sale" v-else-if="isSale">
+                Giảm {{Math.floor((itemData.oldPrice - itemData.price)*100/itemData.oldPrice)}}%
+            </div>
         </div>
-        <div class="card-content">
-            <p class="title is-5">
-                <a :href="`/shops/${genShopUrl(itemData._shop.title, itemData._shop.id)}/${itemData.url}`">
-                    {{itemData.title}}
-                </a>
-            </p>
-			<p class="subtitle is-6 has-text-weight-normal has-text-black">
-				<a class="has-text-grey" :href="`/shops/${genShopUrl(itemData._shop.title, itemData._shop.id)}`">
-					@{{itemData._shop.title}}
-				</a>
-			</p>
+        <div class="card-content v-card-content">
+            <b-tooltip :label="itemData.title" type="is-light" square>
+                <nuxt-link :to="`/shops/${genShopUrl(itemData._shop.title, itemData._shop.id)}/${itemData.url}`">
+                    <span class="is-size-6 has-text-weight-bold has-text-black">{{itemData.title | fmString(30)}}</span> 
+                </nuxt-link>
+            </b-tooltip>
+            <br>
+            <nuxt-link :to="`/shops/${genShopUrl(itemData._shop.title, itemData._shop.id)}`">
+                <span class="is-size-6 has-text-weight-normal has-text-grey">🛒{{itemData._shop.title}}</span>
+            </nuxt-link>
         </div>
         <div class="card-footer v-card-footer">
-            <div>
-                <b-tooltip label="Mua hàng" type="is-info" position="is-right">
-                    <a @click="isModalSaleActive=true">
-                        <b-icon icon="shopping" style="color: #AAA"></b-icon>
-                    </a>
-                </b-tooltip> 
-            </div>
-            <div v-if="itemData.salePrice">
-            	<strike class="is-size-6 has-text-grey-light">{{itemData.price | fmPrice}}{{itemData.currency}}</strike>
-				<span class="is-size-5">{{itemData.salePrice | fmPrice}}{{itemData.currency}}</span>
+            <a @click="isModalSaleActive=true">
+                <b-icon icon="shopping" class="has-text-grey-light"></b-icon>
+            </a>
+            <div v-if="isSale">
+                <p class="is-size-5 has-text-danger">{{itemData.price | fmPrice}}{{itemData.currency}}</p>
+            	<strike class="is-size-6 has-text-grey-light">{{itemData.oldPrice | fmPrice}}{{itemData.currency}}</strike>
             </div>
             <div v-else>
-				<span class="is-size-5">{{itemData.price | fmPrice}}{{itemData.currency}}</span>
+				<span class="is-size-5 has-text-danger">{{itemData.price | fmPrice}}{{itemData.currency}}</span>
             </div>
         </div>
         <b-modal :active.sync="isModalSaleActive" has-modal-card>
@@ -48,7 +43,7 @@
 </template>
 
 <script>
-    import { genUrl } from '~/plugins/utility-helpers'
+    import { genUrl } from '~/plugins/util-helpers'
 
     export default {
         props: {
@@ -59,13 +54,12 @@
         },
         computed: {
             isSale() {
-                return (this.itemData.salePrice ? true : false)
+                return (this.itemData.oldPrice && Number(this.itemData.oldPrice) > Number(this.itemData.price) ? true : false)
             },
             isNew() {
-                return ( 
-                    (Date.parse(this.itemData.updatedDate) +  (72 * 3600 * 1000) < new Date().getTime()) ?
-                    true : false
-                )
+                const now = new Date().getTime();
+                const estimatedTime = Date.parse(this.itemData.updatedDate) +  (24 * 3600 * 1000)
+                return (estimatedTime > now ? true : false)
             }
         },
         data() {
@@ -83,16 +77,17 @@
 
 <style lang="scss" scoped>
     .card {
-        box-shadow: 0 2px 5px 0 rgba(88,88,102,.07);
-        border-radius: 0.3rem;
+        border-radius: 4px;
         border: 1px solid #D8D8D8;
+        box-shadow: none;
         .v-card-image {
-			position: relative;
+            position: relative;
+            border-bottom:  1px solid #D8D8D8;
 			img {
 				border-top-left-radius: 0.3rem;
 				border-top-right-radius: 0.3rem;
 			}
-			.v-item-pin {
+			.v-item-pin-new {
 				position: absolute;
 				top: 5%;
 				right: -1rem;
@@ -113,14 +108,40 @@
                     top: 100%;
                     right: 0;
                 }
+            }
+            .v-item-pin-sale {
+				position: absolute;
+				top: 5%;
+				right: -1rem;
+                text-align: center;
+				background-color: rgb(228, 97, 97);
+                color: white;
+                padding: 0.8rem 0;
+                width: 40%;
+                &:before {
+                    content: '';
+                    position: absolute;
+                    width: 0;
+                    height: 0;
+                    border-width: 0.5rem;
+                    border-style: solid;
+                    border-top-color: rgb(218, 94, 94);
+                    border-left-color: rgb(218, 94, 94);
+                    top: 100%;
+                    right: 0;
+                }
 			}
+        }
+        .v-card-content {
+            height: 5rem;
         }
         .v-card-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-			padding: 0 1.5rem 0.8rem;
+            padding: 0 1.5rem 0.6rem;
+            margin-top: 0.5rem;
 			border-top: none
         }
     }

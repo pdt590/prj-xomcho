@@ -1,17 +1,20 @@
 <template>
-    <div class="container" style="margin-top: 1rem">
+    <div class="container">
         <div class="columns">
             <div class="column is-3" >
                 <div style="position: sticky; top: 8rem;">   
                     <div class="card is-hidden-mobile">
-                        <div class="card-content">
-                            <div class="v-shop-title">
-                                <nuxt-link class="" :to="`/shops/${$route.params.shopUrl}`">
-                                    <figure class="image is-128x128">
-                                        <img :src="loadedShop.logoImage ? `/icon-photo.png` : `/icon-photo.png`" alt="shop_logo">
-                                    </figure>
-                                </nuxt-link>
-                                <br>
+                        <div class="card-content" v-if="loadedShop">
+                            <div class="level">
+                                <div class="level-item">
+                                    <nuxt-link :to="`/shops/${$route.params.shopUrl}`">
+                                        <figure class="image is-128x128" style="border: solid 1px #D8D8D8">
+                                            <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                        </figure>
+                                    </nuxt-link>
+                                </div>
+                            </div>
+                            <div class="has-text-centered">
                                 <h5 class="title is-size-5">{{loadedShop.title}}</h5>
                             </div>
                             <hr>
@@ -41,12 +44,12 @@
                                     </li>
                                 </ul>
                             </div>
-                            <hr>
-                            <nuxt-link class="button is-info is-rounded is-outlined is-fullwidth" 
+                            <hr v-if="user && user.id === loadedShop._creator.id">
+                            <nuxt-link class="button is-info is-rounded is-outlined" 
                                 :to="`/shops/${$route.params.shopUrl}/new-item`"
-                                v-if="user">
+                                v-if="user && user.id === loadedShop._creator.id">
                                 <b-icon icon="plus-box-outline" size="is-small"></b-icon>
-                                <span>Thêm sản phẩm</span>
+                                <strong>Thêm sản phẩm</strong>
                             </nuxt-link>
                         </div>
                     </div>
@@ -54,7 +57,7 @@
                     <b-collapse class="card is-hidden-tablet" :open="false">
                         <header class="card-header" slot="trigger" slot-scope="props">
                             <p class="card-header-title">
-                                <b-icon icon="information-outline"></b-icon>&nbsp;<span>Thông tin</span>
+                                <b-icon icon="information-outline"></b-icon>&nbsp;<span>Thông tin cửa hàng</span>
                             </p>
                             <p class="card-header-icon">
                                 <b-icon
@@ -66,40 +69,52 @@
                             <div class="level">
                                 <div class="level-item">
                                     <nuxt-link class="has-text-centered" :to="`/shops/${$route.params.shopUrl}`">
-                                        <figure class="image is-128x128">
-                                            <img :src="loadedShop.logoImage ? `/icon-photo.png` : `/icon-photo.png`" alt="shop_logo">
+                                        <figure class="image is-128x128" style="border: solid 1px #D8D8D8">
+                                            <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
                                         </figure>
+                                        <br>
                                         <h5 class="title is-size-5">{{loadedShop.title}}</h5>
                                     </nuxt-link>
                                 </div>
-                                <div class="buttons level-item">
-                                    <a class="button is-outlined" 
-                                        :href="`https://maps.google.com/?q=${loadedShop.address}+${loadedShop.province}`" target=_blank>
-                                        <b-icon icon="map-marker"></b-icon>
-                                    </a>
-                                    <a class="button is-outlined" 
-                                        :href="`tel:${loadedShop.phone}`">
-                                        <b-icon icon="cellphone"></b-icon>
-                                    </a>
-                                    <a class="button is-outlined" 
-                                        :href="loadedShop.facebook" target=_blank
-                                        v-if="loadedShop.facebook">
-                                        <b-icon icon="facebook-box"></b-icon>
-                                    </a>
-                                    <a class="button is-outlined" 
-                                        :href="`mailto:${loadedShop.email}` + `?Subject=Xin%20Chào%20${loadedShop.title}`"
-                                        v-if="loadedShop.email">
-                                        <b-icon icon="email"></b-icon>
-                                    </a>
-                                </div> 
                             </div>
                             <hr>
-                            <nuxt-link class="button is-info is-rounded is-outlined is-fullwidth" 
-                                :to="`/shops/${$route.params.shopUrl}/new-item`"
-                                v-if="user">
-                                <b-icon icon="plus-box-outline" size="is-small"></b-icon>
-                                <span>Thêm sản phẩm</span>
-                            </nuxt-link>
+                            <div class="menu">
+                                <p class="menu-label" style="font-size: 0.9rem">
+                                    Liên hệ
+                                </p>
+                                <ul class="menu-list">
+                                    <li>
+                                        <a class="v-list-item" :href="`https://maps.google.com/?q=${loadedShop.address}+${loadedShop.province}`" target=_blank>
+                                            <b-icon icon="map-marker"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.address}}, {{loadedShop.province}}</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="v-list-item" :href="`tel:${loadedShop.phone}`"><b-icon icon="cellphone">
+                                            </b-icon>&nbsp;&nbsp;<span>{{loadedShop.phone}}</span>
+                                        </a>
+                                    </li>
+                                    <li v-if="loadedShop.facebook">
+                                        <a class="v-list-item" :href="loadedShop.facebook" target=_blank>
+                                            <b-icon icon="facebook-box"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.facebook | fmFacebook}}</span>
+                                        </a></li>
+                                    <li v-if="loadedShop.email">
+                                        <a class="v-list-item" :href="`mailto:${loadedShop.email}` + `?Subject=Xin%20Chào%20${loadedShop.title}`">
+                                            <b-icon icon="email"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.email}}</span> 
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <hr v-if="user && user.id === loadedShop._creator.id">
+                            <div class="level">
+                                <div class="level-item">
+                                    <nuxt-link class="button is-info is-rounded is-outlined" 
+                                        :to="`/shops/${$route.params.shopUrl}/new-item`"
+                                        v-if="user && user.id === loadedShop._creator.id">
+                                        <b-icon icon="plus-box-outline" size="is-small"></b-icon>
+                                        <strong>Thêm sản phẩm</strong>
+                                    </nuxt-link>
+                                </div>
+                            </div>
                         </div>
                     </b-collapse>
                     <!--  -->
@@ -110,7 +125,7 @@
                     <div class="card-content">
                         <div class="columns is-gapless">
                             <div class="column is-5">
-                                <v-image-frame></v-image-frame>
+                                <v-image-frame :images="loadedItem.images"></v-image-frame>
                             </div>
                             <div class="column is-7" >
                                 <div class="v-item-description">
@@ -140,18 +155,18 @@
                                         </p>
                                         <ul class="menu-list">
                                             <li>
-                                                <a v-if="loadedItem.salePrice">
-                                                    <h4 class="title is-4 has-text-danger">
-                                                        {{loadedItem.salePrice | fmPrice}} {{loadedItem.currency}}<span class="is-size-5 has-text-dark">&nbsp;({{loadedItem.unit}})</span>
-                                                    </h4>
-                                                    <h5 class="subtitle is-6 has-text-grey-light">
-                                                        <strike>{{loadedItem.price | fmPrice}} {{loadedItem.currency}}</strike>&nbsp;&nbsp;<span>{{(loadedItem.price - loadedItem.salePrice)*-100/loadedItem.price}} %</span>
-                                                    </h5>
+                                                <a v-if="isSale">
+                                                    <p class="title is-4 has-text-danger">
+                                                        {{loadedItem.price | fmPrice}} {{loadedItem.currency}}<span class="is-size-5 has-text-dark" v-if="loadedItem.unit">&nbsp;({{loadedItem.unit}})</span>
+                                                    </p>
+                                                    <p class="subtitle is-6 has-text-grey-light">
+                                                        <strike>{{loadedItem.oldPrice | fmPrice}} {{loadedItem.currency}}</strike>&nbsp;&nbsp;<span>{{Math.floor((loadedItem.oldPrice - loadedItem.price)*-100/loadedItem.oldPrice)}}%</span>
+                                                    </p>
                                                 </a>
                                                 <a v-else>
-                                                    <h4 class="title is-4 has-text-danger">
-                                                        {{loadedItem.price | fmPrice}} {{loadedItem.currency}}<span class="is-size-5 has-text-dark">&nbsp;({{loadedItem.unit}})</span>
-                                                    </h4>
+                                                    <p class="title is-4 has-text-danger">
+                                                        {{loadedItem.price | fmPrice}} {{loadedItem.currency}}<span class="is-size-5 has-text-dark" v-if="loadedItem.unit">&nbsp;({{loadedItem.unit}})</span>
+                                                    </p>
                                                 </a>
                                             </li>
                                         </ul>
@@ -168,31 +183,31 @@
                                         </ul>
                                     </div>
                                     <hr>
-                                    <div class="level">
+                                    <div class="level is-mobile">
                                         <div class="level-left">
                                             <div class="field is-grouped">
                                                 <div class="control">
                                                     <a class="button is-rounded is-info is-outlined" 
                                                         @click="isModalSaleActive=true">
                                                         <b-icon icon="shopping"></b-icon>
-                                                        <span>Mua hàng</span>
+                                                        <strong>Mua hàng</strong>
                                                     </a>
                                                 </div>
-                                                <div class="control">
+                                                <!-- <div class="control">
                                                     <a class="button is-rounded is-danger is-outlined"
                                                         @click="isModalJoinActive=true">
                                                         <b-icon icon="heart-outline"></b-icon>
                                                         <span>Lưu sản phẩm</span>
                                                     </a>
-                                                </div>
+                                                </div> -->
                                             </div>
                                         </div>
-                                        <div class="level-right" v-if="user">
+                                        <div class="level-right" v-if="user && user.id === loadedShop._creator.id">
                                             <nuxt-link class="button is-rounded is-outlined" 
                                                 :to="`/shops/${$route.params.shopUrl}/${$route.params.itemUrl}/edit-item`"
-                                                v-if="user">
+                                                v-if="user && user.id === loadedShop._creator.id">
                                                 <b-icon icon="settings-outline"></b-icon>
-                                                <span>Chỉnh sửa</span>
+                                                <strong>Chỉnh sửa</strong>
                                             </nuxt-link>
                                         </div>
                                     </div>
@@ -212,9 +227,9 @@
         <b-modal :active.sync="isModalSaleActive" has-modal-card>
             <v-modal-sale />
         </b-modal>
-        <b-modal :active.sync="isModalJoinActive" has-modal-card>
+        <!-- <b-modal :active.sync="isModalJoinActive" has-modal-card>
             <v-modal-join />
-        </b-modal>
+        </b-modal> -->
     </div>
 </template>
 
@@ -229,12 +244,15 @@
             ...mapGetters(['user', 'loadedShop']),
             loadedItem() {
                 return this.$store.getters.loadedItem(this.$route.params.itemUrl)
+            },
+            isSale() {
+                return (this.loadedItem.oldPrice && Number(this.loadedItem.oldPrice) > Number(this.loadedItem.price) ? true : false)
             }
         },
         async fetch({ store, params, error }) {
             try{
                 if(process.client) {
-                    if(!store.getters.loadedShop) { 
+                    if(!store.getters.loadedShop || store.getters.loadedShop.url !== params.shopUrl) { 
                         await Promise.all([
                             store.dispatch('loadShop', params.shopUrl),
                             store.dispatch('loadItems', params.shopUrl)
@@ -257,8 +275,7 @@
         },
         data() {
             return {
-                isModalSaleActive: false,
-                isModalJoinActive: false
+                isModalSaleActive: false
             }
         },
         head () {
@@ -277,12 +294,6 @@
         border-radius: 0.3rem;
         box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);
         margin-bottom: 0.5rem;
-    }
-    .v-shop-title {
-        display: flex; 
-        flex-direction: column; 
-        justify-content: center; 
-        align-items: center
     }
     @media screen and (min-width: 768px) {
         .v-item-description {

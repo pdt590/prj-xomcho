@@ -1,132 +1,81 @@
 <template>
-    <div>
-        <section class="section">
-            <div class="container">
-                <p class="content">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti totam est repellat dolorum culpa explicabo aliquam ipsum, nihil porro nesciunt asperiores. Minima veniam mollitia architecto culpa, enim ab quam dolores?</p>
-                <b-tabs :animated="false">
-                    <b-tab-item>
-                        <template slot="header">
-                            <b-icon icon="store"></b-icon>
-                            <span> Cửa hàng <b-tag rounded> 3 </b-tag> </span>
-                        </template>
-                        <div class="v-header">
-                            <div class="view-control">
-                                <b-field grouped group-multiline>
-                                    <b-select placeholder="Sắp xếp">
-                                        <option value="flint">Flint</option>
-                                        <option value="silver">Silver</option>
-                                        <option value="vane">Vane</option>
-                                        <option value="billy">Billy</option>
-                                        <option value="jack">Jack</option>
-                                    </b-select>
-                                </b-field>
-                            </div>
-                        </div>
-                        <div class="columns is-multiline is-mobile is-variable is-1 is-0-mobile">
-                            <div class="column is-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-fifth-fullhd" v-for="(shop, i) in loadedShops" :key="i">
-                                <v-card-shop :shopData="shop" />
-                            </div>
-                        </div>
-                        <div class="v-read-more">
-                            <div class="v-read-more">
-                                <b-pagination
-                                    :total="total"
-                                    :current.sync="current"
-                                    :order="order"
-                                    :size="size"
-                                    :simple="isSimple"
-                                    :rounded="isRounded"
-                                    :per-page="perPage">
-                                </b-pagination>
-                            </div>
-                        </div>
-                    </b-tab-item>
+    <div class="container">
+        <nav class="breadcrumb is-hidden-mobile" style="margin-bottom: 2rem">
+            <ul>
+                <li><nuxt-link to="/">Trang chủ</nuxt-link></li>
+                <li class="is-active"><a>Sản phẩm</a></li>
+            </ul>
+        </nav>
+        <div class="card">
+            <div class="card-content">
+                <b-tabs type="is-boxed">
                     <b-tab-item>
                         <template slot="header">
                             <b-icon icon="shopping"></b-icon>
-                            <span> Sản phẩm <b-tag rounded> 1 </b-tag> </span>
+                            <span> Sản phẩm </span>
                         </template>
-                        <div class="v-header">
-                            <div class="view-control">
-                                <b-field grouped group-multiline>
-                                    <b-select placeholder="Sắp xếp">
-                                        <option value="flint">Flint</option>
-                                        <option value="silver">Silver</option>
-                                        <option value="vane">Vane</option>
-                                        <option value="billy">Billy</option>
-                                        <option value="jack">Jack</option>
-                                    </b-select>
-                                </b-field>
+                        <div class="columns is-multiline is-variable is-2" style="padding-top: 1rem">
+                            <div class="column is-2" v-for="(item, i) in loadedItems" :key="i">
+                                <v-card-item class="is-hidden-mobile" :itemData="item" />
+                                <v-card-item-mobile class="is-hidden-tablet" :itemData="item" />
                             </div>
                         </div>
-                        <div class="columns is-multiline is-mobile is-variable is-1 is-0-mobile">
-                            <div class="column is-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-one-fifth-fullhd" v-for="(shop, i) in loadedShops" :key="i">
-                                <v-card-shop :shopData="shop" />
-                            </div>
-                        </div>
-                        <div class="v-read-more">
-                            <div class="v-read-more">
-                                <b-pagination
-                                    :total="total"
-                                    :current.sync="current"
-                                    :order="order"
-                                    :size="size"
-                                    :simple="isSimple"
-                                    :rounded="isRounded"
-                                    :per-page="perPage">
-                                </b-pagination>
+                        <div class="level">
+                            <div class="level-item">
+                                <button class="button is-rounded is-outlined" :class="{'is-loading': queryLoading}" @click="onLoad"> Xem thêm</button>
                             </div>
                         </div>
                     </b-tab-item>
-                </b-tabs>
+                </b-tabs> 
             </div>
-        </section>
+        </div>
     </div>
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
+
     export default {
-        async asyncData({ store, error }) {
+        computed: {
+            ...mapGetters(['queryLoading'])
+        },
+        async asyncData({ store, params, error }) {
             try {
-                const [loadedShops, loadedItems] = await Promise.all([
-                    store.dispatch('loadPreviewShops'),
-                    store.dispatch('loadPreviewItems')
-                ])
-                return {
-                    loadedShops: loadedShops,
-                    loadedItems: loadedItems
+                const limit = 1
+                const loadedItems = await store.dispatch('loadAllItems', {limit: limit})
+                return { 
+                    loadedItems: loadedItems ,
+                    limit: limit
                 }
-            }catch(error) {
-                console.log('[_ERROR] ' + error)
+            }catch(e) {
+                console.log('[ERROR-query/type]', e)
                 error({ statusCode: 500, message: '...Lỗi' })
             }
         },
-        data() {
-            return {
-                isGridView: true,
-                total: 200,
-                current: 1,
-                perPage: 20,
-                order: 'is-centered',
-                size: 'is-medium',
-                isSimple: false,
-                isRounded: false
+        methods: {
+            async onLoad() {
+                const endAtKey = this.loadedItems[this.loadedItems.length - 1].updatedDate
+                let loadedMoreItems = await this.$store.dispatch('loadAllItems', {
+                    limit: this.limit + 1,
+                    endAtKey: endAtKey
+                })
+                loadedMoreItems.shift() // Remove first item
+                this.loadedItems = [...this.loadedItems, ...loadedMoreItems]
             }
         }
     }
 </script>
 
 <style lang="scss" scoped>
-    .v-header {
-        display: flex;
-        margin-bottom: 2rem;
-        justify-content: flex-end;
-    }
-    .column:last-child {
-        margin-bottom: 2rem;
-    }
-    .v-read-more {
-        display: flex;
-        justify-content: center;
+    .card {
+        border-radius: 0.3rem;
+        box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);
+        .card-header {
+            padding: 1rem;
+        }
+        .card-footer .card-footer-item {
+            justify-content: flex-end;
+            padding: 1rem;
+        }
     }
 </style>

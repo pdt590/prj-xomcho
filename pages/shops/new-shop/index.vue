@@ -1,184 +1,175 @@
 <template>
-    <div class="section">
-        <div class="container">
-            <div class="columns">
-                <div class="column is-8 is-offset-2">
-                    <p class="title is-3">Cài đặt</p>
-                    <form>
-                        <div class="card">
-                            <header class="card-header">
-                                <p class="card-header-title">Thông tin cửa hàng</p>
-                            </header>
-                            <div class="card-content">
-                                <!-- Shop info -->
-                                <b-field grouped>
-                                    <b-field label="Tên cửa hàng*" expanded>
-                                        <b-input
-                                            v-model.trim="shopData.title"
-                                            icon="store">
-                                        </b-input>
-                                    </b-field>
-                                    <b-field label="Sản phẩm kinh doanh*">
-                                        <b-select v-model="shopData.category">
-                                            <option v-for="(province, i) in provinces" :key="i">{{province}}</option>
-                                        </b-select>
-                                    </b-field>
-                                </b-field>
-                                
-                                <b-field label="Facebook"
-                                    :type="!$v.shopData.facebook.url ? `is-danger` : ``" 
-                                    :message="!$v.shopData.facebook.url ? `Nhập địa chỉ facebook hợp lệ` : ``">
+    <div class="container">
+        <div class="columns">
+            <div class="column is-8 is-offset-2">
+                <form>
+                    <div class="card">
+                        <header class="card-header">
+                            <p class="card-header-title is-size-4">Tạo cửa hàng</p>
+                        </header>
+                        <div class="card-content">
+                            <!-- Shop info -->
+                            <b-field grouped>
+                                <b-field label="Tên*" expanded>
                                     <b-input
-                                        type="url"
-                                        v-model.trim="shopData.facebook"
-                                        icon="facebook-box"
-                                        placeholder="Link địa chỉ facebook của cửa hàng hoặc cá nhận">
+                                        v-model.trim="shopData.title"
+                                        icon="store">
                                     </b-input>
                                 </b-field>
+                                <b-field label="Sản phẩm kinh doanh*">
+                                    <b-select v-model="shopData.category">
+                                        <option v-for="(category, i) in categories" :key="i" :value="category.id">{{category.name}}</option>
+                                    </b-select>
+                                </b-field>
+                            </b-field>
+                            
+                            <b-field label="Facebook"
+                                :type="!$v.shopData.facebook.url ? `is-danger` : ``" 
+                                :message="!$v.shopData.facebook.url ? `Nhập địa chỉ facebook hợp lệ` : ``">
+                                <b-input
+                                    type="url"
+                                    v-model.trim="shopData.facebook"
+                                    icon="facebook-box"
+                                    placeholder="Link địa chỉ facebook của cửa hàng hoặc cá nhân">
+                                </b-input>
+                            </b-field>
 
-                                <b-field label="Số điện thoại*" 
-                                    :type="!$v.shopData.phone.numeric ? `is-danger` : ``" 
-                                    :message="!$v.shopData.phone.numeric ? `Nhập số điện thoại hợp lệ` : ``">
-                                    <b-input
-                                        type="tel"
-                                        v-model="shopData.phone"
-                                        icon="cellphone">
+                            <b-field label="Số điện thoại*" 
+                                :type="!$v.shopData.phone.numeric ? `is-danger` : ``" 
+                                :message="!$v.shopData.phone.numeric ? `Nhập số điện thoại hợp lệ` : ``">
+                                <b-input
+                                    type="tel"
+                                    v-model="shopData.phone"
+                                    icon="cellphone">
+                                </b-input>
+                            </b-field>
+
+                            <b-field label="Email" 
+                                :type="!$v.shopData.email.email ? `is-danger` : ``" 
+                                :message="!$v.shopData.email.email ? `Nhập email hợp lệ` : ``">
+                                <b-input
+                                    type="email"
+                                    v-model.trim="shopData.email"
+                                    icon="email">
+                                </b-input>
+                            </b-field>
+
+                            <b-field grouped>
+                                <b-field label="Địa chỉ*" expanded>
+                                    <b-input 
+                                        v-model="shopData.address"
+                                        icon="map-marker">
                                     </b-input>
                                 </b-field>
+                                <b-field label="Tỉnh/Thành*">
+                                    <b-select v-model="shopData.province">
+                                        <option v-for="(province, i) in provinces" :key="i">{{province}}</option>
+                                    </b-select>
+                                </b-field>
+                            </b-field>
+                            
+                            <b-field label="Danh mục sản phẩm*"
+                                :type="!$v.shopData.itemTypes.minLen ? `is-danger` : ``" 
+                                :message="!$v.shopData.itemTypes.minLen ? `Nhập ít nhẩt một loại sản phẩm` : ``">
+                                <b-taginput
+                                    v-model="shopData.itemTypes"
+                                    maxlength="20"
+                                    maxtags="20"
+                                    placeholder="Các loại sản phẩm dự định bán">
+                                </b-taginput>
+                            </b-field>
 
-                                <b-field label="Email" 
-                                    :type="!$v.shopData.email.email ? `is-danger` : ``" 
-                                    :message="!$v.shopData.email.email ? `Nhập email hợp lệ` : ``">
-                                    <b-input
-                                        type="email"
-                                        v-model.trim="shopData.email"
-                                        icon="email">
-                                    </b-input>
-                                </b-field>
-
-                                <b-field grouped>
-                                    <b-field label="Địa chỉ*" expanded>
-                                        <b-input 
-                                            v-model="shopData.address"
-                                            icon="map-marker">
-                                        </b-input>
-                                    </b-field>
-                                    <b-field label="Tỉnh/Thành*">
-                                        <b-select v-model="shopData.province">
-                                            <option v-for="(province, i) in provinces" :key="i">{{province}}</option>
-                                        </b-select>
-                                    </b-field>
-                                </b-field>
-                                
-                                <b-field label="Danh mục sản phẩm*"
-                                    :type="!$v.shopData.itemTypes.minLen ? `is-danger` : ``" 
-                                    :message="!$v.shopData.itemTypes.minLen ? `Nhập ít nhẩt một loại sản phẩm` : ``">
-                                    <b-taginput
-                                        v-model="shopData.itemTypes"
-                                        maxlength="20"
-                                        maxtags="20"
-                                        placeholder="Các loại sản phẩm dự định bán">
-                                    </b-taginput>
-                                </b-field>
-
-                                <b-field label="Miêu tả*">
-                                    <b-input
-                                        type="textarea"
-                                        v-model.trim="shopData.description"
-                                        maxlength="300">
-                                    </b-input>
-                                </b-field>
-                                
-                                <!-- Logo upload -->
-                                <b-field label="Logo (Kích thước < 2MB)"
-                                    :type="!$v.shopData.logoImage.isImg ? `is-danger` : ``"
-                                    :message="!$v.shopData.logoImage.isImg ? `File ảnh không hợp lệ` : ``">
-                                    <b-upload v-model="shopData.logoImage"
-                                        @input="onLogoChange"
-                                        :disabled="$v.shopData.logoImage.$invalid || shopData.logoImage !== null"
-                                        drag-drop>
-                                        <section class="section">
-                                            <div class="content has-text-centered">
-                                                <p>
-                                                    <b-icon
-                                                        icon="upload"
-                                                        size="is-large">
-                                                    </b-icon>
-                                                </p>
-                                                <p>Upload ảnh Logo cho cửa hàng</p>
-                                            </div>
-                                        </section>
-                                    </b-upload>
-                                </b-field>
+                            <b-field label="Miêu tả*">
+                                <b-input
+                                    type="textarea"
+                                    v-model.trim="shopData.description"
+                                    maxlength="300">
+                                </b-input>
+                            </b-field>
+                            
+                            <!-- Logo upload -->
+                            <b-field label="Logo (Kích thước < 2MB)"
+                                :type="!$v.shopData.logoImage.isImg ? `is-danger` : ``"
+                                :message="!$v.shopData.logoImage.isImg ? `File ảnh không hợp lệ` : ``">
                                 <div class="level">
-                                    <div class="level-left">
-                                        <div class="level-item" v-if="shopData.logoImage">
-                                            <figure class="image is-128x128 v-image-preview">
-                                                <img :src="previewLogoImage.url" alt="shop_logo">
-                                                <span class="v-image-size">{{previewLogoImage.size | fmBytes}}</span>
-                                                <a class="delete v-image-delete" @click="previewLogoImage = null; shopData.logoImage = null"></a>
-                                            </figure>
-                                        </div>
+                                    <div class="level-item">
+                                        <b-upload v-model="shopData.logoImage"
+                                            @input="onLogoChange"
+                                            :disabled="$v.shopData.logoImage.$invalid || shopData.logoImage !== null"
+                                            drag-drop>
+                                            <section class="section">
+                                                <div class="content has-text-centered">
+                                                    <p>
+                                                        <b-icon
+                                                            icon="upload"
+                                                            size="is-large">
+                                                        </b-icon>
+                                                    </p>
+                                                    <p>Upload ảnh Logo cho cửa hàng</p>
+                                                </div>
+                                            </section>
+                                        </b-upload>
                                     </div>
                                 </div>
-                                <!-- <span v-if="shopData.logoImage" class="tags has-addons">
-                                    <span class="tag is-info">{{shopData.logoImage.name}}</span>
-                                    <span class="tag is-light">{{shopData.logoImage.size | fmBytes}}</span>
-                                    <a class="tag is-delete is-light" @click="shopData.logoImage = null"></a>
-                                </span> -->
-
-                                <!-- Cover upload -->
-                                <b-field label="Cover (Kích thước < 2MB)"
-                                    :type="!$v.shopData.coverImage.isImg ? `is-danger` : ``"
-                                    :message="!$v.shopData.coverImage.isImg ? `File ảnh không hợp lệ` : ``">
-                                    <b-upload v-model="shopData.coverImage"
-                                        @input="onCoverChange"
-                                        :disabled="$v.shopData.coverImage.$invalid || shopData.coverImage !== null"
-                                        drag-drop>
-                                        <section class="section">
-                                            <div class="content has-text-centered">
-                                                <p>
-                                                    <b-icon
-                                                        icon="upload"
-                                                        size="is-large">
-                                                    </b-icon>
-                                                </p>
-                                                <p>Upload ảnh Cover cho cửa hàng</p>
-                                            </div>
-                                        </section>
-                                    </b-upload>
-                                </b-field>
-                                <div class="level">
-                                    <div class="level-left">
-                                        <div class="level-item" v-if="shopData.coverImage">
-                                            <figure class="image is-128x128 v-image-preview">
-                                                <img :src="previewCoverImage.url" alt="shop_logo">
-                                                <span class="v-image-size">{{previewCoverImage.size | fmBytes}}</span>
-                                                <a class="delete v-image-delete" @click="previewCoverImage =null; shopData.coverImage = null"></a>
-                                            </figure>
-                                        </div>
-                                    </div>
+                            </b-field>
+                            <div class="level">
+                                <div class="level-item" v-if="shopData.logoImage">
+                                    <figure class="image is-128x128 v-image-frame">
+                                        <img class="v-preview-image" v-lazy="previewLogoImage.url" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                        <span class="v-image-size">{{previewLogoImage.size | fmBytes}}</span>
+                                        <a class="delete v-image-bndelete" @click="previewLogoImage = null; shopData.logoImage = null"></a>
+                                    </figure>
                                 </div>
-                                <!-- <span v-if="shopData.coverImage" class="tags has-addons">
-                                    <span class="tag is-info">{{shopData.coverImage.name}}</span>
-                                    <span class="tag is-light">{{shopData.coverImage.size | fmBytes}}</span>
-                                    <a class="tag is-delete is-light" @click="shopData.coverImage = null"></a>
-                                </span> -->
                             </div>
-                            <footer class="card-footer">
-                                <div class="card-footer-item">
-                                    <button class="button is-info is-rounded" 
-                                        :class="{'is-loading': shopLoading}"
-                                        :disabled="$v.shopData.$invalid" 
-                                        type="submit" 
-                                        @click.prevent="onAddShop">
-                                        Tạo cửa hàng
-                                    </button>
+
+                            <!-- Cover upload -->
+                            <b-field label="Cover (Kích thước < 2MB)"
+                                :type="!$v.shopData.coverImage.isImg ? `is-danger` : ``"
+                                :message="!$v.shopData.coverImage.isImg ? `File ảnh không hợp lệ` : ``">
+                                <div class="level">
+                                    <div class="level-item">
+                                        <b-upload v-model="shopData.coverImage"
+                                            @input="onCoverChange"
+                                            :disabled="$v.shopData.coverImage.$invalid || shopData.coverImage !== null"
+                                            drag-drop>
+                                            <section class="section">
+                                                <div class="content has-text-centered">
+                                                    <p>
+                                                        <b-icon
+                                                            icon="upload"
+                                                            size="is-large">
+                                                        </b-icon>
+                                                    </p>
+                                                    <p>Upload ảnh Cover cho cửa hàng</p>
+                                                </div>
+                                            </section>
+                                        </b-upload>
+                                    </div>
                                 </div>
-                            </footer>
+                            </b-field>
+                            <div class="level">
+                                <div class="level-item" v-if="shopData.coverImage">
+                                    <figure class="image is-128x128 v-image-frame">
+                                        <img class="v-preview-image" v-lazy="previewCoverImage.url" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                        <span class="v-image-size">{{previewCoverImage.size | fmBytes}}</span>
+                                        <a class="delete v-image-bndelete" @click="previewCoverImage =null; shopData.coverImage = null"></a>
+                                    </figure>
+                                </div>
+                            </div>
                         </div>
-                    </form>
-                </div>
+                        <footer class="card-footer">
+                            <div class="card-footer-item">
+                                <button class="button is-info is-rounded" 
+                                    :class="{'is-loading': shopLoading}"
+                                    :disabled="$v.shopData.$invalid" 
+                                    type="submit" 
+                                    @click.prevent="onAddShop">
+                                    Tạo cửa hàng
+                                </button>
+                            </div>
+                        </footer>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -186,8 +177,8 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { isImage } from '~/plugins/utility-helpers'
-    import { provinces } from '~/plugins/utility-lists'
+    import { isImage } from '~/plugins/util-helpers'
+    import { provinces, categories } from '~/plugins/util-lists'
     import { required, email, url, numeric, maxLength, minLength } from 'vuelidate/lib/validators'
     
     export default {
@@ -199,7 +190,7 @@
             return {
                 shopData: {
                     title: null,
-                    category: 'An Giang',
+                    category: 'nông-sản',
                     facebook: null,
                     address: null,
                     province: 'Hà Nội',
@@ -211,6 +202,7 @@
                     coverImage: null
                 },
                 provinces: provinces,
+                categories: categories,
                 previewLogoImage: null,
                 previewCoverImage: null
             }

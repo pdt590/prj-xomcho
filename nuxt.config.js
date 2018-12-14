@@ -18,7 +18,7 @@ module.exports = {
 			{ src: 'https://connect.facebook.net/vi_VN/all.js' }
 		],
 		link: [
-			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' },
+			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
 			{ rel: 'stylesheet', href: '//cdn.materialdesignicons.com/3.0.39/css/materialdesignicons.min.css' }
 		]
 	},
@@ -26,13 +26,14 @@ module.exports = {
 	/*
 	** Customize the progress-bar color
 	*/
-	loading: { color: '#DC143C', height: '5px', duration: 5000 },
+    //loading: { color: '#DC143C', height: '5px', duration: 5000 },
+    loading: '~/components/Loading.vue',
 
 	/*
 	** Global CSS
 	*/
 	css: [
-		'~assets/bulma_minty.scss'
+		'~assets/styles/bulma.scss'
 	],
 
 	/*
@@ -43,15 +44,11 @@ module.exports = {
 
 		'~plugins/plugin-firebase.js',
 		'~plugins/plugin-buefy.js',
-		'~plugins/plugin-vuelidate.js',
+        '~plugins/plugin-vuelidate.js',
+        '~plugins/plugin-lazyload.js',
+        '~plugins/plugin-filter.js',
 
-		'~plugins/filter-date.js',
-		'~plugins/filter-facebook.js',
-        '~plugins/filter-string.js',
-		'~plugins/filter-bytes.js',
-		'~plugins/filter-price.js',
-
-		'~plugins/utility-auth-listener.js',
+		'~plugins/util-authListener.js',
 
 		'~plugins/addon-fc.js'
 	],
@@ -60,11 +57,13 @@ module.exports = {
 	** Nuxt.js modules
 	*/
 	modules: [
-		//['nuxt-buefy', { css: false, materialDesignIcons: true }],
 		['@nuxtjs/component-cache', {
 			max: 10000,
-			maxAge: 1000 * 60 * 60
-		}],
+			maxAge: 31536000
+        }],
+        ['@nuxtjs/google-analytics', {
+            id: 'UA-12301-2'
+        }]
 	],
 
 	/*
@@ -77,9 +76,9 @@ module.exports = {
 	/*
 	** Add middleware for all routes
 	*/
-	// router: {
-	//   middleware: ['check-auth', 'auth']
-	// },
+	router: {
+	    //middleware: ['check-auth', 'auth']
+	},
 
 	/*
 	** Build configuration
@@ -91,7 +90,18 @@ module.exports = {
 		extend(config, ctx) {
 
 		}
-	},
+    },
+
+    render: {
+        resourceHints: false,
+        static: {
+            maxAge: 31536000
+        },
+        dist: {
+            maxAge: '1y',
+            index: false
+        }
+    },
 
 	serverMiddleware: [logger({ format: "%date %status %method %url (%time)" })]
 }
