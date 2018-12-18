@@ -8,7 +8,7 @@
         </nav>
         <div class="card">
             <div class="card-content">
-                <b-tabs type="is-boxed">
+                <b-tabs>
                     <b-tab-item>
                         <template slot="header">
                             <b-icon icon="store"></b-icon>
@@ -65,17 +65,3 @@
         }
     }
 </script>
-
-<style lang="scss" scoped>
-    .card {
-        border-radius: 0.3rem;
-        box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);
-        .card-header {
-            padding: 1rem;
-        }
-        .card-footer .card-footer-item {
-            justify-content: flex-end;
-            padding: 1rem;
-        }
-    }
-</style>

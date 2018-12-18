@@ -8,12 +8,9 @@ import Vue from 'vue'
 // import CardShop from '~/components/CardShop'
 // import CardShop4User from '~/components/CardShop4User'
 // import CardShopMobile from '~/components/CardShopMobile'
-
 // import CardItem from '~/components/CardItem'
-// import CardItem4Shop from '~/components/CardItem4Shop'
 // import CardItem4User from '~/components/CardItem4User'
 // import CardItemMobile from '~/components/CardItemMobile'
-// import CardItemMobile4Shop from '~/components/CardItemMobile4Shop'
 
 // import ModalLogin from '~/components/ModalLogin'
 // import ModalSignup from '~/components/ModalSignup'
@@ -31,10 +28,8 @@ import Vue from 'vue'
 // Vue.component('v-card-shop-4user', CardShop4User)
 // Vue.component('v-card-shop-mobile', CardShopMobile)
 // Vue.component('v-card-item', CardItem)
-// Vue.component('v-card-item-4shop', CardItem4Shop)
 // Vue.component('v-card-item-4user', CardItem4User)
 // Vue.component('v-card-item-mobile', CardItemMobile)
-// Vue.component('v-card-item-mobile-4shop', CardItemMobile4Shop)
 
 // // Modal
 // Vue.component('v-modal-login', ModalLogin)

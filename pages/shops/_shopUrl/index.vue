@@ -325,11 +325,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .card {
-        border-radius: 0.3rem;
-        box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);
-        margin-bottom: 0.5rem;
-    }
     .v-list-item {
         display: flex; 
         align-items: center; 

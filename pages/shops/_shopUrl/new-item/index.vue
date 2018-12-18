@@ -37,9 +37,11 @@
                         <div class="card-content">
                             <!-- Item info -->
                             <b-field grouped>
-                                <b-field label="Tên*" expanded>
+                                <b-field label="Tên*" expanded
+                                    :type="$v.itemData.title.$error ? `is-danger` : ``">
                                     <b-input
                                         v-model.trim="itemData.title"
+                                        @blur="$v.itemData.title.$touch()"
                                         icon="shopping">
                                     </b-input>
                                 </b-field>
@@ -59,20 +61,26 @@
                             </b-field>
                             
                             <b-field grouped>
-                                <b-field label="Giá*" expanded>
+                                <b-field label="Giá*" expanded
+                                    :type="$v.itemData.price.$error ? `is-danger` : ``"
+                                    :message="!$v.itemData.price.decimal ? `Nhập giá hợp lệ` : ``">
                                     <b-input
                                         type="number"
                                         step="1"
                                         v-model.trim="itemData.price"
+                                        @blur="$v.itemData.price.$touch()"
                                         icon="cash-100">
                                     </b-input>
                                 </b-field>
 
-                                <b-field label="Giá cũ" expanded>
+                                <b-field label="Giá cũ" expanded
+                                    :type="$v.itemData.oldPrice.$error ? `is-danger` : ``"
+                                    :message="!$v.itemData.oldPrice.decimal ? `Nhập giá hợp lệ` : ``">
                                     <b-input
                                         type="number"
                                         step="1"
                                         v-model.trim="itemData.oldPrice"
+                                        @blur="$v.itemData.oldPrice.$touch()"
                                         icon="cash-100">
                                     </b-input>
                                 </b-field>
@@ -92,10 +100,12 @@
                                 </b-input>
                             </b-field>
 
-                            <b-field label="Miêu tả*">
+                            <b-field label="Miêu tả*"
+                                :type="$v.itemData.description.$error ? `is-danger` : ``">
                                 <b-input
                                     type="textarea"
                                     v-model.trim="itemData.description"
+                                    @blur="$v.itemData.description.$touch()"
                                     maxlength="300">
                                 </b-input>
                             </b-field>
@@ -267,17 +277,3 @@
         }
     }
 </script>
-
-<style lang="scss" scoped>
-    .card {
-        border-radius: 0.3rem;
-        box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);
-        .card-header {
-            padding: 1rem;
-        }
-        .card-footer .card-footer-item {
-            justify-content: flex-end;
-            padding: 1rem;
-        }
-    }
-</style>

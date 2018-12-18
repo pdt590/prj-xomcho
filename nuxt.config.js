@@ -63,9 +63,11 @@ module.exports = {
         }],
         ['@nuxtjs/google-analytics', {
             id: 'UA-12301-2'
-        }]
-	],
-
+        }],
+        ['@nuxtjs/toast',
+        ]
+    ],
+    
 	/*
 	** Global env setting
 	*/

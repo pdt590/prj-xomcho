@@ -35,9 +35,12 @@
                         <b-tabs type="is-boxed">
                             <b-tab-item label="Tên sản phẩm">
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
-                                    <b-field label="Nhập tên mới*">
+                                    <b-field label="Nhập tên mới*"
+                                        :type="$v.itemTitle.$error ? `is-danger` : ``"
+                                        :message="$v.itemTitle.$error ? `Thay đổi tên` : ``">
                                         <b-input
                                             v-model.trim="itemTitle"
+                                            @blur="$v.itemTitle.$touch()"
                                             icon="store">
                                         </b-input>
                                     </b-field>
@@ -47,7 +50,7 @@
                                     <div class="level-right">
                                         <button class="button is-info is-rounded" 
                                             :class="{'is-loading': itemLoading}"
-                                            :disabled="$v.itemTitle.$invalid || !$v.itemTitle.isValid"
+                                            :disabled="$v.itemTitle.$invalid"
                                             type="submit" 
                                             @click.prevent="onUpdateTitle">
                                             Lưu thay đổi
@@ -72,20 +75,26 @@
                                     </b-field>
                                     
                                     <b-field grouped>
-                                        <b-field label="Giá*" expanded>
+                                        <b-field label="Giá*" expanded
+                                            :type="$v.itemContent.price.$error ? `is-danger` : ``"
+                                            :message="!$v.itemContent.price.decimal ? `Nhập giá hợp lệ` : ``">
                                             <b-input
                                                 type="number"
                                                 step="1"
                                                 v-model.trim="itemContent.price"
+                                                @blur="$v.itemContent.price.$touch()"
                                                 icon="cash-100">
                                             </b-input>
                                         </b-field>
 
-                                        <b-field label="Giá cũ" expanded>
+                                        <b-field label="Giá cũ" expanded
+                                            :type="$v.itemContent.oldPrice.$error ? `is-danger` : ``"
+                                            :message="!$v.itemContent.oldPrice.decimal ? `Nhập giá hợp lệ` : ``">
                                             <b-input
                                                 type="number"
                                                 step="1"
                                                 v-model.trim="itemContent.oldPrice"
+                                                @blur="$v.itemContent.oldPrice.$touch()"
                                                 icon="cash-100">
                                             </b-input>
                                         </b-field>
@@ -105,10 +114,12 @@
                                         </b-input>
                                     </b-field>
 
-                                    <b-field label="Miêu tả*">
+                                    <b-field label="Miêu tả*"
+                                        :type="$v.itemContent.description.$error ? `is-danger` : ``">
                                         <b-input
                                             type="textarea"
                                             v-model.trim="itemContent.description"
+                                            @blur="$v.itemContent.description.$touch()"
                                             maxlength="300">
                                         </b-input>
                                     </b-field>
@@ -189,9 +200,12 @@
 
                             <b-tab-item label="Xóa sản phẩm">
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
-                                    <b-field label="Nhập tên sản phẩm*" expanded>
+                                    <b-field label="Nhập tên sản phẩm*" expanded
+                                        :type="$v.confirmTitle.$error ? `is-danger` : ``"
+                                        :message="$v.confirmTitle.$error ? `Tên không trùng khớp` : ``">
                                         <b-input
                                             v-model.trim="confirmTitle"
+                                            @blur="$v.confirmTitle.$touch()"
                                             icon="store">
                                         </b-input>
                                     </b-field>
@@ -221,7 +235,7 @@
     import { mapGetters } from 'vuex'
     import { isImage, deepCopy } from '~/plugins/util-helpers'
     import { currencies } from '~/plugins/util-lists'
-    import { required, email, decimal, sameAs, not, minLength, maxLength} from 'vuelidate/lib/validators'
+    import { required, email, decimal, sameAs, not } from 'vuelidate/lib/validators'
 
     export default {
         middleware: ['auth', 'permission'],
@@ -271,25 +285,24 @@
         },
         data() {
             return {
+                currencies: currencies,
                 itemData: null,
 
                 itemTitle: null,
 
+                itemContent: null,
+
                 itemImages: [],
                 itemPreviewImages: [],
                 itemOldImages: [],
-
-                itemContent: null,
                 
                 confirmTitle: null,
-
-                currencies: currencies
             }
         },
         validations: {
             itemTitle: {
                 required,
-                isValid: not(sameAs(vm => {
+                isValidTitle: not(sameAs(vm => {
                     if(vm.loadedItem) {
                         return vm.loadedItem.title
                     }
@@ -318,7 +331,7 @@
             },
             confirmTitle: {
                 required,
-                sameAs: sameAs(vm => {
+                isValidTitle: sameAs(vm => {
                     if(vm.loadedItem) {
                         return vm.loadedItem.title
                     }
@@ -369,13 +382,3 @@
         }
     }
 </script>
-
-<style lang="scss" scoped>
-    .card {
-        border-radius: 0.3rem;
-        box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);
-        .card-header {
-            padding: 1rem;
-        }
-    }
-</style>

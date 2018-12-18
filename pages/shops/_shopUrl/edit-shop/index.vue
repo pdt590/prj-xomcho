@@ -34,9 +34,12 @@
                         <b-tabs type="is-boxed">
                             <b-tab-item label="Tên cửa hàng">
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
-                                    <b-field label="Nhập tên mới*">
+                                    <b-field label="Nhập tên mới*"
+                                        :type="$v.shopTitle.$error ? `is-danger` : ``"
+                                        :message="$v.shopTitle.$error ? `Thay đổi tên` : ``">
                                         <b-input
                                             v-model.trim="shopTitle"
+                                            @blur="$v.shopTitle.$touch()"
                                             icon="store">
                                         </b-input>
                                     </b-field>
@@ -46,7 +49,7 @@
                                     <div class="level-right">
                                         <button class="button is-info is-rounded" 
                                             :class="{'is-loading': shopLoading}"
-                                            :disabled="$v.shopTitle.$invalid || !$v.shopTitle.isValid"
+                                            :disabled="$v.shopTitle.$invalid"
                                             type="submit" 
                                             @click.prevent="onUpdateTitle">
                                             Lưu thay đổi
@@ -64,40 +67,45 @@
                                     </b-field>
                                     
                                     <b-field label="Facebook"
-                                        :type="!$v.shopContent.facebook.url ? `is-danger` : ``" 
+                                        :type="$v.shopContent.facebook.$error ? `is-danger` : ``" 
                                         :message="!$v.shopContent.facebook.url ? `Nhập địa chỉ facebook hợp lệ` : ``">
                                         <b-input
                                             type="url"
                                             v-model.trim="shopContent.facebook"
+                                            @blur="$v.shopContent.facebook.$touch()"
                                             icon="facebook-box"
                                             placeholder="Link địa chỉ facebook của cửa hàng hoặc cá nhân">
                                         </b-input>
                                     </b-field>
 
                                     <b-field label="Số điện thoại*" 
-                                        :type="!$v.shopContent.phone.numeric ? `is-danger` : ``" 
+                                        :type="$v.shopContent.phone.$error ? `is-danger` : ``" 
                                         :message="!$v.shopContent.phone.numeric ? `Nhập số điện thoại hợp lệ` : ``">
                                         <b-input
                                             type="tel"
                                             v-model="shopContent.phone"
+                                            @blur="$v.shopContent.phone.$touch()"
                                             icon="cellphone">
                                         </b-input>
                                     </b-field>
 
                                     <b-field label="Email" 
-                                        :type="!$v.shopContent.email.email ? `is-danger` : ``" 
+                                        :type="$v.shopContent.email.$error ? `is-danger` : ``" 
                                         :message="!$v.shopContent.email.email ? `Nhập email hợp lệ` : ``">
                                         <b-input
                                             type="email"
                                             v-model.trim="shopContent.email"
+                                            @blur="$v.shopContent.email.$touch()"
                                             icon="email">
                                         </b-input>
                                     </b-field>
 
                                     <b-field grouped>
-                                        <b-field label="Địa chỉ*" expanded>
+                                        <b-field label="Địa chỉ*" expanded
+                                            :type="$v.shopContent.address.$error ? `is-danger` : ``">
                                             <b-input 
                                                 v-model="shopContent.address"
+                                                @blur="$v.shopContent.address.$touch()"
                                                 icon="map-marker">
                                             </b-input>
                                         </b-field>
@@ -109,20 +117,22 @@
                                     </b-field>
                                     
                                     <b-field label="Danh mục sản phẩm*"
-                                        :type="!$v.shopContent.itemTypes.minLen ? `is-danger` : ``" 
-                                        :message="!$v.shopContent.itemTypes.minLen ? `Nhập ít nhẩt một loại sản phẩm` : ``">
+                                        :type="$v.shopContent.itemTypes.$error ? `is-danger` : ``">
                                         <b-taginput
                                             v-model="shopContent.itemTypes"
+                                            @blur="$v.shopContent.itemTypes.$touch()"
                                             maxlength="20"
                                             maxtags="20"
                                             placeholder="Các loại sản phẩm dự định bán">
                                         </b-taginput>
                                     </b-field>
 
-                                    <b-field label="Miêu tả*">
+                                    <b-field label="Miêu tả*"
+                                        :type="$v.shopContent.description.$error ? `is-danger` : ``">
                                         <b-input
                                             type="textarea"
                                             v-model.trim="shopContent.description"
+                                            @blur="$v.shopContent.description.$touch()"
                                             maxlength="300">
                                         </b-input>
                                     </b-field>
@@ -257,9 +267,12 @@
 
                             <b-tab-item label="Xóa cửa hàng">
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
-                                    <b-field label="Nhập tên cửa hàng*" expanded>
+                                    <b-field label="Nhập tên cửa hàng*" expanded
+                                        :type="$v.confirmTitle.$error ? `is-danger` : ``"
+                                        :message="$v.confirmTitle.$error  ? `Tên không trùng khớp` : ``">
                                         <b-input
                                             v-model.trim="confirmTitle"
+                                            @blur="$v.confirmTitle.$touch()"
                                             icon="store">
                                         </b-input>
                                     </b-field>
@@ -342,6 +355,8 @@
                 
                 shopTitle: null,
 
+                shopContent: null,
+
                 shopLogo: null,
                 shopPreviewLogo: null,
                 shopOldLogo: null,
@@ -350,15 +365,13 @@
                 shopPreviewCover: null,
                 shopOldCover: null,
 
-                shopContent: null,
-
                 confirmTitle: null,
             }
         },
         validations: {
             shopTitle: {
                 required,
-                isValid: not(sameAs(vm => {
+                isValidTitle: not(sameAs(vm => {
                     if(vm.loadedShop) {
                         return vm.loadedShop.title
                     }
@@ -400,7 +413,7 @@
             },
             confirmTitle: {
                 required,
-                isValid: sameAs(vm => {
+                isValidTitle: sameAs(vm => {
                     if(vm.loadedShop) {
                         return vm.loadedShop.title
                     }
@@ -453,13 +466,3 @@
         }
     }
 </script>
-
-<style lang="scss" scoped>
-    .card {
-        border-radius: 0.3rem;
-        box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);
-        .card-header {
-            padding: 1rem;
-        }
-    }
-</style>

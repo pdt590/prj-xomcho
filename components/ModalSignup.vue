@@ -3,25 +3,38 @@
         <form>
             <div class="modal-card v-modal-card">
                 <header class="modal-card-head">
-                    <p class="modal-card-title">Đăng nhập</p>
+                    <p class="modal-card-title">Đăng ký</p>
                 </header>
                 <section class="modal-card-body">
-                    <b-field label="Email" 
-                        :type="!$v.formData.email.email || !responseLogin? `is-danger` : ``" 
-                        :message="!$v.formData.email.email || !responseLogin ? `Nhập email hợp lệ` : ``">
+                    <b-field label="Username*"
+                        :type="$v.formData.username.$error ? `is-danger` : ``" 
+                        :message="!$v.formData.username.minlen ? `Tối thiểu 6 kí tự` : ``">
                         <b-input
-                            type="email"
-                            v-model.trim="formData.email"
-                            placeholder="Nhập Email">
+                            type="text"
+                            v-model.trim="formData.username"
+                            @blur="$v.formData.username.$touch()"
+                            placeholder="Nhập username">
                         </b-input>
                     </b-field>
 
-                    <b-field label="Password" 
-                        :type="!$v.formData.password.minlen ? `is-danger` : ``" 
-                        :message="!$v.formData.password.minlen ? `Mật khẩu phải dài hơn 6 kí tự` : ``">
+                    <b-field label="Email*" 
+                        :type="$v.formData.email.$error || !responseSignup ? `is-danger` : ``" 
+                        :message="!$v.formData.email.email || !responseSignup ? `Nhập email hợp lệ` : ``">
+                        <b-input
+                            type="email"
+                            v-model.trim="formData.email"
+                            @blur="$v.formData.email.$touch()"
+                            placeholder="Nhập email">
+                        </b-input>
+                    </b-field>
+
+                    <b-field label="Password*" 
+                        :type="$v.formData.password.$error ? `is-danger` : ``" 
+                        :message="!$v.formData.password.minlen ? `Tối thiểu 6 kí tự` : ``">
                         <b-input
                             type="password"
                             v-model.trim="formData.password"
+                            @blur="$v.formData.password.$touch()"
                             password-reveal
                             placeholder="Nhập mật khẩu">
                         </b-input>
@@ -29,13 +42,13 @@
 
                     <b-checkbox>Remember me</b-checkbox>
                 </section>
-                <footer class="modal-card-foot">
+                <footer class="modal-card-foot" style="justify-content: flex-end">
                     <button class="button is-rounded" type="button" @click="$parent.close()">Close</button>
                     <button class="button is-info is-rounded" 
-                        :class="{'is-loading': authLoading}" 
-                        :disabled="$v.formData.$invalid"
-                        @click.prevent="onLogin">
-                        Đăng nhập
+                        :class="{'is-loading': authLoading}"
+                        :disabled="$v.formData.$invalid" 
+                        @click.prevent="onSignup">
+                        Đăng ký
                     </button>
                 </footer>
             </div>
@@ -55,14 +68,19 @@
         data() {
             return {
                 formData: {
+                    username:'',
                     email: '',
                     password: ''
                 },
-                responseLogin: true
+                responseSignup: true
             }
         },
         validations: {
             formData: {
+                username: {
+                    required,
+                    minlen: minLength(6)
+                },
                 email: {
                     required,
                     email
@@ -74,31 +92,21 @@
             }
         },
         methods: {
-            async onLogin() {
-                this.responseLogin = await this.$store.dispatch('signUserIn', this.formData)
-                if(this.responseLogin) {
+            async onSignup() {
+                this.responseSignup = await this.$store.dispatch('signUserUp', this.formData)
+                if(this.responseSignup) {
                     this.$parent.close()
+                    this.$toast.open({
+                        duration: 4000,
+                        message: 'Kiểm tra hộp thư để kích hoạt tài khoản',
+                        type: 'is-warning'
+                    })
                 }else {
-                    const message = authMessage(this.authError)
-                    if(message === 'InvalEmail') {
-                        this.$toast.open({
-                            duration: 4000,
-                            message: 'Email đã được sử dụng',
-                            type: 'is-danger'
-                        })
-                    }else if(message === 'WrongUser') {
-                        this.$toast.open({
-                            duration: 4000,
-                            message: 'Email không tồn tại',
-                            type: 'is-danger'
-                        })
-                    }else if(message === 'WrongPass') {
-                        this.$toast.open({
-                            duration: 4000,
-                            message: 'Sai mật khẩu',
-                            type: 'is-danger'
-                        })
-                    }
+                    this.$toast.open({
+                        duration: 4000,
+                        message: authMessage(this.authError),
+                        type: 'is-danger'
+                    })
                 }
             }
         }

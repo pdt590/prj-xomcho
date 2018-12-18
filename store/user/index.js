@@ -7,7 +7,7 @@ export default {
     state: {
         authLoading: false,
         authError: null,
-        user: null
+        user: null,
     },
     mutations: {
         setAuthLoading (state, payload) {
@@ -32,9 +32,11 @@ export default {
             vuexContext.commit('clearAuthError')
             try {
                 const { user } = await firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+                await user.sendEmailVerification()
                 const userProfile = {
                     username: payload.username,
                     email: payload.email,
+                    isActive: false,
                     updatedDate: new Date().toISOString()
                 }
                 await usersRef.child(user.uid).set(userProfile)
@@ -146,10 +148,6 @@ export default {
                 console.log('[ERROR-updateUserContent]', error)
             }
         },
-        // https://firebase.google.com/docs/auth/web/manage-users#re-authenticate_a_user
-        // https://stackoverflow.com/questions/37811684/how-to-create-credential-object-needed-by-firebase-web-user-reauthenticate-m
-        // his operation is sensitive and requires recent au…ation. Log in again before retrying this request.
-        // https://medium.com/@ericmorgan1/change-user-email-password-in-firebase-and-react-native-d0abc8d21618
         async updateUserEmail (vuexContext, payload) {
             vuexContext.commit('setAuthLoading', true)
             try{
@@ -177,6 +175,7 @@ export default {
                 localStorage.removeItem('auth-event')
                 return true
             } catch(error){
+                vuexContext.commit('setAuthError', error)
                 vuexContext.commit('setAuthLoading', false)
                 console.log('[ERROR-updateUserEmail]', error)
                 return false
@@ -201,6 +200,7 @@ export default {
                 localStorage.removeItem('auth-event')
                 return true
             } catch(error){
+                vuexContext.commit('setAuthError', error)
                 vuexContext.commit('setAuthLoading', false)
                 console.log('[ERROR-updateUserPassword]', error)
                 return false
@@ -276,6 +276,66 @@ export default {
             }
         },
         //? DONE
+        async resetUserPassword (vuexContext, comfirmEmail) {
+            vuexContext.commit('setAuthLoading', true)
+            try{
+                const user = firebase.auth()
+                await user.sendPasswordResetEmail(comfirmEmail)
+                vuexContext.commit('setAuthLoading', false)
+                localStorage.setItem('auth-event', '')
+                localStorage.removeItem('auth-event')
+                return true
+            } catch(error) {
+                vuexContext.commit('setAuthError', error)
+                vuexContext.commit('setAuthLoading', false)
+                console.log('[ERROR-resetUserPassword]', error)
+                return false
+            }
+        },
+        async handleResetPassword (vuexContext, payload) {
+            vuexContext.commit('setAuthLoading', true)
+            try{
+                const auth = firebase.auth()
+                await auth.confirmPasswordReset(payload.actionCode, payload.newPassword)
+                // user.reload()
+                vuexContext.commit('setAuthLoading', false)
+                localStorage.setItem('auth-event', '')
+                localStorage.removeItem('auth-event')
+                return true
+            } catch(error) {
+                vuexContext.commit('setAuthError', error)
+                vuexContext.commit('setAuthLoading', false)
+                console.log('[ERROR-handleResetPassword]', error)
+                return false
+            }
+        },
+        async handleVerifyEmail (vuexContext, actionCode) {
+            vuexContext.commit('setAuthLoading', true)
+            try{
+                const auth = firebase.auth()
+                await auth.applyActionCode(actionCode)
+                // user.reload()
+                const loadedUser = vuexContext.getters.user
+                const userId = loadedUser.id
+                await usersRef.child(userId).update({
+                    isActive: true
+                })
+                vuexContext.commit('setUser', {
+                    ...loadedUser,
+                    isActive: true
+                })
+                vuexContext.commit('setAuthLoading', false)
+                localStorage.setItem('auth-event', '')
+                localStorage.removeItem('auth-event')
+                return true
+            } catch(error) {
+                vuexContext.commit('setAuthError', error)
+                vuexContext.commit('setAuthLoading', false)
+                console.log('[ERROR-handleVerifyEmail]', error)
+                return false
+            }
+        },
+        //? DONE
         async deleteUser (vuexContext, confirmPassword) {
             vuexContext.commit('setAuthLoading', true)
             try{
@@ -300,6 +360,7 @@ export default {
                 localStorage.removeItem('auth-event')
                 return true
             } catch(error){
+                vuexContext.commit('setAuthError', error)
                 vuexContext.commit('setAuthLoading', false)
                 console.log('[ERROR-deleteUser]', error)
                 return false

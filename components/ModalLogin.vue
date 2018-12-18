@@ -7,21 +7,23 @@
                 </header>
                 <section class="modal-card-body">
                     <b-field label="Email" 
-                        :type="!$v.formData.email.email || !responseLogin? `is-danger` : ``" 
+                        :type="$v.formData.email.$error || !responseLogin? `is-danger` : ``" 
                         :message="!$v.formData.email.email || !responseLogin ? `Nhập email hợp lệ` : ``">
                         <b-input
                             type="email"
                             v-model.trim="formData.email"
+                            @blur="$v.formData.email.$touch()"
                             placeholder="Nhập Email">
                         </b-input>
                     </b-field>
 
                     <b-field label="Password" 
-                        :type="!$v.formData.password.minlen ? `is-danger` : ``" 
-                        :message="!$v.formData.password.minlen ? `Mật khẩu phải dài hơn 6 kí tự` : ``">
+                        :type="$v.formData.password.$error ? `is-danger` : ``" 
+                        :message="!$v.formData.password.minlen ? `Tối thiểu 6 kí tự` : ``">
                         <b-input
                             type="password"
                             v-model.trim="formData.password"
+                            @blur="$v.formData.password.$touch()"
                             password-reveal
                             placeholder="Nhập mật khẩu">
                         </b-input>
@@ -29,14 +31,17 @@
 
                     <b-checkbox>Remember me</b-checkbox>
                 </section>
-                <footer class="modal-card-foot">
-                    <button class="button is-rounded" type="button" @click="$parent.close()">Close</button>
-                    <button class="button is-info is-rounded" 
-                        :class="{'is-loading': authLoading}" 
-                        :disabled="$v.formData.$invalid"
-                        @click.prevent="onLogin">
-                        Đăng nhập
-                    </button>
+                <footer class="modal-card-foot" style="justify-content: space-between">
+                    <a @click="onFgPassword">Quên mật khẩu?</a>
+                    <div class="buttons">
+                        <button class="button is-rounded" type="button" @click="$parent.close()">Close</button>
+                        <button class="button is-info is-rounded" 
+                            :class="{'is-loading': authLoading}" 
+                            :disabled="$v.formData.$invalid"
+                            @click.prevent="onLogin">
+                            Đăng nhập
+                        </button>
+                    </div>
                 </footer>
             </div>
         </form>
@@ -79,27 +84,16 @@
                 if(this.responseLogin) {
                     this.$parent.close()
                 }else {
-                    const message = authMessage(this.authError)
-                    if(message === 'InvalEmail') {
-                        this.$toast.open({
-                            duration: 4000,
-                            message: 'Email đã được sử dụng',
-                            type: 'is-danger'
-                        })
-                    }else if(message === 'WrongUser') {
-                        this.$toast.open({
-                            duration: 4000,
-                            message: 'Email không tồn tại',
-                            type: 'is-danger'
-                        })
-                    }else if(message === 'WrongPass') {
-                        this.$toast.open({
-                            duration: 4000,
-                            message: 'Sai mật khẩu',
-                            type: 'is-danger'
-                        })
-                    }
+                    this.$toast.open({
+                        duration: 4000,
+                        message: authMessage(this.authError),
+                        type: 'is-danger'
+                    })
                 }
+            },
+            onFgPassword() {
+                this.$parent.close()
+                this.$router.push("/user/resetpassword")
             }
         }
     }

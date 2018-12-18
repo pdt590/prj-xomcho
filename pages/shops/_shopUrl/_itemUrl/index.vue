@@ -183,11 +183,22 @@
                                         </ul>
                                     </div>
                                     <hr>
-                                    <div class="level is-mobile">
+                                    <div class="level">
                                         <div class="level-left">
-                                            <div class="field is-grouped">
+                                            <b-field grouped group-multiline>
                                                 <div class="control">
-                                                    <a class="button is-rounded is-info is-outlined" 
+                                                    <b-field>
+                                                        <div class="control">
+                                                            <button class="button is-rounded is-outlined" @click="unit>1 ? unit=unit-1 : ``">-</button>
+                                                        </div>
+                                                        <b-input type="number" style="max-width: 2.5rem" v-model="unit"></b-input>
+                                                        <div class="control">
+                                                            <button class="button is-rounded is-outlined" @click="unit=unit+1">+</button>
+                                                        </div>
+                                                    </b-field>
+                                                </div>
+                                                <div class="control">
+                                                    <a class="button is-info is-rounded is-outlined" 
                                                         @click="isModalSaleActive=true">
                                                         <b-icon icon="shopping"></b-icon>
                                                         <strong>Mua hàng</strong>
@@ -200,15 +211,21 @@
                                                         <span>Lưu sản phẩm</span>
                                                     </a>
                                                 </div> -->
-                                            </div>
+                                            </b-field>
                                         </div>
-                                        <div class="level-right" v-if="user && user.id === loadedShop._creator.id">
-                                            <nuxt-link class="button is-rounded is-outlined" 
-                                                :to="`/shops/${$route.params.shopUrl}/${$route.params.itemUrl}/edit-item`"
-                                                v-if="user && user.id === loadedShop._creator.id">
-                                                <b-icon icon="settings-outline"></b-icon>
-                                                <strong>Chỉnh sửa</strong>
-                                            </nuxt-link>
+                                        <div class="level-right">
+                                            <div class="buttons">
+                                                <a class="button is-info is-rounded is-outlined" href="https://facebook.com" target="_blank">
+                                                    <b-icon icon="share-variant"></b-icon>
+                                                    <strong>Chia sẻ</strong>
+                                                </a>
+                                                <nuxt-link class="button is-rounded is-outlined" 
+                                                    :to="`/shops/${$route.params.shopUrl}/${$route.params.itemUrl}/edit-item`"
+                                                    v-if="user && user.id === loadedShop._creator.id">
+                                                    <b-icon icon="settings-outline"></b-icon>
+                                                    <strong>Chỉnh sửa</strong>
+                                                </nuxt-link>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -225,7 +242,7 @@
             </div>
         </div>
         <b-modal :active.sync="isModalSaleActive" has-modal-card>
-            <v-modal-sale />
+            <v-modal-sale :unit= "unit"/>
         </b-modal>
         <!-- <b-modal :active.sync="isModalJoinActive" has-modal-card>
             <v-modal-join />
@@ -275,7 +292,8 @@
         },
         data() {
             return {
-                isModalSaleActive: false
+                isModalSaleActive: false, 
+                unit:  1
             }
         },
         head () {
@@ -290,11 +308,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .card {
-        border-radius: 0.3rem;
-        box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);
-        margin-bottom: 0.5rem;
-    }
     @media screen and (min-width: 768px) {
         .v-item-description {
             padding: 0 1.5rem

@@ -1,38 +1,41 @@
 <template>
     <div>
         <!-- Signup form -->
-        <form v-if="isSignup">
+        <form v-show="isSignup">
             <div class="modal-card v-modal-card">
                 <header class="modal-card-head">
                     <p class="modal-card-title">Đăng ký</p>
                 </header>
                 <section class="modal-card-body">
                     <b-field label="Username*"
-                        :type="!$v.formDataSignup.username.minlen ? `is-danger` : ``" 
-                        :message="!$v.formDataSignup.username.minlen ? `Username phải dài hơn 6 kí tự` : ``">
+                        :type="$v.formDataSignup.username.$error ? `is-danger` : ``" 
+                        :message="!$v.formDataSignup.username.minlen ? `Tối thiểu 6 kí tự` : ``">
                         <b-input
                             type="text"
                             v-model.trim="formDataSignup.username"
+                            @blur="$v.formDataSignup.username.$touch()"
                             placeholder="Nhập username">
                         </b-input>
                     </b-field>
 
                     <b-field label="Email*" 
-                        :type="!$v.formDataSignup.email.email || !responseSignup ? `is-danger` : ``" 
+                        :type="$v.formDataSignup.email.$error || !responseSignup ? `is-danger` : ``" 
                         :message="!$v.formDataSignup.email.email || !responseSignup ? `Nhập email hợp lệ` : ``">
                         <b-input
                             type="email"
                             v-model.trim="formDataSignup.email"
+                            @blur="$v.formDataSignup.email.$touch()"
                             placeholder="Nhập email">
                         </b-input>
                     </b-field>
 
                     <b-field label="Password*" 
-                        :type="!$v.formDataSignup.password.minlen ? `is-danger` : ``" 
-                        :message="!$v.formDataSignup.password.minlen ? `Mật khẩu phải dài hơn 6 kí tự` : ``">
+                        :type="$v.formDataSignup.password.$error ? `is-danger` : ``" 
+                        :message="!$v.formDataSignup.password.minlen ? `Tối thiểu 6 kí tự` : ``">
                         <b-input
                             type="password"
                             v-model.trim="formDataSignup.password"
+                            @blur="$v.formDataSignup.password.$touch()"
                             password-reveal
                             placeholder="Nhập mật khẩu">
                         </b-input>
@@ -41,7 +44,8 @@
                     <b-checkbox>Remember me</b-checkbox>
                 </section>
                 <footer class="modal-card-foot" style="justify-content: space-between">
-                    <div>
+                    <a @click.prevent="isSignup = !isSignup">{{ isSignup ? `Đăng nhập?` : `Đăng ký?`}}</a>
+                    <div class="buttons">
                         <button class="button is-rounded" type="button" @click="$parent.close()">Close</button>
                         <button class="button is-info is-rounded" 
                             :class="{'is-loading': authLoading}"
@@ -50,36 +54,34 @@
                             Đăng ký
                         </button>
                     </div>
-                    <button class="button is-rounded" type="button"
-                        @click.prevent="isSignup = !isSignup">
-                        {{ isSignup ? `Đăng nhập` : `Đăng ký`}}
-                    </button>
                 </footer>
             </div>
         </form>
         <!-- Login form -->
-        <form v-else>
+        <form v-show="!isSignup">
             <div class="modal-card v-modal-card">
                 <header class="modal-card-head">
                     <p class="modal-card-title">Đăng nhập</p>
                 </header>
                 <section class="modal-card-body">
                     <b-field label="Email" 
-                        :type="!$v.formDataLogin.email.email || !responseLogin? `is-danger` : ``" 
+                        :type="$v.formDataLogin.email.$error || !responseLogin? `is-danger` : ``" 
                         :message="!$v.formDataLogin.email.email || !responseLogin ? `Nhập email hợp lệ` : ``">
                         <b-input
                             type="email"
                             v-model.trim="formDataLogin.email"
+                            @blur="$v.formDataLogin.email.$touch()"
                             placeholder="Nhập Email">
                         </b-input>
                     </b-field>
 
                     <b-field label="Password" 
-                        :type="!$v.formDataLogin.password.minlen ? `is-danger` : ``" 
-                        :message="!$v.formDataLogin.password.minlen ? `Mật khẩu phải dài hơn 6 kí tự` : ``">
+                        :type="$v.formDataLogin.password.$error ? `is-danger` : ``" 
+                        :message="!$v.formDataLogin.password.minlen ? `Tối thiểu 6 kí tự` : ``">
                         <b-input
                             type="password"
                             v-model.trim="formDataLogin.password"
+                            @blur="$v.formDataLogin.password.$touch()"
                             password-reveal
                             placeholder="Nhập mật khẩu">
                         </b-input>
@@ -88,7 +90,11 @@
                     <b-checkbox>Remember me</b-checkbox>
                 </section>
                 <footer class="modal-card-foot" style="justify-content: space-between">
-                    <div>
+                    <p>
+                        <a @click.prevent="isSignup = !isSignup">{{ isSignup ? `Đăng nhập?` : `Đăng ký?`}}</a><br>
+                        <a @click="onFgPassword">Quên mật khẩu?</a>
+                    </p>
+                    <div class="buttons">
                         <button class="button is-rounded" type="button" @click="$parent.close()">Close</button>
                         <button class="button is-info is-rounded" 
                             :class="{'is-loading': authLoading}" 
@@ -97,10 +103,6 @@
                             Đăng nhập
                         </button>
                     </div>
-                    <button class="button is-rounded" type="button"
-                        @click.prevent="isSignup = !isSignup">
-                        {{ isSignup ? `Đăng nhập` : `Đăng ký`}}
-                    </button>
                 </footer>
             </div>
         </form>
@@ -119,17 +121,17 @@
         data() {
             return {
                 formDataSignup: {
-                    username:'',
-                    email: '',
-                    password: ''
+                    username: null,
+                    email: null,
+                    password: null
                 },
                 formDataLogin: {
-                    email: '',
-                    password: ''
+                    email: null,
+                    password: null
                 },
                 responseSignup: true,
                 responseLogin: true,
-                isSignup: true
+                isSignup: false
             }
         },
         validations: {
@@ -163,15 +165,17 @@
                 this.responseSignup = await this.$store.dispatch('signUserUp', this.formDataSignup)
                 if(this.responseSignup) {
                     this.$parent.close()
+                    this.$toast.open({
+                        duration: 4000,
+                        message: 'Kiểm tra hộp thư để kích hoạt tài khoản',
+                        type: 'is-warning'
+                    })
                 }else {
-                    const message = authMessage(this.authError)
-                    if(message === 'InvalEmail') {
-                        this.$toast.open({
-                            duration: 4000,
-                            message: 'Email đã được sử dụng',
-                            type: 'is-danger'
-                        })
-                    }
+                    this.$toast.open({
+                        duration: 4000,
+                        message: authMessage(this.authError),
+                        type: 'is-danger'
+                    })
                 }
             },
             async onLogin() {
@@ -179,27 +183,16 @@
                 if(this.responseLogin) {
                     this.$parent.close()
                 }else {
-                    const message = authMessage(this.authError)
-                    if(message === 'InvalEmail') {
-                        this.$toast.open({
-                            duration: 4000,
-                            message: 'Email đã được sử dụng',
-                            type: 'is-danger'
-                        })
-                    }else if(message === 'WrongUser') {
-                        this.$toast.open({
-                            duration: 4000,
-                            message: 'Email không tồn tại',
-                            type: 'is-danger'
-                        })
-                    }else if(message === 'WrongPass') {
-                        this.$toast.open({
-                            duration: 4000,
-                            message: 'Sai mật khẩu',
-                            type: 'is-danger'
-                        })
-                    }
+                    this.$toast.open({
+                        duration: 4000,
+                        message: authMessage(this.authError),
+                        type: 'is-danger'
+                    })
                 }
+            },
+            onFgPassword() {
+                this.$parent.close()
+                this.$router.push("/user/resetpassword")
             }
         }
     }

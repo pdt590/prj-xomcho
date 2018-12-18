@@ -72,13 +72,6 @@
 </script>
 
 <style lang="scss" scoped>
-    .card {
-        border-radius: 0.3rem;
-        box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);
-        .card-header {
-            padding: 1rem;
-        }
-    }
     .v-username {
         display: flex; 
         flex-direction: column; 

@@ -68,11 +68,22 @@ export function deepCopy(arg) {
 }
 
 export function authMessage(arg) {
-    if(arg.message.includes('The email address is already in use')) {
-        return 'InvalEmail'
-    }else if(arg.message.includes('There is no user record')) {
-        return 'WrongUser'
-    }else if(arg.message.includes('The password is invalid')) {
-        return 'WrongPass'
+    let message = ''
+    switch(arg.code) {
+        case 'auth/email-already-in-use':
+            message = 'Email đã được sử dụng'
+            break
+        case 'auth/user-not-found':
+            message = 'Tài khoản không tồn tại'
+            break
+        case 'auth/wrong-password':
+            message = 'Mật khẩu không chính xác'
+            break
+        case 'auth/invalid-action-code':
+            message = 'Mã xác nhận không hợp lệ'
+            break
+        default:
+            message = arg
     }
+    return message
 }

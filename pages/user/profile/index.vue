@@ -26,10 +26,11 @@
                             <b-tab-item label="Thông tin">
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
                                     <b-field label="Username*"
-                                        :type="!$v.userContent.username.min ? `is-danger` : ``" 
-                                        :message="!$v.userContent.username.min ? `Username phải dài hơn 6 kí tự` : ``">
+                                        :type="$v.userContent.username.$error ? `is-danger` : ``" 
+                                        :message="!$v.userContent.username.min ? `Tối thiểu 6 kí tự` : ``">
                                         <b-input
                                             v-model="userContent.username"
+                                            @blur="$v.userContent.username.$touch()"
                                             icon="account">
                                         </b-input>
                                     </b-field>
@@ -41,11 +42,12 @@
                                     </b-field>
 
                                     <b-field label="Số điện thoại" 
-                                        :type="!$v.userContent.phone.numeric ? `is-danger` : ``" 
+                                        :type="$v.userContent.phone.$error ? `is-danger` : ``" 
                                         :message="!$v.userContent.phone.numeric ? `Nhập số điện thoại hợp lệ` : ``">
                                         <b-input
                                             type="tel"
                                             v-model="userContent.phone"
+                                            @blur="$v.userContent.phone.$touch()"
                                             icon="cellphone">
                                         </b-input>
                                     </b-field>
@@ -81,20 +83,22 @@
                             <b-tab-item label="Email">
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
                                     <b-field label="Mật khẩu*"
-                                        :type="!responseNewEmail ? `is-danger` : ``" 
-                                        :message="!responseNewEmail ? `Nhập lại mật khẩu` : ``">
+                                        :type="$v.confirmPasswordForNewEmail.$error || !responseNewEmail ? `is-danger` : ``" 
+                                        :message=" !$v.confirmPasswordForNewEmail.minLen ? `Tối thiểu 6 kí tự`: !responseNewEmail ? `Nhập mật khẩu hợp lệ` : ``">
                                         <b-input
                                             type="password"
                                             v-model.trim="confirmPasswordForNewEmail"
+                                            @blur="$v.confirmPasswordForNewEmail.$touch()"
                                             password-reveal>
                                         </b-input>
                                     </b-field>
                                     <b-field label="Email mới*" 
-                                        :type="!$v.userEmail.email ? `is-danger` : ``" 
-                                        :message="!$v.userEmail.email ? `Nhập email hợp lệ` : ``">
+                                        :type="$v.userEmail.$error ? `is-danger` : ``" 
+                                        :message="!$v.userEmail.email ? `Nhập email hợp lệ` : !$v.userEmail.isValidEmail ? `` : ``">
                                         <b-input
                                             type="email"
                                             v-model.trim="userEmail"
+                                            @blur="$v.userEmail.$touch()"
                                             icon="email">
                                         </b-input>
                                     </b-field>
@@ -115,27 +119,29 @@
 
                             <b-tab-item label="Mật khẩu">
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
-                                    <b-field label="Mật khẩu*"
-                                        :type="!responseNewPassword ? `is-danger` : ``" 
-                                        :message="!responseNewPassword ? `Nhập lại mật khẩu` : ``">
+                                    <b-field label="Mật khẩu cũ*"
+                                        :type="$v.confirmPasswordForNewPassword.$error || !responseNewPassword ? `is-danger` : ``" 
+                                        :message="!$v.confirmPasswordForNewPassword.minLen ? `Tối thiểu 6 kí tự` : !responseNewPassword ? `Nhập lại mật khẩu` : ``">
                                         <b-input
                                             type="password"
                                             v-model.trim="confirmPasswordForNewPassword"
+                                            @blur="$v.confirmPasswordForNewPassword.$touch()"
                                             password-reveal>
                                         </b-input>
                                     </b-field>
                                     <b-field label="Mật khẩu mới*"
-                                        :type="!$v.userPassword.minlen ? `is-danger` : ``" 
-                                        :message="!$v.userPassword.minlen ? `Mật khẩu phải dài hơn 6 kí tự` : ``">
+                                        :type="$v.userPassword.$error ? `is-danger` : ``" 
+                                        :message="!$v.userPassword.minLen ? `Tối thiểu 6 kí tự` : ``">
                                         <b-input
                                             type="password"
                                             v-model.trim="userPassword"
+                                            @blur="$v.userPassword.$touch()"
                                             password-reveal>
                                         </b-input>
                                     </b-field>
                                     <b-field label="Xác nhận mật khẩu mới*"
-                                        :type="!$v.confirmUserPassword.minlen || $v.confirmUserPassword.$error ? `is-danger` : ``" 
-                                        :message="!$v.confirmUserPassword.minlen ? `Mật khẩu phải dài hơn 6 kí tự` : $v.confirmUserPassword.$error ? `Mật khẩu không trùng khớp` : ``">
+                                        :type="$v.confirmUserPassword.$error ? `is-danger` : ``" 
+                                        :message="$v.confirmUserPassword.$error ? `Mật khẩu không trùng khớp` : ``">
                                         <b-input
                                             type="password"
                                             v-model.trim="confirmUserPassword"
@@ -218,11 +224,12 @@
                             <b-tab-item label="Xóa tài khoản">
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
                                     <b-field label="Mật khẩu*"
-                                        :type="!responseDeleting ? `is-danger` : ``" 
-                                        :message="!responseDeleting ? `Nhập lại mật khẩu` : ``">
+                                        :type="$v.confirmPasswordForDeleting.$error || !responseDeleting ? `is-danger` : ``" 
+                                        :message="!$v.confirmPasswordForDeleting.minLen ? `Tối thiểu 6 kí tự` : !responseDeleting ? `Nhập lại mật khẩu` : ``">
                                         <b-input
                                             type="password"
                                             v-model.trim="confirmPasswordForDeleting"
+                                            @blur="$v.confirmPasswordForDeleting.$touch()"
                                             password-reveal>
                                         </b-input>
                                     </b-field>
@@ -274,78 +281,75 @@
                 provinces: provinces,
                 userData: null,
 
+                userContent: null,
+
                 userEmail: null,
+                confirmPasswordForNewEmail: null,
+                responseNewEmail: true,
 
                 userPassword: null,
                 confirmUserPassword: null,
+                confirmPasswordForNewPassword: null,
+                responseNewPassword: true,
 
                 userAvatar: null,
                 userPreviewAvatar: null,
                 userOldAvatar: null,
 
-                userContent: null,
-
-                confirmPasswordForNewEmail: null,
-                confirmPasswordForNewPassword: null,
                 confirmPasswordForDeleting: null,
-                responseNewEmail: true,
-                responseNewPassword: true,
                 responseDeleting: true
             }
         },
         validations: {
-            userEmail: {
-                required,
-                email,
-                isValidEmail: not(sameAs(vm => {
-                    if(vm.user) {
-                        return vm.user.email
-                    }
-                }))
-            },
-            userPassword: {
-                required, 
-                minlen: minLength(6)
-            },
-            confirmUserPassword: {
-                required,
-                minlen: minLength(6),
-                isValidPassword: sameAs(vm => {
-                    if(vm.userPassword) {
-                        return vm.userPassword
-                    }
-                })
-            },
-            userAvatar: {
-                isImg: isImage(2097152) // <2MB
-            },
             userContent: {
                 username: {
                     required,
-                    min: minLength(6), // TODO: Why cannot name minLen here
-                    isValidUsername: not(sameAs(vm => { // TODO: Why cannot name not here
-                        if(vm.user) {
-                            return vm.user.username
-                        }
-                    }))
+                    min: minLength(6),
+                    // isValidUsername: not(sameAs(function() { return this.user.username }))
                 },
                 phone: {
                     numeric
                 }
             },
+
+            userEmail: {
+                required,
+                email,
+                isValidEmail: not(sameAs(function() {
+                    if(this.user) {
+                        return this.user.email 
+                    } 
+                }))
+            },
             confirmPasswordForNewEmail: {
                 required,
+                minLen: minLength(6)
                 // async isPassword(value) {
                 //     if (!value) return true
                 //     const response = await this.$store.dispatch('isCorrectPassword', value)
                 //     return response
                 // }
             },
+
             confirmPasswordForNewPassword: {
-                required
+                required,
+                minLen: minLength(6)
             },
+            userPassword: {
+                required,
+                minLen: minLength(6)
+            },
+            confirmUserPassword: {
+                isValidPassword: sameAs('userPassword')
+            },
+
+            userAvatar: {
+                isImg: isImage(2097152) // <2MB
+            }, 
+
             confirmPasswordForDeleting: {
-                required
+                required,
+                minLen: minLength(6)
             },
         },
         methods: {
@@ -409,13 +413,3 @@
         }
     }
 </script>
-
-<style lang="scss" scoped>
-    .card {
-        border-radius: 0.3rem;
-        box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);
-        .card-header {
-            padding: 1rem;
-        }
-    }
-</style>

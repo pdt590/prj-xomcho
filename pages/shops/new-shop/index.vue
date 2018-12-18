@@ -10,9 +10,12 @@
                         <div class="card-content">
                             <!-- Shop info -->
                             <b-field grouped>
-                                <b-field label="Tên*" expanded>
+                                <b-field label="Tên*" expanded 
+                                    :type="$v.shopData.title.$error ? `is-danger` : ``">
                                     <b-input
+                                        type="text"
                                         v-model.trim="shopData.title"
+                                        @blur="$v.shopData.title.$touch()"
                                         icon="store">
                                     </b-input>
                                 </b-field>
@@ -24,40 +27,45 @@
                             </b-field>
                             
                             <b-field label="Facebook"
-                                :type="!$v.shopData.facebook.url ? `is-danger` : ``" 
+                                :type="$v.shopData.facebook.$error ? `is-danger` : ``" 
                                 :message="!$v.shopData.facebook.url ? `Nhập địa chỉ facebook hợp lệ` : ``">
                                 <b-input
                                     type="url"
                                     v-model.trim="shopData.facebook"
+                                    @blur="$v.shopData.facebook.$touch()"
                                     icon="facebook-box"
                                     placeholder="Link địa chỉ facebook của cửa hàng hoặc cá nhân">
                                 </b-input>
                             </b-field>
 
                             <b-field label="Số điện thoại*" 
-                                :type="!$v.shopData.phone.numeric ? `is-danger` : ``" 
+                                :type="$v.shopData.phone.$error ? `is-danger` : ``" 
                                 :message="!$v.shopData.phone.numeric ? `Nhập số điện thoại hợp lệ` : ``">
                                 <b-input
                                     type="tel"
                                     v-model="shopData.phone"
+                                    @blur="$v.shopData.phone.$touch()"
                                     icon="cellphone">
                                 </b-input>
                             </b-field>
 
                             <b-field label="Email" 
-                                :type="!$v.shopData.email.email ? `is-danger` : ``" 
+                                :type="$v.shopData.email.$error ? `is-danger` : ``" 
                                 :message="!$v.shopData.email.email ? `Nhập email hợp lệ` : ``">
                                 <b-input
                                     type="email"
                                     v-model.trim="shopData.email"
+                                    @blur="$v.shopData.email.$touch()"
                                     icon="email">
                                 </b-input>
                             </b-field>
 
                             <b-field grouped>
-                                <b-field label="Địa chỉ*" expanded>
+                                <b-field label="Địa chỉ*" expanded
+                                    :type="$v.shopData.address.$error ? `is-danger` : ``">
                                     <b-input 
                                         v-model="shopData.address"
+                                        @blur="$v.shopData.address.$touch()"
                                         icon="map-marker">
                                     </b-input>
                                 </b-field>
@@ -69,20 +77,22 @@
                             </b-field>
                             
                             <b-field label="Danh mục sản phẩm*"
-                                :type="!$v.shopData.itemTypes.minLen ? `is-danger` : ``" 
-                                :message="!$v.shopData.itemTypes.minLen ? `Nhập ít nhẩt một loại sản phẩm` : ``">
+                                :type="$v.shopData.itemTypes.$error ? `is-danger` : ``">
                                 <b-taginput
                                     v-model="shopData.itemTypes"
+                                    @blur="$v.shopData.itemTypes.$touch()"
                                     maxlength="20"
                                     maxtags="20"
                                     placeholder="Các loại sản phẩm dự định bán">
                                 </b-taginput>
                             </b-field>
 
-                            <b-field label="Miêu tả*">
+                            <b-field label="Miêu tả*"
+                                :type="$v.shopData.description.$error ? `is-danger` : ``">
                                 <b-input
                                     type="textarea"
                                     v-model.trim="shopData.description"
+                                    @blur="$v.shopData.description.$touch()"
                                     maxlength="300">
                                 </b-input>
                             </b-field>
@@ -179,7 +189,7 @@
     import { mapGetters } from 'vuex'
     import { isImage } from '~/plugins/util-helpers'
     import { provinces, categories } from '~/plugins/util-lists'
-    import { required, email, url, numeric, maxLength, minLength } from 'vuelidate/lib/validators'
+    import { required, email, url, numeric } from 'vuelidate/lib/validators'
     
     export default {
         middleware: 'auth',
@@ -232,8 +242,7 @@
                     email
                 },
                 itemTypes: {
-                    required,
-                    minLen: minLength(1),
+                    required
                 },
                 description: {
                     required
@@ -268,17 +277,3 @@
         }
     }
 </script>
-
-<style lang="scss" scoped>
-    .card {
-        border-radius: 0.3rem;
-        box-shadow: 0 1px 4px 0 rgba(0,0,0,.1);
-        .card-header {
-            padding: 1rem;
-        }
-        .card-footer .card-footer-item {
-            justify-content: flex-end;
-            padding: 1rem;
-        }
-    }
-</style>

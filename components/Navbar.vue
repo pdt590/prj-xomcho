@@ -7,12 +7,12 @@
                         <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28" style='display: none' onload="this.style.display = 'block'" alt="brand_logo">
                     </nuxt-link>
                 </div>
-                <div class="navbar-menu" :class="{'is-active': isMenuActive}">
+                <div class="navbar-menu">
                     <div class="navbar-start">
                     </div>
                     <div class="v-navbar-center">
                         <div class="navbar-item">
-                            <b-field>
+                            <b-field position="is-centered">
                                 <b-select v-model="searchTarget">
                                     <option value="shop">Cửa hàng</option>
                                     <option value="item">Sản phẩm</option>
@@ -23,17 +23,16 @@
                                     icon="magnify">
                                     <template slot="empty">...</template>
                                 </b-autocomplete>
-                                <button class="button" @click="onSearch">Tìm Kiếm</button>
+                                <div class="control">
+                                    <button class="button" @click="onSearch">Tìm Kiếm</button>
+                                </div>
                             </b-field>
                         </div>
                     </div>
                     <div class="navbar-end">
-                        <div class="navbar-item" v-if="!user && $route.path !== '/user/join'">
+                        <div class="navbar-item" v-if="!user && $route.path !== '/user/join' && $route.path !== '/user/activekey' && $route.path !== '/user/resetpassword'">
                             <div class="buttons">
-                                <a class="button is-info is-rounded is-outlined" @click="isModalSignupActive=true;isMenuActive=false">
-                                    <strong>Đăng ký</strong>
-                                </a>
-                                <a class="button is-info is-rounded is-outlined" @click="isModalLoginActive=true;isMenuActive=false">
+                                <a class="button is-info is-rounded is-outlined" @click="isModalJoinActive=true">
                                     <strong>Đăng nhập</strong>
                                 </a>
                             </div>
@@ -44,7 +43,7 @@
                             </nuxt-link>
                         </div>
                         <div class="navbar-item has-dropdown is-hoverable" v-if="user">
-                            <a v-if="!isMenuActive" class="navbar-link">
+                            <a class="navbar-link">
                                 <img class="v-nav-avatar" v-lazy="user.avatar ? user.avatar.url : `/icon-user.png`" style='display: none' onload="this.style.display = 'block'" alt="avatar">
                             </a>
                             <div class="navbar-dropdown is-right">
@@ -65,12 +64,9 @@
                         </div>
                     </div>
                 </div>
-                <b-modal :active.sync="isModalLoginActive" has-modal-card>
-                    <v-modal-login />
-                </b-modal>
-                <b-modal :active.sync="isModalSignupActive" has-modal-card>
-                    <v-modal-signup />
-                </b-modal>           
+                <b-modal :active.sync="isModalJoinActive" has-modal-card>
+                    <v-modal-join />
+                </b-modal>        
             </div>
         </nav>
 
@@ -97,6 +93,11 @@
                 </div>
             </div>
         </nav>
+        <div class="container" v-if="user && !user.isActive && $route.path!=='/user/activekey'">
+            <b-message type="is-danger" size="is-small">
+                Tài khoản chưa được kích hoạt
+            </b-message>
+        </div>
     </div>
 </template>
 
@@ -118,13 +119,11 @@
             return {
                 searchKey: null,
                 searchTarget: 'shop',
-                isSearchActive: false,
-                isListActive: false,
-                isMenuActive: false,
+
                 isModalLoginActive: false,
                 isModalSignupActive: false,
-                radioButton: 'shop',
-                
+                isModalJoinActive: false,
+
                 categories: categories
             }
         },

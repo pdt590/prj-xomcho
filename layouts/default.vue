@@ -10,10 +10,8 @@
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
-
     export default {
-        middleware: 'check-auth'
+        middleware: 'check-auth',
     }
 </script>
 
