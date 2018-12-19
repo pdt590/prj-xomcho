@@ -46,6 +46,7 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
 * Implement image optimize in cloud function and remove maximum image size rule
 * Reimplement error message code ?
 * Change card style likes youtube
+* Improve Search
 
 * Note for Vuelidate
   * @blur should go with $error

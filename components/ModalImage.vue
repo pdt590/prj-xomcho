@@ -1,7 +1,7 @@
 <template>
     <div>
         <figure class="image is-square">
-            <img class="v-image-contain" :src="mainImage.url" style='display: none' onload="this.style.display = 'block'" alt="item_image">
+            <img class="v-image-contain" :src="selectedImage.url" style='display: none' onload="this.style.display = 'block'" alt="item_image">
         </figure>
         <div class="columns is-variable is-1 is-mobile" style="margin-top: 0.1rem">
             <div class="column is-3" v-for="(image, i) in images" :key="i">
@@ -21,12 +21,12 @@
         },
         data() {
             return {
-                mainImage: this.images[this.selectedId]
+                selectedImage: this.images[this.selectedId]
             }
         },
         methods: {
             setMainImage(index) {
-                this.mainImage = this.images[index]
+                this.selectedImage = this.images[index]
             }
         }
     }

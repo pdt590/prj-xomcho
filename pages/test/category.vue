@@ -68,8 +68,8 @@
 </template>
 
 <script>
-    import { sortShopTypes, sortItemTypes, categories } from '~/plugins/util-lists'
     import { mapGetters } from 'vuex'
+    import { sortShopTypes, sortItemTypes, categories } from '~/plugins/util-lists'
 
     export default {
         computed: {

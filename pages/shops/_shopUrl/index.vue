@@ -241,9 +241,9 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import { sortItemTypes } from '~/plugins/util-lists'
     import { deepCopy } from '~/plugins/util-helpers'
-    import { mapGetters } from 'vuex'
 
     export default {
         computed: {

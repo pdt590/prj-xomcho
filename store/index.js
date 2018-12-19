@@ -5,6 +5,7 @@ import shop from './shop'
 import user from './user'
 import shared from './shared'
 import query from './query'
+import message from './message'
 
 export default () => {
     return new Vuex.Store({
@@ -13,7 +14,8 @@ export default () => {
             shop: shop,
             user: user,
             shared: shared,
-            query: query
+            query: query,
+            message: message
         }        
     })
 }

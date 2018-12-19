@@ -67,8 +67,8 @@
 </template>
 
 <script>
-    import { sortShopTypes, sortItemTypes, categories } from '~/plugins/util-lists'
     import { mapGetters } from 'vuex'
+    import { sortShopTypes, sortItemTypes, categories } from '~/plugins/util-lists'
 
     export default {
         computed: {
@@ -134,7 +134,7 @@
         },
         methods: { 
             async onTabChange(tabIndex) {
-                if(tabIndex) {
+                if(tabIndex==1) {
                     this.loadedItems = await this.$store.dispatch('loadCategoryItems', this.$route.params.category)
                 }
             },

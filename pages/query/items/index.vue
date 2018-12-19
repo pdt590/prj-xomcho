@@ -26,6 +26,7 @@
                             </div>
                         </div>
                     </b-tab-item>
+                    <b-loading :is-full-page="false" :active.sync="queryLoading"></b-loading>
                 </b-tabs> 
             </div>
         </div>
@@ -48,7 +49,7 @@
                     limit: limit
                 }
             }catch(e) {
-                console.log('[ERROR-query/type]', e)
+                console.log('[ERROR-query/items]', e)
                 error({ statusCode: 500, message: '...Lỗi' })
             }
         },
@@ -59,7 +60,7 @@
                     limit: this.limit + 1,
                     endAtKey: endAtKey
                 })
-                loadedMoreItems.shift() // Remove first item
+                loadedMoreMessages.length ? loadedMoreMessages.shift() : ``// Remove first item
                 this.loadedItems = [...this.loadedItems, ...loadedMoreItems]
             }
         }

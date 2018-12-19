@@ -26,13 +26,25 @@ const checkImage = (file, maxFileSize) => {
 // universally unique identifier
 export function genId(length) {
     let uiid = "";
-    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
     for (let i = 0; i < length; i++){
         uiid += possible.charAt(Math.floor(Math.random() * possible.length))
     }
     const minutesNow = Math.floor(Date.now() / (1000*60))
     return minutesNow + uiid
+}
+
+// universally unique identifier
+export function genId_(length) {
+    let uiid = "";
+    let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+
+    for (let i = 0; i < length; i++){
+        uiid += possible.charAt(Math.floor(Math.random() * possible.length))
+    }
+    const secondsNow = Math.floor(Date.now() / 1000)
+    return secondsNow + uiid
 }
 
 /*
@@ -56,7 +68,12 @@ export function genUrl(title, uuid) {
 }
 
 export function fetchId(url) {
-    return url.split("-").pop();
+    return url.split('-').pop()
+}
+
+export function fetchTitle(url) {
+    url.split('-').pop()
+    return url.join('-')
 }
 
 export function fetchKey(object, value) {

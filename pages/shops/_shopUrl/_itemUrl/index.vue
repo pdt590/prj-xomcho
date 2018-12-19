@@ -185,13 +185,13 @@
                                     <hr>
                                     <div class="level">
                                         <div class="level-left">
-                                            <b-field grouped group-multiline>
+                                            <b-field grouped group-multiline v-if="user && user.id !== loadedShop._creator.id">
                                                 <div class="control">
                                                     <b-field>
                                                         <div class="control">
                                                             <button class="button is-rounded is-outlined" @click="unit>1 ? unit=unit-1 : ``">-</button>
                                                         </div>
-                                                        <b-input type="number" style="max-width: 2.5rem" v-model="unit"></b-input>
+                                                        <b-input type="number" style="max-width: 3rem" v-model.number="unit"></b-input>
                                                         <div class="control">
                                                             <button class="button is-rounded is-outlined" @click="unit=unit+1">+</button>
                                                         </div>
@@ -215,7 +215,9 @@
                                         </div>
                                         <div class="level-right">
                                             <div class="buttons">
-                                                <a class="button is-info is-rounded is-outlined" href="https://facebook.com" target="_blank">
+                                                <a class="button is-info is-rounded is-outlined" 
+                                                    href="https://www.facebook.com/sharer/sharer.php?u=https://stackoverflow.com/questions/5478702/add-facebook-share-button-to-static-html-page" 
+                                                    target="_blank">
                                                     <b-icon icon="share-variant"></b-icon>
                                                     <strong>Chia sẻ</strong>
                                                 </a>

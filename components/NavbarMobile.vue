@@ -161,8 +161,8 @@
 </template>
 
 <script>
-    import { categories } from '~/plugins/util-lists'
     import { mapGetters } from 'vuex'
+    import { categories } from '~/plugins/util-lists'
 
     export default {
         props: {

@@ -42,6 +42,11 @@
                                 <strong>Tạo cửa hàng</strong>
                             </nuxt-link>
                         </div>
+                        <div class="navbar-item">
+                            <nuxt-link class="has-text-grey" to="/user/message" v-if="user">
+                                <b-icon icon="email-outline"></b-icon>
+                            </nuxt-link>
+                        </div>
                         <div class="navbar-item has-dropdown is-hoverable" v-if="user">
                             <a class="navbar-link">
                                 <img class="v-nav-avatar" v-lazy="user.avatar ? user.avatar.url : `/icon-user.png`" style='display: none' onload="this.style.display = 'block'" alt="avatar">
@@ -53,9 +58,6 @@
                                 <nuxt-link class="navbar-item" to="/user/mgmt">
                                     <b-icon icon="finance"></b-icon><p class="is-size-6">Quản lý</p>
                                 </nuxt-link>
-                                <!-- <nuxt-link class="navbar-item" to="/user/messages">
-                                    <b-icon icon="message-text-outline"></b-icon><p class="is-size-6">Tin nhắn</p>
-                                </nuxt-link> -->
                                 <hr class="navbar-divider">
                                 <a class="navbar-item" @click="onLogout">
                                     <b-icon icon="logout-variant"></b-icon><p class="is-size-6">Thoát</p>
@@ -102,8 +104,8 @@
 </template>
 
 <script>
-    import { categories } from '~/plugins/util-lists'
     import { mapGetters } from 'vuex'
+    import { categories } from '~/plugins/util-lists'
 
     export default {
         props: {
@@ -139,7 +141,7 @@
                 }
             },
             onSearch() {
-                this.$router.push(`/search/${this.searchTarget}-${this.searchKey}`)
+                window.location.href = `/search?target=${this.searchTarget}&key=${this.searchKey}`
             }
         }
     }

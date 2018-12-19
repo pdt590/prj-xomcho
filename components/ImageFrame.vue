@@ -1,7 +1,7 @@
 <template>
     <div>
         <figure class="image is-square" @dblclick="isModalImageActive=true;">
-            <img class="v-image-contain" :src="mainImage.url" style='display: none' onload="this.style.display = 'block'" alt="item_image">
+            <img class="v-image-contain" :src="selectedImage.url" style='display: none' onload="this.style.display = 'block'" alt="item_image">
         </figure>
         <div class="columns is-variable is-1 is-mobile" style="margin-top: 0.1rem">
             <div class="column is-3" v-for="(image, i) in images" :key="i">
@@ -23,7 +23,7 @@
         },
         data() {
             return {
-                mainImage: this.images[0],
+                selectedImage: this.images[0],
                 selectedId: 0,
                 isModalImageActive: false
             }
@@ -31,7 +31,7 @@
         methods: {
             setMainImage(index) {
                 this.selectedId = index
-                this.mainImage = this.images[index]
+                this.selectedImage = this.images[index]
             }
         }
     }

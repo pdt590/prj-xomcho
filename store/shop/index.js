@@ -296,27 +296,6 @@ export default {
                 shopsData.forEach(shopData => {
                     payload.username !== undefined ? updates[`${shopData.key}/_creator/username`] = payload.username : ``
                     payload.avatar !== undefined ? updates[`${shopData.key}/_creator/avatar`] = payload.avatar : ``
-                    // const shopObj = shopData.val()
-                    // if(payload.username !== undefined) {
-                    //     updates[shopData.key] = {
-                    //         ...shopObj,
-                    //         _creator: {
-                    //             id: userId,
-                    //             username: payload.username,
-                    //             avatar: user.avatar ? user.avatar : null
-                    //         }
-                    //     }
-                    // }
-                    // if(payload.avatar !== undefined) {
-                    //     updates[shopData.key] = {
-                    //         ...shopObj,
-                    //         _creator: {
-                    //             id: userId,
-                    //             username: user.username,
-                    //             avatar: payload.avatar
-                    //         }
-                    //     } 
-                    // }
                 })
                 await shopsRef.update(updates)
                 vuexContext.commit('setShop', ) // TODO: how to update current loadedshop

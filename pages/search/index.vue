@@ -8,7 +8,7 @@
         </nav>
         <div class="card">
             <div class="card-content">
-                <b-tabs type="is-boxed" :animated="false" @change="onTabChange">
+                <b-tabs :animated="false" @change="onTabChange">
                     <b-tab-item v-if="searchTarget==='shop'">
                         <template slot="header">
                             <b-icon icon="store"></b-icon>
@@ -67,8 +67,8 @@
 </template>
 
 <script>
-    import { sortShopTypes, sortItemTypes, categories } from '~/plugins/util-lists'
     import { mapGetters } from 'vuex'
+    import { sortShopTypes, sortItemTypes, categories } from '~/plugins/util-lists'
 
     export default {
         computed: {
@@ -110,12 +110,11 @@
                 return this.loadedItems.slice((this.currentItemPage-1)*this.perPage, this.currentItemPage*this.perPage)
             }
         },
-        async asyncData({ store, params, error }) {
+        async asyncData({ store, query, error }) {
             try {
                 let  loadedShops, loadedItems = []
-                const payload = params.key.split("-")
-                const searchTarget = payload.shift()
-                const searchKey = payload.join('-')
+                const searchTarget = query.target
+                const searchKey = query.key
                 if(searchTarget === "shop") {
                     loadedShops = await store.dispatch('loadSearchShops', searchKey)
                 }else if (searchTarget === "item") {

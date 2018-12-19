@@ -26,12 +26,12 @@
                     </header>
                     <section class="modal-card-body" >
                         <b-field label="Tên*"
-                            :type="$v.formData.fullname.$error ? `is-danger` : ``">
+                            :type="$v.formData.name.$error ? `is-danger` : ``">
                             <b-input
                                 type="text"
                                 icon="account"
-                                v-model.trim="formData.fullname"
-                                @blur="$v.formData.fullname.$touch()"
+                                v-model.trim="formData.name"
+                                @blur="$v.formData.name.$touch()"
                                 placeholder="Họ tên...">
                             </b-input>
                         </b-field>
@@ -62,11 +62,11 @@
                         <b-field label="Số lượng*">
                             <b-field>
                                 <div class="control">
-                                    <button class="button is-rounded is-outlined" @click.prevent="unit>1 ? unit=unit-1 : ``">-</button>
+                                    <button class="button is-outlined" @click.prevent="unit>1 ? unit=unit-1 : ``">-</button>
                                 </div>
-                                <b-input type="number" v-model="unit" expanded></b-input>
+                                <b-input type="number" v-model.number="unit" expanded></b-input>
                                 <div class="control">
-                                    <button class="button is-rounded is-outlined" @click.prevent="unit=unit+1">+</button>
+                                    <button class="button is-outlined" @click.prevent="unit=unit+1">+</button>
                                 </div>
                             </b-field>
                         </b-field>
@@ -85,9 +85,9 @@
                         <div class="buttons">
                             <button class="button is-rounded" type="button" @click="$parent.close()">Close</button>
                             <button class="button is-info is-rounded" 
-                                :class="{'is-loading': authLoading}" 
+                                :class="{'is-loading': messageLoading}" 
                                 :disabled="$v.formData.$invalid"
-                                @click.prevent="">Gửi</button>
+                                @click.prevent="onSend">Gửi</button>
                         </div>
                     </footer>
                 </div>
@@ -105,8 +105,16 @@
         props: {
             unit: Number
         },
+        created() {
+            this.formData = {
+                name: this.user && this.user.fullname ? this.user.fullname : null,
+                phone: this.user && this.user.phone ? this.user.phone : null,
+                address: this.user && this.user.address ? this.user.address + ' ' + this.user.province : null,
+                message: null
+            }
+        },
         computed: {
-            ...mapGetters(['itemLoading', 'loadedShop']),
+            ...mapGetters(['messageLoading', 'user']),
             loadedItem() {
                 return this.$store.getters.loadedItem(this.$route.params.itemUrl)
             }
@@ -115,16 +123,17 @@
             return {
                 isMessageActive: false,
                 formData: {
-                    fullname: null,
+                    name: null,
                     phone: null,
                     address: null,
                     message: null
-                }
+                },
+                response: null
             }
         },
         validations: {
             formData: {
-                fullname: {
+                name: {
                     required
                 },
                 phone: {
@@ -134,6 +143,30 @@
                 address: {
                     required
                 }
+            }
+        },
+        methods: {
+            async onSend() {
+                this.response = await this.$store.dispatch('sendBuyMessage', {
+                    ...this.formData,
+                    itemUrl: this.loadedItem.url,
+                    unit: this.unit,
+                    to: this.loadedItem._creator.id
+                })
+                if(this.response) {
+                        this.$parent.close()
+                        this.$toast.open({
+                            duration: 4000,
+                            message: 'Gửi tin nhắn thành công',
+                            type: 'is-success'
+                        })
+                    }else {
+                        this.$toast.open({
+                            duration: 4000,
+                            message: authMessage(this.authError),
+                            type: 'is-danger'
+                        })
+                    }
             }
         }
     }

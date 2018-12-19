@@ -1,5 +1,4 @@
 import firebase from '~/plugins/plugin-firebase'
-import { genId, genUrl, fetchId } from '~/plugins/util-helpers'
 const db = firebase.database()
 const shopsRef = db.ref('shops')
 const itemsRef = db.ref('items')
