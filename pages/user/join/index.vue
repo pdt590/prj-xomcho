@@ -173,13 +173,13 @@
                 if(this.responseSignup) {
                     this.$router.push('/')
                     this.$toast.open({
-                        duration: 4000,
+                        duration: 3000,
                         message: 'Kiểm tra hộp thư để kích hoạt tài khoản',
                         type: 'is-warning'
                     })
                 }else {
                     this.$toast.open({
-                        duration: 4000,
+                        duration: 3000,
                         message: authMessage(this.authError),
                         type: 'is-danger'
                     })
@@ -191,7 +191,7 @@
                     this.$router.push('/')
                 }else {
                     this.$toast.open({
-                        duration: 4000,
+                        duration: 3000,
                         message: authMessage(this.authError),
                         type: 'is-danger'
                     })

@@ -113,13 +113,13 @@
                 if(this.response) {
                     this.$router.push("/user/join")
                     this.$toast.open({
-                        duration: 4000,
+                        duration: 3000,
                         message: 'Mật khẩu thay đổi thành công',
                         type: 'is-success'
                     })
                 }else {
                     this.$toast.open({
-                        duration: 4000,
+                        duration: 3000,
                         message: authMessage(this.authError),
                         type: 'is-danger'
                     })

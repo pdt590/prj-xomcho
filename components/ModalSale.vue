@@ -26,12 +26,12 @@
                     </header>
                     <section class="modal-card-body" >
                         <b-field label="Tên*"
-                            :type="$v.formData.name.$error ? `is-danger` : ``">
+                            :type="$v.formData.fullname.$error ? `is-danger` : ``">
                             <b-input
                                 type="text"
                                 icon="account"
-                                v-model.trim="formData.name"
-                                @blur="$v.formData.name.$touch()"
+                                v-model.trim="formData.fullname"
+                                @blur="$v.formData.fullname.$touch()"
                                 placeholder="Họ tên...">
                             </b-input>
                         </b-field>
@@ -75,7 +75,7 @@
                             <b-input
                                 type="textarea"
                                 maxlength="100"
-                                v-model.trim="formData.message"
+                                v-model.trim="formData.content"
                                 placeholder="Tin nhắn nếu có...">
                             </b-input>
                         </b-field>
@@ -85,7 +85,7 @@
                         <div class="buttons">
                             <button class="button is-rounded" type="button" @click="$parent.close()">Close</button>
                             <button class="button is-info is-rounded" 
-                                :class="{'is-loading': messageLoading}" 
+                                :class="{'is-loading': chatLoading}" 
                                 :disabled="$v.formData.$invalid"
                                 @click.prevent="onSend">Gửi</button>
                         </div>
@@ -107,14 +107,14 @@
         },
         created() {
             this.formData = {
-                name: this.user && this.user.fullname ? this.user.fullname : null,
+                fullname: this.user && this.user.fullname ? this.user.fullname : null,
                 phone: this.user && this.user.phone ? this.user.phone : null,
                 address: this.user && this.user.address ? this.user.address + ' ' + this.user.province : null,
-                message: null
+                content: null
             }
         },
         computed: {
-            ...mapGetters(['messageLoading', 'user']),
+            ...mapGetters(['chatLoading', 'user']),
             loadedItem() {
                 return this.$store.getters.loadedItem(this.$route.params.itemUrl)
             }
@@ -123,17 +123,17 @@
             return {
                 isMessageActive: false,
                 formData: {
-                    name: null,
+                    fullname: null,
                     phone: null,
                     address: null,
-                    message: null
+                    content: null
                 },
                 response: null
             }
         },
         validations: {
             formData: {
-                name: {
+                fullname: {
                     required
                 },
                 phone: {
@@ -148,21 +148,23 @@
         methods: {
             async onSend() {
                 this.response = await this.$store.dispatch('sendBuyMessage', {
+                    itemUrl: this.$route.path,
+                    itemTitle: this.loadedItem.title,
                     ...this.formData,
-                    itemUrl: this.loadedItem.url,
                     unit: this.unit,
-                    to: this.loadedItem._creator.id
+                    partnerId: this.loadedItem._creator.id,
+                    partnerUsername: this.loadedItem._creator.username
                 })
                 if(this.response) {
                         this.$parent.close()
                         this.$toast.open({
-                            duration: 4000,
+                            duration: 3000,
                             message: 'Gửi tin nhắn thành công',
                             type: 'is-success'
                         })
                     }else {
                         this.$toast.open({
-                            duration: 4000,
+                            duration: 3000,
                             message: authMessage(this.authError),
                             type: 'is-danger'
                         })

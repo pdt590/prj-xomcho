@@ -43,7 +43,7 @@
                             </nuxt-link>
                         </div>
                         <div class="navbar-item">
-                            <nuxt-link class="has-text-grey" to="/user/message" v-if="user">
+                            <nuxt-link class="has-text-grey-light" to="/user/message" v-if="user">
                                 <b-icon icon="email-outline"></b-icon>
                             </nuxt-link>
                         </div>

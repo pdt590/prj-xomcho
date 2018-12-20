@@ -330,8 +330,4 @@
         align-items: center; 
         margin-bottom: 0.5rem;
     }
-    .v-wrap-text {
-        word-wrap: break-word;
-        white-space: pre-wrap;
-    }
 </style>

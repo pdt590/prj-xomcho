@@ -9,50 +9,69 @@
         <div class="card">
             <div class="card-content">
                 <div class="columns">
-                    <div class="column is-4" style="max-height: 50rem; overflow-y: scroll;">
-                        <b-tabs type="is-boxed" @change="onTabChange">
-                            <b-tab-item>
+                    <div class="column is-4" style="max-height: 40rem; overflow-y: scroll;">
+                        <!-- <b-tabs type="is-boxed"> -->
+                            <!-- <b-tab-item>
                                 <template slot="header">
                                     <b-icon icon="inbox-arrow-down"></b-icon>
-                                </template>
-                                <div class="media" v-for="(message, i) in loadedInboxMessages" :key="i" @click="setMainMessageInbox(i)">
+                                </template> -->
+                            
+                                <div class="media" :class="{'has-background-white-ter': i === selectedChatId}" style="padding: 1rem" v-for="(chat, i) in loadedChats" :key="i" @click="setMainChat(i)">
                                     <div class="media-content" style="overflow: hidden;">
-                                        <p>From: {{message.updatedDate}}</p>
-                                        <p>To: {{message.to}}</p>
+                                        <p class="has-text-weight-semibold has-text-info">{{chat.messages[chat.messages.length - 1].fromId ? chat.messages[chat.messages.length - 1].fromUsername : chat.messages[chat.messages.length - 1].fullname }}
+                                            <span class="has-text-grey-light" v-if="!chat.messages[chat.messages.length - 1].fromId">(Khách vãng lai)</span>
+                                            <span class="has-text-grey-light" v-if="chat.messages[chat.messages.length - 1].fromId === user.id">(Tôi)</span>
+                                        </p>
+                                        <a class="has-text-weight-semibold has-text-grey" :href="chat.itemUrl" target="_blank">{{chat.itemTitle}}</a>
+                                        <p>💬 {{chat.messages[chat.messages.length - 1].content | fmString(100)}}</p>
                                     </div>
                                     <div class="media-right">
+                                        <b-icon :icon="chat.state ? `eye-outline` :  `eye-off-outline`" size="is-small"></b-icon>
                                         <button class="delete is-small"></button>
                                     </div>
                                 </div>
-                            </b-tab-item>
-                            <b-tab-item>
-                                <template slot="header">
-                                    <b-icon icon="inbox-arrow-up"></b-icon>
-                                </template>
-                                <div class="media" v-for="(message, i) in loadedOutboxMessages" :key="i" @click="setMainMessageOutbox(i)">
-                                    <div class="media-content" style="overflow: hidden;">
-                                        <p>From: {{message.updatedDate}}</p>
-                                        <p>To: {{message.to}}</p>
-                                    </div>
-                                    <div class="media-right">
-                                        <button class="delete is-small"></button>
-                                    </div>
+                            <!-- </b-tab-item> -->
+                            <!-- <b-loading :is-full-page="false" :active.sync="chatLoading"></b-loading> -->
+                        <!-- </b-tabs> -->
+                        <div class="level">
+                            <div class="level-item">
+                                <a class="button is-rounded" :class="{'is-loading': chatLoading}" @click="onLoad">Xem thêm</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column is-8" v-if="selectedChat" style="display: flex; flex-direction: column; justify-content: space-between">
+                        <div style="border-bottom: solid 1px #D8D8D8; padding: 0.7rem">
+                            <a class="has-text-weight-bold" :href="selectedChat.itemUrl" target="_blank">{{selectedChat.itemTitle}}</a>
+                        </div>
+                        <div id="chatView" style="max-height: 30rem; overflow-y: scroll;">
+                            <div :class="message.fromId === user.id ? `me` : `fr`" v-for="(message, i) in selectedChat.messages" :key="i">
+                                <div class="chat-content v-wrap-text">
+                                    <p v-if="message.fullname">Tên: {{message.fullname}}</p>
+                                    <p v-if="message.phone">SĐT: {{message.phone}}</p>
+                                    <p v-if="message.address">Địa Chỉ: {{message.address}}</p>
+                                    <p v-if="message.unit">Số Lượng: {{message.unit}}</p>
+                                    <p v-if="message.content">{{message.content}}</p>
                                 </div>
-                            </b-tab-item>
-                            <b-loading :is-full-page="false" :active.sync="messageLoading"></b-loading>
-                        </b-tabs>
-                        <a class="button is-rounded is-fullwidth" :class="{'is-loading': messageLoading}" @click="onLoadInbox" v-if="tabIndex == 0">Xem thêm</a>
-                        <a class="button is-rounded is-fullwidth" :class="{'is-loading': messageLoading}" @click="onLoadOutbox" v-if="tabIndex == 1">Xem thêm</a>
-                    </div>
-                    <div class="column is-8" v-if="selectedInboxMessage && tabIndex == 0">
-                        <p>{{selectedInboxMessage.message}}</p>
-                        <p>From: {{selectedInboxMessage.updatedDate}}</p>
-                        <p>To: {{selectedInboxMessage.to}}</p>
-                    </div>
-                    <div class="column is-8" v-if="selectedOutboxMessage && tabIndex == 1">
-                        <p>{{selectedOutboxMessage.message}}</p>
-                        <p>From: {{selectedOutboxMessage.updatedDate}}</p>
-                        <p>To: {{selectedOutboxMessage.to}}</p>
+                            </div>
+                        </div>
+                        <b-field grouped style="border-top: solid 1px #D8D8D8; padding-top: 1rem">
+                            <b-input
+                                type="textarea"
+                                maxlength="200"
+                                v-model.trim="messageContent"
+                                @blur="$v.messageContent.$touch()"
+                                expanded
+                                :has-counter="false"
+                                size="is-small"
+                                :disabled="!selectedChat.messages[selectedChat.messages.length - 1].fromId">
+                            </b-input>
+                            <p class="control">
+                                <button class="button is-info is-outlined is-rounded" 
+                                    :disabled="!selectedChat.messages[selectedChat.messages.length - 1].fromId || $v.messageContent.$invalid"
+                                    @click.prevent="onSend">Gửi
+                                </button>
+                            </p>
+                        </b-field>
                     </div>
                 </div>
             </div>
@@ -62,23 +81,32 @@
 
 <script>
     import { mapGetters } from 'vuex'
+    import { required, numeric } from 'vuelidate/lib/validators'
+    import { genId_ } from '~/plugins/util-helpers'
 
     export default {
         middleware: 'auth',
+        mounted() {
+            this.scrollToEnd()
+        },
+        updated() {
+            this.$nextTick(() => this.scrollToEnd());
+        },
         computed: {
-            ...mapGetters(['messageLoading'])
+            ...mapGetters(['chatLoading', 'user'])
         },
         async asyncData({ store, params, error }) {
             try {
                 const limit = 4
-                const loadedInboxMessages = await store.dispatch('loadInboxMessages', {limit: limit})
-                if(loadedInboxMessages.length) {
-                    await store.dispatch('setMessageState', loadedInboxMessages[0].id)
+                const loadedChats = await store.dispatch('loadChats', {limit: limit})
+                if(loadedChats.length) {
+                    await store.dispatch('setChatState', loadedChats[0].id)
+                    loadedChats[0].state = true
                 }
                 return { 
-                    loadedInboxMessages: loadedInboxMessages ,
+                    loadedChats: loadedChats,
                     limit: limit,
-                    selectedInboxMessage: loadedInboxMessages[0],
+                    selectedChat: loadedChats[0]
                 }
             }catch(e) {
                 console.log('[ERROR-user/message]', e)
@@ -87,44 +115,57 @@
         },
         data() {
             return {
-                tabIndex: 0,
-                loadedOutboxMessages: [],
-                selectedOutboxMessage: null
+                messageContent: null,
+                selectedChatId: 0
+            }
+        },
+        validations: {
+            messageContent: {
+                required
             }
         },
         methods: {
-            async onTabChange(tabIndex) {
-                this.tabIndex = tabIndex
-                if(tabIndex == 1) {
-                    this.loadedOutboxMessages = await this.$store.dispatch('loadOutboxMessages', {limit: this.limit})
-                    this.selectedOutboxMessage = this.loadedOutboxMessages[0]
+            async setMainChat(index) {
+                await this.$store.dispatch('setChatState', this.loadedChats[index].id)
+                this.loadedChats[index].state = true
+                this.selectedChat = this.loadedChats[index]
+                this.selectedChatId = index
+            },
+            async onLoad() {
+                const endAtKey = this.loadedChats[this.loadedChats.length - 1].updatedDate
+                let loadedMoreChats = await this.$store.dispatch('loadChats', {
+                    limit: this.limit + 1,
+                    endAtKey: endAtKey
+                })
+                loadedMoreChats.length ? loadedMoreChats.shift() : `` // Remove first item
+                this.loadedChats = [...this.loadedChats, ...loadedMoreChats]
+            },
+            async onSend() {
+                const messageId = genId_(10)
+                const now = new Date().toISOString()
+                const message = {
+                    fullname: this.user.fullname ? this.user.fullname : null,
+                    content: this.messageContent,
+                    fromId: this.user.id,
+                    fromUsername: this.user.username,
+                    updatedDate: now
                 }
-            },
-            async setMainMessageInbox(index) {
-                await this.$store.dispatch('setMessageState', this.loadedInboxMessages[index].id)
-                this.loadedInboxMessages[index].isOpened = true
-                this.selectedInboxMessage = this.loadedInboxMessages[index]
-            },
-            async setMainMessageOutbox(index) {
-                this.selectedOutboxMessage = this.loadedOutboxMessages[index]
-            },
-            async onLoadInbox() {
-                const endAtKey = this.loadedInboxMessages[this.loadedInboxMessages.length - 1].id
-                let loadedMoreMessages = await this.$store.dispatch('loadInboxMessages', {
-                    limit: this.limit + 1,
-                    endAtKey: endAtKey
+                this.loadedChats[this.selectedChatId].messages.push({
+                    id: messageId,
+                    ...message
                 })
-                loadedMoreMessages.length ? loadedMoreMessages.shift() : `` // Remove first item
-                this.loadedInboxMessages = [...this.loadedInboxMessages, ...loadedMoreMessages]
-            },
-            async onLoadOutbox() {
-                const endAtKey = this.loadedOutboxMessages[this.loadedOutboxMessages.length - 1].id
-                let loadedMoreMessages = await this.$store.dispatch('loadOutboxMessages', {
-                    limit: this.limit + 1,
-                    endAtKey: endAtKey
+                this.messageContent = null
+                await this.$store.dispatch('sendChatMessage', {
+                    partnerId: this.loadedChats[this.selectedChatId].partnerId,
+                    chatId: this.loadedChats[this.selectedChatId].id,
+                    now: now,
+                    messageId: messageId,
+                    message: message
                 })
-                loadedMoreMessages.length ? loadedMoreMessages.shift() : ``// Remove first item
-                this.loadedOutboxMessages = [...this.loadedOutboxMessages, ...loadedMoreMessages]
+            },
+            scrollToEnd(){
+                const container = this.$el.querySelector("#chatView")
+                container.scrollTop = container.scrollHeight
             }
         }
     }
@@ -153,5 +194,63 @@
 
     .media:hover {
         cursor: pointer;
+    }
+
+    .fr, .me { 
+        display: flex; 
+        align-items: center; 
+        position: relative;
+    }
+
+    .me { justify-content: flex-end; }
+
+    .fr .chat-content, .me .chat-content {
+        margin: 1rem .8rem;
+        padding: 10px 20px;
+        display: inline-block;
+        position: relative;
+        border-radius: 4px;
+        max-width: 50%;
+    }
+
+    .fr .chat-content { background-color: #e3ecec; }
+
+    .fr span, .me span {
+        font-size: 13px;
+        position: absolute;
+        top: -2px;
+        font-weight: 300;
+        text-shadow: .2px .2px .4px rgba(0,0,0, .16);
+    }
+
+    .fr span { left: 20px; }
+    .me span { right: 20px; }
+
+    .me .chat-content { background-color: dodgerblue; color: white; }
+
+    .fr .chat-content:before, .me .chat-content:before {
+        content: '';  
+        width: 0;
+        height: 0;
+        border-width: 7px;
+        position: absolute;
+        border-style: solid;
+        border-color: transparent;
+    }
+
+    .fr .chat-content:before {
+        left: -1px;
+        bottom: -9px;
+        transform: rotateZ(8.5deg);
+        border-top-color: #e3ecec;
+        border-left-color: #e3ecec;
+    }
+
+    .me .chat-content:before {
+        right: 0px;
+        bottom: -9px;
+        transform: rotateZ(-8.5deg);
+        border-top-color: dodgerblue;
+        border-right-color: dodgerblue;
     }
 </style>

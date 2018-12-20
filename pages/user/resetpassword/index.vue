@@ -70,13 +70,13 @@
                 this.response = await this.$store.dispatch('resetUserPassword', this.formData.email)
                 if(this.response) {
                     this.$toast.open({
-                        duration: 4000,
+                        duration: 3000,
                         message: 'Kiểm tra hộp thư để thiết lập lại mật khẩu',
                         type: 'is-warning'
                     })
                 }else {
                     this.$toast.open({
-                        duration: 4000,
+                        duration: 3000,
                         message: authMessage(this.authError),
                         type: 'is-danger'
                     })

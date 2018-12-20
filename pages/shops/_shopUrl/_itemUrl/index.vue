@@ -185,7 +185,7 @@
                                     <hr>
                                     <div class="level">
                                         <div class="level-left">
-                                            <b-field grouped group-multiline v-if="user && user.id !== loadedShop._creator.id">
+                                            <b-field grouped group-multiline v-if="!user || user && user.id !== loadedShop._creator.id">
                                                 <div class="control">
                                                     <b-field>
                                                         <div class="control">
@@ -324,9 +324,5 @@
         display: flex; 
         align-items: center; 
         margin-bottom: 0.5rem;
-    }
-    .v-wrap-text {
-        word-wrap: break-word;
-        white-space: pre-wrap;
     }
 </style>

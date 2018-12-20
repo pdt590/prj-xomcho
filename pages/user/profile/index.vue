@@ -271,7 +271,10 @@
                 this.userOldAvatar = deepCopy(this.userData.avatar)
                 delete this.userData.avatar
             }
-            this.userContent = deepCopy(this.userData)
+            this.userContent = {
+                ...deepCopy(this.userData),
+                province: 'Hà Nội'
+            }
         },
         computed: {
             ...mapGetters(['authLoading', 'user'])
@@ -364,7 +367,7 @@
                 })
                 if(!this.responseNewEmail) {
                     this.$toast.open({
-                        duration: 4000,
+                        duration: 3000,
                         message: 'Mật khẩu không chính xác',
                         type: 'is-danger'
                     })
@@ -379,7 +382,7 @@
                 })
                 if(!this.responseNewPassword) {
                     this.$toast.open({
-                        duration: 4000,
+                        duration: 3000,
                         message: 'Mật khẩu không chính xác',
                         type: 'is-danger'
                     })
@@ -395,7 +398,7 @@
                 this.responseDeleting = await this.$store.dispatch('deleteUser', this.confirmPasswordForDeleting)
                 if(!this.responseDeleting) {
                     this.$toast.open({
-                        duration: 4000,
+                        duration: 3000,
                         message: 'Mật khẩu không chính xác',
                         type: 'is-danger'
                     })

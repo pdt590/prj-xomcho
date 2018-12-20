@@ -61,9 +61,9 @@ export function _genId(title, length) {
 
 export function genUrl(title, uuid) {
     if(uuid) {
-        return title.replace(/\s+/g, '-').toLowerCase() + '-' + uuid
+        return title.replace(/\s+|[,\/?]/g, '-').toLowerCase() + '-' + uuid
     }else {
-        return title.replace(/\s+/g, '-').toLowerCase()
+        return title.replace(/\s+|[,\/?]/g, '-').toLowerCase()
     }
 }
 
@@ -71,9 +71,10 @@ export function fetchId(url) {
     return url.split('-').pop()
 }
 
+// TODO:
 export function fetchTitle(url) {
     url.split('-').pop()
-    return url.join('-')
+    return url.join('')
 }
 
 export function fetchKey(object, value) {

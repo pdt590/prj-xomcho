@@ -85,7 +85,7 @@
                     this.$parent.close()
                 }else {
                     this.$toast.open({
-                        duration: 4000,
+                        duration: 3000,
                         message: authMessage(this.authError),
                         type: 'is-danger'
                     })
