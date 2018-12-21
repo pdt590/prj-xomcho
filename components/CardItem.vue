@@ -25,7 +25,7 @@
             </nuxt-link>
         </div>
         <div class="card-footer v-card-footer">
-            <a @click="isModalSaleActive=true">
+            <a @click="isModalSaleActive=true" v-if="!user || user && user.id !== itemData._creator.id">
                 <b-icon icon="shopping" class="has-text-grey-light"></b-icon>
             </a>
             <div v-if="isSale">
@@ -43,6 +43,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import { genUrl } from '~/plugins/util-helpers'
 
     export default {
@@ -53,6 +54,7 @@
             }
         },
         computed: {
+            ...mapGetters(['user']),
             isSale() {
                 return (this.itemData.oldPrice && Number(this.itemData.oldPrice) > Number(this.itemData.price) ? true : false)
             },

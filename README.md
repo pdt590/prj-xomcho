@@ -37,7 +37,7 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
 * Refer Navbar logic for mobile on Zing, Dantri or VnExpress (Add breadcrumb on navbar mobile)
 * Re-design buy logic ?
 * Edit number input style
-* Implement Message without response message
+* Implement Message without response message ?
   * Have read and un-read status
 * Add danh muc cells on home page ?
 * Add bookmark function

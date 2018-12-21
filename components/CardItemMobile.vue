@@ -25,7 +25,7 @@
 			</div>
 			<div class="level is-mobile" style="align-self: flex-end">
 				<div class="level-left">
-					<a class="level-item" @click="isModalSaleActive=true">
+					<a class="level-item" @click="isModalSaleActive=true" v-if="!user || user && user.id !== itemData._creator.id">
 						<b-icon icon="shopping" class="has-text-grey-light"></b-icon>
 					</a>
 				</div>
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+	import { mapGetters } from 'vuex'
 	import { genUrl } from '~/plugins/util-helpers'
 
 	export default {
@@ -59,6 +60,7 @@
             }
         },
         computed: {
+			...mapGetters(['user']),
             isSale() {
                 return (this.itemData.oldPrice && Number(this.itemData.oldPrice) > Number(this.itemData.price) ? true : false)
             },

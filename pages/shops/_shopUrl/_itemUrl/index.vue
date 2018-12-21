@@ -185,7 +185,7 @@
                                     <hr>
                                     <div class="level">
                                         <div class="level-left">
-                                            <b-field grouped group-multiline v-if="!user || user && user.id !== loadedShop._creator.id">
+                                            <b-field grouped group-multiline v-if="!user || user && user.id !== loadedItem._creator.id">
                                                 <div class="control">
                                                     <b-field>
                                                         <div class="control">
