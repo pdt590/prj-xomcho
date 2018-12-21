@@ -4,11 +4,24 @@ const db = firebase.database()
 
 export default {
     state: {
-        chatLoading: false
+        chatLoading: false,
+        chatNotifying : false,
+        loadedChats: [],
+        countUnOpenedChats: 0
     },
     mutations: {
         setChatLoading(state, payload) {
             state.chatLoading = payload
+        },
+        setChatNotifying(state, payload){
+            state.chatNotifying = payload
+        },
+        setChats(state, payload) {
+            state.loadedChats = []
+            state.loadedChats = payload
+        },
+        setCountUnOpenedChats (state, payload) {
+            state.countUnOpenedChats = payload
         }
     },
     actions: {
@@ -112,66 +125,77 @@ export default {
                 return false
             }
         },
-        async loadChats (vuexContext, payload) {
+        async loadChats (vuexContext) {
             vuexContext.commit('setChatLoading', true)
             try {
                 const user = vuexContext.getters.user
-                let chatsData = null
-                if(payload.endAtKey !== undefined) {
-                    chatsData = await db.ref(`chats/${user.id}`).orderByChild('updatedDate').endAt(payload.endAtKey).limitToLast(payload.limit).once('value')  
-                }else {
-                    chatsData = await db.ref(`chats/${user.id}`).orderByChild('updatedDate').limitToLast(payload.limit).once('value') 
-                }    
-                const loadedChats = []
-                chatsData.forEach(chatData => {
-                    const loadedMessages = []
-                    const { itemUrl, itemTitle, state, updatedDate, messages, partnerId, partnerUsername } = chatData.val()
-                    for(const key in messages) {
-                        loadedMessages.push({
-                            id: key,
-                            ...messages[key]
-                        })
-                    }
-                    const chatObj = {
-                        id: chatData.key,
-                        itemUrl: itemUrl,
-                        itemTitle: itemTitle,
-                        state: state,
-                        updatedDate: updatedDate,
-                        partnerId: partnerId,
-                        partnerUsername: partnerUsername,
-                        messages: loadedMessages
-                    }
-                    loadedChats.push(chatObj)
+                await db.ref(`chats/${user.id}`).orderByChild('updatedDate').limitToFirst(200).on('value', chatsData => {
+                    const loadedChats = []
+                    chatsData.forEach(chatData => {
+                        const loadedMessages = []
+                        const { itemUrl, itemTitle, state, updatedDate, messages, partnerId, partnerUsername } = chatData.val()
+                        for(const key in messages) {
+                            loadedMessages.push({
+                                id: key,
+                                ...messages[key]
+                            })
+                        }
+                        const chatObj = {
+                            id: chatData.key,
+                            itemUrl: itemUrl,
+                            itemTitle: itemTitle,
+                            state: state,
+                            updatedDate: updatedDate,
+                            partnerId: partnerId,
+                            partnerUsername: partnerUsername,
+                            messages: loadedMessages
+                        }
+                        loadedChats.push(chatObj)
+                    })
+                    loadedChats.reverse()
+                    vuexContext.commit('setChats', loadedChats)
                 })
-                loadedChats.reverse()
                 vuexContext.commit('setChatLoading', false)
-                return loadedChats
+            } catch(error) {
+                console.log('[ERROR-loadChats]', error)
+                vuexContext.commit('setChatLoading', false)
+            }
+        },
+        async loadCountUnOpenedChats (vuexContext) {
+            vuexContext.commit('setChatLoading', true)
+            try {
+                const user = vuexContext.getters.user
+                await db.ref(`chats/${user.id}`).orderByChild('state').equalTo(false).on('value', chatsData => {
+                    let count = 0
+                    chatsData.forEach(chatData => {
+                        count = count + 1
+                    })
+                    vuexContext.commit('setCountUnOpenedChats', count)
+                })
+                vuexContext.commit('setChatLoading', false)
             } catch(error) {
                 console.log('[ERROR-loadChats]', error)
                 vuexContext.commit('setChatLoading', false)
             }
         },
         async setChatState (vuexContext, chatId) {
-            //vuexContext.commit('setChatLoading', true)
+            vuexContext.commit('setChatLoading', true)
             try {
                 const user = vuexContext.getters.user
                 await db.ref(`chats/${user.id}`).child(chatId).update({
                     state : true
                 })
-                //vuexContext.commit('setChatLoading', false)
+                vuexContext.commit('setChatLoading', false)
             } catch(error) {
                 console.log('[ERROR-setMessageState]', error)
-                //vuexContext.commit('setChatLoading', false)
+                vuexContext.commit('setChatLoading', false)
             }
         },
-        async deleteChat (vuexContext, payload) {
+        async deleteChat (vuexContext, chatId) {
             vuexContext.commit('setChatLoading', true)
             try {
                 const user = vuexContext.getters.user
-                const { partnerId, chatId } = payload
                 await db.ref(`chats/${user.id}`).child(chatId).remove()
-                await db.ref(`chats/${partnerId}`).child(chatId).remove()
                 vuexContext.commit('setChatLoading', false)
             } catch(error) {
                 console.log('[ERROR-deleteChat]', error)
@@ -193,5 +217,14 @@ export default {
         chatLoading(state) {
             return state.chatLoading
         },
+        chatNotifying(state) {
+            return state.chatNotifying
+        },
+        loadedChats(state) {
+            return state.loadedChats
+        },
+        countUnOpenedChats(state) {
+            return state.countUnOpenedChats
+        }
     }
 }

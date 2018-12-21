@@ -43,8 +43,8 @@
                             </nuxt-link>
                         </div>
                         <div class="navbar-item">
-                            <nuxt-link class="has-text-grey-light" to="/user/message" v-if="user">
-                                <b-icon icon="email-outline"></b-icon>
+                            <nuxt-link class="button is-rounded is-outlined" :class="countUnOpenedChats ? 'is-danger' : 'is-info'" to="/user/message" v-if="user">
+                                <b-icon icon="email-outline"></b-icon><span v-if="countUnOpenedChats">&nbsp;{{countUnOpenedChats}}</span>
                             </nuxt-link>
                         </div>
                         <div class="navbar-item has-dropdown is-hoverable" v-if="user">
@@ -100,6 +100,11 @@
                 Tài khoản chưa được kích hoạt
             </b-message>
         </div>
+        <!-- <div class="container" v-if="user && countUnOpenedChats">
+            <b-message type="is-danger" size="is-small" auto-close :duration="2000">
+                Có tin nhắn mới
+            </b-message>
+        </div> -->
     </div>
 </template>
 
@@ -115,7 +120,10 @@
             }
         },
         computed: {
-            ...mapGetters(['user'])
+            ...mapGetters(['countUnOpenedChats', 'user'])
+        },
+        async mounted() {
+            await this.$store.dispatch('loadCountUnOpenedChats')
         },
         data() {
             return {
