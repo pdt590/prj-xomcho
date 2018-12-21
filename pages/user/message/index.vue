@@ -86,9 +86,6 @@
                 </div>
             </div>
         </div>
-        <div class="has-text-centered" style="padding-top: 5rem" v-else> 
-            <p class="title is-3" >Hộp thư trống 📪!</p>
-        </div>
     </div>
 </template>
 
