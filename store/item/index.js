@@ -14,11 +14,10 @@ export default {
         },
         setItems(state, payload) {
             state.loadedItems = payload
-            state.loadedItems.sort((a, b) => Date.parse(b.updatedDate) - Date.parse(a.updatedDate))
         },
         addItem(state, payload) {
-            state.loadedItems.splice(0, 0, payload) // Push to top
-            //state.loadedItems.push(payload) // Push to bottom
+            //state.loadedItems.splice(0, 0, payload) // Push to top
+            state.loadedItems.push(payload) // Push to bottom
         },
         updateItem(state, payload) {
             const itemIndex = state.loadedItems.findIndex(item => {

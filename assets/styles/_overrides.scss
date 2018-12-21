@@ -227,3 +227,8 @@ input[type=number] {
     word-wrap: break-word;
     white-space: pre-wrap;
 }
+
+.textarea {
+    max-height: 6rem !important;
+    min-height: 4rem !important
+}

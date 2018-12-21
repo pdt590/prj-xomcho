@@ -9,7 +9,7 @@ export default {
     mutations: {
         setChatLoading(state, payload) {
             state.chatLoading = payload
-        },
+        }
     },
     actions: {
         async sendBuyMessage (vuexContext, payload) {
@@ -50,7 +50,7 @@ export default {
                     updatedDate: now
                 }
                 // Me
-                if(user.id) {
+                if(user) {
                     await db.ref(`chats/${user.id}`).child(chatId).set({
                         itemUrl: itemUrl,
                         itemTitle: itemTitle,
@@ -132,9 +132,6 @@ export default {
                             ...messages[key]
                         })
                     }
-                    // Mới nhất
-                    // loadedMessages = loadedMessages.sort((a, b) => Date.parse(b.updatedDate) - Date.parse(a.updatedDate))
-                    // loadedMessages.reverse()
                     const chatObj = {
                         id: chatData.key,
                         itemUrl: itemUrl,
@@ -166,6 +163,29 @@ export default {
             } catch(error) {
                 console.log('[ERROR-setMessageState]', error)
                 //vuexContext.commit('setChatLoading', false)
+            }
+        },
+        async deleteChat (vuexContext, payload) {
+            vuexContext.commit('setChatLoading', true)
+            try {
+                const user = vuexContext.getters.user
+                const { partnerId, chatId } = payload
+                await db.ref(`chats/${user.id}`).child(chatId).remove()
+                await db.ref(`chats/${partnerId}`).child(chatId).remove()
+                vuexContext.commit('setChatLoading', false)
+            } catch(error) {
+                console.log('[ERROR-deleteChat]', error)
+                vuexContext.commit('setChatLoading', false)
+            }
+        },
+        async deleteChatsByUser (vuexContext, userId) {
+            vuexContext.commit('setChatLoading', true)
+            try {
+                await db.ref('chats').child(userId).remove()
+                vuexContext.commit('setChatLoading', false)
+            } catch(error) {
+                console.log('[ERROR-deleteChatsByUser]', error)
+                vuexContext.commit('setChatLoading', false)
             }
         }
     },

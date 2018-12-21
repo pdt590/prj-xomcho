@@ -60,7 +60,7 @@
                     limit: this.limit + 1,
                     endAtKey: endAtKey
                 })
-                loadedMoreMessages.length ? loadedMoreMessages.shift() : `` // Remove first item
+                loadedMoreShops.length ? loadedMoreShops.shift() : `` // Remove first item
                 this.loadedShops = [...this.loadedShops, ...loadedMoreShops]
             }
         }

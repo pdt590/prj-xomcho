@@ -344,6 +344,7 @@ export default {
                 const userId = loadedUser.id
                 await vuexContext.dispatch('deleteItemsByUser', userId)
                 await vuexContext.dispatch('deleteShopsByUser', userId)
+                await vuexContext.dispatch('deleteChatsByUser', userId)
                 const credential = await firebase.auth.EmailAuthProvider.credential(
                     user.email,
                     confirmPassword
