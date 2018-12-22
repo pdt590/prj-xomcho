@@ -6,7 +6,7 @@
                 <li class="is-active"><a>Tin nhắn</a></li>
             </ul>
         </nav>
-        <div class="card" v-if="loadedChats.length">
+        <div class="card" v-if="loadedChats.length && user">
             <div class="card-content">
                 <div class="columns">
                     <div class="column is-4 v-chat-list">
@@ -20,7 +20,7 @@
                             :key="i">
                             <div class="media-content" style="overflow: hidden;" @click="setMainChat(i)">
                                 <p>
-                                    <b-icon icon="account-circle" size="is-small" v-if="user && info.message.fromId === user.id"></b-icon>
+                                    <b-icon icon="account-circle" size="is-small" v-if="info.message.fromId === user.id"></b-icon>
                                     <b-icon :icon="!info.message.fromId ? `account-question` : `account-check`" size="is-small" type="is-dark" v-else></b-icon>
                                     <span class="has-text-weight-semibold has-text-info">{{info.message.fromId ? info.message.fromUsername : info.message.fullname }}</span>
                                     <small class="has-text-grey-light"> &#8226; {{info.message.updatedDate | fmDate}}</small>
@@ -48,8 +48,8 @@
                             <div v-if="selectedChat.messages">
                                 <div v-for="(message, i) in selectedChat.messages" :key="i">
                                     <!-- Message Content -->
-                                    <div :class="user && message.fromId === user.id ? `me` : `fr`">
-                                        <span v-if="user && message.fromId !== user.id" >{{message.fromUsername}}</span>
+                                    <div :class="message.fromId === user.id ? `me` : `fr`">
+                                        <span v-if="message.fromId !== user.id" >{{message.fromUsername}}</span>
                                         <div class="chat-content" style="margin-top: 1.5rem">
                                             <p v-if="message.unit">Thông tin đặt mua 🛒</p>
                                             <p v-if="message.unit && message.fullname">Sản phẩm: <strong>{{selectedChat.itemTitle}}</strong></p>

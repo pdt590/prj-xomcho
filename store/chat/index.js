@@ -165,16 +165,22 @@ export default {
             vuexContext.commit('setChatLoading', true)
             try {
                 const user = vuexContext.getters.user
-                await db.ref(`chats/${user.id}`).orderByChild('state').equalTo(false).on('value', chatsData => {
-                    let count = 0
-                    chatsData.forEach(chatData => {
-                        count = count + 1
-                    })
-                    vuexContext.commit('setCountUnOpenedChats', count)
+                let count = 0
+                const chatsData = await db.ref(`chats/${user.id}`).orderByChild('state').equalTo(false).once('value')
+                chatsData.forEach(chatData => {
+                    count = count + 1
                 })
+                vuexContext.commit('setCountUnOpenedChats', count)
+                // await db.ref(`chats/${user.id}`).orderByChild('state').equalTo(false).on('value', chatsData => {
+                //     let count = 0
+                //     chatsData.forEach(chatData => {
+                //         count = count + 1
+                //     })
+                //     vuexContext.commit('setCountUnOpenedChats', count)
+                // })
                 vuexContext.commit('setChatLoading', false)
             } catch(error) {
-                console.log('[ERROR-loadChats]', error)
+                console.log('[ERROR-loadCountUnOpenedChats]', error)
                 vuexContext.commit('setChatLoading', false)
             }
         },
