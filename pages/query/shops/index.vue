@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <nav class="breadcrumb is-hidden-mobile" style="margin-bottom: 2rem">
+        <nav class="breadcrumb is-hidden-mobile">
             <ul>
                 <li><nuxt-link to="/">Trang chủ</nuxt-link></li>
                 <li class="is-active"><a>Cửa hàng</a></li>

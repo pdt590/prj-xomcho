@@ -41,7 +41,7 @@
                 </div>
             </div>
         </section>
-        <section class="section">
+        <section class="section is-hidden-mobile">
             <div class="container">
                 <div class="v-header">
                     <p class="is-size-5 is-capitalized has-text-black has-text-weight-semibold">Danh mục</p>

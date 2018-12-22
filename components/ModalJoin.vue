@@ -45,7 +45,7 @@
                 </section>
                 <footer class="modal-card-foot" style="justify-content: space-between">
                     <a @click.prevent="isSignup = !isSignup">{{ isSignup ? `Đăng nhập?` : `Đăng ký?`}}</a>
-                    <div class="buttons">
+                    <div class="buttons" style="justify-content: flex-end">
                         <button class="button is-rounded" type="button" @click="$parent.close()">Close</button>
                         <button class="button is-info is-rounded" 
                             :class="{'is-loading': authLoading}"
@@ -89,12 +89,12 @@
 
                     <b-checkbox>Remember me</b-checkbox>
                 </section>
-                <footer class="modal-card-foot" style="justify-content: space-between">
+                <footer class="modal-card-foot" style="justify-content: space-between;">
                     <p>
                         <a @click.prevent="isSignup = !isSignup">{{ isSignup ? `Đăng nhập?` : `Đăng ký?`}}</a><br>
                         <a @click="onFgPassword">Quên mật khẩu?</a>
                     </p>
-                    <div class="buttons">
+                    <div class="buttons" style="justify-content: flex-end">
                         <button class="button is-rounded" type="button" @click="$parent.close()">Close</button>
                         <button class="button is-info is-rounded" 
                             :class="{'is-loading': authLoading}" 

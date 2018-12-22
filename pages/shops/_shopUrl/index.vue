@@ -103,7 +103,7 @@
                         </div>
                     </div>
                     <!-- for mobile -->
-                    <b-collapse class="card is-hidden-tablet" :open="false">
+                    <b-collapse class="card is-hidden-tablet" :open="true">
                         <header class="card-header" slot="trigger" slot-scope="props">
                             <p class="card-header-title">
                                 <b-icon icon="store"></b-icon>&nbsp;<span class="has-text-grey">{{loadedShop.title}}</span>

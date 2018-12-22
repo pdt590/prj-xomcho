@@ -95,6 +95,7 @@
                 </div>
             </div>
         </nav>
+        
         <div class="container" v-if="user && !user.isActive && $route.path!=='/user/activekey'">
             <b-message type="is-danger" size="is-small">
                 Tài khoản chưa được kích hoạt
@@ -113,12 +114,6 @@
     import { categories } from '~/plugins/util-lists'
 
     export default {
-        props: {
-            isHome: {
-                type: Boolean,
-                default: false
-            }
-        },
         computed: {
             ...mapGetters(['countUnOpenedChats', 'user'])
         },
@@ -130,8 +125,6 @@
                 searchKey: null,
                 searchTarget: 'shop',
 
-                isModalLoginActive: false,
-                isModalSignupActive: false,
                 isModalJoinActive: false,
 
                 categories: categories
@@ -177,11 +170,9 @@
     .navbar-dropdown .navbar-item {
         display: flex;
         align-items: center;
+        padding-right: 1rem;
         p {
             margin-left: 1rem;
         }
-    }
-    .navbar-dropdown .navbar-item {
-        padding-right: 1rem;
     }
 </style>

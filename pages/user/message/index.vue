@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <nav class="breadcrumb is-hidden-mobile" style="margin-bottom: 2rem">
+        <nav class="breadcrumb is-hidden-mobile">
             <ul>
                 <li><nuxt-link to="/">Trang chủ</nuxt-link></li>
                 <li class="is-active"><a>Tin nhắn</a></li>
@@ -10,39 +10,35 @@
             <div class="card-content">
                 <div class="columns">
                     <div class="column is-4 v-chat-list">
-                        <b-tabs type="is-boxed">
-                            <b-tab-item>
-                                <template slot="header">
-                                    <b-icon icon="inbox-arrow-down"></b-icon>
-                                </template>
-                                <div class="media" 
-                                    :class="{'has-background-white-ter': i === selectedChatIndex}" 
-                                    style="padding: 1rem" 
-                                    v-for="(info, i) in tbnInfos" 
-                                    :key="i">
-                                    <div class="media-content" style="overflow: hidden;" @click="setMainChat(i)">
-                                        <p class="has-text-weight-semibold has-text-info">
-                                            <b-icon icon="account-circle" size="is-small" v-if="info.message.fromId === user.id"></b-icon>
-                                            <b-icon :icon="!info.message.fromId ? `account-question` : `account-check`" size="is-small" v-else></b-icon>
-                                            {{info.message.fromId ? info.message.fromUsername : info.message.fullname }}
-                                            <small class="has-text-grey-light"> - {{info.message.updatedDate | fmDate}}</small>
-                                        </p>
-                                        <p class="has-text-weight-semibold has-text-grey">{{info.itemTitle}}</p>
-                                        <p>💬 {{info.message.content | fmString(100)}}</p>
+                        <template slot="header">
+                            <b-icon icon="inbox-arrow-down"></b-icon>
+                        </template>
+                        <div class="media" 
+                            :class="{'has-background-white-ter': i === selectedChatIndex}" 
+                            style="padding: 1rem" 
+                            v-for="(info, i) in tbnInfos" 
+                            :key="i">
+                            <div class="media-content" style="overflow: hidden;" @click="setMainChat(i)">
+                                <p>
+                                    <b-icon icon="account-circle" size="is-small" v-if="user && info.message.fromId === user.id"></b-icon>
+                                    <b-icon :icon="!info.message.fromId ? `account-question` : `account-check`" size="is-small" type="is-dark" v-else></b-icon>
+                                    <span class="has-text-weight-semibold has-text-info">{{info.message.fromId ? info.message.fromUsername : info.message.fullname }}</span>
+                                    <small class="has-text-grey-light"> &#8226; {{info.message.updatedDate | fmDate}}</small>
+                                </p>
+                                <p class="has-text-weight-semibold has-text-grey">{{info.itemTitle}}</p>
+                                <p>💬 {{info.message.content | fmString(100)}}</p>
+                            </div>
+                            <div class="media-right">
+                                <div class="level">
+                                    <div class="level-item">
+                                        <b-tag :type="info.state ? `is-info` :  `is-danger`" size="is-small" style="margin: 0.2rem">{{info.state ? `Đã mở` :  `Chưa mở`}}</b-tag>
                                     </div>
-                                    <div class="media-right">
-                                        <div class="level">
-                                            <div class="level-item">
-                                                <b-tag :type="info.state ? `is-info` :  `is-danger`" size="is-small" style="margin: 0.2rem">{{info.state ? `Đã mở` :  `Chưa mở`}}</b-tag>
-                                            </div>
-                                            <div class="level-item">                                            
-                                                <button class="delete is-small" @click="onDelete(i)"></button>
-                                            </div>
-                                        </div>
+                                    <div class="level-item">                                            
+                                        <button class="delete is-small" @click="onDelete(i)"></button>
                                     </div>
                                 </div>
-                            </b-tab-item>
-                        </b-tabs>
+                            </div>
+                        </div>
                     </div>
                     <div class="column is-8 v-chat-view">
                         <div class="v-chat-view-title">
@@ -51,17 +47,22 @@
                         <div id="chatView" class="v-chat-view-content">
                             <div v-if="selectedChat.messages">
                                 <div v-for="(message, i) in selectedChat.messages" :key="i">
-                                    <div :class="message.fromId === user.id ? `me` : `fr`">
-                                        <span v-if="message.fromId !== user.id" >{{message.fromUsername}}</span>
+                                    <!-- Message Content -->
+                                    <div :class="user && message.fromId === user.id ? `me` : `fr`">
+                                        <span v-if="user && message.fromId !== user.id" >{{message.fromUsername}}</span>
                                         <div class="chat-content" style="margin-top: 1.5rem">
-                                            <p v-if="message.unit">🛒 Thông tin đặt mua sản phẩm</p>
-                                            <p v-if="message.unit && message.fullname">💳 {{message.fullname}}</p>
-                                            <p v-if="message.unit && message.phone">📞 {{message.phone}}</p>
-                                            <p v-if="message.unit && message.address">📍 {{message.address}}</p>
-                                            <p v-if="message.unit">💵 Số Lượng {{message.unit}}</p>
+                                            <p v-if="message.unit">Thông tin đặt mua 🛒</p>
+                                            <p v-if="message.unit && message.fullname">Sản phẩm: <strong>{{selectedChat.itemTitle}}</strong></p>
+                                            <p v-if="message.unit && message.fullname">Tên người mua: <strong>{{message.fullname}}</strong></p>
+                                            <p v-if="message.unit && message.phone">   Số điện thoại: <strong>{{message.phone}}</strong></p>
+                                            <p v-if="message.unit && message.address"> Địa chỉ: <strong>{{message.address}}</strong></p>
+                                            <p v-if="message.unit">                    Số Lượng: <strong>{{message.unit}}</strong></p>
+                                            <p v-if="message.unit">&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</p>
+                                            
                                             <p v-if="message.content">{{message.content}}</p>
                                         </div> 
                                     </div>
+                                    <!--  -->
                                 </div>
                             </div>
                         </div>
@@ -198,22 +199,18 @@
 
     /* Track */
     ::-webkit-scrollbar-track {
-        background: #f1f1f1; 
+        background: #f1f1f1;
     }
     
     /* Handle */
     ::-webkit-scrollbar-thumb {
-        background: #888; 
+        background: #888;
+        border-radius: 0.3rem
     }
 
     /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
         background: #555;
-    }
-
-    .v-chat-list {
-        max-height: 40rem; 
-        overflow-y: scroll
     }
 
     .media:hover {
@@ -224,17 +221,48 @@
         display: flex; 
         flex-direction: column; 
         justify-content: space-between;
+        padding: 0;
+    }
+
+    @media screen and (min-width: 768px) {
+        .v-chat-list {
+            max-height: 40rem; 
+            overflow-y: scroll;
+            border-bottom: solid 1px #D8D8D8; 
+        }
         .v-chat-view-title {
             border-bottom: solid 1px #D8D8D8; 
-            padding: 0.7rem
+            padding: 0.7rem 0 0.7rem 1rem
         };
         .v-chat-view-content {
             max-height: 30rem; 
             overflow-y: scroll
         };
         .v-chat-input {
+            max-height: 10rem;
             border-top: solid 1px #D8D8D8;
-            padding-top: 1rem
+            padding: 0.7rem
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        .v-chat-list {
+            max-height: 15rem; 
+            overflow-y: scroll;
+            border-bottom: solid 1px #D8D8D8; 
+        }
+        .v-chat-view-title {
+            border-bottom: solid 1px #D8D8D8; 
+            padding: 0.7rem 0 0.7rem 1rem
+        };
+        .v-chat-view-content {
+            max-height: 15rem; 
+            overflow-y: scroll
+        };
+        .v-chat-input {
+            max-height: 5rem;
+            border-top: solid 1px #D8D8D8;
+            padding: 0.7rem
         }
     }
 
