@@ -129,7 +129,7 @@
                 loadedItems: [],
                 currentShopPage: 1,
                 currentItemPage: 1,
-                perPage: 6,
+                perPage: 18,
             }
         },
         methods: { 

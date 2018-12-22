@@ -21,26 +21,7 @@
                 </div>
             </div>
         </section>
-        <section class="section">
-            <div class="container">
-                <div class="v-header">
-                    <p class="is-size-5 is-capitalized has-text-black has-text-weight-semibold">Cửa hàng nổi bật</p>
-                    <nuxt-link class="is-size-6 has-text-grey-light has-text-weight-semibold" to="/query/shops">
-                        Xem thêm
-                    </nuxt-link>
-                </div>
-                <div class="columns is-multiline is-variable is-1 is-hidden-mobile">
-                    <div class="column is-2" v-for="(shop, i) in loadedShops" :key="i">
-                        <v-card-shop :shopData="shop" />
-                    </div>
-                </div>
-                <div class="columns is-multiline is-variable is-1 is-hidden-tablet">
-                    <div class="column" v-for="(shop, i) in loadedShops.slice(0, 4)" :key="i">
-                        <v-card-shop-mobile :shopData="shop" />
-                    </div>
-                </div>
-            </div>
-        </section>
+        <!-- for desktop -->
         <section class="section is-hidden-mobile">
             <div class="container">
                 <div class="v-header">
@@ -60,7 +41,22 @@
                 </div>
             </div>
         </section>
-        <section class="section">
+        <section class="section is-hidden-mobile">
+            <div class="container">
+                <div class="v-header">
+                    <p class="is-size-5 is-capitalized has-text-black has-text-weight-semibold">Cửa hàng nổi bật</p>
+                    <nuxt-link class="is-size-6 has-text-grey-light has-text-weight-semibold" to="/query/shops">
+                        Xem thêm
+                    </nuxt-link>
+                </div>
+                <div class="columns is-multiline is-variable is-1">
+                    <div class="column is-2" v-for="(shop, i) in loadedShops" :key="i">
+                        <v-card-shop :shopData="shop" />
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="section is-hidden-mobile">
             <div class="container">
                 <div class="v-header">
                     <p class="is-size-5 is-capitalized has-text-black has-text-weight-semibold">Sản phẩm nổi bật</p>
@@ -68,18 +64,59 @@
                         Xem thêm
                     </nuxt-link>
                 </div>
-                <div class="columns is-multiline is-variable is-3 is-hidden-mobile">
+                <div class="columns is-multiline is-variable is-3">
                     <div class="column is-2" v-for="(item, i) in loadedItems" :key="i">
                         <v-card-item :itemData="item" />
                     </div>
                 </div>
-                <div class="columns is-multiline is-variable is-3 is-hidden-tablet">
-                    <div class="column" v-for="(item, i) in loadedItems.slice(0, 4)" :key="i">
-                        <v-card-item-mobile :itemData="item" />
-                    </div>
-                </div>
             </div>
         </section>
+        <!--  -->
+
+        <!-- for mobile -->
+        <section class="section is-hidden-tablet" style="padding-bottom: 0">
+            <div class="container">
+                <div class="v-header">
+                    <p class="is-size-5 is-capitalized has-text-black has-text-weight-semibold">Cửa hàng nổi bật</p>
+                    <nuxt-link class="is-size-6 has-text-grey-light has-text-weight-semibold" to="/query/shops">
+                        Xem thêm
+                    </nuxt-link>
+                </div>
+                <no-ssr>
+                    <carousel-3d :disable3d="true" :space="365" :clickable="false" :animationSpeed="300">
+                        <slide v-for="(count, id) in 4" :key="id" :index="id">
+                            <div class="columns is-multiline is-variable is-1">
+                                <div class="column" v-for="(shop, i) in loadedShops.slice(4*id, 4*(id+1))" :key="i">
+                                    <v-card-shop-mobile :shopData="shop" />
+                                </div>
+                            </div>
+                        </slide>
+                    </carousel-3d>
+                </no-ssr>
+            </div>
+        </section>
+        <section class="section is-hidden-tablet" style="padding-bottom: 0">
+            <div class="container">
+                <div class="v-header">
+                    <p class="is-size-5 is-capitalized has-text-black has-text-weight-semibold">Sản phẩm nổi bật</p>
+                    <nuxt-link class="is-size-6 has-text-grey-light has-text-weight-semibold" to="/query/items"> 
+                        Xem thêm
+                    </nuxt-link>
+                </div>
+                <no-ssr>
+                    <carousel-3d :disable3d="true" :space="365" :clickable="false" :animationSpeed="300">
+                        <slide v-for="(count, id) in 4" :key="id" :index="id">
+                            <div class="columns is-multiline is-variable is-1">
+                                <div class="column" v-for="(item, i) in loadedItems.slice(4*id, 4*(id+1))" :key="i">
+                                    <v-card-item-mobile :itemData="item" />
+                                </div>
+                            </div>
+                        </slide>
+                    </carousel-3d>
+                </no-ssr>
+            </div>
+        </section>
+        <!--  -->
     </div>
 </template>
 
@@ -87,6 +124,10 @@
     import { categories } from '~/plugins/util-lists'
 
     export default {
+        components: {
+            Carousel3d: () => import('vue-carousel-3d').then(({ Carousel3d }) => Carousel3d),
+            Slide : () => import('vue-carousel-3d').then(({ Slide }) => Slide),
+        },
         async asyncData({ store, error }) {
             try {
                 const [loadedShops, loadedItems] = await Promise.all([
@@ -104,7 +145,13 @@
         },
         data() {
             return {
-                categories: categories
+                categories: categories,
+                flickityOptions: {
+                    initialIndex: 3,
+                    prevNextButtons: false,
+                    pageDots: false,
+                    wrapAround: true
+                }
             }
         }
     }
@@ -125,6 +172,15 @@
         justify-content: center;
         align-items: center;
         border-radius: 4px;
+    }
+    .carousel-3d-container {
+        height: 35rem !important;
+        background-color: #FFF;
+        .carousel-3d-slide {
+            border: none;
+            background-color: #FFF;
+            height: 35rem !important;
+        }
     }
 </style>
 

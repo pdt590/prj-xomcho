@@ -73,7 +73,7 @@ export default {
         async loadPreviewShops (vuexContext) {
             vuexContext.commit('setQueryLoading', true)
             try {
-                const shopsData = await shopsRef.orderByChild('updatedDate').limitToLast(12).once('value')         
+                const shopsData = await shopsRef.orderByChild('updatedDate').limitToLast(18).once('value')         
                 const loadedShops = []
                 shopsData.forEach(shopData => {
                     const shopObj = shopData.val()
@@ -90,7 +90,7 @@ export default {
         async loadPreviewItems (vuexContext) {
             vuexContext.commit('setQueryLoading', true)
             try {
-                const itemsData = await itemsRef.orderByChild('updatedDate').limitToLast(12).once('value')
+                const itemsData = await itemsRef.orderByChild('updatedDate').limitToLast(18).once('value')
                 const loadedItems = []
                 itemsData.forEach(itemData => {
                     const itemObj = itemData.val()
@@ -155,7 +155,7 @@ export default {
         async loadCategoryShops (vuexContext, category) {
             vuexContext.commit('setQueryLoading', true)
             try {
-                const shopsData = await shopsRef.orderByChild('category').equalTo(category).limitToFirst(500).once('value')
+                const shopsData = await shopsRef.orderByChild('category').equalTo(category).limitToFirst(300).once('value')
                 const loadedShops = []
                 shopsData.forEach(shopData => {
                     const shopObj = shopData.val()
@@ -174,7 +174,7 @@ export default {
         async loadCategoryItems (vuexContext, category) {
             vuexContext.commit('setQueryLoading', true)
             try {
-                const itemsData = await itemsRef.orderByChild('category').equalTo(category).limitToFirst(500).once('value')
+                const itemsData = await itemsRef.orderByChild('category').equalTo(category).limitToFirst(300).once('value')
                 const loadedItems = []
                 itemsData.forEach(itemData => {
                     const itemObj = itemData.val()
@@ -195,7 +195,7 @@ export default {
         async loadSearchShops (vuexContext, searchKey) {
             vuexContext.commit('setQueryLoading', true)
             try {
-                const shopsData = await shopsRef.orderByChild('title').startAt(searchKey).endAt(searchKey+"\uf8ff").limitToFirst(500).once('value')
+                const shopsData = await shopsRef.orderByChild('title').startAt(searchKey).endAt(searchKey+"\uf8ff").limitToFirst(300).once('value')
                 const loadedShops = []
                 shopsData.forEach(shopData => {
                     const shopObj = shopData.val()
@@ -214,7 +214,7 @@ export default {
         async loadSearchItems (vuexContext, searchKey) {
             vuexContext.commit('setQueryLoading', true)
             try {
-                const itemsData = await itemsRef.orderByChild('title').startAt(searchKey).endAt(searchKey+"\uf8ff").limitToFirst(500).once('value')
+                const itemsData = await itemsRef.orderByChild('title').startAt(searchKey).endAt(searchKey+"\uf8ff").limitToFirst(300).once('value')
                 const loadedItems = []
                 itemsData.forEach(itemData => {
                     const itemObj = itemData.val()

@@ -42,7 +42,7 @@
         },
         async asyncData({ store, params, error }) {
             try {
-                const limit = 1
+                const limit = 18
                 const loadedItems = await store.dispatch('loadAllItems', {limit: limit})
                 return { 
                     loadedItems: loadedItems ,

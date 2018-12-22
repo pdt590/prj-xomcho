@@ -32,7 +32,7 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
 * Add avatar in Navbar mobile
 * Add Share Button in Shop
 * Move Card Style to global file and remove shadow in case of mobile ?
-* Implement Slider for Home page
+* Implement Slider for Home page ?
 * Adjust the number of displayed items/shops bw desktop and mobile ?
 * Refer Navbar logic for mobile on Zing, Dantri or VnExpress (Add breadcrumb on navbar mobile)
 * Re-design buy logic ?
@@ -47,6 +47,9 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
 * Reimplement error message code ?
 * Change card style likes youtube
 * Improve Search
+* Implement query/filter location
+* Develop PWA
+* Improve Image Uploader UX
 
 * Note for Vuelidate
   * @blur should go with $error
@@ -54,3 +57,7 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
   * sameAs('xxx') can use with same level of input (refer - confirmNewPassword and newPassword in /user/activekey)
   * should use this with function(){} inside sameAs instead of vm
   * required and isValid validator always show error message at beginning
+
+* There are two ways to import 3-party lib component in Nuxt
+  * Import globally: Create plugin and set ssr: false in nuxt.config -> no recommendation
+  * Import locally: Import as components and use <no-ssr/> tag -> recommendation (light-weight)
