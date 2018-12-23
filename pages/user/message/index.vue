@@ -10,9 +10,6 @@
             <div class="card-content">
                 <div class="columns">
                     <div class="column is-4 has-background-white-ter v-chat-list">
-                        <template slot="header">
-                            <b-icon icon="inbox-arrow-down"></b-icon>
-                        </template>
                         <div class="media"
                             :class="{'v-chat-select': i === selectedChatIndex}" 
                             style="padding: 1rem" 
@@ -26,7 +23,7 @@
                                     <small class="has-text-grey-light"> &#8226; {{info.message.updatedDate | fmDate}}</small>
                                 </p>
                                 <p class="has-text-weight-semibold has-text-grey">{{info.itemTitle}}</p>
-                                <p>💬 {{info.message.content | fmString(100)}}</p>
+                                <p>{{info.message.content | fmString(100)}}</p>
                             </div>
                             <div class="media-right">
                                 <div class="level">
@@ -37,6 +34,11 @@
                                         <button class="delete is-small" @click="onDelete(i)"></button>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="level" style="padding-bottom: 0.5rem">
+                            <div class="level-item">
+                                <button class="button is-rounded is-outlined" :class="{'is-loading': chatLoading}" @click="onLoad">Xem thêm</button>
                             </div>
                         </div>
                     </div>
@@ -58,7 +60,6 @@
                                             <p v-if="message.unit && message.address"> Địa chỉ: <strong>{{message.address}}</strong></p>
                                             <p v-if="message.unit">                    Số Lượng: <strong>{{message.unit}}</strong></p>
                                             <p v-if="message.unit">&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</p>
-                                            
                                             <p v-if="message.content">{{message.content}}</p>
                                         </div> 
                                     </div>
@@ -154,6 +155,9 @@
                 }
                 this.selectedChat = this.loadedChats[index]
                 this.selectedChatIndex = index
+            },
+            async onLoad() {
+                await this.$store.dispatch('loadMoreChats')
             },
             async onSend() {
                 const messageId = genId_(10)
@@ -257,7 +261,7 @@
         .v-chat-list {
             max-height: 15rem; 
             overflow-y: scroll;
-            border-radius: 0.3rem
+            border-radius: 0.3rem;
         }
         .v-chat-view-title {
             padding: 0.5rem 0 0.5rem 1rem

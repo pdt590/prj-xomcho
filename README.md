@@ -29,29 +29,31 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
 * Deploy main page with categories column ?
 * Re-struct folder based on firebase deployment
 * Add avatar in Navbar mobile ?
-* Add Share Button in Shop
 * Move Card Style to global file and remove shadow in case of mobile ?
 * Implement Slider for Home page ?
 * Adjust the number of displayed items/shops bw desktop and mobile ?
-* Edit breadcrumb logic in each query page
-* Refer Navbar logic for mobile on Zing, Dantri or VnExpress (Add breadcrumb on navbar mobile)
 * Re-design buy logic ?
-* Edit number input style
 * Implement Message without response message ?
   * Have read and un-read status
 * Add danh muc cells on home page ?
-* Add bookmark function
 * Implement forget pw and confirm sigup page ?
 * Add middleware rule for join page ?
-* Implement image optimize in cloud function and remove maximum image size rule
 * Reimplement error message code ?
+
+* Implement image optimize in cloud function and remove maximum image size rule
+* Add bookmark function
+* Add Share Button in Shop
+* Edit number input style
 * Change card style likes youtube
+* Edit breadcrumb logic in each query page
+* Refer Navbar logic for mobile on Zing, Dantri or VnExpress (Add breadcrumb on navbar mobile)
 * Improve Search
 * Implement query/filter location
 * Develop PWA
 * Improve Image Uploader UX
 * Add lazy-load for message
 * Rethink Permission mdw
+* Add lazy load for all Query pages (save EndKey into a var)
 
 * Note for Vuelidate
   * @blur should go with $error

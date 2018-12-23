@@ -16,8 +16,8 @@ export default {
             state.loadedItems = payload
         },
         addItem(state, payload) {
-            //state.loadedItems.splice(0, 0, payload) // Push to top
-            state.loadedItems.push(payload) // Push to bottom
+            state.loadedItems.splice(0, 0, payload) // Push to top
+            //state.loadedItems.push(payload) // Push to bottom
         },
         updateItem(state, payload) {
             const itemIndex = state.loadedItems.findIndex(item => {

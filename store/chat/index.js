@@ -17,8 +17,11 @@ export default {
             state.chatNotifying = payload
         },
         setChats(state, payload) {
-            state.loadedChats = []
             state.loadedChats = payload
+        },
+        setMoreChats(state, payload) {
+            payload.shift()
+            state.loadedChats = [...state.loadedChats, ...payload]
         },
         setCountUnOpenedChats (state, payload) {
             state.countUnOpenedChats = payload
@@ -101,7 +104,7 @@ export default {
             }
         },
         async sendChatMessage (vuexContext, payload) {
-            vuexContext.commit('setChatLoading', true)
+            //vuexContext.commit('setChatLoading', true)
             try {
                 const user = vuexContext.getters.user
                 const { partnerId, chatId, now, messageId, message } = payload
@@ -117,11 +120,11 @@ export default {
                     state: false,
                     updatedDate: now
                 })
-                vuexContext.commit('setChatLoading', false)
+                //vuexContext.commit('setChatLoading', false)
                 return true
             } catch (e) {
                 console.log('[ERROR-sendChatMessage]', e)
-                vuexContext.commit('setChatLoading', false)
+                //vuexContext.commit('setChatLoading', false)
                 return false
             }
         },
@@ -129,7 +132,8 @@ export default {
             vuexContext.commit('setChatLoading', true)
             try {
                 const user = vuexContext.getters.user
-                await db.ref(`chats/${user.id}`).orderByChild('updatedDate').limitToFirst(200).on('value', chatsData => {
+                const numChats = vuexContext.getters.loadedChats.length ? vuexContext.getters.loadedChats.length : 15
+                await db.ref(`chats/${user.id}`).orderByChild('updatedDate').limitToLast(numChats).on('value', chatsData => {
                     const loadedChats = []
                     chatsData.forEach(chatData => {
                         const loadedMessages = []
@@ -158,6 +162,44 @@ export default {
                 vuexContext.commit('setChatLoading', false)
             } catch(e) {
                 console.log('[ERROR-loadChats]', e)
+                vuexContext.commit('setChatLoading', false)
+            }
+        },
+        async loadMoreChats (vuexContext) {
+            vuexContext.commit('setChatLoading', true)
+            try {
+                const user = vuexContext.getters.user
+                console.log(vuexContext.getters.loadedChats)
+                const numChats = vuexContext.getters.loadedChats.length
+                const endAtKey = vuexContext.getters.loadedChats[numChats-1].updatedDate
+                const chatsData = await db.ref(`chats/${user.id}`).orderByChild('updatedDate').endAt(endAtKey).limitToLast(16).once('value')
+                const loadedChats = []
+                chatsData.forEach(chatData => {
+                    const loadedMessages = []
+                    const { itemUrl, itemTitle, state, updatedDate, messages, partnerId, partnerUsername } = chatData.val()
+                    for(const key in messages) {
+                        loadedMessages.push({
+                            id: key,
+                            ...messages[key]
+                        })
+                    }
+                    const chatObj = {
+                        id: chatData.key,
+                        itemUrl: itemUrl,
+                        itemTitle: itemTitle,
+                        state: state,
+                        updatedDate: updatedDate,
+                        partnerId: partnerId,
+                        partnerUsername: partnerUsername,
+                        messages: loadedMessages
+                    }
+                    loadedChats.push(chatObj)
+                })
+                loadedChats.reverse()
+                vuexContext.commit('setMoreChats', loadedChats)
+                vuexContext.commit('setChatLoading', false)
+            } catch(e) {
+                console.log('[ERROR-loadMoreChats]', e)
                 vuexContext.commit('setChatLoading', false)
             }
         },
@@ -228,6 +270,9 @@ export default {
         },
         loadedChats(state) {
             return state.loadedChats
+        },
+        numChats(state) {
+            return state.numChats
         },
         countUnOpenedChats(state) {
             return state.countUnOpenedChats

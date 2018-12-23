@@ -6,7 +6,7 @@
                     <div class="level-item has-text-centered">
                         <div>
                             <p class="title is-2 is-spaced">
-                                XÓM CHỢ
+                                Xóm Chợ
                             </p>
                             <p class="subtitle is-5">
                                 Công cụ hỗ trợ bán hàng Online
