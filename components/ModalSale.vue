@@ -61,14 +61,20 @@
                             </b-input>
                         </b-field>
 
-                        <b-field label="Số lượng*">
+                        <b-field label="Số lượng*"
+                            :type="$v.formData.unit.$error ? `is-danger` : ``">
                             <b-field>
                                 <div class="control">
-                                    <button class="button is-outlined" @click.prevent="unit>1 ? unit=unit-1 : ``">-</button>
+                                    <button class="button is-outlined" @click.prevent="formData.unit>1 ? formData.unit=formData.unit-1 : ``">-</button>
                                 </div>
-                                <b-input type="number" v-model.number="unit" expanded></b-input>
+                                <b-input 
+                                    type="number" 
+                                    v-model.number="formData.unit" 
+                                    @blur="$v.formData.unit.$touch()"
+                                    expanded>
+                                </b-input>
                                 <div class="control">
-                                    <button class="button is-outlined" @click.prevent="unit=unit+1">+</button>
+                                    <button class="button is-outlined" @click.prevent="formData.unit=formData.unit+1">+</button>
                                 </div>
                             </b-field>
                         </b-field>
@@ -114,7 +120,8 @@
                 fullname: this.user && this.user.fullname ? this.user.fullname : null,
                 phone: this.user && this.user.phone ? this.user.phone : null,
                 address: this.user && this.user.address ? this.user.address + ' ' + this.user.province : null,
-                content: null
+                content: null,
+                unit: this.unit ? this.unit : 1
             }
         },
         computed: {
@@ -127,6 +134,7 @@
                     fullname: null,
                     phone: null,
                     address: null,
+                    unit: null,
                     content: null
                 },
                 response: null
@@ -143,6 +151,10 @@
                 },
                 address: {
                     required
+                },
+                unit: {
+                    required,
+                    numeric
                 }
             }
         },
@@ -152,7 +164,7 @@
                     itemUrl: this.$route.path,
                     itemTitle: this.itemData.title,
                     ...this.formData,
-                    unit: this.unit,
+                    unit: this.formData.unit,
                     partnerId: this.itemData._creator.id,
                     partnerUsername: this.itemData._creator.username
                 })

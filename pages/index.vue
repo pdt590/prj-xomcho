@@ -82,15 +82,17 @@
                         Xem thêm
                     </nuxt-link>
                 </div>
-                <carousel-3d :disable3d="true" :space="365" :clickable="false" :animationSpeed="300">
-                    <slide v-for="(count, id) in 4" :key="id" :index="id">
-                        <div class="columns is-multiline is-variable is-1">
-                            <div class="column" v-for="(shop, i) in loadedShops.slice(4*id, 4*(id+1))" :key="i">
-                                <v-card-shop-mobile :shopData="shop" />
+                <no-ssr>
+                    <carousel-3d :disable3d="true" :space="365" :clickable="false" :animationSpeed="300">
+                        <slide v-for="(count, id) in 4" :key="id" :index="id">
+                            <div class="columns is-multiline is-variable is-1">
+                                <div class="column" v-for="(shop, i) in loadedShops.slice(4*id, 4*(id+1))" :key="i">
+                                    <v-card-shop-mobile :shopData="shop" />
+                                </div>
                             </div>
-                        </div>
-                    </slide>
-                </carousel-3d>
+                        </slide>
+                    </carousel-3d>
+                </no-ssr>
             </div>
         </section>
         <section class="section is-hidden-tablet" style="padding-bottom: 0">
@@ -101,15 +103,17 @@
                         Xem thêm
                     </nuxt-link>
                 </div>
-                <carousel-3d :disable3d="true" :space="365" :clickable="false" :animationSpeed="300">
-                    <slide v-for="(count, id) in 4" :key="id" :index="id">
-                        <div class="columns is-multiline is-variable is-1">
-                            <div class="column" v-for="(item, i) in loadedItems.slice(4*id, 4*(id+1))" :key="i">
-                                <v-card-item-mobile :itemData="item" />
+                <no-ssr>
+                    <carousel-3d :disable3d="true" :space="365" :clickable="false" :animationSpeed="300">
+                        <slide v-for="(count, id) in 4" :key="id" :index="id">
+                            <div class="columns is-multiline is-variable is-1">
+                                <div class="column" v-for="(item, i) in loadedItems.slice(4*id, 4*(id+1))" :key="i">
+                                    <v-card-item-mobile :itemData="item" />
+                                </div>
                             </div>
-                        </div>
-                    </slide>
-                </carousel-3d>
+                        </slide>
+                    </carousel-3d>
+                </no-ssr>
             </div>
         </section>
         <!--  -->
