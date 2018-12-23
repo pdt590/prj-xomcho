@@ -8,7 +8,7 @@
         </nav>
         <div class="card">
             <div class="card-content">
-                <b-tabs :animated="false" @change="onTabChange">
+                <b-tabs :animated="false">
                     <b-tab-item v-if="searchTarget==='shop'">
                         <template slot="header">
                             <b-icon icon="store"></b-icon>
@@ -126,9 +126,8 @@
                     loadedShops: loadedShops,
                     loadedItems: loadedItems 
                 }
-                
             }catch(e) {
-                console.log('[ERROR-query/category]', e)
+                console.log('[ERROR-query/search]', e)
                 error({ statusCode: 500, message: 'Lỗi loadSearchShops hoặc loadSearchItems' })
             }
         },
@@ -139,18 +138,12 @@
                 sortShopType: 'Mới nhất',
                 sortItemType: 'Mới nhất',
 
-                loadedItems: [],
                 currentShopPage: 1,
                 currentItemPage: 1,
                 perPage: 6,
             }
         },
-        methods: { 
-            async onTabChange(tabIndex) {
-                if(tabIndex) {
-                    this.loadedItems = await this.$store.dispatch('loadCategoryItems', this.$route.params.category)
-                }
-            },
+        methods: {
             onPagShopChange(pageCount) {
                 this.currentShopPage = pageCount
             },

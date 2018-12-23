@@ -19,14 +19,14 @@
                                 <v-card-shop class="is-hidden-mobile" :shopData="shop" />
                                 <v-card-shop-mobile class="is-hidden-tablet" :shopData="shop" />
                             </div>
+                            <b-loading class="is-hidden-mobile" :is-full-page="false" :active.sync="queryLoading"></b-loading>
                         </div>
                         <div class="level">
                             <div class="level-item">
-                                <button class="button is-rounded is-outlined" :class="{'is-loading': queryLoading}" @click="onLoad"> Xem thêm</button>
+                                <button class="button is-rounded is-outlined" :class="{'is-loading': queryLoading}" :disabled="!loadedShops.length" @click="onLoad"> Xem thêm</button>
                             </div>
                         </div>
                     </b-tab-item>
-                    <b-loading :is-full-page="false" :active.sync="queryLoading"></b-loading>
                 </b-tabs> 
             </div>
         </div>

@@ -21,7 +21,7 @@
                                     v-model="searchKey"
                                     placeholder="Tìm kiếm"
                                     icon="magnify">
-                                    <template slot="empty">...</template>
+                                    <template slot="empty"></template>
                                 </b-autocomplete>
                                 <div class="control">
                                     <button class="button" @click="onSearch">Tìm Kiếm</button>

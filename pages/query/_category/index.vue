@@ -110,7 +110,7 @@
                 return this.loadedItems.slice((this.currentItemPage-1)*this.perPage, this.currentItemPage*this.perPage)
             }
         },
-        async asyncData({ app, store, params, error }) {
+        async asyncData({ store, params, error }) {
             try {
                 const loadedShops = await store.dispatch('loadCategoryShops', params.category)
                 return { loadedShops: loadedShops }

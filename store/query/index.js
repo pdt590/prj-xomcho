@@ -7,13 +7,7 @@ export default {
     state: {
         queryLoading: false,
         loadedPersonalShops: [],
-        loadedPersonalItems: [],
-        loadedPreviewShops: [],
-        loadedPreviewItems: [],
-        loadedCategoryShops: [],
-        loadedCategoryItems: [],
-        loadedSearchShops: [],
-        loadedSearchItems: [],
+        loadedPersonalItems: []
     },
     mutations: {
         setQueryLoading(state, payload) {
@@ -235,11 +229,11 @@ export default {
         queryLoading(state) {
             return state.queryLoading
         },
-        // Shops
+
+        // Personal
         loadedPersonalShops(state) {
             return state.loadedPersonalShops
         },
-        // Items
         loadedPersonalItems(state) {
             return state.loadedPersonalItems
         }

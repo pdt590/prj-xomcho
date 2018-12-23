@@ -19,8 +19,8 @@ export const currencies = [
 
 export const categories = [
     {
-        id: 'nông-sản',
-        name: 'Nông Sản',
+        id: 'nông-nghiệp',
+        name: 'Nông Nghiệp',
         icon: 'flower-tulip-outline'
     },
     {

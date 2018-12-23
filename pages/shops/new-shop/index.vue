@@ -200,7 +200,7 @@
             return {
                 shopData: {
                     title: null,
-                    category: 'nông-sản',
+                    category: 'nông-nghiệp',
                     facebook: null,
                     address: null,
                     province: 'Hà Nội',
