@@ -51,8 +51,8 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
 * Implement query/filter location
 * Develop PWA
 * Improve Image Uploader UX
-* Add lazy-load for message
-* Rethink Permission mdw
+* Add lazy-load for message ?
+* Rethink Permission mdw ?
 * Add lazy load for all Query pages (save EndKey into a var)
 
 * Note for Vuelidate
@@ -61,7 +61,3 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
   * sameAs('xxx') can use with same level of input (refer - confirmNewPassword and newPassword in /user/activekey)
   * should use this with function(){} inside sameAs instead of vm
   * required and isValid validator always show error message at beginning
-
-* There are two ways to import 3-party lib component in Nuxt
-  * Import globally: Create plugin and set ssr: false in nuxt.config -> no recommendation
-  * Import locally: Import as components and use <no-ssr/> tag -> recommendation (light-weight)
