@@ -44,8 +44,8 @@ export default {
                 vuexContext.commit('setPersonalShops', loadedShops)
                 vuexContext.commit('setQueryLoading', false)
                 return loadedShops
-            } catch(error) {
-                console.log('[ERROR-loadPersonalShops]', error)
+            } catch(e) {
+                console.log('[ERROR-loadPersonalShops]', e)
                 vuexContext.commit('setQueryLoading', false)
             }
         },
@@ -63,8 +63,8 @@ export default {
                 vuexContext.commit('setPersonalItems', loadedItems)
                 vuexContext.commit('setQueryLoading', false)
                 return loadedItems
-            } catch(error) {
-                console.log('[ERROR-loadPersonalItems]', error)
+            } catch(e) {
+                console.log('[ERROR-loadPersonalItems]', e)
                 vuexContext.commit('setQueryLoading', false)
             }
         },
@@ -82,8 +82,8 @@ export default {
                 loadedShops.reverse()
                 vuexContext.commit('setQueryLoading', false)
                 return loadedShops
-            } catch(error) {
-                console.log('[ERROR-loadPreviewShops]', error)
+            } catch(e) {
+                console.log('[ERROR-loadPreviewShops]', e)
                 vuexContext.commit('setQueryLoading', false)
             }
         },
@@ -99,8 +99,8 @@ export default {
                 loadedItems.reverse()
                 vuexContext.commit('setQueryLoading', false)
                 return loadedItems
-            } catch(error) {
-                console.log('[ERROR-loadPreviewItems]', error)
+            } catch(e) {
+                console.log('[ERROR-loadPreviewItems]', e)
                 vuexContext.commit('setQueryLoading', false)
             }
         },
@@ -123,8 +123,8 @@ export default {
                 loadedShops.reverse()
                 vuexContext.commit('setQueryLoading', false)
                 return loadedShops
-            } catch(error) {
-                console.log('[ERROR-loadAllShops]', error)
+            } catch(e) {
+                console.log('[ERROR-loadAllShops]', e)
                 vuexContext.commit('setQueryLoading', false)
             }
         },
@@ -145,8 +145,8 @@ export default {
                 loadedItems.reverse()
                 vuexContext.commit('setQueryLoading', false)
                 return loadedItems
-            } catch(error) {
-                console.log('[ERROR-loadAllItems]', error)
+            } catch(e) {
+                console.log('[ERROR-loadAllItems]', e)
                 vuexContext.commit('setQueryLoading', false)
             }
         },
@@ -166,8 +166,8 @@ export default {
                 })
                 vuexContext.commit('setQueryLoading', false)
                 return loadedShops.reverse()
-            } catch(error) {
-                console.log('[ERROR-loadCategoryShops]', error)
+            } catch(e) {
+                console.log('[ERROR-loadCategoryShops]', e)
                 vuexContext.commit('setQueryLoading', false)
             }
         },
@@ -185,8 +185,8 @@ export default {
                 })
                 vuexContext.commit('setQueryLoading', false)
                 return loadedItems.reverse()
-            } catch(error) {
-                console.log('[ERROR-loadCategoryItems]', error)
+            } catch(e) {
+                console.log('[ERROR-loadCategoryItems]', e)
                 vuexContext.commit('setQueryLoading', false)
             }
         },
@@ -206,8 +206,8 @@ export default {
                 })
                 vuexContext.commit('setQueryLoading', false)
                 return loadedShops.reverse()
-            } catch(error) {
-                console.log('[ERROR-loadSearchShops]', error)
+            } catch(e) {
+                console.log('[ERROR-loadSearchShops]', e)
                 vuexContext.commit('setQueryLoading', false)
             }
         },
@@ -225,8 +225,8 @@ export default {
                 })
                 vuexContext.commit('setQueryLoading', false)
                 return loadedItems.reverse()
-            } catch(error) {
-                console.log('[ERROR-loadSearchItems]', error)
+            } catch(e) {
+                console.log('[ERROR-loadSearchItems]', e)
                 vuexContext.commit('setQueryLoading', false)
             }
         },

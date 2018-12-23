@@ -7,4 +7,4 @@ const options = {
     //lazyComponent: true
 }
 
-process.client ? Vue.use(VueLazyload, options) : ``
+Vue.use(VueLazyload, options)

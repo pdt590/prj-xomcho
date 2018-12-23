@@ -9,12 +9,12 @@
         <div class="card" v-if="loadedChats.length && user">
             <div class="card-content">
                 <div class="columns">
-                    <div class="column is-4 v-chat-list">
+                    <div class="column is-4 has-background-white-ter v-chat-list">
                         <template slot="header">
                             <b-icon icon="inbox-arrow-down"></b-icon>
                         </template>
-                        <div class="media" 
-                            :class="{'has-background-white-ter': i === selectedChatIndex}" 
+                        <div class="media"
+                            :class="{'v-chat-select': i === selectedChatIndex}" 
                             style="padding: 1rem" 
                             v-for="(info, i) in tbnInfos" 
                             :key="i">
@@ -127,7 +127,7 @@
                 process.server ? await store.dispatch('loadChats') : ``
             }catch(e) {
                 console.log('[ERROR-user/message]', e)
-                error({ statusCode: 500, message: '...Lỗi' })
+                error({ statusCode: 500, message: 'Lỗi loadChats' })
             }
         },
         data() {
@@ -200,11 +200,12 @@
     /* Track */
     ::-webkit-scrollbar-track {
         background: #f1f1f1;
+        border-radius: 0.3rem
     }
     
     /* Handle */
     ::-webkit-scrollbar-thumb {
-        background: #888;
+        background: #AAA;
         border-radius: 0.3rem
     }
 
@@ -224,24 +225,31 @@
         padding: 0;
     }
 
+    .v-chat-select {
+        background-color: #FFF;
+        border-radius: 0.3rem
+    }
+
     @media screen and (min-width: 768px) {
         .v-chat-list {
-            max-height: 40rem; 
+            height: 40rem; 
             overflow-y: scroll;
-            border-bottom: solid 1px #D8D8D8; 
+            border-radius: 0.3rem
         }
         .v-chat-view-title {
-            border-bottom: solid 1px #D8D8D8; 
-            padding: 0.7rem 0 0.7rem 1rem
+            height: 3rem; 
+            padding: 0.7rem 0 0.5rem 1rem
         };
         .v-chat-view-content {
-            max-height: 30rem; 
-            overflow-y: scroll
+            height: 32rem; 
+            overflow-y: scroll;
+            border: solid 1px #D8D8D8;
+            border-left: none;
+            border-radius: 0.3rem
         };
         .v-chat-input {
-            max-height: 10rem;
-            border-top: solid 1px #D8D8D8;
-            padding: 0.7rem
+            height: 5rem;
+            padding: 0.5rem
         }
     }
 
@@ -249,20 +257,20 @@
         .v-chat-list {
             max-height: 15rem; 
             overflow-y: scroll;
-            border-bottom: solid 1px #D8D8D8; 
+            border-radius: 0.3rem
         }
         .v-chat-view-title {
-            border-bottom: solid 1px #D8D8D8; 
-            padding: 0.7rem 0 0.7rem 1rem
+            padding: 0.5rem 0 0.5rem 1rem
         };
         .v-chat-view-content {
             max-height: 15rem; 
-            overflow-y: scroll
+            overflow-y: scroll;
+            border: solid 1px #D8D8D8;
+            border-radius: 0.3rem
         };
         .v-chat-input {
             max-height: 5rem;
-            border-top: solid 1px #D8D8D8;
-            padding: 0.7rem
+            padding: 0.5rem
         }
     }
 

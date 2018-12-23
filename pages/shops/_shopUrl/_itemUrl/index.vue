@@ -244,7 +244,7 @@
             </div>
         </div>
         <b-modal :active.sync="isModalSaleActive" has-modal-card>
-            <v-modal-sale :unit= "unit"/>
+            <v-modal-sale :itemData="loadedItem" :unit= "unit" />
         </b-modal>
         <!-- <b-modal :active.sync="isModalJoinActive" has-modal-card>
             <v-modal-join />
@@ -283,14 +283,10 @@
                         store.dispatch('loadItems', params.shopUrl)
                     ])
                 }
-            } catch(error) {
-                console.log('[ERROR-shops/shopUrl/itemUrl]', error)
-                error({ statusCode: 500, message: '...Lỗi'})
+            } catch(e) {
+                console.log('[ERROR-shops/shopUrl/itemUrl]', e)
+                error({ statusCode: 500, message: 'Lỗi loadShop và loadItems'})
             } 
-            if(!store.getters.loadedItem(params.itemUrl)) {
-                console.log('[ERROR-shops/shopUrl/itemUrl]', 'Cannot load item')
-                error({ statusCode: 404, message: 'Cannot load item'})
-            }
         },
         data() {
             return {

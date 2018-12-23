@@ -65,7 +65,7 @@
                 ])
             }catch(e) {
                 console.log('[ERROR-user/mgmt]', e)
-                error({ statusCode: 500, message: '...Lỗi' })
+                error({ statusCode: 500, message: 'Lỗi loadPersonalShops và loadPersonalItems' })
             }
         }
     }

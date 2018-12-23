@@ -50,7 +50,7 @@
                 }
             }catch(e) {
                 console.log('[ERROR-query/shops]', e)
-                error({ statusCode: 500, message: '...Lỗi' })
+                error({ statusCode: 500, message: 'Lỗi loadAllShops' })
             }
         },
         methods: {

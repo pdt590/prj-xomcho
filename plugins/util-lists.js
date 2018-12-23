@@ -43,11 +43,11 @@ export const categories = [
         name: 'Tivi - Thiết Bị Nghe Nhìn',
         icon: 'television'
     },
-    {
-        id: 'phụ-kiện-thiết-bị-số',
-        name: 'Phụ Kiện - Thiết Bị Số',
-        icon: 'headphones'
-    },
+    // {
+    //     id: 'phụ-kiện-thiết-bị-số',
+    //     name: 'Phụ Kiện - Thiết Bị Số',
+    //     icon: 'headphones'
+    // },
     {   
         id: 'máy-tính-thiết-bị-it',
         name: 'Máy Tính - Thiết Bị IT',
@@ -64,7 +64,7 @@ export const categories = [
         icon: 'fridge-outline'
     },
     {
-        id: 'nhà-cửa-đời-sồng',
+        id: 'nhà-cửa-đời-sống',
         name: 'Nhà Cửa - Đời Sống',
         icon: 'wall-sconce'
     },

@@ -3,7 +3,7 @@
         <nav class="navbar is-fixed-top">
             <div class="navbar-brand">
                 <nuxt-link class="navbar-item" to="/">
-                    <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28" style='display: none' onload="this.style.display = 'block'" alt="brand_logo">
+                    <img class="v-main-logo" v-lazy="`/logo.png`" style='display: none' onload="this.style.display = 'block'" alt="brand_logo">
                 </nuxt-link>
                 <a class="navbar-item" data-target="mobile-search" @click="onActiveSearch">
                     <b-icon :icon="isSearchActive ? `close-box` :  `magnify`" :type="isSearchActive ? `is-danger` :  ``"></b-icon>
@@ -176,8 +176,7 @@
 </script>
 
 <style lang="scss" scoped>
-    .navbar-brand {
-        .navbar-item:not(:first-child) {
+    .navbar-brand .navbar-item:not(:first-child) {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -185,7 +184,6 @@
             width: 3rem;
             position: relative;
             margin-left: auto
-        }
     }
     .navbar {
         border: none;

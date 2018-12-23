@@ -238,7 +238,7 @@
     import { required, email, decimal, sameAs, not } from 'vuelidate/lib/validators'
 
     export default {
-        middleware: ['auth', 'permission'],
+        middleware: ['auth', 'edit-permission'],
         created() {
             this.itemData  = deepCopy(this.loadedItem)
             this.itemTitle = this.itemData.title
@@ -253,34 +253,6 @@
             ...mapGetters(['itemLoading', 'loadedShop']),
             loadedItem() {
                 return this.$store.getters.loadedItem(this.$route.params.itemUrl)
-            }
-        },
-        async fetch({ store, params, error }) {
-            try{
-                if(process.client) {
-                    if(!store.getters.loadedShop || store.getters.loadedShop.url !== params.shopUrl) { 
-                        await Promise.all([
-                            store.dispatch('loadShop', params.shopUrl),
-                            store.dispatch('loadItems', params.shopUrl)
-                        ])
-                    }
-                }else {
-                    await Promise.all([
-                        store.dispatch('loadShop', params.shopUrl),
-                        store.dispatch('loadItems', params.shopUrl)
-                    ])
-                }
-            } catch(error) {
-                console.log('[ERROR-shops/shopUrl/itemUrl/edit-item]', error)
-                error({ statusCode: 500, message: '...Lỗi'})
-            }
-            if(!store.getters.loadedItem(params.itemUrl)) {
-                console.log('[ERROR-shops/shopUrl/itemUrl/edit-item]', 'Cannot load item')
-                error({ statusCode: 404, message: '...Lỗi'})
-            }
-            if(!store.getters.loadedShop) {
-                console.log('[ERROR-shops/shopUrl/itemUrl/edit-item]', 'Cannot load shop')
-                error({ statusCode: 404, message: 'Cannot load shop'})
             }
         },
         data() {

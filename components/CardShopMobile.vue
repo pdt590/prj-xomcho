@@ -3,7 +3,7 @@
 		<div class="media-left">
 			<nuxt-link :to="`/shops/${shopData.url}`">
 				<figure class="image is-96x96">
-					<img class="v-image-mobile-card" v-lazy="shopData.logoImage ? shopData.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+					<img class="v-image-mobile-card" v-lazy="shopData.logoImage ? shopData.logoImage.url : require(`../assets/images/categories/${shopData.category}.png`)" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
 				</figure>
 			</nuxt-link>
 		</div>

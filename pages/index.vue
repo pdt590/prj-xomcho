@@ -6,7 +6,7 @@
                     <div class="level-item has-text-centered">
                         <div>
                             <p class="title is-2 is-spaced">
-                                XomCho.net
+                                XÓM CHỢ
                             </p>
                             <p class="subtitle is-5">
                                 Công cụ hỗ trợ bán hàng Online
@@ -16,7 +16,7 @@
                         </div>
                     </div>
                     <div class="level-item">
-                        <img src="/home-01.svg" style="max-height: 30rem">
+                        <img src="/home.svg" style="max-height: 30rem">
                     </div>
                 </div>
             </div>
@@ -82,17 +82,15 @@
                         Xem thêm
                     </nuxt-link>
                 </div>
-                <no-ssr>
-                    <carousel-3d :disable3d="true" :space="365" :clickable="false" :animationSpeed="300">
-                        <slide v-for="(count, id) in 4" :key="id" :index="id">
-                            <div class="columns is-multiline is-variable is-1">
-                                <div class="column" v-for="(shop, i) in loadedShops.slice(4*id, 4*(id+1))" :key="i">
-                                    <v-card-shop-mobile :shopData="shop" />
-                                </div>
+                <carousel-3d :disable3d="true" :space="365" :clickable="false" :animationSpeed="300">
+                    <slide v-for="(count, id) in 4" :key="id" :index="id">
+                        <div class="columns is-multiline is-variable is-1">
+                            <div class="column" v-for="(shop, i) in loadedShops.slice(4*id, 4*(id+1))" :key="i">
+                                <v-card-shop-mobile :shopData="shop" />
                             </div>
-                        </slide>
-                    </carousel-3d>
-                </no-ssr>
+                        </div>
+                    </slide>
+                </carousel-3d>
             </div>
         </section>
         <section class="section is-hidden-tablet" style="padding-bottom: 0">
@@ -103,17 +101,15 @@
                         Xem thêm
                     </nuxt-link>
                 </div>
-                <no-ssr>
-                    <carousel-3d :disable3d="true" :space="365" :clickable="false" :animationSpeed="300">
-                        <slide v-for="(count, id) in 4" :key="id" :index="id">
-                            <div class="columns is-multiline is-variable is-1">
-                                <div class="column" v-for="(item, i) in loadedItems.slice(4*id, 4*(id+1))" :key="i">
-                                    <v-card-item-mobile :itemData="item" />
-                                </div>
+                <carousel-3d :disable3d="true" :space="365" :clickable="false" :animationSpeed="300">
+                    <slide v-for="(count, id) in 4" :key="id" :index="id">
+                        <div class="columns is-multiline is-variable is-1">
+                            <div class="column" v-for="(item, i) in loadedItems.slice(4*id, 4*(id+1))" :key="i">
+                                <v-card-item-mobile :itemData="item" />
                             </div>
-                        </slide>
-                    </carousel-3d>
-                </no-ssr>
+                        </div>
+                    </slide>
+                </carousel-3d>
             </div>
         </section>
         <!--  -->
@@ -124,10 +120,6 @@
     import { categories } from '~/plugins/util-lists'
 
     export default {
-        components: {
-            Carousel3d: () => import('vue-carousel-3d').then(({ Carousel3d }) => Carousel3d),
-            Slide : () => import('vue-carousel-3d').then(({ Slide }) => Slide),
-        },
         async asyncData({ store, error }) {
             try {
                 const [loadedShops, loadedItems] = await Promise.all([
@@ -140,7 +132,7 @@
                 }
             }catch(e) {
                 console.log('[/]', e)
-                error({ statusCode: 500, message: '...Lỗi' })
+                error({ statusCode: 500, message: 'Lỗi loadPreviewShops và loadPreviewItems' })
             }
         },
         data() {

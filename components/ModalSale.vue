@@ -4,12 +4,14 @@
             <div class="modal-card v-modal-card">
                 <div  v-if="!isMessageActive">
                     <header class="modal-card-head">
-                        <p class="modal-card-title">Mua hàng qua...</p>
+                        <p class="modal-card-title">Mua hàng qua ...</p>
                     </header>
                     <section class="modal-card-body">
                         <div class="buttons" style="display: flex; justify-content: center">
-                            <a href="https://www.facebook.com/discount.real" class="button is-link is-outlined is-rounded is-large" target="_blank">
-                                <b-icon icon="facebook"></b-icon>
+                            <a  v-if="$route.params.shopUrl !== genShopUrl(itemData._shop.title, itemData._shop.id)"
+                                :href="`/shops/${genShopUrl(itemData._shop.title, itemData._shop.id)}`" 
+                                class="button is-grey is-outlined is-rounded is-large" target="_blank">
+                                <b-icon icon="store"></b-icon>
                             </a>
                             <a class="button is-grey is-outlined is-rounded is-large" @click.prevent="isMessageActive = true">
                                 <b-icon icon="comment-processing-outline"></b-icon>
@@ -99,10 +101,12 @@
 <script>
     import { mapGetters } from 'vuex'
     import { authMessage } from '~/plugins/util-helpers'
+    import { genUrl } from '~/plugins/util-helpers'
     import { required, numeric } from 'vuelidate/lib/validators'
 
     export default {
         props: {
+            itemData: Object,
             unit: Number
         },
         created() {
@@ -114,10 +118,7 @@
             }
         },
         computed: {
-            ...mapGetters(['chatLoading', 'user']),
-            loadedItem() {
-                return this.$store.getters.loadedItem(this.$route.params.itemUrl)
-            }
+            ...mapGetters(['chatLoading', 'user'])
         },
         data() {
             return {
@@ -149,11 +150,11 @@
             async onSend() {
                 this.response = await this.$store.dispatch('sendBuyMessage', {
                     itemUrl: this.$route.path,
-                    itemTitle: this.loadedItem.title,
+                    itemTitle: this.itemData.title,
                     ...this.formData,
                     unit: this.unit,
-                    partnerId: this.loadedItem._creator.id,
-                    partnerUsername: this.loadedItem._creator.username
+                    partnerId: this.itemData._creator.id,
+                    partnerUsername: this.itemData._creator.username
                 })
                 if(this.response) {
                         this.$parent.close()
@@ -169,6 +170,9 @@
                             type: 'is-danger'
                         })
                     }
+            },
+            genShopUrl(title, id) {
+                return genUrl(title, id)
             }
         }
     }

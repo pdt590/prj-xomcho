@@ -97,7 +97,7 @@
                 }
             }catch(e) {
                 console.log('[ERROR-query/category]', e)
-                error({ statusCode: 500, message: '...Lỗi' })
+                error({ statusCode: 500, message: 'Lỗi loadCategoryShops và loadCategoryItems' })
             }
         },
         data() {
@@ -176,8 +176,8 @@
 //         payload.isToLast ? loadedShops.reverse() : ``
 //         vuexContext.commit('setQueryLoading', false)
 //         return loadedShops
-//     } catch(error) {
-//         console.log('[ERROR-loadCategoryShops]', error)
+//     } catch(e) {
+//         console.log('[ERROR-loadCategoryShops]', e)
 //         vuexContext.commit('setQueryLoading', false)
 //     }
 // },
@@ -210,8 +210,8 @@
 //         })
 //         vuexContext.commit('setQueryLoading', false)
 //         return loadedItems
-//     } catch(error) {
-//         console.log('[ERROR-loadCategoryItems]', error)
+//     } catch(e) {
+//         console.log('[ERROR-loadCategoryItems]', e)
 //         vuexContext.commit('setQueryLoading', false)
 //     }
 // },

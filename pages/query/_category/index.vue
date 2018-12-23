@@ -116,7 +116,7 @@
                 return { loadedShops: loadedShops }
             }catch(e) {
                 console.log('[ERROR-query/category]', e)
-                error({ statusCode: 500, message: '...Lỗi' })
+                error({ statusCode: 500, message: 'Lỗi loadCategoryShops' })
             }
         },
         data() {

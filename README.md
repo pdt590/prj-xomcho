@@ -24,16 +24,16 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
 ## TODO
 
 * Re-write validate input forms ?
-* Add lazyload for images
+* Add lazyload for images ?
 * Add lazyload for components ?
-* Edit breadcrumb logic in each query page
 * Deploy main page with categories column ?
 * Re-struct folder based on firebase deployment
-* Add avatar in Navbar mobile
+* Add avatar in Navbar mobile ?
 * Add Share Button in Shop
 * Move Card Style to global file and remove shadow in case of mobile ?
 * Implement Slider for Home page ?
 * Adjust the number of displayed items/shops bw desktop and mobile ?
+* Edit breadcrumb logic in each query page
 * Refer Navbar logic for mobile on Zing, Dantri or VnExpress (Add breadcrumb on navbar mobile)
 * Re-design buy logic ?
 * Edit number input style
@@ -50,6 +50,8 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
 * Implement query/filter location
 * Develop PWA
 * Improve Image Uploader UX
+* Add lazy-load for message
+* Rethink Permission mdw
 
 * Note for Vuelidate
   * @blur should go with $error

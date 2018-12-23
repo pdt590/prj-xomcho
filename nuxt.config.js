@@ -8,7 +8,7 @@ module.exports = {
 	** Headers of the page
 	*/
 	head: {
-		title: pkg.name,
+		title: 'Xóm Chợ | Xóm bán hàng Online',
 		meta: [
 			{ charset: 'utf-8' },
 			{ name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1' },
@@ -41,17 +41,18 @@ module.exports = {
 	*/
 	plugins: [
 		//'~plugins/test.js',
-		'~plugins/components.js',
+		{src: '~plugins/components.js'},
 
-		'~plugins/plugin-firebase.js',
-		'~plugins/plugin-buefy.js',
-        '~plugins/plugin-vuelidate.js',
-        '~plugins/plugin-lazyload.js',
-        '~plugins/plugin-filter.js',
+		{src: '~plugins/plugin-firebase.js'},
+		{src: '~plugins/plugin-buefy.js'},
+        {src: '~plugins/plugin-vuelidate.js', ssr: false},
+		{src: '~plugins/plugin-lazyload.js', ssr: false},
+		{src: '~plugins/plugin-carousel.js', ssr: false},
+        {src: '~plugins/plugin-filter.js'},
 
-		'~plugins/util-authListener.js',
+		{src: '~plugins/util-authListener.js'},
 
-		'~plugins/addon-fc.js'
+		{src: '~plugins/addon-fc.js'}
 	],
 
 	/*

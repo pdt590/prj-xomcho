@@ -39,7 +39,7 @@ export default {
             }catch (e) {
                 vuexContext.commit('setAuthError', e)
                 console.log('[ERROR-nuxtServerInit]', e)
-                error({ statusCode: 500, message: '...Lỗi' })
+                error({ statusCode: 500, message: 'Lỗi nuxtServerInit' })
             } 
         }
     }

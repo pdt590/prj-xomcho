@@ -83,8 +83,8 @@ export default {
                 vuexContext.commit('addItem', item)
                 vuexContext.commit('setItemLoading', false)
                 return itemUrl
-            } catch(error) {
-                console.log('[ERROR-addItem]', error)
+            } catch(e) {
+                console.log('[ERROR-addItem]', e)
                 vuexContext.commit('setItemLoading', false)
             }
         },
@@ -99,8 +99,8 @@ export default {
                     ...newItemContent
                 })
                 vuexContext.commit('setItemLoading', false)
-            } catch(error) {
-                console.log('[ERROR-updateItemContent] ' + error)
+            } catch(e) {
+                console.log('[ERROR-updateItemContent]', e)
                 vuexContext.commit('setItemLoading', false)
             }
         },
@@ -122,8 +122,8 @@ export default {
                 })
                 vuexContext.commit('setItemLoading', false)
                 return newItemUrl
-            } catch(error) {
-                console.log('[ERROR-updateItemTitle]', error)
+            } catch(e) {
+                console.log('[ERROR-updateItemTitle]', e)
                 vuexContext.commit('setItemLoading', false)
             }
         },
@@ -175,8 +175,8 @@ export default {
                     ...update
                 })
                 vuexContext.commit('setItemLoading', false)
-            } catch(error) {
-                console.log('[ERROR-updateItemImages]', error)
+            } catch(e) {
+                console.log('[ERROR-updateItemImages]', e)
                 vuexContext.commit('setItemLoading', false)
             }
         },
@@ -194,8 +194,8 @@ export default {
                 await itemsRef.child(itemId).remove()
                 vuexContext.commit('removeItem', itemId)
                 vuexContext.commit('setItemLoading', false)
-            } catch(error) {
-                console.log('[ERROR-deleteItem]', error)
+            } catch(e) {
+                console.log('[ERROR-deleteItem]', e)
                 vuexContext.commit('setItemLoading', false)
             }
         },
@@ -213,8 +213,8 @@ export default {
                 vuexContext.commit('setItems', loadedItems)
                 vuexContext.commit('setItemLoading', false)
                 return loadedItems
-            } catch(error) {
-                console.log('[ERROR-loadItems]', error)
+            } catch(e) {
+                console.log('[ERROR-loadItems]', e)
                 vuexContext.commit('setItemLoading', false)
             }
         },
@@ -265,8 +265,8 @@ export default {
                 await itemsRef.update(updates)
                 vuexContext.commit('setItems', loadedItems)
                 vuexContext.commit('setItemLoading', false)
-            } catch(error) {
-                console.log('[ERROR-updateItemsByShop]', error)
+            } catch(e) {
+                console.log('[ERROR-updateItemsByShop]', e)
                 vuexContext.commit('setItemLoading', false)
             }
         },
@@ -292,8 +292,8 @@ export default {
                 await itemsRef.update(updates)
                 vuexContext.commit('setItems', [])
                 vuexContext.commit('setItemLoading', false)
-            } catch(error) {
-                console.log('[ERROR-deleteItemsByShop]', error)
+            } catch(e) {
+                console.log('[ERROR-deleteItemsByShop]', e)
                 vuexContext.commit('setItemLoading', false)
             }
         },
@@ -336,8 +336,8 @@ export default {
                 await itemsRef.update(updates)
                 vuexContext.commit('setItems', ) // TODO: how to update current loadedItems
                 vuexContext.commit('setItemLoading', false)
-            } catch(error) {
-                console.log('[ERROR-updateItemsByUser]', error)
+            } catch(e) {
+                console.log('[ERROR-updateItemsByUser]', e)
                 vuexContext.commit('setItemLoading', false)
             }
         },
@@ -361,8 +361,8 @@ export default {
                 })
                 await itemsRef.update(updates)
                 vuexContext.commit('setItemLoading', false)
-            } catch(error) {
-                console.log('[ERROR-deleteItemsByUser]', error)
+            } catch(e) {
+                console.log('[ERROR-deleteItemsByUser]', e)
                 vuexContext.commit('setItemLoading', false)
             }
         },

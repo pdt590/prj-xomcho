@@ -43,7 +43,7 @@
 			</div>
 		</div>
 		<b-modal :active.sync="isModalSaleActive" has-modal-card>
-            <v-modal-sale />
+            <v-modal-sale :itemData="itemData" />
         </b-modal>
 	</div>
 </template>

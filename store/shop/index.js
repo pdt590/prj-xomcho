@@ -81,8 +81,8 @@ export default {
                 vuexContext.commit('setShop', shop)
                 vuexContext.commit('setShopLoading', false)
                 return shopUrl
-            } catch (error) {
-                console.log('[ERROR-addShop]', error)
+            } catch (e) {
+                console.log('[ERROR-addShop]', e)
                 vuexContext.commit('setShopLoading', false)
             }
         },
@@ -105,8 +105,8 @@ export default {
                     ...newShopContent
                 })
                 vuexContext.commit('setShopLoading', false)
-            } catch(error) {
-                console.log('[ERROR-updateShopContent]', error)
+            } catch(e) {
+                console.log('[ERROR-updateShopContent]', e)
                 vuexContext.commit('setShopLoading', false)
             }
         },
@@ -131,8 +131,8 @@ export default {
                 })
                 vuexContext.commit('setShopLoading', false)
                 return newShopUrl
-            } catch(error) {
-                console.log('[ERROR-updateShopTitle]', error)
+            } catch(e) {
+                console.log('[ERROR-updateShopTitle]', e)
                 vuexContext.commit('setShopLoading', false)
             }
         },
@@ -188,8 +188,8 @@ export default {
                 }
                 vuexContext.commit('setShop', updatedShop)
                 vuexContext.commit('setShopLoading', false)
-            } catch(error) {
-                console.log('[ERROR-updateShopLogo]', error)
+            } catch(e) {
+                console.log('[ERROR-updateShopLogo]', e)
                 vuexContext.commit('setShopLoading', false)
             }
         },
@@ -239,8 +239,8 @@ export default {
                 }
                 vuexContext.commit('setShop', updatedShop)
                 vuexContext.commit('setShopLoading', false)
-            } catch(error) {
-                console.log('[ERROR-updateShopCover]', error)
+            } catch(e) {
+                console.log('[ERROR-updateShopCover]', e)
                 vuexContext.commit('setShopLoading', false)
             }
         },
@@ -262,8 +262,8 @@ export default {
                 await shopsRef.child(shopId).remove()
                 vuexContext.commit('setShop', null)
                 vuexContext.commit('setShopLoading', false)
-            } catch(error) {
-                console.log('[ERROR-deleteShop]', error)
+            } catch(e) {
+                console.log('[ERROR-deleteShop]', e)
                 vuexContext.commit('setShopLoading', false)
             }
         },
@@ -278,8 +278,8 @@ export default {
                 vuexContext.commit('setShop', loadedShop)
                 vuexContext.commit('setShopLoading', false)
                 return loadedShop
-            } catch(error) {
-                console.log('[ERROR-loadShop]', error)
+            } catch(e) {
+                console.log('[ERROR-loadShop]', e)
                 vuexContext.commit('setShopLoading', false)
             }
         },
@@ -300,8 +300,8 @@ export default {
                 await shopsRef.update(updates)
                 vuexContext.commit('setShop', ) // TODO: how to update current loadedshop
                 vuexContext.commit('setShopLoading', false)
-            } catch(error) {
-                console.log('[ERROR-updateShopsByUser]', error)
+            } catch(e) {
+                console.log('[ERROR-updateShopsByUser]', e)
                 vuexContext.commit('setShopLoading', false)
             }
         },
@@ -326,8 +326,8 @@ export default {
                 })
                 await shopsRef.update(updates)
                 vuexContext.commit('setShopLoading', false)
-            } catch(error) {
-                console.log('[ERROR-deleteShopsByUser]', error)
+            } catch(e) {
+                console.log('[ERROR-deleteShopsByUser]', e)
                 vuexContext.commit('setShopLoading', false)
             }
         }

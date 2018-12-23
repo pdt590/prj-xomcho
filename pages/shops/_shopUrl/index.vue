@@ -288,13 +288,9 @@
                         store.dispatch('loadItems', params.shopUrl)
                     ])
                 }
-            } catch(error) {
-                console.log('[ERROR-shops/shopUrl]', error)
-                error({ statusCode: 500, message: '...Lỗi'})
-            }
-            if(!store.getters.loadedShop) {
-                console.log('[ERROR-shops/shopUrl]', 'Cannot load shop')
-                error({ statusCode: 404, message: 'Cannot load shop'})
+            } catch(e) {
+                console.log('[ERROR-shops/shopUrl]', e)
+                error({ statusCode: 500, message: 'Lỗi loadShop và loadItems'})
             }
         },
         data() {

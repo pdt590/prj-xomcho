@@ -65,8 +65,7 @@ const fbFilter = value => {
 };
 
 function formatFb(inputLink) {
-    const n = inputLink.split("/")
-    return n[n.length-1]
+    return inputLink.replace('https://www.facebook.com/','');
 }
 
 // price

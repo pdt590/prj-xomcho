@@ -305,7 +305,7 @@
     import { required, email, url, numeric, sameAs, not, minLength, maxLength } from 'vuelidate/lib/validators'
 
     export default {
-        middleware: ['auth', 'permission'],
+        middleware: ['auth', 'edit-permission'],
         created() {
             this.shopData  = deepCopy(this.loadedShop)
             this.shopTitle = this.shopData.title
@@ -322,30 +322,6 @@
         },
         computed: {
             ...mapGetters(['shopLoading', 'loadedShop'])
-        },
-        async fetch({ store, params, error }) {
-            try{
-                if(process.client) {
-                    if(!store.getters.loadedShop || store.getters.loadedShop.url !== params.shopUrl) { 
-                        await Promise.all([
-                            store.dispatch('loadShop', params.shopUrl),
-                            store.dispatch('loadItems', params.shopUrl)
-                        ])
-                    }
-                }else {
-                    await Promise.all([
-                        store.dispatch('loadShop', params.shopUrl),
-                        store.dispatch('loadItems', params.shopUrl)
-                    ])
-                }
-            } catch(error) {
-                console.log('[ERROR-shops/shopUrl/edit-shop]', error)
-                error({ statusCode: 500, message: '...Lỗi'})
-            }
-            if(!store.getters.loadedShop) {
-                console.log('[ERROR-shops/shopUrl/edit-shop]', 'Cannot load shop')
-                error({ statusCode: 404, message: 'Cannot load shop'})
-            }
         },
         data() {
             return {

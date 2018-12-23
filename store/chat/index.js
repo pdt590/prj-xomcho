@@ -94,8 +94,8 @@ export default {
                 })
                 vuexContext.commit('setChatLoading', false)
                 return true
-            } catch (error) {
-                console.log('[ERROR-sendBuyMessage]', error)
+            } catch (e) {
+                console.log('[ERROR-sendBuyMessage]', e)
                 vuexContext.commit('setChatLoading', false)
                 return false
             }
@@ -119,8 +119,8 @@ export default {
                 })
                 vuexContext.commit('setChatLoading', false)
                 return true
-            } catch (error) {
-                console.log('[ERROR-sendChatMessage]', error)
+            } catch (e) {
+                console.log('[ERROR-sendChatMessage]', e)
                 vuexContext.commit('setChatLoading', false)
                 return false
             }
@@ -156,8 +156,8 @@ export default {
                     vuexContext.commit('setChats', loadedChats)
                 })
                 vuexContext.commit('setChatLoading', false)
-            } catch(error) {
-                console.log('[ERROR-loadChats]', error)
+            } catch(e) {
+                console.log('[ERROR-loadChats]', e)
                 vuexContext.commit('setChatLoading', false)
             }
         },
@@ -179,8 +179,8 @@ export default {
                 //     vuexContext.commit('setCountUnOpenedChats', count)
                 // })
                 vuexContext.commit('setChatLoading', false)
-            } catch(error) {
-                console.log('[ERROR-loadCountUnOpenedChats]', error)
+            } catch(e) {
+                console.log('[ERROR-loadCountUnOpenedChats]', e)
                 vuexContext.commit('setChatLoading', false)
             }
         },
@@ -192,8 +192,8 @@ export default {
                     state : true
                 })
                 vuexContext.commit('setChatLoading', false)
-            } catch(error) {
-                console.log('[ERROR-setMessageState]', error)
+            } catch(e) {
+                console.log('[ERROR-setMessageState]', e)
                 vuexContext.commit('setChatLoading', false)
             }
         },
@@ -203,8 +203,8 @@ export default {
                 const user = vuexContext.getters.user
                 await db.ref(`chats/${user.id}`).child(chatId).remove()
                 vuexContext.commit('setChatLoading', false)
-            } catch(error) {
-                console.log('[ERROR-deleteChat]', error)
+            } catch(e) {
+                console.log('[ERROR-deleteChat]', e)
                 vuexContext.commit('setChatLoading', false)
             }
         },
@@ -213,8 +213,8 @@ export default {
             try {
                 await db.ref('chats').child(userId).remove()
                 vuexContext.commit('setChatLoading', false)
-            } catch(error) {
-                console.log('[ERROR-deleteChatsByUser]', error)
+            } catch(e) {
+                console.log('[ERROR-deleteChatsByUser]', e)
                 vuexContext.commit('setChatLoading', false)
             }
         }

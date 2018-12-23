@@ -55,10 +55,10 @@ export default {
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
                 return true
-            } catch(error) {
-                vuexContext.commit('setAuthError', error)
+            } catch(e) {
+                vuexContext.commit('setAuthError', e)
                 vuexContext.commit('setAuthLoading', false)
-                console.log('[ERROR-signUserUp]', error)
+                console.log('[ERROR-signUserUp]', e)
                 return false
             }
         },
@@ -84,10 +84,10 @@ export default {
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
                 return true
-            } catch(error) {
-                vuexContext.commit('setAuthError', error)
+            } catch(e) {
+                vuexContext.commit('setAuthError', e)
                 vuexContext.commit('setAuthLoading', false)
-                console.log('[ERROR-signUserIn]', error)
+                console.log('[ERROR-signUserIn]', e)
                 return false
             }
         },
@@ -143,9 +143,9 @@ export default {
                 vuexContext.commit('setAuthLoading', false)
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
-            } catch(error){
+            } catch(e){
                 vuexContext.commit('setAuthLoading', false)
-                console.log('[ERROR-updateUserContent]', error)
+                console.log('[ERROR-updateUserContent]', e)
             }
         },
         async updateUserEmail (vuexContext, payload) {
@@ -174,10 +174,10 @@ export default {
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
                 return true
-            } catch(error){
-                vuexContext.commit('setAuthError', error)
+            } catch(e){
+                vuexContext.commit('setAuthError', e)
                 vuexContext.commit('setAuthLoading', false)
-                console.log('[ERROR-updateUserEmail]', error)
+                console.log('[ERROR-updateUserEmail]', e)
                 return false
             }
         },
@@ -199,10 +199,10 @@ export default {
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
                 return true
-            } catch(error){
-                vuexContext.commit('setAuthError', error)
+            } catch(e){
+                vuexContext.commit('setAuthError', e)
                 vuexContext.commit('setAuthLoading', false)
-                console.log('[ERROR-updateUserPassword]', error)
+                console.log('[ERROR-updateUserPassword]', e)
                 return false
             }
         },
@@ -270,8 +270,8 @@ export default {
                 vuexContext.commit('setAuthLoading', false)
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
-            } catch(error) {
-                console.log('[ERROR-updateAvatar]', error)
+            } catch(e) {
+                console.log('[ERROR-updateAvatar]', e)
                 vuexContext.commit('setAuthLoading', false)
             }
         },
@@ -285,10 +285,10 @@ export default {
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
                 return true
-            } catch(error) {
-                vuexContext.commit('setAuthError', error)
+            } catch(e) {
+                vuexContext.commit('setAuthError', e)
                 vuexContext.commit('setAuthLoading', false)
-                console.log('[ERROR-resetUserPassword]', error)
+                console.log('[ERROR-resetUserPassword]', e)
                 return false
             }
         },
@@ -302,10 +302,10 @@ export default {
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
                 return true
-            } catch(error) {
-                vuexContext.commit('setAuthError', error)
+            } catch(e) {
+                vuexContext.commit('setAuthError', e)
                 vuexContext.commit('setAuthLoading', false)
-                console.log('[ERROR-handleResetPassword]', error)
+                console.log('[ERROR-handleResetPassword]', e)
                 return false
             }
         },
@@ -328,10 +328,10 @@ export default {
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
                 return true
-            } catch(error) {
-                vuexContext.commit('setAuthError', error)
+            } catch(e) {
+                vuexContext.commit('setAuthError', e)
                 vuexContext.commit('setAuthLoading', false)
-                console.log('[ERROR-handleVerifyEmail]', error)
+                console.log('[ERROR-handleVerifyEmail]', e)
                 return false
             }
         },
@@ -360,10 +360,10 @@ export default {
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
                 return true
-            } catch(error){
-                vuexContext.commit('setAuthError', error)
+            } catch(e){
+                vuexContext.commit('setAuthError', e)
                 vuexContext.commit('setAuthLoading', false)
-                console.log('[ERROR-deleteUser]', error)
+                console.log('[ERROR-deleteUser]', e)
                 return false
             }  
         },
@@ -377,8 +377,8 @@ export default {
                 )
                 await user.reauthenticateAndRetrieveDataWithCredential(credential)
                 return true
-            } catch(error) {
-                console.log('[ERROR-isCorrectPassword]', error)
+            } catch(e) {
+                console.log('[ERROR-isCorrectPassword]', e)
                 return false
             }
         },
@@ -387,8 +387,8 @@ export default {
                 const item = await usersRef.orderByChild('email').equalTo(payload).once('value')
                 if(item.val()) return false
                 return true
-            } catch(error) {
-                console.log('[ERROR-isUnique]', error)
+            } catch(e) {
+                console.log('[ERROR-isUnique]', e)
                 return false
             }
         }
