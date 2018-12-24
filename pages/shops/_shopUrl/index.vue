@@ -6,7 +6,9 @@
                 <div class="card is-hidden-tablet" v-if="loadedShop.coverImage">
                     <div class="card-image">
                         <figure class="image is-16by9">
-                            <img class="v-image-cover" v-lazy="loadedShop.coverImage.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
+                            <no-ssr>
+                                <img class="v-image-cover" v-lazy="loadedShop.coverImage.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
+                            </no-ssr>
                         </figure>
                     </div>
                 </div>
@@ -16,8 +18,10 @@
                         <div class="card-content" v-if="loadedShop">
                             <div class="level">
                                 <div class="level-item">
-                                    <figure class="image is-128x128" style="border: solid 1px #D8D8D8">
-                                        <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                    <figure class="image v-image-border">
+                                        <no-ssr>
+                                            <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                        </no-ssr>
                                     </figure>
                                     <!-- <b-radio-button v-if="user"
                                         v-model="isSaved"
@@ -118,8 +122,10 @@
                             <div class="level">
                                 <div class="level-item">
                                     <div class="has-text-centered">
-                                        <figure class="image is-128x128" style="border: solid 1px #D8D8D8">
-                                            <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                        <figure class="image v-image-border">
+                                            <no-ssr>
+                                                <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                            </no-ssr>
                                         </figure>
                                         <br>
                                         <h5 class="title is-size-5">{{loadedShop.title}}</h5>
@@ -196,7 +202,9 @@
                 <div class="card is-hidden-mobile" v-if="loadedShop.coverImage">
                     <div class="card-image">
                         <figure class="image is-3by1">
-                            <img class="v-image-cover" v-lazy="loadedShop.coverImage.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
+                            <no-ssr>
+                                <img class="v-image-cover" v-lazy="loadedShop.coverImage.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
+                            </no-ssr>
                         </figure>
                     </div>
                 </div>
@@ -232,6 +240,12 @@
                         </b-pagination>
                     </div>
                 </div>
+                <div class="card">
+                    <div class="card-content">
+                        <div id="fb-root"></div>
+                        <div class="fb-comments" :data-href="`https://xomcho.net/shops/${$route.params.shopUrl}`" data-numposts="5" data-width="100%"></div>
+                    </div>
+                </div>
             </div>
         </div>
         <!-- <b-modal :active.sync="isModalJoinActive" has-modal-card>
@@ -246,6 +260,9 @@
     import { deepCopy } from '~/plugins/util-helpers'
 
     export default {
+        mounted() {
+            this.$initFbSDK()
+        },
         computed: {
             ...mapGetters(['user','loadedShop', 'loadedItems']),
             totalItem() {

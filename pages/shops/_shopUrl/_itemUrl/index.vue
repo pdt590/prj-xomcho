@@ -8,8 +8,10 @@
                             <div class="level">
                                 <div class="level-item">
                                     <nuxt-link :to="`/shops/${$route.params.shopUrl}`">
-                                        <figure class="image is-128x128" style="border: solid 1px #D8D8D8">
-                                            <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                        <figure class="image v-image-border">
+                                            <no-ssr>
+                                                <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                            </no-ssr>
                                         </figure>
                                     </nuxt-link>
                                 </div>
@@ -69,8 +71,10 @@
                             <div class="level">
                                 <div class="level-item">
                                     <nuxt-link class="has-text-centered" :to="`/shops/${$route.params.shopUrl}`">
-                                        <figure class="image is-128x128" style="border: solid 1px #D8D8D8">
-                                            <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                        <figure class="image v-image-border">
+                                            <no-ssr>
+                                                <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                            </no-ssr>
                                         </figure>
                                         <br>
                                         <h5 class="title is-size-5">{{loadedShop.title}}</h5>
@@ -216,7 +220,7 @@
                                         <div class="level-right">
                                             <div class="buttons">
                                                 <a class="button is-info is-rounded is-outlined" 
-                                                    href="https://www.facebook.com/sharer/sharer.php?u=https://stackoverflow.com/questions/5478702/add-facebook-share-button-to-static-html-page" 
+                                                    :href="`https://www.facebook.com/sharer/sharer.php?u=https://www.xomcho.net/shops/${$route.params.shopUrl}/${$route.params.itemUrl}`" 
                                                     target="_blank">
                                                     <b-icon icon="share-variant"></b-icon>
                                                     <strong>Chia sẻ</strong>
@@ -238,7 +242,7 @@
                 <div class="card">
                     <div class="card-content">
                         <div id="fb-root"></div>
-                        <div class="fb-comments" :data-href="`http://localhost:3000/shops/${$route.params.shopUrl}/${$route.params.itemUrl}`" data-numposts="5" data-width="100%"></div>
+                        <div class="fb-comments" :data-href="`https://xomcho.net/shops/${$route.params.shopUrl}/${$route.params.itemUrl}`" data-numposts="5" data-width="100%"></div>
                     </div>
                 </div>
             </div>

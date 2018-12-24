@@ -15,7 +15,7 @@
                             <div class="level">
                                 <div class="level-item">
                                     <nuxt-link :to="`/shops/${$route.params.shopUrl}`">
-                                        <figure class="image is-128x128" style="border: solid 1px #D8D8D8">
+                                        <figure class="image v-image-border">
                                             <img class="v-shop-logo" :src="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
                                         </figure> 
                                     </nuxt-link>
@@ -180,14 +180,18 @@
                                     <div class="level">
                                         <div class="level-item" v-if="shopOldLogo">
                                             <figure class="image is-128x128 v-image-frame">
-                                                <img class="v-preview-image" v-lazy="shopOldLogo.url" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                                <no-ssr>
+                                                    <img class="v-preview-image" v-lazy="shopOldLogo.url" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                                </no-ssr>
                                                 <span class="v-image-size">{{shopOldLogo.metadata.size | fmBytes}}</span>
                                                 <a class="delete v-image-bndelete" @click="shopOldLogo = null"></a>
                                             </figure>
                                         </div>
                                         <div class="level-item" v-if="shopLogo">
                                             <figure class="image is-128x128 v-image-frame">
-                                                <img class="v-preview-image" v-lazy="shopPreviewLogo.url" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                                <no-ssr>
+                                                    <img class="v-preview-image" v-lazy="shopPreviewLogo.url" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                                </no-ssr>
                                                 <span class="v-image-size">{{shopPreviewLogo.size | fmBytes}}</span>
                                                 <a class="delete v-image-bndelete" @click="shopPreviewLogo = null; shopLogo = null"></a>
                                             </figure>
@@ -237,14 +241,18 @@
                                     <div class="level">
                                         <div class="level-item" v-if="shopOldCover">
                                             <figure class="image is-128x128 v-image-frame">
-                                                <img class="v-preview-image" v-lazy="shopOldCover.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
+                                                <no-ssr>
+                                                    <img class="v-preview-image" v-lazy="shopOldCover.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
+                                                </no-ssr>
                                                 <span class="v-image-size">{{shopOldCover.metadata.size | fmBytes}}</span>
                                                 <a class="delete v-image-bndelete" @click="shopOldCover = null"></a>
                                             </figure>
                                         </div>
                                         <div class="level-item" v-if="shopCover">
                                             <figure class="image is-128x128 v-image-frame">
-                                                <img class="v-preview-image" v-lazy="shopPreviewCover.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
+                                                <no-ssr>
+                                                    <img class="v-preview-image" v-lazy="shopPreviewCover.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
+                                                </no-ssr>
                                                 <span class="v-image-size">{{shopPreviewCover.size | fmBytes}}</span>
                                                 <a class="delete v-image-bndelete" @click="shopPreviewCover= null; shopCover = null"></a>
                                             </figure>

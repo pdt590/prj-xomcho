@@ -6,7 +6,9 @@
         <div class="columns is-variable is-1 is-mobile" style="margin-top: 0.1rem">
             <div class="column is-3" v-for="(image, i) in images" :key="i">
                 <figure class="image is-square is-preview" @click="setMainImage(i)">
-                    <img class="v-image-contain" v-lazy="image.url" style='display: none' onload="this.style.display = 'block'" :alt="`item_image_${i}`">
+                    <no-ssr>
+                        <img class="v-image-contain" v-lazy="image.url" style='display: none' onload="this.style.display = 'block'" :alt="`item_image_${i}`">
+                    </no-ssr>
                 </figure>
             </div>
         </div>

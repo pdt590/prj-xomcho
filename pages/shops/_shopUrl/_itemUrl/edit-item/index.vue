@@ -16,8 +16,10 @@
                             <div class="level">
                                 <div class="level-item">
                                     <nuxt-link class="" :to="`/shops/${$route.params.shopUrl}/${$route.params.itemUrl}`">
-                                        <figure class="image is-128x128" style="border: solid 1px #D8D8D8">
-                                            <img class="v-shop-logo" v-lazy="loadedItem.images[0] ? loadedItem.images[0].url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                        <figure class="image v-image-border">
+                                            <no-ssr>
+                                                <img class="v-shop-logo" v-lazy="loadedItem.images[0] ? loadedItem.images[0].url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                            </no-ssr>
                                         </figure>
                                     </nuxt-link>
                                 </div>
@@ -169,7 +171,9 @@
                                         <div class="level-item" style="flex-grow: 0.1; padding-bottom: 1rem" v-for="(file, index) in itemOldImages"
                                             :key="index">
                                             <figure class="image is-128x128 v-image-frame">
-                                                <img class="v-preview-image" v-lazy="file.url" :alt="`item_image_${index}`">
+                                                <no-ssr>
+                                                    <img class="v-preview-image" v-lazy="file.url" :alt="`item_image_${index}`">
+                                                </no-ssr>
                                                 <span class="v-image-size">{{file.metadata.size | fmBytes}}</span>
                                                 <a class="delete v-image-bndelete" @click="itemOldImages.splice(index, 1)"></a>
                                             </figure>
@@ -177,7 +181,9 @@
                                         <div class="level-item" style="flex-grow: 0.1;" v-for="(file, index) in itemPreviewImages"
                                             :key="itemOldImages.length + index">
                                             <figure class="image is-128x128 v-image-frame">
-                                                <img class="v-preview-image" v-lazy="file.url" :alt="`item_image_${itemOldImages.length + index}`">
+                                                <no-ssr>
+                                                    <img class="v-preview-image" v-lazy="file.url" :alt="`item_image_${itemOldImages.length + index}`">
+                                                </no-ssr>
                                                 <span class="v-image-size">{{file.size | fmBytes}}</span>
                                                 <a class="delete v-image-bndelete" @click="itemPreviewImages.splice(index, 1); itemImages.splice(index, 1)"></a>
                                             </figure>

@@ -7,8 +7,10 @@
                         <div class="card-content" v-if="user">
                             <div class="level">
                                 <div class="level-item">
-                                    <figure class="image is-128x128" style="border: solid 1px #D8D8D8">
-                                        <img class="v-user-avatar" :src="user.avatar ? user.avatar.url : `/icon-user.png`" style='display: none' onload="this.style.display = 'block'" alt="user_avatar">
+                                    <figure class="image v-image-border">
+                                        <no-ssr>
+                                            <img class="v-user-avatar" :src="user.avatar ? user.avatar.url : `/icon-user.png`" style='display: none' onload="this.style.display = 'block'" alt="user_avatar">
+                                        </no-ssr>
                                     </figure>
                                 </div>
                             </div>
@@ -193,14 +195,18 @@
                                     <div class="level">
                                         <div class="level-item" v-if="userOldAvatar">
                                             <figure class="image is-128x128 v-image-frame">
-                                                <img class="v-preview-image" v-lazy="userOldAvatar.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
+                                                <no-ssr>
+                                                    <img class="v-preview-image" v-lazy="userOldAvatar.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
+                                                </no-ssr>
                                                 <span class="v-image-size">{{userOldAvatar.metadata.size | fmBytes}}</span>
                                                 <a class="delete v-image-bndelete" @click="userOldAvatar = null"></a>
                                             </figure>
                                         </div>
                                         <div class="level-item" v-if="userAvatar">
                                             <figure class="image is-128x128 v-image-frame">
-                                                <img class="v-preview-image" v-lazy="userPreviewAvatar.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
+                                                <no-ssr>
+                                                    <img class="v-preview-image" v-lazy="userPreviewAvatar.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
+                                                </no-ssr>
                                                 <span class="v-image-size">{{userPreviewAvatar.size | fmBytes}}</span>
                                                 <a class="delete v-image-bndelete" @click="userPreviewAvatar= null; userAvatar = null"></a>
                                             </figure>

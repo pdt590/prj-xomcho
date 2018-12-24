@@ -4,7 +4,9 @@
             <div class="container">
                 <div class="navbar-brand">
                     <nuxt-link class="navbar-item" to="/">
-                        <img class="v-main-logo" v-lazy="`/logo.png`" style='display: none' onload="this.style.display = 'block'" alt="brand_logo">
+                        <no-ssr>
+                            <img class="v-main-logo" v-lazy="`/logo.png`" style='display: none' onload="this.style.display = 'block'" alt="brand_logo">
+                        </no-ssr>
                     </nuxt-link>
                 </div>
                 <div class="navbar-menu">
@@ -49,7 +51,9 @@
                         </div>
                         <div class="navbar-item has-dropdown is-hoverable" v-if="user">
                             <a class="navbar-link">
-                                <img class="v-nav-avatar" v-lazy="user.avatar ? user.avatar.url : `/icon-user.png`" style='display: none' onload="this.style.display = 'block'" alt="avatar">
+                                <no-ssr>
+                                    <img class="v-nav-avatar" v-lazy="user.avatar ? user.avatar.url : `/icon-user.png`" style='display: none' onload="this.style.display = 'block'" alt="avatar">
+                                </no-ssr>
                             </a>
                             <div class="navbar-dropdown is-right">
                                 <nuxt-link class="navbar-item" to="/user/profile">

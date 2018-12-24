@@ -3,7 +3,9 @@
         <div class="card-image v-card-image">
 			<nuxt-link :to="`/shops/${genShopUrl(itemData._shop.title, itemData._shop.id)}/${itemData.url}`">
 				<figure class="image is-4by3">
-					<img class="v-image-card" v-lazy="itemData.images ? itemData.images[0].url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="item_image">
+                    <no-ssr>
+                        <img class="v-image-card" v-lazy="itemData.images ? itemData.images[0].url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="item_image">
+                    </no-ssr>
 				</figure>
 			</nuxt-link>
             <div class="v-item-pin-new" v-if="isNew">

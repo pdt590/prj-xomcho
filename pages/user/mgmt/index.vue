@@ -7,8 +7,10 @@
                         <div class="card-content">
                             <div class="v-username" v-if="user">
                                 <nuxt-link :to="`/user/profile`">
-                                    <figure class="image is-128x128" style="border: solid 1px #D8D8D8">
-                                        <img class="v-user-avatar" v-lazy="user.avatar ? user.avatar.url : `/icon-user.png`" style='display: none' onload="this.style.display = 'block'" alt="user_avatar">
+                                    <figure class="image v-image-border">
+                                        <no-ssr>
+                                            <img class="v-user-avatar" v-lazy="user.avatar ? user.avatar.url : `/icon-user.png`" style='display: none' onload="this.style.display = 'block'" alt="user_avatar">
+                                        </no-ssr>
                                     </figure> 
                                 </nuxt-link> 
                                 <br>

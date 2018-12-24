@@ -15,8 +15,10 @@
                             <div class="level">
                                 <div class="level-item">
                                     <nuxt-link :to="`/shops/${$route.params.shopUrl}`">
-                                        <figure class="image is-128x128" style="border: solid 1px #D8D8D8">
-                                            <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                        <figure class="image v-image-border">
+                                            <no-ssr>
+                                                <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                            </no-ssr>
                                         </figure>
                                     </nuxt-link>
                                 </div>
@@ -140,7 +142,9 @@
                                 <div class="level-item" style="flex-grow: 0.1; padding-bottom: 1rem" v-for="(file, index) in previewImages"
                                     :key="index">
                                     <figure class="image is-128x128 v-image-frame">
-                                        <img class="v-preview-image" v-lazy="file.url" :alt="`item_image_${index}`">
+                                        <no-ssr>
+                                            <img class="v-preview-image" v-lazy="file.url" :alt="`item_image_${index}`">
+                                        </no-ssr>
                                         <span class="v-image-size">{{file.size | fmBytes}}</span>
                                         <a class="delete v-image-bndelete" @click="previewImages.splice(index, 1); itemData.images.splice(index, 1)"></a>
                                     </figure>

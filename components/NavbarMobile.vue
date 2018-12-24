@@ -3,7 +3,9 @@
         <nav class="navbar is-fixed-top">
             <div class="navbar-brand">
                 <nuxt-link class="navbar-item" to="/">
-                    <img class="v-main-logo" v-lazy="`/logo.png`" style='display: none' onload="this.style.display = 'block'" alt="brand_logo">
+                    <no-ssr>
+                        <img class="v-main-logo" v-lazy="`/logo.png`" style='display: none' onload="this.style.display = 'block'" alt="brand_logo">
+                    </no-ssr>
                 </nuxt-link>
                 <a class="navbar-item" data-target="mobile-search" @click="onActiveSearch">
                     <b-icon :icon="isSearchActive ? `close-box` :  `magnify`" :type="isSearchActive ? `is-danger` :  ``"></b-icon>
@@ -18,7 +20,9 @@
                     <b-icon icon="email-outline" :type="countUnOpenedChats ? `is-danger` : ``"></b-icon>
                 </a>
                 <a class="navbar-item" data-target="mobile-menu" @click="onActiveProfile">
-                    <img v-if="user && !isProfileActive" class="v-nav-avatar-mobile" v-lazy="user.avatar ? user.avatar.url : `/icon-user.png`" style='display: none' onload="this.style.display = 'block'" alt="avatar">
+                    <no-ssr v-if="user && !isProfileActive">
+                        <img class="v-nav-avatar-mobile" v-lazy="user.avatar ? user.avatar.url : `/icon-user.png`" style='display: none' onload="this.style.display = 'block'" alt="avatar">
+                    </no-ssr>
                     <b-icon v-else :icon="isProfileActive ? `close-box` : `menu`" :type="isProfileActive ? `is-danger` :  ``"></b-icon>
                 </a>
             </div>

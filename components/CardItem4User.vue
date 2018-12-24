@@ -3,7 +3,9 @@
 		<div class="media-left">
 			<nuxt-link :to="`/shops/${genShopUrl(itemData._shop.title, itemData._shop.id)}/${itemData.url}`">
 				<figure class="image is-96x96">
-					<img class="v-image-mobile-card" v-lazy="itemData.images ? itemData.images[0].url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="item_image">
+					<no-ssr>
+						<img class="v-image-mobile-card" v-lazy="itemData.images ? itemData.images[0].url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="item_image">
+					</no-ssr>
 				</figure>
 			</nuxt-link>
 		</div>
