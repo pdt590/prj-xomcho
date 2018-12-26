@@ -1,13 +1,13 @@
 {
     "name": "xomcho",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "An eCommercial project for online shops and more",
     "author": "Phan Duy Thang",
     "private": true,
     "scripts": {
         "dev": "cross-env HOST=0.0.0.0 PORT=3000 nuxt",
         "build": "nuxt build",
-        "start": "nuxt start",
+        "start": "cross-env HOST=0.0.0.0 PORT=3000 nuxt start",
         "generate": "nuxt generate"
     },
     "dependencies": {

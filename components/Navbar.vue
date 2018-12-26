@@ -122,7 +122,7 @@
             ...mapGetters(['countUnOpenedChats', 'user'])
         },
         async mounted() {
-            await this.$store.dispatch('loadCountUnOpenedChats')
+            this.user ? await this.$store.dispatch('loadCountUnOpenedChats') : ``
         },
         data() {
             return {

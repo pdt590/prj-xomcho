@@ -72,7 +72,7 @@ module.exports = {
 	** Global env setting
 	*/
 	env: {
-
+		//baseUrl: process.env.BASE_URL || 'http://localhost:3000'
 	},
 
 	/*
@@ -86,6 +86,8 @@ module.exports = {
 	** Build configuration
 	*/
 	build: {
+		//publicPath: '/',
+		extractCSS: true,
 		/*
 		** You can extend webpack config here
 		*/
