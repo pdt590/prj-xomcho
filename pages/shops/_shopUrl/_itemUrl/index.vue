@@ -220,7 +220,7 @@
                                         <div class="level-right">
                                             <div class="buttons">
                                                 <a class="button is-info is-rounded is-outlined" 
-                                                    :href="`https://www.facebook.com/sharer/sharer.php?u=https://www.xomcho.net/shops/${$route.params.shopUrl}/${$route.params.itemUrl}`" 
+                                                    :href="`https://www.facebook.com/sharer/sharer.php?u=${baseUrl}/shops/${$route.params.shopUrl}/${$route.params.itemUrl}`" 
                                                     target="_blank">
                                                     <b-icon icon="share-variant"></b-icon>
                                                     <strong>Chia sẻ</strong>
@@ -242,7 +242,7 @@
                 <div class="card">
                     <div class="card-content">
                         <div id="fb-root"></div>
-                        <div class="fb-comments" :data-href="`https://xomcho.net/shops/${$route.params.shopUrl}/${$route.params.itemUrl}`" data-numposts="5" data-width="100%"></div>
+                        <div class="fb-comments" :data-href="`${baseUrl}/shops/${$route.params.shopUrl}/${$route.params.itemUrl}`" data-numposts="5" data-width="100%"></div>
                     </div>
                 </div>
             </div>
@@ -295,7 +295,8 @@
         data() {
             return {
                 isModalSaleActive: false, 
-                unit:  1
+                unit:  1,
+                baseUrl: process.env.baseUrl,
             }
         },
         head () {

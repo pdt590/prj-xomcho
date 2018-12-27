@@ -243,7 +243,7 @@
                 <div class="card">
                     <div class="card-content">
                         <div id="fb-root"></div>
-                        <div class="fb-comments" :data-href="`https://xomcho.net/shops/${$route.params.shopUrl}`" data-numposts="5" data-width="100%"></div>
+                        <div class="fb-comments" :data-href="`${baseUrl}/shops/${$route.params.shopUrl}`" data-numposts="5" data-width="100%"></div>
                     </div>
                 </div>
             </div>
@@ -318,7 +318,9 @@
                 displayItemType: 'Tất cả',
 
                 currentItemPage: 1,
-                perPage: 3
+                perPage: 3,
+
+                baseUrl: process.env.baseUrl,
             }
         },
         methods: {

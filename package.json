@@ -10,6 +10,9 @@
         "start": "cross-env HOST=0.0.0.0 PORT=3000 nuxt start",
         "generate": "nuxt generate"
     },
+    "engines": { 
+        "node": "8"
+    },
     "dependencies": {
         "@nuxtjs/component-cache": "^1.1.4",
         "@nuxtjs/google-analytics": "^2.0.2",
