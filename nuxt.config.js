@@ -45,7 +45,7 @@ module.exports = {
 
 		{src: '~plugins/plugin-firebase.js'},
 		{src: '~plugins/plugin-buefy.js'},
-        {src: '~plugins/plugin-vuelidate.js', ssr: false},
+        {src: '~plugins/plugin-vuelidate.js'},
 		{src: '~plugins/plugin-lazyload.js', ssr: false},
 		{src: '~plugins/plugin-carousel.js', ssr: false},
         {src: '~plugins/plugin-filter.js'},
