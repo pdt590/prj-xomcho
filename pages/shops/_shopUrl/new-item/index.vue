@@ -113,7 +113,7 @@
                             </b-field>
                             
                             <!-- Image upload -->
-                            <b-field label="Ảnh sản phẩm* (Tối thiểu 1 ảnh - Tối đa 4 ảnh, kích thước < 2MB)"
+                            <b-field label="Ảnh sản phẩm*"
                                 :type="!$v.itemData.images.isImg ? `is-danger` : ``"
                                 :message="!$v.itemData.images.isImg ? `File ảnh không hợp lệ` : ``">
                                 <div class="level">
@@ -139,12 +139,11 @@
                                 </div>
                             </b-field>
                             <div class="level" style="justify-content: center;">
-                                <div class="level-item" style="flex-grow: 0.1; padding-bottom: 1rem" v-for="(file, index) in previewImages"
+                                <div class="level-item" style="flex-grow: 0.1; padding-bottom: 1rem" 
+                                    v-for="(file, index) in previewImages"
                                     :key="index">
                                     <figure class="image is-128x128 v-image-frame">
-                                        <no-ssr>
-                                            <img class="v-preview-image" v-lazy="file.url" :alt="`item_image_${index}`">
-                                        </no-ssr>
+                                        <img class="v-preview-image" :src="file.url" :alt="`item_image_${index}`">
                                         <span class="v-image-size">{{file.size | fmBytes}}</span>
                                         <a class="delete v-image-bndelete" @click="previewImages.splice(index, 1); itemData.images.splice(index, 1)"></a>
                                     </figure>
@@ -228,7 +227,7 @@
                 images: {
                     required,
                     maxLen: maxLength(4),
-                    isImg: isImage(2097152) // <2MB
+                    isImg: isImage
                 }
             }
         },

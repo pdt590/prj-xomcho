@@ -18,7 +18,7 @@
                                     <nuxt-link class="" :to="`/shops/${$route.params.shopUrl}/${$route.params.itemUrl}`">
                                         <figure class="image v-image-border">
                                             <no-ssr>
-                                                <img class="v-shop-logo" v-lazy="loadedItem.images[0] ? loadedItem.images[0].url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                                <img class="v-shop-logo" v-lazy="loadedItem.images[0] ? loadedItem.images[0].url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="item_image">
                                             </no-ssr>
                                         </figure>
                                     </nuxt-link>
@@ -142,7 +142,7 @@
 
                             <b-tab-item label="Ảnh">
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
-                                    <b-field label="Ảnh sản phẩm* (Tối thiểu 1 ảnh - Tối đa 4 ảnh, kích thước < 2MB)"
+                                    <b-field label="Ảnh sản phẩm*"
                                         :type="!$v.itemImages.isImg ? `is-danger` : ``"
                                         :message="!$v.itemImages.isImg ? `File ảnh không hợp lệ` : ``">
                                         <div class="level">
@@ -168,22 +168,20 @@
                                         </div>
                                     </b-field>
                                     <div class="level" style="justify-content: center;">
-                                        <div class="level-item" style="flex-grow: 0.1; padding-bottom: 1rem" v-for="(file, index) in itemOldImages"
+                                        <div class="level-item" style="flex-grow: 0.1; padding-bottom: 1rem" 
+                                            v-for="(file, index) in itemOldImages"
                                             :key="index">
                                             <figure class="image is-128x128 v-image-frame">
-                                                <no-ssr>
-                                                    <img class="v-preview-image" v-lazy="file.url" :alt="`item_image_${index}`">
-                                                </no-ssr>
+                                                <img class="v-preview-image" :src="file.url" :alt="`item_image_${index}`">
                                                 <span class="v-image-size">{{file.metadata.size | fmBytes}}</span>
                                                 <a class="delete v-image-bndelete" @click="itemOldImages.splice(index, 1)"></a>
                                             </figure>
                                         </div>
-                                        <div class="level-item" style="flex-grow: 0.1;" v-for="(file, index) in itemPreviewImages"
+                                        <div class="level-item" style="flex-grow: 0.1;" 
+                                            v-for="(file, index) in itemPreviewImages"
                                             :key="itemOldImages.length + index">
                                             <figure class="image is-128x128 v-image-frame">
-                                                <no-ssr>
-                                                    <img class="v-preview-image" v-lazy="file.url" :alt="`item_image_${itemOldImages.length + index}`">
-                                                </no-ssr>
+                                                <img class="v-preview-image" :src="file.url" :alt="`item_image_${itemOldImages.length + index}`">
                                                 <span class="v-image-size">{{file.size | fmBytes}}</span>
                                                 <a class="delete v-image-bndelete" @click="itemPreviewImages.splice(index, 1); itemImages.splice(index, 1)"></a>
                                             </figure>
@@ -287,7 +285,7 @@
                 }))
             },
             itemImages: {
-                isImg: isImage(2097152) // <2MB
+                isImg: isImage
             },
             itemContent : {
                 price: {

@@ -98,7 +98,7 @@
                             </b-field>
                             
                             <!-- Logo upload -->
-                            <b-field label="Logo (Kích thước < 2MB)"
+                            <b-field label="Logo"
                                 :type="!$v.shopData.logoImage.isImg ? `is-danger` : ``"
                                 :message="!$v.shopData.logoImage.isImg ? `File ảnh không hợp lệ` : ``">
                                 <div class="level">
@@ -125,9 +125,7 @@
                             <div class="level">
                                 <div class="level-item" v-if="shopData.logoImage">
                                     <figure class="image is-128x128 v-image-frame">
-                                        <no-ssr>
-                                            <img class="v-preview-image" v-lazy="previewLogoImage.url" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
-                                        </no-ssr>
+                                        <img class="v-preview-image" :src="previewLogoImage.url" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
                                         <span class="v-image-size">{{previewLogoImage.size | fmBytes}}</span>
                                         <a class="delete v-image-bndelete" @click="previewLogoImage = null; shopData.logoImage = null"></a>
                                     </figure>
@@ -135,7 +133,7 @@
                             </div>
 
                             <!-- Cover upload -->
-                            <b-field label="Cover (Kích thước < 2MB)"
+                            <b-field label="Cover"
                                 :type="!$v.shopData.coverImage.isImg ? `is-danger` : ``"
                                 :message="!$v.shopData.coverImage.isImg ? `File ảnh không hợp lệ` : ``">
                                 <div class="level">
@@ -162,9 +160,7 @@
                             <div class="level">
                                 <div class="level-item" v-if="shopData.coverImage">
                                     <figure class="image is-128x128 v-image-frame">
-                                        <no-ssr>
-                                            <img class="v-preview-image" v-lazy="previewCoverImage.url" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
-                                        </no-ssr>
+                                        <img class="v-preview-image" :src="previewCoverImage.url" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
                                         <span class="v-image-size">{{previewCoverImage.size | fmBytes}}</span>
                                         <a class="delete v-image-bndelete" @click="previewCoverImage =null; shopData.coverImage = null"></a>
                                     </figure>
@@ -252,10 +248,10 @@
                     required
                 },
                 logoImage: {
-                    isImg: isImage(2097152) // <2MB
+                    isImg: isImage
                 },
                 coverImage: {
-                    isImg: isImage(2097152) // <2MB
+                    isImg: isImage
                 }
             }
         },

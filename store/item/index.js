@@ -1,5 +1,5 @@
 import firebase from '~/plugins/plugin-firebase'
-import { genId, genUrl, fetchId } from '~/plugins/util-helpers'
+import { genId, genUrl, fetchId, compressImage } from '~/plugins/util-helpers'
 const db = firebase.database()
 const itemsRef = db.ref('items')
 
@@ -55,14 +55,15 @@ export default {
 
                 if(newImages.length) {
                     for (const image of newImages) {
-                        const ext = image.name.slice(image.name.lastIndexOf('.'))
+                        const cprImage = await compressImage(image)
+                        const ext = cprImage.name.slice(cprImage.name.lastIndexOf('.'))
                         const newImageName = genId(15) + ext
                         const metaData = { 
                             name: newImageName, 
-                            size: image.size, 
+                            size: cprImage.size, 
                             _creator: vuexContext.getters.user.id
                         }
-                        await firebase.storage().ref('items/' + newImageName).put(image, storageMetadata)
+                        await firebase.storage().ref('items/' + newImageName).put(cprImage, storageMetadata)
                         const imgDownloadUrl = await firebase.storage().ref('items/' + newImageName).getDownloadURL()
                         newImageObjects.push({
                             url: imgDownloadUrl, 
@@ -147,14 +148,15 @@ export default {
                 }
                 if(newImages.length) {
                     for (const image of newImages) {
-                        const ext = image.name.slice(image.name.lastIndexOf('.'))
+                        const cprImage = await compressImage(image)
+                        const ext = cprImage.name.slice(cprImage.name.lastIndexOf('.'))
                         const newImageName = genId(15) + ext
                         const metaData = { 
                             name: newImageName, 
-                            size: image.size, 
+                            size: cprImage.size, 
                             _creator: vuexContext.getters.user.id,
                         }
-                        await firebase.storage().ref('items/' + newImageName).put(image, storageMetadata)
+                        await firebase.storage().ref('items/' + newImageName).put(cprImage, storageMetadata)
                         const imgDownloadUrl = await firebase.storage().ref('items/' + newImageName).getDownloadURL()
                         newImageObjects.push({
                             url: imgDownloadUrl, 
@@ -311,30 +313,9 @@ export default {
                 itemsData.forEach(itemData => {
                     payload.username !== undefined ? updates[`${itemData.key}/_creator/username`] = payload.username : ``
                     payload.avatar !== undefined ? updates[`${itemData.key}/_creator/avatar`] = payload.avatar : ``
-                    // const itemObj = itemData.val()
-                    // if(payload.username !== undefined) {
-                    //     updates[itemData.key] = {
-                    //         ...itemObj,
-                    //         _creator: {
-                    //             id: userId,
-                    //             username: payload.username,
-                    //             avatar: user.avatar ? user.avatar: null
-                    //         }
-                    //     }
-                    // }
-                    // if(payload.avatar !== undefined) {
-                    //     updates[itemData.key] = {
-                    //         ...itemObj,
-                    //         _creator: {
-                    //             id: userId,
-                    //             username: user.username,
-                    //             avatar: payload.avatar
-                    //         }
-                    //     }
-                    // }
                 })
                 await itemsRef.update(updates)
-                vuexContext.commit('setItems', ) // TODO: how to update current loadedItems
+                //vuexContext.commit('setItems', ) // TODO: how to update current loadedItems
                 vuexContext.commit('setItemLoading', false)
             } catch(e) {
                 console.log('[ERROR-updateItemsByUser]', e)

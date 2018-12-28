@@ -1,5 +1,5 @@
 import firebase from '~/plugins/plugin-firebase'
-import { genId, genUrl, fetchId } from '~/plugins/util-helpers'
+import { genId, genUrl, fetchId, compressImage } from '~/plugins/util-helpers'
 const db = firebase.database()
 const shopsRef = db.ref('shops')
 
@@ -38,14 +38,15 @@ export default {
                 }
 
                 if(newLogo) {
-                    const ext = newLogo.name.slice(newLogo.name.lastIndexOf('.'))
+                    const cprLogo = await compressImage(newLogo)
+                    const ext = cprLogo.name.slice(cprLogo.name.lastIndexOf('.'))
                     const newImageName = genId(15) + ext
                     const metaData = { 
                         name: newImageName, 
-                        size: newLogo.size, 
+                        size: cprLogo.size, 
                         _creator: vuexContext.getters.user.id
                     }
-                    await firebase.storage().ref('shops/' + newImageName).put(newLogo, storageMetadata)
+                    await firebase.storage().ref('shops/' + newImageName).put(cprLogo, storageMetadata)
                     const logoDownloadUrl = await firebase.storage().ref('shops/' + newImageName).getDownloadURL()
                     logoObject = {
                         url: logoDownloadUrl, 
@@ -54,14 +55,15 @@ export default {
                 }
 
                 if(newCover) {
-                    const ext = newCover.name.slice(newCover.name.lastIndexOf('.'))
+                    const cprCover = await compressImage(newCover)
+                    const ext = cprCover.name.slice(cprCover.name.lastIndexOf('.'))
                     const newImageName = genId(15) + ext
                     const metaData = { 
                         name: newImageName, 
-                        size: newCover.size, 
+                        size: cprCover.size, 
                         _creator: vuexContext.getters.user.id
                     }
-                    await firebase.storage().ref('shops/' + newImageName).put(newCover, storageMetadata)
+                    await firebase.storage().ref('shops/' + newImageName).put(cprCover, storageMetadata)
                     const coverDownloadUrl = await firebase.storage().ref('shops/' + newImageName).getDownloadURL()
                     coverObject = {
                         url: coverDownloadUrl, 
@@ -162,14 +164,15 @@ export default {
                 const storageMetadata = {
                     cacheControl: 'public,max-age=31536000',
                 }
-                const ext = newLogo.name.slice(newLogo.name.lastIndexOf('.'))
+                const cprLogo = await compressImage(newLogo)
+                const ext = cprLogo.name.slice(cprLogo.name.lastIndexOf('.'))
                 const newImageName = genId(15) + ext
                 const metaData = { 
                     name: newImageName, 
-                    size: newLogo.size, 
+                    size: cprLogo.size, 
                     _creator: vuexContext.getters.user.id
                 }
-                await firebase.storage().ref('shops/' + newImageName).put(newLogo, storageMetadata)
+                await firebase.storage().ref('shops/' + newImageName).put(cprLogo, storageMetadata)
                 const logoDownloadUrl = await firebase.storage().ref('shops/' + newImageName).getDownloadURL()
                 logoObject = {
                     metadata: metaData,
@@ -216,14 +219,15 @@ export default {
                 const storageMetadata = {
                     cacheControl: 'public,max-age=31536000',
                 }
-                const ext = newCover.name.slice(newCover.name.lastIndexOf('.'))
+                const cprCover = await compressImage(newCover)
+                const ext = cprCover.name.slice(cprCover.name.lastIndexOf('.'))
                 const newImageName = genId(15) + ext
                 const metaData = { 
                     name: newImageName, 
-                    size: newCover.size, 
+                    size: cprCover.size, 
                     _creator: vuexContext.getters.user.id
                 }
-                await firebase.storage().ref('shops/' + newImageName).put(newCover, storageMetadata)
+                await firebase.storage().ref('shops/' + newImageName).put(cprCover, storageMetadata)
                 const coverDownloadUrl = await firebase.storage().ref('shops/' + newImageName).getDownloadURL()
                 coverObject = {
                     metadata: metaData,
@@ -298,7 +302,7 @@ export default {
                     payload.avatar !== undefined ? updates[`${shopData.key}/_creator/avatar`] = payload.avatar : ``
                 })
                 await shopsRef.update(updates)
-                vuexContext.commit('setShop', ) // TODO: how to update current loadedshop
+                //vuexContext.commit('setShop', ) // TODO: how to update current loadedshop
                 vuexContext.commit('setShopLoading', false)
             } catch(e) {
                 console.log('[ERROR-updateShopsByUser]', e)

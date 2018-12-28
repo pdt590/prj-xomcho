@@ -1,27 +1,68 @@
+import Compressor from 'compressorjs'
+
+export function compressImage (image) {
+    let quality = 0.4
+    if(image.size > 1000000) {
+        quality = 0.2
+    }
+    return new Promise((resolve, reject)=>{
+        new Compressor(image, {
+            quality: quality,
+            convertSize: 1000000,
+            checkOrientation: false,
+            success(result) {
+                resolve(result)
+            },
+            error(e) {
+                console.log(e.message)
+                reject(e)
+            },
+        });
+    })
+}
+
 export const lessThan = (inputValue) => (value) => {
     return value < inputValue ? true : false
 }
 
-// https://monterail.github.io/vuelidate/#sub-simplest-example
-export const isImage = (maxFileSize) => (value) => {
+export const isImage = (value) => {
     if(Array.isArray(value)) {
         for(let file of value) {
-            if(!checkImage(file, maxFileSize)) return false
+            if(!checkImage(file)) return false
         }
     }else if(value) {
         const file = value
-        if(!checkImage(file, maxFileSize)) return false
+        if(!checkImage(file)) return false
     }
     return true
 }
 
-const checkImage = (file, maxFileSize) => {
+const checkImage = (file) => {
     const acceptedFiles = ['.png', '.PNG', '.jpeg', '.JPEG', '.jpg', '.JPG']
     const ext = file.name.slice(file.name.lastIndexOf('.'))
     if(!acceptedFiles.includes(ext)) return false
-    if(file.size > maxFileSize) return false
     return true
 }
+
+// export const isImage = (maxFileSize) => (value) => {
+//     if(Array.isArray(value)) {
+//         for(let file of value) {
+//             if(!checkImage(file, maxFileSize)) return false
+//         }
+//     }else if(value) {
+//         const file = value
+//         if(!checkImage(file, maxFileSize)) return false
+//     }
+//     return true
+// }
+
+// const checkImage = (file, maxFileSize) => {
+//     const acceptedFiles = ['.png', '.PNG', '.jpeg', '.JPEG', '.jpg', '.JPG']
+//     const ext = file.name.slice(file.name.lastIndexOf('.'))
+//     if(!acceptedFiles.includes(ext)) return false
+//     if(file.size > maxFileSize) return false
+//     return true
+// }
 
 // universally unique identifier
 export function genId(length) {

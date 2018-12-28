@@ -168,7 +168,7 @@
 
                             <b-tab-item label="Avatar">
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
-                                    <b-field label="Avatar (Kích thước < 2MB)"
+                                    <b-field label="Avatar"
                                         :type="!$v.userAvatar.isImg ? `is-danger` : ``"
                                         :message="!$v.userAvatar.isImg ? `File ảnh không hợp lệ` : ``">
                                         <div class="level">
@@ -195,18 +195,14 @@
                                     <div class="level">
                                         <div class="level-item" v-if="userOldAvatar">
                                             <figure class="image is-128x128 v-image-frame">
-                                                <no-ssr>
-                                                    <img class="v-preview-image" v-lazy="userOldAvatar.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
-                                                </no-ssr>
+                                                <img class="v-preview-image" :src="userOldAvatar.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
                                                 <span class="v-image-size">{{userOldAvatar.metadata.size | fmBytes}}</span>
                                                 <a class="delete v-image-bndelete" @click="userOldAvatar = null"></a>
                                             </figure>
                                         </div>
                                         <div class="level-item" v-if="userAvatar">
                                             <figure class="image is-128x128 v-image-frame">
-                                                <no-ssr>
-                                                    <img class="v-preview-image" v-lazy="userPreviewAvatar.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
-                                                </no-ssr>
+                                                <img class="v-preview-image" :src="userPreviewAvatar.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
                                                 <span class="v-image-size">{{userPreviewAvatar.size | fmBytes}}</span>
                                                 <a class="delete v-image-bndelete" @click="userPreviewAvatar= null; userAvatar = null"></a>
                                             </figure>
@@ -353,7 +349,7 @@
             },
 
             userAvatar: {
-                isImg: isImage(2097152) // <2MB
+                isImg: isImage
             }, 
 
             confirmPasswordForDeleting: {

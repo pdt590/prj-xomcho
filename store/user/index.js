@@ -1,5 +1,6 @@
 import firebase from '~/plugins/plugin-firebase'
 import Cookie from 'js-cookie'
+import { compressImage } from '~/plugins/util-helpers'
 const db = firebase.database()
 const usersRef = db.ref('users')
 
@@ -236,14 +237,15 @@ export default {
                 const storageMetadata = {
                     cacheControl: 'public,max-age=31536000',
                 }
-                const ext = newAvatar.name.slice(newAvatar.name.lastIndexOf('.'))
+                const cprAvatar = await compressImage(newAvatar)
+                const ext = cprAvatar.name.slice(cprAvatar.name.lastIndexOf('.'))
                 const newAvatarName = userId + ext
                 const metaData = { 
                     name: newAvatarName, 
-                    size: newAvatar.size, 
+                    size: cprAvatar.size, 
                     _creator: userId
                 }
-                await firebase.storage().ref('users/' + newAvatarName).put(newAvatar, storageMetadata)
+                await firebase.storage().ref('users/' + newAvatarName).put(cprAvatar, storageMetadata)
                 const avatarDownloadUrl = await firebase.storage().ref('users/' + newAvatarName).getDownloadURL()
                 avatarObject = {
                     metadata: metaData,

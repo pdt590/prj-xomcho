@@ -16,7 +16,9 @@
                                 <div class="level-item">
                                     <nuxt-link :to="`/shops/${$route.params.shopUrl}`">
                                         <figure class="image v-image-border">
-                                            <img class="v-shop-logo" :src="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                            <no-ssr>
+                                                <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                            </no-ssr>
                                         </figure> 
                                     </nuxt-link>
                                 </div>
@@ -153,7 +155,7 @@
 
                             <b-tab-item label="Ảnh Logo">
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
-                                    <b-field label="Logo (Kích thước < 2MB)"
+                                    <b-field label="Logo"
                                         :type="!$v.shopLogo.isImg ? `is-danger` : ``"
                                         :message="!$v.shopLogo.isImg ? `File ảnh không hợp lệ` : ``">
                                         <div class="level">
@@ -180,18 +182,14 @@
                                     <div class="level">
                                         <div class="level-item" v-if="shopOldLogo">
                                             <figure class="image is-128x128 v-image-frame">
-                                                <no-ssr>
-                                                    <img class="v-preview-image" v-lazy="shopOldLogo.url" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
-                                                </no-ssr>
+                                                <img class="v-preview-image" :src="shopOldLogo.url" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
                                                 <span class="v-image-size">{{shopOldLogo.metadata.size | fmBytes}}</span>
                                                 <a class="delete v-image-bndelete" @click="shopOldLogo = null"></a>
                                             </figure>
                                         </div>
                                         <div class="level-item" v-if="shopLogo">
                                             <figure class="image is-128x128 v-image-frame">
-                                                <no-ssr>
-                                                    <img class="v-preview-image" v-lazy="shopPreviewLogo.url" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
-                                                </no-ssr>
+                                                <img class="v-preview-image" :src="shopPreviewLogo.url" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
                                                 <span class="v-image-size">{{shopPreviewLogo.size | fmBytes}}</span>
                                                 <a class="delete v-image-bndelete" @click="shopPreviewLogo = null; shopLogo = null"></a>
                                             </figure>
@@ -214,7 +212,7 @@
 
                             <b-tab-item label="Ảnh Cover">
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
-                                    <b-field label="Cover (Kích thước < 2MB)"
+                                    <b-field label="Cover"
                                         :type="!$v.shopCover.isImg ? `is-danger` : ``"
                                         :message="!$v.shopCover.isImg ? `File ảnh không hợp lệ` : ``">
                                         <div class="level">
@@ -241,18 +239,14 @@
                                     <div class="level">
                                         <div class="level-item" v-if="shopOldCover">
                                             <figure class="image is-128x128 v-image-frame">
-                                                <no-ssr>
-                                                    <img class="v-preview-image" v-lazy="shopOldCover.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
-                                                </no-ssr>
+                                                <img class="v-preview-image" :src="shopOldCover.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
                                                 <span class="v-image-size">{{shopOldCover.metadata.size | fmBytes}}</span>
                                                 <a class="delete v-image-bndelete" @click="shopOldCover = null"></a>
                                             </figure>
                                         </div>
                                         <div class="level-item" v-if="shopCover">
                                             <figure class="image is-128x128 v-image-frame">
-                                                <no-ssr>
-                                                    <img class="v-preview-image" v-lazy="shopPreviewCover.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
-                                                </no-ssr>
+                                                <img class="v-preview-image" :src="shopPreviewCover.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
                                                 <span class="v-image-size">{{shopPreviewCover.size | fmBytes}}</span>
                                                 <a class="delete v-image-bndelete" @click="shopPreviewCover= null; shopCover = null"></a>
                                             </figure>
@@ -362,10 +356,10 @@
                 }))
             },
             shopLogo: {
-                isImg: isImage(2097152) // <2MB
+                isImg: isImage
             },
             shopCover: {
-                isImg: isImage(2097152) // <2MB
+                isImg: isImage
             },
             shopContent: {
                 category: {
