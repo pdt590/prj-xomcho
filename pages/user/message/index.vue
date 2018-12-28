@@ -192,28 +192,6 @@
 </script>
 
 <style lang="scss" scoped>
-    /* width */
-    ::-webkit-scrollbar {
-        width: 10px;
-    }
-
-    /* Track */
-    ::-webkit-scrollbar-track {
-        background: #f1f1f1;
-        border-radius: 0.3rem
-    }
-    
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-        background: #AAA;
-        border-radius: 0.3rem
-    }
-
-    /* Handle on hover */
-    ::-webkit-scrollbar-thumb:hover {
-        background: #555;
-    }
-
     .media:hover {
         cursor: pointer;
     }
