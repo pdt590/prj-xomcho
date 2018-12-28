@@ -8,9 +8,7 @@
                             <div class="level">
                                 <div class="level-item">
                                     <figure class="image v-image-border">
-                                        <no-ssr>
-                                            <img class="v-user-avatar" :src="user.avatar ? user.avatar.url : `/icon-user.png`" style='display: none' onload="this.style.display = 'block'" alt="user_avatar">
-                                        </no-ssr>
+                                        <img class="v-user-avatar" :src="user.avatar ? user.avatar.url : `/icon-user.png`" style='display: none' onload="this.style.display = 'block'" alt="user_avatar">
                                     </figure>
                                 </div>
                             </div>

@@ -16,9 +16,7 @@
                                 <div class="level-item">
                                     <nuxt-link :to="`/shops/${$route.params.shopUrl}`">
                                         <figure class="image v-image-border">
-                                            <no-ssr>
-                                                <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
-                                            </no-ssr>
+                                            <img class="v-shop-logo" :src="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
                                         </figure> 
                                     </nuxt-link>
                                 </div>
