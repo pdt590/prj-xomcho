@@ -9,7 +9,7 @@
                                 Xóm Chợ
                             </p>
                             <p class="subtitle is-5">
-                                Công cụ hỗ trợ bán hàng Online
+                                Chợ bán hàng Online
                             </p>
                             <br>
                             <nuxt-link class="button is-large is-info is-rounded is-outlined" to="/shops/new-shop">Tạo cửa hàng</nuxt-link>

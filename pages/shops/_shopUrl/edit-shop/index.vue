@@ -269,9 +269,7 @@
 
                             <b-tab-item label="Xóa cửa hàng">
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
-                                    <b-field label="Nhập tên cửa hàng*" expanded
-                                        :type="$v.confirmTitle.$error ? `is-danger` : ``"
-                                        :message="$v.confirmTitle.$error  ? `Tên không trùng khớp` : ``">
+                                    <b-field label="Nhập tên cửa hàng*" expanded>
                                         <b-input
                                             v-model.trim="confirmTitle"
                                             @blur="$v.confirmTitle.$touch()"
