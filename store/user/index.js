@@ -33,6 +33,9 @@ export default {
             vuexContext.commit('clearAuthError')
             try {
                 const { user } = await firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+                await user.updateProfile({
+                    displayName: payload.username
+                })
                 await user.sendEmailVerification()
                 const userProfile = {
                     username: payload.username,

@@ -132,7 +132,7 @@ export default {
             vuexContext.commit('setChatLoading', true)
             try {
                 const user = vuexContext.getters.user
-                const numChats = vuexContext.getters.loadedChats.length ? vuexContext.getters.loadedChats.length : 15
+                const numChats = vuexContext.getters.loadedChats.length > 15 ? vuexContext.getters.loadedChats.length : 15
                 await db.ref(`chats/${user.id}`).orderByChild('updatedDate').limitToLast(numChats).on('value', chatsData => {
                     const loadedChats = []
                     chatsData.forEach(chatData => {
@@ -169,7 +169,6 @@ export default {
             vuexContext.commit('setChatLoading', true)
             try {
                 const user = vuexContext.getters.user
-                console.log(vuexContext.getters.loadedChats)
                 const numChats = vuexContext.getters.loadedChats.length
                 const endAtKey = vuexContext.getters.loadedChats[numChats-1].updatedDate
                 const chatsData = await db.ref(`chats/${user.id}`).orderByChild('updatedDate').endAt(endAtKey).limitToLast(16).once('value')

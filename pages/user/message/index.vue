@@ -23,7 +23,7 @@
                                     <small class="has-text-grey-light"> &#8226; {{info.message.updatedDate | fmDate}}</small>
                                 </p>
                                 <p class="has-text-weight-semibold has-text-grey">{{info.itemTitle}}</p>
-                                <p>{{info.message.content | fmString(100)}}</p>
+                                <p v-if="info.message.content">{{info.message.content | fmString(100)}}</p>
                             </div>
                             <div class="media-right">
                                 <div class="level">
@@ -105,7 +105,7 @@
         updated() {
             this.loadedChats.length ? this.$nextTick(() => {
                 this.selectedChatIndex == 0 ? this.selectedChat = this.loadedChats[0] : ``
-                this.scrollToEnd()
+                this.user ? this.scrollToEnd() : ``
             }) : ``
         },
         computed: {
@@ -169,11 +169,6 @@
                     fromUsername: this.user.username,
                     updatedDate: now
                 }
-                this.selectedChat.messages.push({
-                    id: messageId,
-                    ...message
-                })
-                this.messageContent = null
                 await this.$store.dispatch('sendChatMessage', {
                     partnerId: this.selectedChat.partnerId,
                     chatId: this.selectedChat.id,
@@ -181,11 +176,12 @@
                     messageId: messageId,
                     message: message
                 })
+                this.selectedChatIndex = 0
+                this.messageContent = null
             },
             async onDelete(index) {
                 const chatId = this.loadedChats[index].id
                 await this.$store.dispatch('deleteChat', chatId)
-                this.loadedChats.splice(index, 1)
             },
             scrollToEnd(){
                 const container = this.$el.querySelector("#chatView")
