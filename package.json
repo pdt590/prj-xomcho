@@ -5,9 +5,9 @@
     "author": "Phan Duy Thang",
     "private": true,
     "scripts": {
-        "dev": "cross-env HOST=0.0.0.0 PORT=3000 nuxt",
-        "build": "nuxt build",
-        "start": "cross-env HOST=0.0.0.0 PORT=3000 nuxt start",
+        "dev": "cross-env BASE_URL=https://xomcho.net HOST=0.0.0.0 PORT=3000 nuxt",
+        "build": "cross-env BASE_URL=https://xomcho.net nuxt build",
+        "start": "cross-env NODE_ENV=production HOST=0.0.0.0 PORT=3000 nuxt start",
         "generate": "nuxt generate"
     },
     "engines": {
@@ -23,11 +23,11 @@
         "nuxt": "^2.3.4",
         "vue-carousel-3d": "^0.1.23",
         "vue-lazyload": "^1.2.6",
-        "vuelidate": "^0.7.4"
+        "vuelidate": "^0.7.4",
+        "cross-env": "^5.0.1"
     },
     "devDependencies": {
         "connect-logger": "0.0.1",
-        "cross-env": "^5.0.1",
         "node-sass": "^4.11.0",
         "sass-loader": "^7.0.3"
     }

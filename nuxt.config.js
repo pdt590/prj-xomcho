@@ -64,7 +64,7 @@ module.exports = {
 			maxAge: 31536000
         }],
         ['@nuxtjs/google-analytics', {
-            id: 'UA-12301-2'
+            id: 'UA-131484797-1'
         }]
     ],
     
@@ -107,6 +107,8 @@ module.exports = {
             index: false
         }
     },
+
+	dev: (process.env.NODE_ENV !== 'production'),
 
 	serverMiddleware: [logger({ format: "%date %status %method %url (%time)" })]
 }
