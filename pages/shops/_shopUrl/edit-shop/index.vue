@@ -34,9 +34,7 @@
                         <b-tabs type="is-boxed">
                             <b-tab-item label="Tên cửa hàng">
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
-                                    <b-field label="Nhập tên mới*"
-                                        :type="$v.shopTitle.$error ? `is-danger` : ``"
-                                        :message="$v.shopTitle.$error ? `Thay đổi tên` : ``">
+                                    <b-field label="Nhập tên mới*">
                                         <b-input
                                             v-model.trim="shopTitle"
                                             @blur="$v.shopTitle.$touch()"
