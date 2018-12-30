@@ -46,8 +46,8 @@ Vue.component('v-modal-sale', () => import('~/components/ModalSale'))
 Vue.component('v-modal-image', () => import('~/components/ModalImage'))
 
 Vue.component('v-logo', () => import('~/components/Logo'))
-Vue.component('v-navbar', () => import('~/components/NavBar'))
-Vue.component('v-navbar-mobile', () => import('~/components/NavBarMobile'))
+Vue.component('v-navbar', () => import('~/components/Navbar'))
+Vue.component('v-navbar-mobile', () => import('~/components/NavbarMobile'))
 Vue.component('v-footer', () => import('~/components/Footer'))
 Vue.component('v-image-frame', () => import('~/components/ImageFrame'))
 

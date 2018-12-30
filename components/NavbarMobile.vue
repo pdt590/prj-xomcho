@@ -181,13 +181,13 @@
 
 <style lang="scss" scoped>
     .navbar-brand .navbar-item:not(:first-child) {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 4rem;
-            width: 3rem;
-            position: relative;
-            margin-left: auto
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 4rem;
+        width: 3rem;
+        position: relative;
+        margin-left: auto
     }
     .navbar {
         border: none;
