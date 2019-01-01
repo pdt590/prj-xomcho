@@ -305,6 +305,7 @@
                 title: this.loadedItem.title,
                 meta: [
                     { hid: 'description', name: 'description', content: this.loadedItem.description },
+                    { hid: 'og-url', property: 'og:url', content:`${process.env.baseUrl}${this.$route.path}` },
                     { hid: 'og-title', property: 'og:title', content: this.loadedItem.title },
                     { hid: 'og-description', property: 'og:description', content: this.loadedItem.description },
                     { hid: 'og-image', property: 'og:image', content: this.loadedItem.images[0].url },

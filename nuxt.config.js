@@ -19,10 +19,7 @@ module.exports = {
 			},
 			{ hid: 'og-title', property: 'og:title', content: 'Xóm Chợ - Chợ bán hàng Online' },
 			{ hid: 'og-description', property: 'og:description', content: 'Chợ bán hàng Online - Trang tạo cửa hàng bán hàng Online - Công cụ hỗ trợ bán hàng Online' },
-			{ hid: 'og-image', property: 'og:image', content: 'https://www.xomcho.net/logo.png'},
-			{ hid: 'prop-name', itemprop: 'name', content: 'Xóm Chợ - Công cụ bán hàng Online' },
-			{ hid: 'prop-description', itemprop: 'description', content: 'Chợ bán hàng Online - Trang tạo cửa hàng bán hàng Online - Công cụ hỗ trợ bán hàng Online' },
-			{ hid: 'prop-image', itemprop: 'image', content: 'https://www.xomcho.net/logo.png'},
+			{ hid: 'og-image', property: 'og:image', content: `${process.env.BASE_URL}/logo.png`}
 		],
 		script: [
 			{ src: 'https://connect.facebook.net/vi_VN/all.js' }

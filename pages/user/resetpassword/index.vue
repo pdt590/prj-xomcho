@@ -19,7 +19,7 @@
                                 </b-input>
                             </b-field>
                         </div>
-                        <footer class="card-footer">
+                        <footer class="card-footer" style="border-top: none">
                             <div class="card-footer-item">
                                 <button class="button is-info is-rounded" 
                                     :class="{'is-loading': authLoading}"
@@ -74,6 +74,7 @@
                         message: 'Kiểm tra hộp thư để thiết lập lại mật khẩu',
                         type: 'is-warning'
                     })
+                    this.$router.push('/user/join')
                 }else {
                     this.$toast.open({
                         duration: 3000,

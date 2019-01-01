@@ -90,7 +90,7 @@
 
                             <b-checkbox>Remember me</b-checkbox>
                         </div>
-                        <footer class="card-footer">
+                        <footer class="card-footer" style="border-top: none">
                             <div class="card-footer-item">
                                 <p>
                                     <a @click.prevent="isSignup = !isSignup">{{ isSignup ? `Đăng nhập?` : `Đăng ký?`}}</a>
