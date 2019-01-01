@@ -70,16 +70,17 @@
                         <div class="card-content">
                             <div class="level">
                                 <div class="level-item">
-                                    <nuxt-link class="has-text-centered" :to="`/shops/${$route.params.shopUrl}`">
+                                    <nuxt-link :to="`/shops/${$route.params.shopUrl}`">
                                         <figure class="image v-image-border">
                                             <no-ssr>
                                                 <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
                                             </no-ssr>
                                         </figure>
-                                        <br>
-                                        <h5 class="title is-size-5">{{loadedShop.title}}</h5>
                                     </nuxt-link>
                                 </div>
+                            </div>
+                            <div class="has-text-centered">
+                                <h5 class="title is-size-5">{{loadedShop.title}}</h5> 
                             </div>
                             <hr>
                             <div class="menu">

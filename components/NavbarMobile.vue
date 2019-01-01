@@ -7,26 +7,29 @@
                         <img class="v-main-logo" v-lazy="`/logo.png`" style='display: none' onload="this.style.display = 'block'" alt="brand_logo">
                     </no-ssr>
                 </nuxt-link>
-                <a class="navbar-item" data-target="mobile-search" @click="onActiveSearch">
-                    <b-icon :icon="isSearchActive ? `close-box` :  `magnify`" :type="isSearchActive ? `is-danger` :  ``"></b-icon>
-                </a>
-                <a class="navbar-item" data-target="mobile-new-shop" @click="onOpenNewShop" v-if="user">
-                    <b-icon icon="plus-box-outline"></b-icon>
-                </a>
-                <a class="navbar-item" data-target="mobile-page-list" @click="onActiveCategories">
-                    <b-icon :icon="isCategoriesActive ? `close-box` : `view-dashboard-outline`" :type="isCategoriesActive ? `is-danger` :  ``"></b-icon>
-                </a>
-                <a class="navbar-item" @click="onOpenMessage" v-if="user">
-                    <b-icon icon="email-outline" :type="countUnOpenedChats ? `is-danger` : ``"></b-icon>
-                </a>
-                <a class="navbar-item" data-target="mobile-menu" @click="onActiveProfile">
-                    <no-ssr v-if="user && !isProfileActive">
-                        <img class="v-nav-avatar-mobile" v-lazy="user.avatar ? user.avatar.url : `/icon-user.png`" style='display: none' onload="this.style.display = 'block'" alt="avatar">
-                    </no-ssr>
-                    <b-icon v-else :icon="isProfileActive ? `close-box` : `menu`" :type="isProfileActive ? `is-danger` :  ``"></b-icon>
-                </a>
+
+                <div class="navbar-end">
+                    <a class="navbar-item" data-target="mobile-search" @click="onActiveSearch">
+                        <b-icon :icon="isSearchActive ? `close-box` :  `magnify`" :type="isSearchActive ? `is-danger` :  ``"></b-icon>
+                    </a>
+                    <a class="navbar-item" data-target="mobile-new-shop" @click="onOpenNewShop" v-if="user">
+                        <b-icon icon="plus-box-outline"></b-icon>
+                    </a>
+                    <a class="navbar-item" data-target="mobile-page-list" @click="onActiveCategories">
+                        <b-icon :icon="isCategoriesActive ? `close-box` : `view-dashboard-outline`" :type="isCategoriesActive ? `is-danger` :  ``"></b-icon>
+                    </a>
+                    <a class="navbar-item" @click="onOpenMessage" v-if="user">
+                        <b-icon icon="email-outline" :type="countUnOpenedChats ? `is-danger` : ``"></b-icon>
+                    </a>
+                    <a class="navbar-item" data-target="mobile-menu" @click="onActiveProfile">
+                        <no-ssr v-if="user && !isProfileActive">
+                            <img class="v-nav-avatar-mobile" v-lazy="user.avatar ? user.avatar.url : `/icon-user.png`" style='display: none' onload="this.style.display = 'block'" alt="avatar">
+                        </no-ssr>
+                        <b-icon v-else :icon="isProfileActive ? `close-box` : `menu`" :type="isProfileActive ? `is-danger` :  ``"></b-icon>
+                    </a>
+                </div>
             </div>
-    
+
             <div id="mobile-search" class="navbar-menu" :class="{'is-active': isSearchActive}">
                 <div class="navbar-start">
                     <div class="navbar-item">
@@ -50,43 +53,37 @@
             </div>
             
             <div id="mobile-page-list" class="navbar-menu" :class="{'is-active': isCategoriesActive}">
-                <div class="navbar-start">
-                    <div class="navbar-item has-dropdown is-hoverable">
-                        <div class="navbar-dropdown">
-                            <b-collapse v-for="(category, i) in categories" :key="i">
-                                <nuxt-link class="navbar-item" :to="`/query/${category.id}`" slot="trigger">
-                                    <b-icon :icon="category.icon"></b-icon><p class="is-size-6">{{category.name}}</p>
-                                </nuxt-link>
-                            </b-collapse >
-                        </div>
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <div class="navbar-dropdown">
+                        <b-collapse v-for="(category, i) in categories" :key="i">
+                            <nuxt-link class="navbar-item" :to="`/query/${category.id}`" slot="trigger">
+                                <b-icon :icon="category.icon"></b-icon><p class="is-size-6">{{category.name}}</p>
+                            </nuxt-link>
+                        </b-collapse >
                     </div>
                 </div>
             </div>
 
             <div id="mobile-menu" class="navbar-menu" :class="{'is-active': isProfileActive}">
-                <div class="navbar-start">
-                </div>
-                <div class="navbar-end">
-                    <div class="navbar-item" v-if="!user && $route.path !== '/user/join' && $route.path !== '/user/activekey' && $route.path !== '/user/resetpassword'">
-                        <div class="buttons">
-                            <a class="button is-info is-rounded is-outlined" @click="isModalJoinActive=true; isProfileActive=false">
-                                <strong>Đăng nhập</strong>
-                            </a>
-                        </div>
+                <div class="navbar-item" v-if="!user && $route.path !== '/user/join' && $route.path !== '/user/activekey' && $route.path !== '/user/resetpassword'">
+                    <div class="buttons">
+                        <a class="button is-info is-rounded is-outlined" @click="isModalJoinActive=true; isProfileActive=false">
+                            <strong>Đăng nhập</strong>
+                        </a>
                     </div>
-                    <div v-if="user" class="navbar-item has-dropdown is-hoverable">
-                        <div class="navbar-dropdown is-right">
-                            <nuxt-link class="navbar-item" to="/user/profile">
-                                <b-icon icon="settings-outline"></b-icon><p class="is-size-6">Cài đặt</p> 
-                            </nuxt-link>
-                            <nuxt-link class="navbar-item" to="/user/mgmt">
-                                <b-icon icon="finance"></b-icon><p class="is-size-6">Quản lý</p>
-                            </nuxt-link>
-                            <hr class="navbar-divider">
-                            <a class="navbar-item" @click="onLogout">
-                                <b-icon icon="logout-variant"></b-icon><p class="is-size-6">Thoát</p>
-                            </a>
-                        </div>
+                </div>
+                <div v-if="user" class="navbar-item has-dropdown is-hoverable">
+                    <div class="navbar-dropdown is-right">
+                        <nuxt-link class="navbar-item" to="/user/profile">
+                            <b-icon icon="settings-outline"></b-icon><p class="is-size-6">Cài đặt</p> 
+                        </nuxt-link>
+                        <nuxt-link class="navbar-item" to="/user/mgmt">
+                            <b-icon icon="finance"></b-icon><p class="is-size-6">Quản lý</p>
+                        </nuxt-link>
+                        <hr class="navbar-divider">
+                        <a class="navbar-item" @click="onLogout">
+                            <b-icon icon="logout-variant"></b-icon><p class="is-size-6">Thoát</p>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -180,7 +177,18 @@
 </script>
 
 <style lang="scss" scoped>
-    .navbar-brand .navbar-item:not(:first-child) {
+    .navbar {
+        border: none;
+        border-bottom: 1px solid #D8D8D8;
+    }
+    .navbar-end {
+        display: flex;
+        justify-content: flex-end;
+        align-items: stretch;
+        margin-left: auto;
+        padding: 0;
+    }
+    .navbar-end .navbar-item {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -188,10 +196,6 @@
         width: 3rem;
         position: relative;
         margin-left: auto
-    }
-    .navbar {
-        border: none;
-        border-bottom: 1px solid #D8D8D8;
     }
     .navbar-menu {
         height: 100vh;
@@ -203,5 +207,4 @@
             margin-left: 1rem;
         }
     }
-
 </style>

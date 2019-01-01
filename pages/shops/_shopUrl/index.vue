@@ -121,22 +121,21 @@
                         <div class="card-content">
                             <div class="level">
                                 <div class="level-item">
-                                    <div class="has-text-centered">
-                                        <figure class="image v-image-border">
-                                            <no-ssr>
-                                                <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
-                                            </no-ssr>
-                                        </figure>
-                                        <br>
-                                        <h5 class="title is-size-5">{{loadedShop.title}}</h5>
-                                        <!-- <b-radio-button
-                                            native-value="Yep"
-                                            type="is-danger">
-                                            <b-icon icon="bookmark-outline" style="margin-left: 0.2rem; color: #AAA"></b-icon>
-                                        </b-radio-button> -->
-                                    </div>
+                                    <figure class="image v-image-border">
+                                        <no-ssr>
+                                            <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
+                                        </no-ssr>
+                                    </figure>
                                 </div>
                             </div>
+                            <div class="has-text-centered">
+                                <h5 class="title is-size-5">{{loadedShop.title}}</h5> 
+                            </div>
+                            <!-- <b-radio-button
+                                native-value="Yep"
+                                type="is-danger">
+                                <b-icon icon="bookmark-outline" style="margin-left: 0.2rem; color: #AAA"></b-icon>
+                            </b-radio-button> -->
                             <hr>
                             <div class="menu">
                                 <p class="menu-label" style="font-size: 0.9rem">
