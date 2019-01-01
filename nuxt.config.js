@@ -12,13 +12,23 @@ module.exports = {
 		meta: [
 			{ charset: 'utf-8' },
 			{ name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1' },
-			{ hid: 'description', name: 'description', content: pkg.description }
+			{ 
+				hid:  'description', 
+				name: 'description', 
+				content: 'Chợ bán hàng Online - Trang tạo cửa hàng bán hàng Online - Công cụ hỗ trợ bán hàng Online'
+			},
+			{ hid: 'og-title', property: 'og:title', content: 'Xóm Chợ - Chợ bán hàng Online' },
+			{ hid: 'og-description', property: 'og:description', content: 'Chợ bán hàng Online - Trang tạo cửa hàng bán hàng Online - Công cụ hỗ trợ bán hàng Online' },
+			{ hid: 'og-image', property: 'og:image', content: 'https://www.xomcho.net/logo.png'},
+			{ hid: 'prop-name', itemprop: 'name', content: 'Xóm Chợ - Công cụ bán hàng Online' },
+			{ hid: 'prop-description', itemprop: 'description', content: 'Chợ bán hàng Online - Trang tạo cửa hàng bán hàng Online - Công cụ hỗ trợ bán hàng Online' },
+			{ hid: 'prop-image', itemprop: 'image', content: 'https://www.xomcho.net/logo.png'},
 		],
 		script: [
 			{ src: 'https://connect.facebook.net/vi_VN/all.js' }
 		],
 		link: [
-			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico?v=1' },
 			{ rel: 'stylesheet', href: '//cdn.materialdesignicons.com/3.0.39/css/materialdesignicons.min.css' }
 		]
 	},
@@ -108,7 +118,7 @@ module.exports = {
         }
     },
 
-	dev: (process.env.NODE_ENV !== 'production'),
+	//dev: (process.env.NODE_ENV !== 'production'),
 
 	serverMiddleware: [logger({ format: "%date %status %method %url (%time)" })]
 }

@@ -78,7 +78,7 @@
                                 </div>
                             </b-field>
                         </b-field>
-
+                        
                         <b-field label="Tin nhắn">
                             <b-input
                                 type="textarea"
@@ -161,7 +161,7 @@
         methods: {
             async onSend() {
                 this.response = await this.$store.dispatch('sendBuyMessage', {
-                    itemUrl: this.$route.path,
+                    itemUrl: `/shops/${this.genShopUrl(this.itemData._shop.title, this.itemData._shop.id)}/${this.itemData.url}`,
                     itemTitle: this.itemData.title,
                     ...this.formData,
                     unit: this.formData.unit,

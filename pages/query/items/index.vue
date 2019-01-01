@@ -63,6 +63,14 @@
                 loadedMoreItems.length ? loadedMoreItems.shift() : ``// Remove first item
                 this.loadedItems = [...this.loadedItems, ...loadedMoreItems]
             }
+        },
+        head () {
+            return {
+                title: 'Xóm Chợ | Các sản phẩm nổi bật',
+                meta: [
+                    { hid: 'description', name: 'description', content: 'Xóm Chợ - Các sản phẩm nổi bật'}
+                ]
+            }
         }
     }
 </script>

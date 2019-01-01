@@ -200,7 +200,7 @@
             return {
                 shopData: {
                     title: null,
-                    category: 'nông-nghiệp',
+                    category: 'nong-nghiep',
                     facebook: null,
                     address: null,
                     province: 'Hà Nội',
@@ -273,6 +273,14 @@
                     url: URL.createObjectURL(this.shopData.coverImage),
                     size: this.shopData.coverImage.size
                 }
+            }
+        },
+        head () {
+            return {
+                title: 'Tạo cửa hàng',
+                meta: [
+                    { hid: 'description', name: 'description', content: 'Tạo cửa hàng Online'}
+                ]
             }
         }
     }

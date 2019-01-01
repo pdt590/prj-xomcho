@@ -4,12 +4,12 @@ import 'firebase/database'
 import 'firebase/storage'
 
 const config = {
-    apiKey: "AIzaSyCBJntBA6p16jw20LArZn-lhw6EO5utA6E",
-    authDomain: "xomcho-production.firebaseapp.com",
-    databaseURL: "https://xomcho-production.firebaseio.com",
-    projectId: "xomcho-production",
-    storageBucket: "xomcho-production.appspot.com",
-    messagingSenderId: "78176232230"
+    apiKey: "AIzaSyAjn0msAQdtmSdsVBJgDEvI723diqHOT2U",
+    authDomain: "xomcho-prod-f4578.firebaseapp.com",
+    databaseURL: "https://xomcho-prod-f4578.firebaseio.com",
+    projectId: "xomcho-prod-f4578",
+    storageBucket: "xomcho-prod-f4578.appspot.com",
+    messagingSenderId: "345792245329"
 }
 
 if (!firebase.apps.length) {

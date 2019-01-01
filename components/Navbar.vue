@@ -90,11 +90,11 @@
                                 </nuxt-link>
                             </div>
                         </div>
-                        <a href="" class="navbar-item" >Hướng dẫn</a>
+                        <a href="/" class="navbar-item" >Hướng dẫn</a>
                     </div>
                     <div class="navbar-end" style="border-left: 1px solid #D8D8D8">
-                        <a href="" class="navbar-item" style="padding-right: 1.5rem; padding-left: 1.5rem"><b-icon icon="facebook"></b-icon></a>
-                        <a href="" class="navbar-item" style="padding-right: 1rem; padding-left: 1.5rem"><b-icon icon="youtube"></b-icon></a>
+                        <a href="/" class="navbar-item" style="padding-right: 1.5rem; padding-left: 1.5rem"><b-icon icon="facebook"></b-icon></a>
+                        <a href="/" class="navbar-item" style="padding-right: 1rem; padding-left: 1.5rem"><b-icon icon="youtube"></b-icon></a>
                     </div>
                 </div>
             </div>

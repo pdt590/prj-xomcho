@@ -144,6 +144,14 @@
             onPagItemChange(pageCount) {
                 this.currentItemPage = pageCount
             },
+        },
+        head () {
+            return {
+                title: `Xóm Chợ | ${this.queryName}`,
+                meta: [
+                    { hid: 'description', name: 'description', content: `Xóm Chợ - Danh mục ${this.queryName}`}
+                ]
+            }
         }
     }
 </script>

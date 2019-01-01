@@ -63,6 +63,14 @@
                 loadedMoreShops.length ? loadedMoreShops.shift() : `` // Remove first item
                 this.loadedShops = [...this.loadedShops, ...loadedMoreShops]
             }
+        },
+        head () {
+            return {
+                title: 'Xóm Chợ | Các cửa hàng nổi bật',
+                meta: [
+                    { hid: 'description', name: 'description', content: 'Xóm Chợ - Các cửa hàng nổi bật'}
+                ]
+            }
         }
     }
 </script>

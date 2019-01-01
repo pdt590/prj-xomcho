@@ -18,7 +18,7 @@
         <div class="card-content v-card-content">
             <b-tooltip :label="itemData.title" type="is-light" square>
                 <nuxt-link :to="`/shops/${genShopUrl(itemData._shop.title, itemData._shop.id)}/${itemData.url}`">
-                    <span class="is-size-6 has-text-weight-bold has-text-black">{{itemData.title | fmString(30)}}</span> 
+                    <span class="is-size-6 has-text-weight-bold has-text-black">{{itemData.title | fmString(40)}}</span> 
                 </nuxt-link>
             </b-tooltip>
             <br>
@@ -137,7 +137,7 @@
 			}
         }
         .v-card-content {
-            height: 5rem;
+            min-height: 5rem;
         }
         .v-card-footer {
             display: flex;

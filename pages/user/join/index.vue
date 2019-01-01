@@ -197,6 +197,14 @@
                     })
                 }
             }
+        },
+        head () {
+            return {
+                title: 'Đăng nhập/Đăng ký',
+                meta: [
+                    { hid: 'description', name: 'description', content: 'Đăng nhập-Đăng ký'}
+                ]
+            }
         }
     }
 </script>

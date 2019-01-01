@@ -19,27 +19,27 @@ export const currencies = [
 
 export const categories = [
     {
-        id: 'nông-nghiệp',
+        id: 'nong-nghiep',
         name: 'Nông Nghiệp',
         icon: 'flower-tulip-outline'
     },
     {
-        id: 'thực-phẩm-hàng-tiêu-dùng',
+        id: 'thuc-pham-hang-tieu-dung',
         name: 'Thực Phẩm - Hàng Tiêu Dùng',
         icon: 'food'
     },
     {
-        id: 'thuốc-y-tế',
+        id: 'thuoc-y-te',
         name: 'Thuốc - Y Tế',
         icon: 'pill'
     },
     {
-        id: 'điện-thoại-máy-tính-bảng',
+        id: 'dien-thoai-may-tinh-bang',
         name: 'Điện Thoại - Máy Tính Bảng',
         icon: 'cellphone-android'
     },
     {
-        id: 'tivi-thiết-bị-nghe-nhìn',
+        id: 'tivi-thiet-bi-nghe-nhin',
         name: 'Tivi - Thiết Bị Nghe Nhìn',
         icon: 'television'
     },
@@ -49,62 +49,62 @@ export const categories = [
     //     icon: 'headphones'
     // },
     {   
-        id: 'máy-tính-thiết-bị-it',
+        id: 'may-tinh-thiet-bi-it',
         name: 'Máy Tính - Thiết Bị IT',
         icon: 'laptop-mac'
     },
     {
-        id: 'máy-ảnh-máy-quay-phim',
+        id: 'may-anh-may-quay-phim',
         name: 'Máy Ảnh - Máy Quay Phim',
         icon: 'camera-enhance-outline'
     },
     {
-        id: 'điện-gia-dụng-điện-lạnh',
+        id: 'dien-gia-dung-dien-lanh',
         name: 'Điện Gia Dụng - Điện Lạnh',
         icon: 'fridge-outline'
     },
     {
-        id: 'nhà-cửa-đời-sống',
+        id: 'nha-cua-doi-song',
         name: 'Nhà Cửa - Đời Sống',
         icon: 'wall-sconce'
     },
     {
-        id: 'đồ-chơi-mẹ-và-bé',
+        id: 'do-choi-me-va-be',
         name: 'Đồ Chơi, Mẹ & Bé',
         icon: 'baby'
     },
     {
-        id: 'làm-đẹp-sức-khỏe',
+        id: 'lam-dep-suc-khoe',
         name: 'Làm Đẹp - Sức Khỏe',
         icon: 'google-home'
     },
     {
-        id: 'thời-trang-phụ-kiện',
+        id: 'thoi-trang-phu-kien',
         name: 'Thời Trang - Phụ Kiện',
         icon: 'tshirt-crew-outline'
     },
     {
-        id: 'thể-thao-dã-ngoại',
+        id: 'the-thao-da-ngoai',
         name: 'Thể Thao - Dã Ngoại',
         icon: 'soccer'
     },
     {
-        id: 'xe-máy-ô-tô-xe-đạp',
+        id: 'xe-may-oto-xe-dap',
         name: 'Xe Máy, Ô Tô, Xe Đạp',
         icon: 'car'
     },
     {
-        id: 'sách-vpp-quà-tặng',
+        id: 'sach-vpp-qua-tang',
         name: 'Sách, VPP & Quà Tặng',
         icon: 'book-outline'
     },
     {
-        id: 'dịch-vụ-thẻ-cào',
+        id: 'dich-vu-the-cao',
         name: 'Dịch Vụ - Thẻ Cào',
         icon: 'cards-outline'
     },
     {
-        id: 'khác',
+        id: 'khac',
         name: 'Khác',
         icon: 'wallet-giftcard'
     },

@@ -1,0 +1,7 @@
+User-agent: * 
+Disallow: /user/activekey
+Disallow: /user/message
+Disallow: /user/mgmt
+Disallow: /user/profile
+Disallow: /user/resetpassword
+Disallow: /search

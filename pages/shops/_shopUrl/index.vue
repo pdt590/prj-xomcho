@@ -332,7 +332,10 @@
             return {
                 title: this.loadedShop.title,
                 meta: [
-                    { hid: 'description', name: 'description', content: this.loadedShop.description }
+                    { hid: 'description', name: 'description', content: this.loadedShop.description },
+                    { hid: 'og-title', property: 'og:title', content: this.loadedShop.title },
+                    { hid: 'og-description', property: 'og:description', content: this.loadedShop.description },
+                    { hid: 'og-image', property: 'og:image', content: this.loadedShop.logoImage.url},
                 ]
             }
         }
