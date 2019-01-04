@@ -18,18 +18,13 @@
 				</strong>&bull;
 				<small class="is-uppercase">{{shopCategory}}</small>
 				<br><br>
-				<!-- <b-taglist>
-					<b-tag rounded type="is-warning" 
-						v-for="(type, i) in shopData.itemTypes.slice(0, 2)" :key="i">
-						{{type}}
-					</b-tag>
-					<b-tag rounded type="is-warning">...</b-tag>
-				</b-taglist> -->
 			</div>
 			<div class="level is-mobile">
 				<div class="level-left">
 					<a class="level-item">
-						<b-icon icon="bookmark" class="has-text-grey-light"></b-icon>
+						<a class="button has-text-grey-light" style="border: none" v-if="!user || user && user.id !== shopData._creator.id" @click="onSave">
+							<b-icon icon="bookmark" :type="isSaved ? `is-danger` : ``"></b-icon>
+						</a>
 					</a>
 				</div>
 				<div class="level-right">
@@ -42,10 +37,14 @@
 				</div>
 			</div>
 		</div>
+		<b-modal :active.sync="isModalJoinActive" has-modal-card>
+            <v-modal-join />
+        </b-modal>
 	</div>
 </template>
 
 <script>
+	import { mapGetters } from 'vuex'
     import { categories } from '~/plugins/util-lists'
 
 	export default {
@@ -56,8 +55,32 @@
             }
         },
         computed: {
+			...mapGetters(['user', 'bmShops']),
             shopCategory() {
                 return categories.find(category => category.id === this.shopData.category).name
+			},
+			isSaved() {
+                return this.bmShops.find(bmShop => bmShop.url === this.shopData.url)
+            }
+		},
+		data() {
+            return {
+                isModalJoinActive: false
+            }
+        },
+        methods: {
+            async onSave() {
+                if(this.user && !this.isSaved) {
+                    await this.$store.dispatch('addBmShop', this.shopData.url)
+                }else if(this.user && this.isSaved) {
+                    await this.$store.dispatch('removeBmShop', this.isSaved.id)
+                }else {
+                    if(this.$route.path === '/') {
+                        this.$router.push('/user/join')
+                    }else {
+                        this.isModalJoinActive = true
+                    }
+                }
             }
         }
 	}

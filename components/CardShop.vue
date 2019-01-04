@@ -19,16 +19,22 @@
             </nuxt-link>
         </div>
         <div class="card-footer v-card-footer">
-            <b-icon icon="bookmark" class="has-text-grey-light"></b-icon>
+            <a class="button has-text-grey-light" style="border: none" v-if="!user || user && user.id !== shopData._creator.id" @click="onSave">
+                <b-icon icon="bookmark" :type="isSaved ? `is-danger` : ``"></b-icon>
+            </a>
             <div class="has-text-grey">
                 <b-icon icon="map-marker-outline" size="is-small"></b-icon>
                 {{shopData.province}}
             </div>
         </div>
+        <b-modal :active.sync="isModalJoinActive" has-modal-card>
+            <v-modal-join />
+        </b-modal>
     </div>
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import { categories } from '~/plugins/util-lists'
 
     export default {
@@ -39,8 +45,32 @@
             }
         },
         computed: {
+            ...mapGetters(['user', 'bmShops']),
             shopCategory() {
                 return categories.find(category => category.id === this.shopData.category).name
+            },
+			isSaved() {
+                return this.bmShops.find(bmShop => bmShop.url === this.shopData.url)
+            }
+        },
+        data() {
+            return {
+                isModalJoinActive: false
+            }
+        },
+        methods: {
+            async onSave() {
+                if(this.user && !this.isSaved) {
+                    await this.$store.dispatch('addBmShop', this.shopData.url)
+                }else if(this.user && this.isSaved) {
+                    await this.$store.dispatch('removeBmShop', this.isSaved.id)
+                }else {
+                    if(this.$route.path === '/') {
+                        this.$router.push('/user/join')
+                    }else {
+                        this.isModalJoinActive = true
+                    }
+                }
             }
         }
     }

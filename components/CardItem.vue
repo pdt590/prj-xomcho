@@ -27,8 +27,8 @@
             </nuxt-link>
         </div>
         <div class="card-footer v-card-footer">
-            <a @click="isModalSaleActive=true" v-if="!user || user && user.id !== itemData._creator.id">
-                <b-icon icon="shopping" class="has-text-grey-light"></b-icon>
+            <a class="button has-text-grey-light" style="border: none" v-if="!user || user && user.id !== itemData._creator.id" @click="onSave" >
+                <b-icon icon="heart" :type="isSaved ? `is-danger` : ``"></b-icon>
             </a>
             <div v-if="isSale">
                 <p class="is-size-5 has-text-danger">{{itemData.price | fmPrice}}{{itemData.currency}}</p>
@@ -38,8 +38,8 @@
 				<span class="is-size-5 has-text-danger">{{itemData.price | fmPrice}}{{itemData.currency}}</span>
             </div>
         </div>
-        <b-modal :active.sync="isModalSaleActive" has-modal-card>
-            <v-modal-sale :itemData="itemData" />
+        <b-modal :active.sync="isModalJoinActive" has-modal-card>
+            <v-modal-join />
         </b-modal>
     </div>
 </template>
@@ -56,7 +56,7 @@
             }
         },
         computed: {
-            ...mapGetters(['user']),
+            ...mapGetters(['user', 'bmItems']),
             isSale() {
                 return (this.itemData.oldPrice && Number(this.itemData.oldPrice) > Number(this.itemData.price) ? true : false)
             },
@@ -64,16 +64,32 @@
                 const now = new Date().getTime();
                 const estimatedTime = Date.parse(this.itemData.updatedDate) +  (24 * 3600 * 1000)
                 return (estimatedTime > now ? true : false)
+            },
+            isSaved() {
+                return this.bmItems.find(bmItem => bmItem.url === this.itemData.url)
             }
         },
         data() {
             return {
-                isModalSaleActive: false
+                isModalJoinActive: false
             }
         },
         methods: {
             genShopUrl(title, id) {
                 return genUrl(title, id)
+            },
+            async onSave() {
+                if(this.user && !this.isSaved) {
+                    await this.$store.dispatch('addBmItem', this.itemData.url)
+                }else if(this.user && this.isSaved) {
+                    await this.$store.dispatch('removeBmItem', this.isSaved.id)
+                }else {
+                    if(this.$route.path === '/') {
+                        this.$router.push('/user/join')
+                    }else {
+                        this.isModalJoinActive = true
+                    }
+                }
             }
         }
     }

@@ -241,6 +241,7 @@ export default {
                 vuexContext.commit('setQueryLoading', false)
             }
         },
+        
         async loadSearchItems (vuexContext, searchKey) {
             vuexContext.commit('setQueryLoading', true)
             try {
@@ -341,7 +342,6 @@ export default {
         },
 
         async addBmShop (vuexContext, shopUrl) {
-            vuexContext.commit('setQueryLoading', true)
             try{
                 const key = genId(5)
                 const loadedUser = vuexContext.getters.user
@@ -351,15 +351,12 @@ export default {
                     id: key,
                     url: shopUrl
                 })
-                vuexContext.commit('setQueryLoading', false)
             } catch(e) {
-                vuexContext.commit('setQueryLoading', false)
                 console.log('[ERROR-addBmShop]', e)
             }
         },
 
         async addBmItem (vuexContext, itemUrl) {
-            vuexContext.commit('setQueryLoading', true)
             try{
                 const key = genId(5)      
                 const loadedUser = vuexContext.getters.user
@@ -369,9 +366,7 @@ export default {
                     id: key,
                     url: itemUrl
                 })
-                vuexContext.commit('setQueryLoading', false)
             } catch(e) {
-                vuexContext.commit('setQueryLoading', false)
                 console.log('[ERROR-addBmItem]', e)
             }
         },
@@ -417,7 +412,7 @@ export default {
             return state.loadedPersonalItems
         },
 
-        // Boolmark
+        // Bookmark
         bmShops(state) {
             return state.bmShops
         },

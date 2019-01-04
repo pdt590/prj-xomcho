@@ -170,6 +170,7 @@
         border-radius: 4px;
     }
     .carousel-3d-container {
+        z-index: 0;
         height: 35rem !important;
         background-color: #FFF;
         .carousel-3d-slide {
