@@ -2,10 +2,7 @@
     <div>
         <nav class="navbar is-fixed-top">
             <div class="navbar-brand">
-                <nuxt-link class="navbar-item" to="/">
-                    <no-ssr>
-                        <img class="v-main-logo" v-lazy="`/logo.png`" style='display: none' onload="this.style.display = 'block'" alt="brand_logo">
-                    </no-ssr>
+                <nuxt-link class="navbar-item v-logo" to="/">
                 </nuxt-link>
 
                 <div class="navbar-end">
@@ -40,7 +37,6 @@
                             </b-select>
                             <b-autocomplete
                                 v-model="searchKey"
-                                placeholder="Tìm kiếm"
                                 icon="magnify">
                                 <template slot="empty"></template>
                             </b-autocomplete>
@@ -113,9 +109,6 @@
         computed: {
             ...mapGetters(['countUnOpenedChats', 'user'])
         },
-        async mounted() {
-            this.user ? await this.$store.dispatch('loadCountUnOpenedChats') : ``
-        },
         data() {
             return {
                 searchKey: null,
@@ -180,6 +173,11 @@
     .navbar {
         border: none;
         border-bottom: 1px solid #D8D8D8;
+    }
+    .navbar-brand .v-logo {
+        background: url(/logo.png) no-repeat center center;
+        background-size: cover;
+        width: 10rem;
     }
     .navbar-end {
         display: flex;

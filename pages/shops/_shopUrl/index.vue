@@ -13,6 +13,7 @@
                     </div>
                 </div>
                 <!--  -->
+
                 <div style="position: sticky; top: 8rem;">   
                     <div class="card is-hidden-mobile">
                         <div class="card-content" v-if="loadedShop">
@@ -23,18 +24,6 @@
                                             <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
                                         </no-ssr>
                                     </figure>
-                                    <!-- <b-radio-button v-if="user"
-                                        v-model="isSaved"
-                                        :native-value="true"
-                                        type="is-danger">
-                                        <b-icon icon="bookmark-outline" style="margin-left: 0.2rem; color: #AAA"></b-icon>
-                                    </b-radio-button>
-                                    <b-radio-button v-else
-                                        v-model="isModalJoinActive"
-                                        :native-value="true"
-                                        type="is-danger">
-                                        <b-icon icon="bookmark-outline" style="margin-left: 0.2rem; color: #AAA"></b-icon>
-                                    </b-radio-button> -->
                                 </div>
                             </div>
                             <div class="has-text-centered">
@@ -70,9 +59,9 @@
                                             </b-icon>&nbsp;&nbsp;<span>{{loadedShop.phone}}</span>
                                         </a>
                                     </li>
-                                    <li v-if="loadedShop.facebook">
-                                        <a class="v-list-item" :href="loadedShop.facebook" target=_blank>
-                                            <b-icon icon="facebook-box"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.facebook | fmFacebook}}</span>
+                                    <li v-if="loadedShop.fbUrl">
+                                        <a class="v-list-item" :href="loadedShop.fbUrl" target=_blank>
+                                            <b-icon icon="facebook-box"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.fbName ? loadedShop.fbName : fbName}}</span>
                                         </a></li>
                                     <li v-if="loadedShop.email">
                                         <a class="v-list-item" :href="`mailto:${loadedShop.email}` + `?Subject=Xin%20Chào%20${loadedShop.title}`">
@@ -92,20 +81,36 @@
                                     </li>
                                 </ul>
                             </div>
-                            <hr v-if="user && user.id === loadedShop._creator.id">
-                            <div class="buttons" v-if="user && user.id === loadedShop._creator.id">
-                                <nuxt-link class="button is-info is-rounded is-outlined" :to="`/shops/${$route.params.shopUrl}/edit-shop`">
+                            <hr>
+                            <div class="buttons">
+                                <a class="button is-info is-rounded is-outlined" 
+                                    :href="`https://www.facebook.com/sharer/sharer.php?u=${baseUrl}/shops/${$route.params.shopUrl}`" 
+                                    target="_blank">
+                                    <b-icon icon="share-variant"></b-icon>
+                                    <strong>Chia sẻ</strong>
+                                </a>
+                                <a class="button is-info is-rounded is-outlined" :class="{'is-loading': queryLoading}"
+                                    @click="onSave"
+                                    v-if="!user || user && user.id !== loadedShop._creator.id">
+                                    <b-icon icon="bookmark" :type="isSaved ? `is-danger` : ``"></b-icon>
+                                    <strong>{{isSaved ? 'Hủy lưu' : 'Lưu'}} </strong>
+                                </a>
+                                <nuxt-link class="button is-info is-rounded is-outlined" 
+                                    :to="`/shops/${$route.params.shopUrl}/edit-shop`"
+                                    v-if="user && user.id === loadedShop._creator.id">
                                     <b-icon icon="settings-outline" size="is-small"></b-icon>
                                     <strong>Chỉnh sửa</strong>
                                 </nuxt-link>
                                 <nuxt-link class="button is-info is-rounded is-outlined" 
-                                    :to="`/shops/${$route.params.shopUrl}/new-item`">
+                                    :to="`/shops/${$route.params.shopUrl}/new-item`"
+                                    v-if="user && user.id === loadedShop._creator.id">
                                     <b-icon icon="plus-box-outline" size="is-small"></b-icon>
                                     <strong>Thêm sản phẩm</strong>
                                 </nuxt-link>
                             </div>
                         </div>
                     </div>
+
                     <!-- for mobile -->
                     <b-collapse class="card is-hidden-tablet" :open="true">
                         <header class="card-header" slot="trigger" slot-scope="props">
@@ -131,11 +136,6 @@
                             <div class="has-text-centered">
                                 <h5 class="title is-size-5">{{loadedShop.title}}</h5> 
                             </div>
-                            <!-- <b-radio-button
-                                native-value="Yep"
-                                type="is-danger">
-                                <b-icon icon="bookmark-outline" style="margin-left: 0.2rem; color: #AAA"></b-icon>
-                            </b-radio-button> -->
                             <hr>
                             <div class="menu">
                                 <p class="menu-label" style="font-size: 0.9rem">
@@ -163,9 +163,9 @@
                                             </b-icon>&nbsp;&nbsp;<span>{{loadedShop.phone}}</span>
                                         </a>
                                     </li>
-                                    <li v-if="loadedShop.facebook">
-                                        <a class="v-list-item" :href="loadedShop.facebook" target=_blank>
-                                            <b-icon icon="facebook-box"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.facebook | fmFacebook}}</span>
+                                    <li v-if="loadedShop.fbUrl">
+                                        <a class="v-list-item" :href="loadedShop.fbUrl" target=_blank>
+                                            <b-icon icon="facebook-box"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.fbName ? loadedShop.fbName : fbName}}</span>
                                         </a></li>
                                     <li v-if="loadedShop.email">
                                         <a class="v-list-item" :href="`mailto:${loadedShop.email}` + `?Subject=Xin%20Chào%20${loadedShop.title}`">
@@ -174,24 +174,33 @@
                                     </li>
                                 </ul>
                             </div>
-                            <hr v-if="user && user.id === loadedShop._creator.id">
-                            <div class="buttons" v-if="user && user.id === loadedShop._creator.id">
-                                <nuxt-link class="button is-info is-rounded is-outlined" :to="`/shops/${$route.params.shopUrl}/edit-shop`">
+                            <hr>
+                            <div class="buttons">
+                                <a class="button is-info is-rounded is-outlined" 
+                                    :href="`https://www.facebook.com/sharer/sharer.php?u=${baseUrl}/shops/${$route.params.shopUrl}`" 
+                                    target="_blank">
+                                    <b-icon icon="share-variant"></b-icon>
+                                    <strong>Chia sẻ</strong>
+                                </a>
+                                <a class="button is-info is-rounded is-outlined" :class="{'is-loading': queryLoading}"
+                                    @click="onSave"
+                                    v-if="!user || user && user.id !== loadedShop._creator.id">
+                                    <b-icon icon="bookmark" :type="isSaved ? `is-danger` : ``"></b-icon>
+                                    <strong>{{isSaved ? 'Hủy lưu' : 'Lưu'}} </strong>
+                                </a>
+                                <nuxt-link class="button is-info is-rounded is-outlined" 
+                                    :to="`/shops/${$route.params.shopUrl}/edit-shop`"
+                                    v-if="user && user.id === loadedShop._creator.id">
                                     <b-icon icon="settings-outline" size="is-small"></b-icon>
                                     <strong>Chỉnh sửa</strong>
                                 </nuxt-link>
                                 <nuxt-link class="button is-info is-rounded is-outlined" 
-                                    :to="`/shops/${$route.params.shopUrl}/new-item`">
+                                    :to="`/shops/${$route.params.shopUrl}/new-item`"
+                                    v-if="user && user.id === loadedShop._creator.id">
                                     <b-icon icon="plus-box-outline" size="is-small"></b-icon>
                                     <strong>Thêm sản phẩm</strong>
                                 </nuxt-link>
                             </div>
-                            <!-- <hr v-if="loadedShop.itemTypes">
-                            <b-field grouped group-multiline v-if="loadedShop.itemTypes">
-                                <div class="control" v-for="(type, i) in loadedShop.itemTypes" :key="i">
-                                    <b-tag size="is-medium" rounded>{{type}}</b-tag>
-                                </div>
-                            </b-field> -->
                         </div>
                     </b-collapse>
                     <!--  -->
@@ -224,7 +233,7 @@
                         </b-field>
                         <div class="columns is-multiline is-variable is-4" style="padding-top: 1rem">
                             <div class="column is-one-third-tablet is-one-quarter-desktop is-one-quarter-widescreen is-one-quarter-fullhd" 
-                                v-for="(item, i) in displayedItems" :key="i">
+                                v-for="item in displayedItems" :key="item.images[0].url">
                                 <v-card-item class="is-hidden-mobile" :itemData="item" />
                                 <v-card-item-mobile class="is-hidden-tablet" :itemData="item" />
                             </div>
@@ -247,9 +256,9 @@
                 </div>
             </div>
         </div>
-        <!-- <b-modal :active.sync="isModalJoinActive" has-modal-card>
+        <b-modal :active.sync="isModalJoinActive" has-modal-card>
             <v-modal-join />
-        </b-modal> -->
+        </b-modal>
     </div>
 </template>
 
@@ -263,12 +272,12 @@
             this.$initFbSDK()
         },
         computed: {
-            ...mapGetters(['user','loadedShop', 'loadedItems']),
+            ...mapGetters(['user', 'queryLoading', 'bmShops', 'loadedShop', 'loadedItems']),
             totalItem() {
                 return this.loadedItems.length
             },
             displayedItems() {
-                let loadedItems = deepCopy(this.loadedItems)
+                let loadedItems = this.loadedItems
                 if(this.displayItemType !== "Tất cả") {
                     loadedItems = loadedItems.filter(item => item.type === this.displayItemType)
                 }
@@ -287,6 +296,12 @@
                         break
                 }
                 return loadedItems.slice((this.currentItemPage-1)*this.perPage, this.currentItemPage*this.perPage)
+            },
+            fbName() {
+                return this.$options.filters.fmFacebook(this.loadedShop.fbUrl)
+            },
+            isSaved() {
+                return this.bmShops.find(bmShop => bmShop.url === this.loadedShop.url)
             }
         },
         async fetch({ store, params, error }) {
@@ -319,6 +334,8 @@
                 currentItemPage: 1,
                 perPage: 3,
 
+                isModalJoinActive: false,
+
                 baseUrl: process.env.baseUrl,
             }
         },
@@ -326,16 +343,25 @@
             onPagItemChange(pageCount) {
                 this.currentItemPage = pageCount
             },
+            async onSave() {
+                if(this.user && !this.isSaved) {
+                    await this.$store.dispatch('addBmShop', this.loadedShop.url)
+                }else if(this.user && this.isSaved) {
+                    await this.$store.dispatch('removeBmShop', this.isSaved.id)
+                }else {
+                    this.isModalJoinActive = true
+                }
+            }
         },
         head () {
             return {
                 title: this.loadedShop.title,
                 meta: [
                     { hid: 'description', name: 'description', content: this.loadedShop.description },
-                    { hid: 'og-url', property: 'og:url', content:`${process.env.baseUrl}${this.$route.path}` },
+                    { hid: 'og-url', property: 'og:url', content: `${process.env.baseUrl}${this.$route.path}` },
                     { hid: 'og-title', property: 'og:title', content: this.loadedShop.title },
                     { hid: 'og-description', property: 'og:description', content: this.loadedShop.description },
-                    { hid: 'og-image', property: 'og:image', content: this.loadedShop.logoImage.url},
+                    { hid: 'og-image', property: 'og:image', content: this.loadedShop.logoImage ? this.loadedShop.logoImage.url : `${process.env.baseUrl}/icon-user.png`},
                 ]
             }
         }

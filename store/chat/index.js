@@ -54,12 +54,13 @@ export default {
                 const chatId = genId_(10)
                 const messageId = genId_(10)
                 const now = new Date().toISOString()
-                const { itemUrl, itemTitle, partnerId, partnerUsername, fullname, phone, address, unit, content } = payload
+                const { itemUrl, itemTitle, partnerId, partnerUsername, fullname, phone, address, unit, price, content } = payload
                 const message = {
                     fullname: fullname,
                     phone: phone,
                     address: address,
                     unit: unit,
+                    price: price,
                     content: content,
                     fromId: user ? user.id : null,
                     fromUsername: user ? user.username : null,
@@ -103,6 +104,7 @@ export default {
                 return false
             }
         },
+
         async sendChatMessage (vuexContext, payload) {
             //vuexContext.commit('setChatLoading', true)
             try {
@@ -128,6 +130,7 @@ export default {
                 return false
             }
         },
+
         async loadChats (vuexContext) {
             vuexContext.commit('setChatLoading', true)
             try {
@@ -165,6 +168,7 @@ export default {
                 vuexContext.commit('setChatLoading', false)
             }
         },
+
         async loadMoreChats (vuexContext) {
             vuexContext.commit('setChatLoading', true)
             try {
@@ -202,6 +206,7 @@ export default {
                 vuexContext.commit('setChatLoading', false)
             }
         },
+
         async loadCountUnOpenedChats (vuexContext) {
             vuexContext.commit('setChatLoading', true)
             try {
@@ -212,6 +217,12 @@ export default {
                     count = count + 1
                 })
                 vuexContext.commit('setCountUnOpenedChats', count)
+                // In Navbar:
+                // async mounted() {
+                //     this.user ? await this.$store.dispatch('loadCountUnOpenedChats') : ``
+                // }
+                //
+                // In store:
                 // await db.ref(`chats/${user.id}`).orderByChild('state').equalTo(false).on('value', chatsData => {
                 //     let count = 0
                 //     chatsData.forEach(chatData => {
@@ -225,6 +236,7 @@ export default {
                 vuexContext.commit('setChatLoading', false)
             }
         },
+
         async setChatState (vuexContext, chatId) {
             vuexContext.commit('setChatLoading', true)
             try {
@@ -249,6 +261,7 @@ export default {
                 vuexContext.commit('setChatLoading', false)
             }
         },
+        
         async deleteChatsByUser (vuexContext, userId) {
             vuexContext.commit('setChatLoading', true)
             try {

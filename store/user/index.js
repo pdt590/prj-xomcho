@@ -8,7 +8,7 @@ export default {
     state: {
         authLoading: false,
         authError: null,
-        user: null,
+        user: null
     },
     mutations: {
         setAuthLoading (state, payload) {
@@ -28,6 +28,7 @@ export default {
         clearAuthError (vuexContext) {
             vuexContext.commit('clearAuthError')
         },
+        
         async signUserUp (vuexContext, payload) {
             vuexContext.commit('setAuthLoading', true)
             vuexContext.commit('clearAuthError')
@@ -66,6 +67,7 @@ export default {
                 return false
             }
         },
+
         async signUserIn (vuexContext, payload) {
             vuexContext.commit('setAuthLoading', true)
             vuexContext.commit('clearAuthError')
@@ -95,7 +97,8 @@ export default {
                 return false
             }
         },
-        initAuth (vuexContext) {
+
+        async initAuth (vuexContext) {
             let uid = Cookie.get("uid")
             let expirationDate = Cookie.get("expirationDate")
             if (new Date().getTime() > +expirationDate || !uid) {
@@ -109,6 +112,7 @@ export default {
                 new Date().getTime() + (2 * 3600 * 1000) // 1h expired time
             )
         },
+        
         async logOut (vuexContext) {
             await firebase.auth().signOut()
             Cookie.remove("uid")
@@ -119,7 +123,7 @@ export default {
                 localStorage.removeItem('auth-event')
             }
         },
-        //? DONE
+
         async updateUserContent (vuexContext, newUserContent) {
             vuexContext.commit('setAuthLoading', true)
             try{
@@ -152,6 +156,7 @@ export default {
                 console.log('[ERROR-updateUserContent]', e)
             }
         },
+
         async updateUserEmail (vuexContext, payload) {
             vuexContext.commit('setAuthLoading', true)
             try{
@@ -185,7 +190,7 @@ export default {
                 return false
             }
         },
-        //? DONE
+
         async updateUserPassword (vuexContext, payload) {
             vuexContext.commit('setAuthLoading', true)
             try{
@@ -210,7 +215,7 @@ export default {
                 return false
             }
         },
-        //? DONE
+
         async updateUserAvatar (vuexContext, newAvatar) {
             vuexContext.commit('setAuthLoading', true)
             try {
@@ -280,7 +285,7 @@ export default {
                 vuexContext.commit('setAuthLoading', false)
             }
         },
-        //? DONE
+
         async resetUserPassword (vuexContext, comfirmEmail) {
             vuexContext.commit('setAuthLoading', true)
             try{
@@ -297,6 +302,7 @@ export default {
                 return false
             }
         },
+
         async handleResetPassword (vuexContext, payload) {
             vuexContext.commit('setAuthLoading', true)
             try{
@@ -314,6 +320,7 @@ export default {
                 return false
             }
         },
+
         async handleVerifyEmail (vuexContext, actionCode) {
             vuexContext.commit('setAuthLoading', true)
             try{
@@ -340,7 +347,7 @@ export default {
                 return false
             }
         },
-        //? DONE
+
         async deleteUser (vuexContext, confirmPassword) {
             vuexContext.commit('setAuthLoading', true)
             try{
@@ -372,6 +379,7 @@ export default {
                 return false
             }  
         },
+
         async isCorrectPassword (vuexContext, confirmPassword) {
             try{
                 const user = firebase.auth().currentUser
@@ -387,6 +395,7 @@ export default {
                 return false
             }
         },
+
         async isUnique (vuexContext, payload) {
             try{
                 const item = await usersRef.orderByChild('email').equalTo(payload).once('value')

@@ -17,7 +17,6 @@ export default {
         }
     },
     actions: {
-        //? DONE
         async addShop (vuexContext, newShop) {
             vuexContext.commit('setShopLoading', true)
             try {
@@ -88,7 +87,7 @@ export default {
                 vuexContext.commit('setShopLoading', false)
             }
         },
-        //? DONE
+
         async updateShopContent (vuexContext, newShopContent) {
             vuexContext.commit('setShopLoading', true)
             try {
@@ -112,7 +111,7 @@ export default {
                 vuexContext.commit('setShopLoading', false)
             }
         },
-        //? DONE
+
         async updateShopTitle (vuexContext, newShopTitle) {
             vuexContext.commit('setShopLoading', true)
             try {
@@ -138,7 +137,7 @@ export default {
                 vuexContext.commit('setShopLoading', false)
             }
         },
-        //? DONE
+
         async updateShopLogo (vuexContext, newLogo) {
             vuexContext.commit('setShopLoading', true)
             try {
@@ -196,7 +195,7 @@ export default {
                 vuexContext.commit('setShopLoading', false)
             }
         },
-        //? DONE
+
         async updateShopCover (vuexContext, newCover) {
             vuexContext.commit('setShopLoading', true)
             try {
@@ -248,7 +247,7 @@ export default {
                 vuexContext.commit('setShopLoading', false)
             }
         },
-        //? DONE
+
         async deleteShop (vuexContext) {
             vuexContext.commit('setShopLoading', true)
             try {
@@ -271,7 +270,7 @@ export default {
                 vuexContext.commit('setShopLoading', false)
             }
         },
-        //? DONE
+
         async loadShop (vuexContext, shopUrl) {
             vuexContext.commit('setShopLoading', true)
             try {
@@ -287,6 +286,7 @@ export default {
                 vuexContext.commit('setShopLoading', false)
             }
         },
+        
         /**
          * Actions called by user
          */
@@ -309,6 +309,7 @@ export default {
                 vuexContext.commit('setShopLoading', false)
             }
         },
+        
         async deleteShopsByUser (vuexContext, userId) {
             vuexContext.commit('setShopLoading', true)
             try {
@@ -332,6 +333,30 @@ export default {
                 vuexContext.commit('setShopLoading', false)
             } catch(e) {
                 console.log('[ERROR-deleteShopsByUser]', e)
+                vuexContext.commit('setShopLoading', false)
+            }
+        },
+
+        async deleteSpecificShopByUser (vuexContext, shopUrl) {
+            vuexContext.commit('setShopLoading', true)
+            try {
+                const shopId = fetchId(shopUrl)
+                const shopData = await shopsRef.child(shopId).once('value')
+                const loadedShop = shopData.val()
+
+                const logoImage = loadedShop.logoImage
+                const coverImage = loadedShop.coverImage
+                await vuexContext.dispatch('deleteItemsByShop', shopId)
+                if(logoImage) {
+                    await firebase.storage().ref('shops/' + logoImage.metadata.name).delete()
+                }
+                if(coverImage) {
+                    await firebase.storage().ref('shops/' + coverImage.metadata.name).delete()
+                }
+                await shopsRef.child(shopId).remove()
+                vuexContext.commit('setShopLoading', false)
+            } catch(e) {
+                console.log('[ERROR-deleteSpecificShopByUser]', e)
                 vuexContext.commit('setShopLoading', false)
             }
         }

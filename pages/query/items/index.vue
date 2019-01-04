@@ -15,7 +15,7 @@
                             <span> Sản phẩm </span>
                         </template>
                         <div class="columns is-multiline is-variable is-2" style="padding-top: 1rem">
-                            <div class="column is-2" v-for="(item, i) in loadedItems" :key="i">
+                            <div class="column is-2" v-for="item in loadedItems" :key="item.id">
                                 <v-card-item class="is-hidden-mobile" :itemData="item" />
                                 <v-card-item-mobile class="is-hidden-tablet" :itemData="item" />
                             </div>

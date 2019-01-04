@@ -64,16 +64,26 @@
                                         </b-select>
                                     </b-field>
                                     
-                                    <b-field label="Facebook"
-                                        :type="$v.shopContent.facebook.$error ? `is-danger` : ``" 
-                                        :message="!$v.shopContent.facebook.url ? `Nhập địa chỉ facebook hợp lệ` : ``">
-                                        <b-input
-                                            type="url"
-                                            v-model.trim="shopContent.facebook"
-                                            @blur="$v.shopContent.facebook.$touch()"
-                                            icon="facebook-box"
-                                            placeholder="Link địa chỉ facebook của cửa hàng hoặc cá nhân">
-                                        </b-input>
+                                    <b-field grouped>
+                                        <b-field label="Facebook" expanded
+                                            :type="$v.shopContent.fbUrl.$error ? `is-danger` : ``" 
+                                            :message="!$v.shopContent.fbUrl.url ? `Nhập địa chỉ facebook hợp lệ` : ``">
+                                            <b-input
+                                                type="url"
+                                                v-model.trim="shopContent.fbUrl"
+                                                @blur="$v.shopContent.fbUrl.$touch()"
+                                                icon="facebook-box"
+                                                placeholder="Link địa chỉ facebook của cửa hàng hoặc cá nhân">
+                                            </b-input>
+                                        </b-field>
+                                        <b-field label="Tên Facebook">
+                                            <b-input
+                                                type="text"
+                                                v-model.trim="shopContent.fbName"
+                                                icon="facebook-box"
+                                                placeholder="Tên hiển thị Facebook">
+                                            </b-input>
+                                        </b-field>
                                     </b-field>
 
                                     <b-field label="Số điện thoại*" 
@@ -359,7 +369,7 @@
                 category: {
                     required
                 },
-                facebook: {
+                fbUrl: {
                     url
                 },
                 address: {
@@ -411,7 +421,7 @@
             },
             async onDelete() {
                 await this.$store.dispatch('deleteShop')
-                this.$router.push('/')
+                this.$router.push('/user/mgmt')
             },
             onLogoChange() {
                 this.shopPreviewLogo = null

@@ -32,7 +32,7 @@
 			</div>
 			<!-- For mobile -->
 			<div class="buttons is-hidden-tablet">
-				<!-- <a class="button is-danger is-rounded is-outlined" :class="{'is-loading': authLoading}" @click="onDelete(itemData.url)">Xóa</a> -->
+				<a class="button is-danger is-rounded is-outlined" @click="isModalConfirmActive=true">Xóa</a>
             	<nuxt-link class="button is-info is-rounded is-outlined" :to="`/shops/${genShopUrl(itemData._shop.title, itemData._shop.id)}/${itemData.url}/edit-item`" target="_blank">Sửa</nuxt-link>
 			</div>
 			<!--  -->
@@ -49,10 +49,13 @@
 		</div>
         <div class="media-right is-hidden-mobile">
 			<div class="buttons">
-				<!-- <a class="button is-danger is-rounded is-outlined" :class="{'is-loading': authLoading}" @click="onDelete(itemData.url)">Xóa</a> -->
+				<a class="button is-danger is-rounded is-outlined" @click="isModalConfirmActive=true">Xóa</a>
             	<nuxt-link class="button is-info is-rounded is-outlined" :to="`/shops/${genShopUrl(itemData._shop.title, itemData._shop.id)}/${itemData.url}/edit-item`" target="_blank">Sửa</nuxt-link>
 			</div>
         </div>
+		<b-modal :active.sync="isModalConfirmActive" has-modal-card>
+            <v-modal-confirm :itemData="itemData" />
+        </b-modal>
 	</div>
 </template>
 
@@ -68,7 +71,6 @@
             }
         },
         computed: {
-			...mapGetters(['authLoading']),
             isSale() {
                 return (this.itemData.oldPrice && Number(this.itemData.oldPrice) > Number(this.itemData.price) ? true : false)
             },
@@ -80,7 +82,7 @@
         },
 		data() {
 			return {
-				isModalSaleActive: false
+				isModalConfirmActive: false
 			}
 		},
         methods: {

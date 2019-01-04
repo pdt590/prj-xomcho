@@ -8,7 +8,7 @@
         </nav>
         <div class="card">
             <div class="card-content">
-                <b-tabs type="is-boxed" :animated="false" @change="onTabChange">
+                <b-tabs type="is-boxed" @change="onTabChange">
                     <b-tab-item>
                         <template slot="header">
                             <b-icon icon="store"></b-icon>
@@ -20,7 +20,8 @@
                             </b-select>
                         </b-field>
                         <div class="columns is-multiline is-variable is-1" style="padding-top: 1rem">
-                            <div class="column is-2" v-for="(shop, i) in displayedShops" :key="i">
+                            <div class="column is-2" v-for="shop in displayedShops" :key="shop.id">
+                                {{shop.id}}
                                 <v-card-shop class="is-hidden-mobile" :shopData="shop" />
                                 <v-card-shop-mobile class="is-hidden-tablet" :shopData="shop" />
                             </div>
@@ -46,9 +47,9 @@
                             </b-select>
                         </b-field>
                         <div class="columns is-multiline is-variable is-3" style="padding-top: 1rem">
-                            <div class="column is-2" v-for="(item, i) in displayedItems" :key="i">
+                            <div class="column is-2" v-for="item in displayedItems" :key="item.id">
                                 <v-card-item class="is-hidden-mobile" :itemData="item" />
-                                <v-card-item-mobile class="is-hidden-tablet" :itemData="item" />  
+                                <v-card-item-mobile class="is-hidden-tablet" :itemData="item" />
                             </div>
                         </div>
                         <b-pagination
@@ -127,6 +128,7 @@
                 sortItemType: 'Mới nhất',
 
                 loadedItems: [],
+                isItemsLoaded: false,
                 currentShopPage: 1,
                 currentItemPage: 1,
                 perPage: 18,
@@ -134,9 +136,10 @@
         },
         methods: { 
             async onTabChange(tabIndex) {
-                if(tabIndex==1) {
+                if(tabIndex==1 && !this.isItemsLoaded) {
                     this.loadedItems = await this.$store.dispatch('loadCategoryItems', this.$route.params.category)
                 }
+                this.isItemsLoaded = true
             },
             onPagShopChange(pageCount) {
                 this.currentShopPage = pageCount

@@ -26,7 +26,7 @@
 			</div>
 			<!-- For mobile -->
 			<div class="buttons is-hidden-tablet">
-				<!-- <a class="button is-danger is-rounded is-outlined" :class="{'is-loading': authLoading}" @click="onDelete(shopData.url)">Xóa</a> -->
+				<a class="button is-danger is-rounded is-outlined" @click="isModalConfirmActive=true">Xóa</a>
             	<nuxt-link class="button is-info is-rounded is-outlined" :to="`/shops/${shopData.url}/edit-shop`" target="_blank">Sửa</nuxt-link>
 			</div>
 			<!--  -->
@@ -43,10 +43,13 @@
 		</div>
         <div class="media-right is-hidden-mobile">
 			<div class="buttons">
-				<!-- <a class="button is-danger is-rounded is-outlined" :class="{'is-loading': authLoading}" @click="onDelete(shopData.url)">Xóa</a> -->
+				<a class="button is-danger is-rounded is-outlined" @click="isModalConfirmActive=true">Xóa</a>
             	<nuxt-link class="button is-info is-rounded is-outlined" :to="`/shops/${shopData.url}/edit-shop`" target="_blank">Sửa</nuxt-link>
 			</div>
         </div>
+		<b-modal :active.sync="isModalConfirmActive" has-modal-card>
+            <v-modal-confirm :shopData="shopData" />
+        </b-modal>
 	</div>
 </template>
 
@@ -62,10 +65,14 @@
             }
 		},
 		computed: {
-            ...mapGetters(['authLoading']),
             shopCategory() {
                 return categories.find(category => category.id === this.shopData.category).name
             }
+		},
+		data() {
+			return {
+				isModalConfirmActive: false
+			}
 		}
 	}
 </script>

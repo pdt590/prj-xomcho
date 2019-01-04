@@ -59,6 +59,7 @@
                                             <p v-if="message.unit && message.phone">   Số điện thoại: <strong>{{message.phone}}</strong></p>
                                             <p v-if="message.unit && message.address"> Địa chỉ: <strong>{{message.address}}</strong></p>
                                             <p v-if="message.unit">                    Số Lượng: <strong>{{message.unit}}</strong></p>
+                                            <p v-if="message.unit">                    Tổng tiền: <strong>{{message.price | fmPrice}}</strong></p>
                                             <p v-if="message.unit">&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</p>
                                             <p v-if="message.content">{{message.content}}</p>
                                         </div> 

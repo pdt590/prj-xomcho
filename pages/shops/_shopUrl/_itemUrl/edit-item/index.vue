@@ -332,7 +332,7 @@
             },
             async onDelete() {
                 await this.$store.dispatch('deleteItem', this.loadedItem.url)
-                this.$router.push('/')
+                this.$router.push(`/shops/${this.$route.params.shopUrl}`)
             },
             onFileChange() {
                 this.itemPreviewImages = []

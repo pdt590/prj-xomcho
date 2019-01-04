@@ -26,11 +26,10 @@ export default {
             state.loadedItems[itemIndex] = payload
         },
         removeItem(state, payload) {
-            state.loadedItems.splice(state.loadedItems.findIndex(item => fetchId(item.url) === payload), 1)
+            state.loadedItems.splice(state.loadedItems.findIndex(item => item.url === payload), 1)
         }
     },
     actions: {
-        //? DONE
         async addItem (vuexContext, newItem) {
             vuexContext.commit('setItemLoading', true)
             try {
@@ -89,6 +88,7 @@ export default {
                 vuexContext.commit('setItemLoading', false)
             }
         },
+
         async updateItemContent (vuexContext, newItemContent) {
             vuexContext.commit('setItemLoading', true)
             try {
@@ -105,7 +105,7 @@ export default {
                 vuexContext.commit('setItemLoading', false)
             }
         },
-        //? DONE
+
         async updateItemTitle (vuexContext, payload) {
             vuexContext.commit('setItemLoading', true)
             try {
@@ -128,7 +128,7 @@ export default {
                 vuexContext.commit('setItemLoading', false)
             }
         },
-        //? DONE
+
         async updateItemImages (vuexContext, payload) {
             vuexContext.commit('setItemLoading', true)
             try {
@@ -182,7 +182,7 @@ export default {
                 vuexContext.commit('setItemLoading', false)
             }
         },
-        //? DONE
+
         async deleteItem (vuexContext, itemUrl) {
             vuexContext.commit('setItemLoading', true)
             try {
@@ -194,14 +194,14 @@ export default {
                     }))
                 }
                 await itemsRef.child(itemId).remove()
-                vuexContext.commit('removeItem', itemId)
+                vuexContext.commit('removeItem', itemUrl)
                 vuexContext.commit('setItemLoading', false)
             } catch(e) {
                 console.log('[ERROR-deleteItem]', e)
                 vuexContext.commit('setItemLoading', false)
             }
         },
-        //? DONE
+
         async loadItems (vuexContext, shopUrl) {
             vuexContext.commit('setItemLoading', true)
             try {
@@ -220,6 +220,22 @@ export default {
                 vuexContext.commit('setItemLoading', false)
             }
         },
+
+        async loadItem (vuexContext, ItemUrl) {
+            vuexContext.commit('setItemLoading', true)
+            try {
+                const itemId = fetchId(ItemUrl)
+                const itemData = await itemsRef.child(itemId).once('value')
+                const itemObj = itemData.val()
+                const loadedItem = itemObj
+                vuexContext.commit('setItemLoading', false)
+                return loadedItem
+            } catch(e) {
+                console.log('[ERROR-loadItem]', e)
+                vuexContext.commit('setItemLoading', false)
+            }
+        },
+        
         /**
          * Actions called by Shop
          */
@@ -272,7 +288,7 @@ export default {
                 vuexContext.commit('setItemLoading', false)
             }
         },
-        //? DONE
+
         async deleteItemsByShop (vuexContext, shopId) {
             vuexContext.commit('setItemLoading', true)
             try {
@@ -322,6 +338,7 @@ export default {
                 vuexContext.commit('setItemLoading', false)
             }
         },
+        
         async deleteItemsByUser (vuexContext, userId) {
             vuexContext.commit('setItemLoading', true)
             try {
@@ -347,6 +364,26 @@ export default {
                 vuexContext.commit('setItemLoading', false)
             }
         },
+
+        async deleteSpecificItemByUser (vuexContext, itemUrl) {
+            vuexContext.commit('setItemLoading', true)
+            try {
+                const itemId = fetchId(itemUrl)
+                const itemData = await itemsRef.child(itemId).once('value')
+                const loadedItem = itemData.val()
+
+                if(loadedItem.images) {
+                    await Promise.all(loadedItem.images.map( async (image) => {
+                        await firebase.storage().ref('items/' + image.metadata.name).delete()
+                    }))
+                }
+                await itemsRef.child(itemId).remove()
+                vuexContext.commit('setItemLoading', false)
+            } catch(e) {
+                console.log('[ERROR-deleteSpecificItemByUser]', e)
+                vuexContext.commit('setItemLoading', false)
+            }
+        }
     },
     getters: {
         itemLoading(state) {

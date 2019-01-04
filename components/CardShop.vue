@@ -8,24 +8,15 @@
                     </no-ssr>
                 </figure>
                 <div class="content v-shop-description">
-                    <p class="is-size-6 has-text-black has-text-weight-normal" style="line-height: 1.5em;">
-                        {{shopData.description | fmString(60)}}
-                    </p>
+                    <p class="is-size-6 has-text-black has-text-weight-normal" style="line-height: 1.5em;">{{shopData.description | fmString(60)}}</p>
                 </div>
             </nuxt-link>
         </div>
         <div class="card-content">
             <p class="is-size-6 is-uppercase has-text-grey-light">{{shopCategory}}</p>
-                <nuxt-link :to="`/shops/${shopData.url}`">
-                    <span class="is-size-6 has-text-black has-text-weight-bold">{{shopData.title}} 🔥</span> 
-                </nuxt-link>
-            <!-- <b-taglist>
-                <b-tag rounded type="is-warning" 
-                    v-for="(type, i) in shopData.itemTypes.slice(0, 2)" :key="i">
-                    {{type}}
-                </b-tag>
-                <b-tag rounded type="is-warning">...</b-tag>
-            </b-taglist> -->
+            <nuxt-link :to="`/shops/${shopData.url}`">
+                <span class="is-size-6 has-text-black has-text-weight-bold">{{shopData.title}} 🔥</span> 
+            </nuxt-link>
         </div>
         <div class="card-footer v-card-footer">
             <b-icon icon="bookmark" class="has-text-grey-light"></b-icon>

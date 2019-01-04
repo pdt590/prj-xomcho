@@ -4,9 +4,6 @@
             <div class="container">
                 <div class="navbar-brand">
                     <nuxt-link class="navbar-item" to="/">
-                        <no-ssr>
-                            <img class="v-main-logo" v-lazy="`/logo.png`" style='display: none' onload="this.style.display = 'block'" alt="brand_logo">
-                        </no-ssr>
                     </nuxt-link>
                 </div>
                 <div class="navbar-menu">
@@ -21,7 +18,6 @@
                                 </b-select>
                                 <b-autocomplete
                                     v-model="searchKey"
-                                    placeholder="Tìm kiếm"
                                     icon="magnify">
                                     <template slot="empty"></template>
                                 </b-autocomplete>
@@ -90,11 +86,11 @@
                                 </nuxt-link>
                             </div>
                         </div>
-                        <a href="/" class="navbar-item" >Hướng dẫn</a>
+                        <a href="/" class="navbar-item">Hướng dẫn</a>
                     </div>
                     <div class="navbar-end" style="border-left: 1px solid #D8D8D8">
-                        <a href="/" class="navbar-item" style="padding-right: 1.5rem; padding-left: 1.5rem"><b-icon icon="facebook"></b-icon></a>
-                        <a href="/" class="navbar-item" style="padding-right: 1rem; padding-left: 1.5rem"><b-icon icon="youtube"></b-icon></a>
+                        <a href="https://www.facebook.com/XomCho-1646047958892133" target="_blank" class="navbar-item" style="padding-right: 1.5rem; padding-left: 1.5rem"><b-icon icon="facebook"></b-icon></a>
+                        <a href="https://www.youtube.com/channel/UCo_RIxRoNk5yVBsdLkAQy8w" target="_blank" class="navbar-item" style="padding-right: 1rem; padding-left: 1.5rem"><b-icon icon="youtube"></b-icon></a>
                     </div>
                 </div>
             </div>
@@ -120,9 +116,6 @@
     export default {
         computed: {
             ...mapGetters(['countUnOpenedChats', 'user'])
-        },
-        async mounted() {
-            this.user ? await this.$store.dispatch('loadCountUnOpenedChats') : ``
         },
         data() {
             return {
@@ -166,6 +159,11 @@
             //min-height: unset;
             //height: 3rem;
         }
+    }
+    .navbar-brand .navbar-item {
+        background: url(/logo.svg) no-repeat center center;
+        background-size: cover;
+        width: 10rem
     }
     .navbar-menu .v-navbar-center {
         display: flex;

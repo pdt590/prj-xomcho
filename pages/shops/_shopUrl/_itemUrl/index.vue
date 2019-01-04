@@ -35,9 +35,9 @@
                                             </b-icon>&nbsp;&nbsp;<span>{{loadedShop.phone}}</span>
                                         </a>
                                     </li>
-                                    <li v-if="loadedShop.facebook">
-                                        <a class="v-list-item" :href="loadedShop.facebook" target=_blank>
-                                            <b-icon icon="facebook-box"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.facebook | fmFacebook}}</span>
+                                    <li v-if="loadedShop.fbUrl">
+                                        <a class="v-list-item" :href="loadedShop.fbUrl" target=_blank>
+                                            <b-icon icon="facebook-box"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.fbName ? loadedShop.fbName : fbName}}</span>
                                         </a></li>
                                     <li v-if="loadedShop.email">
                                         <a class="v-list-item" :href="`mailto:${loadedShop.email}` + `?Subject=Xin%20Chào%20${loadedShop.title}`">
@@ -98,9 +98,9 @@
                                             </b-icon>&nbsp;&nbsp;<span>{{loadedShop.phone}}</span>
                                         </a>
                                     </li>
-                                    <li v-if="loadedShop.facebook">
-                                        <a class="v-list-item" :href="loadedShop.facebook" target=_blank>
-                                            <b-icon icon="facebook-box"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.facebook | fmFacebook}}</span>
+                                    <li v-if="loadedShop.fbUrl">
+                                        <a class="v-list-item" :href="loadedShop.fbUrl" target=_blank>
+                                            <b-icon icon="facebook-box"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.fbName ? loadedShop.fbName : fbName}}</span>
                                         </a></li>
                                     <li v-if="loadedShop.email">
                                         <a class="v-list-item" :href="`mailto:${loadedShop.email}` + `?Subject=Xin%20Chào%20${loadedShop.title}`">
@@ -149,10 +149,6 @@
                                             </b-taglist>
                                         </div>
                                     </b-field>
-                                    <!-- <div class="level-item has-text-grey-light">
-                                        <b-icon icon="eye-outline" size="is-small"></b-icon>&nbsp;200
-                                        <b-icon icon="comment-processing-outline" size="is-small" style="margin-left: 1rem"></b-icon>&nbsp;20
-                                    </div> -->
                                     <hr>
                                     <div class="menu">
                                         <p class="menu-label" style="font-size: 0.9rem">
@@ -197,29 +193,36 @@
                                                             <button class="button is-rounded is-outlined" @click="unit>1 ? unit=unit-1 : ``">-</button>
                                                         </div>
                                                         <b-input type="number" style="max-width: 3rem" v-model.number="unit"></b-input>
+                                                        <p class="control">
+                                                            <span class="button is-static">{{$options.filters.fmPrice(unit*loadedItem.price)}} {{loadedItem.currency}}</span>
+                                                        </p>
                                                         <div class="control">
                                                             <button class="button is-rounded is-outlined" @click="unit=unit+1">+</button>
                                                         </div>
                                                     </b-field>
                                                 </div>
-                                                <div class="control">
-                                                    <a class="button is-info is-rounded is-outlined" 
-                                                        @click="isModalSaleActive=true">
-                                                        <b-icon icon="shopping"></b-icon>
-                                                        <strong>Mua hàng</strong>
-                                                    </a>
-                                                </div>
-                                                <!-- <div class="control">
-                                                    <a class="button is-rounded is-danger is-outlined"
-                                                        @click="isModalJoinActive=true">
-                                                        <b-icon icon="heart-outline"></b-icon>
-                                                        <span>Lưu sản phẩm</span>
-                                                    </a>
-                                                </div> -->
                                             </b-field>
                                         </div>
+                                        
+                                        <div class="level-right">
+                                            <a class="button is-info is-rounded is-outlined"
+                                                v-if="!user || user && user.id !== loadedItem._creator.id"
+                                                @click="isModalSaleActive=true">
+                                                <b-icon icon="shopping"></b-icon>
+                                                <strong>Mua hàng</strong>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="level">
+                                        <div class="level-left"></div>
                                         <div class="level-right">
                                             <div class="buttons">
+                                                <a class="button is-info is-rounded is-outlined" :class="{'is-loading': queryLoading}"
+                                                    @click="onSave"
+                                                    v-if="!user || user && user.id !== loadedShop._creator.id">
+                                                    <b-icon icon="heart" :type="isSaved ? `is-danger` : ``"></b-icon>
+                                                    <strong>{{isSaved ? 'Hủy lưu' : 'Lưu'}}</strong>
+                                                </a>
                                                 <a class="button is-info is-rounded is-outlined" 
                                                     :href="`https://www.facebook.com/sharer/sharer.php?u=${baseUrl}/shops/${$route.params.shopUrl}/${$route.params.itemUrl}`" 
                                                     target="_blank">
@@ -251,9 +254,9 @@
         <b-modal :active.sync="isModalSaleActive" has-modal-card>
             <v-modal-sale :itemData="loadedItem" :unit= "unit" />
         </b-modal>
-        <!-- <b-modal :active.sync="isModalJoinActive" has-modal-card>
+        <b-modal :active.sync="isModalJoinActive" has-modal-card>
             <v-modal-join />
-        </b-modal> -->
+        </b-modal>
     </div>
 </template>
 
@@ -265,12 +268,18 @@
             this.$initFbSDK()
         },
         computed: {
-            ...mapGetters(['user', 'loadedShop']),
+            ...mapGetters(['user', 'queryLoading', 'bmItems', 'loadedShop']),
             loadedItem() {
                 return this.$store.getters.loadedItem(this.$route.params.itemUrl)
             },
             isSale() {
                 return (this.loadedItem.oldPrice && Number(this.loadedItem.oldPrice) > Number(this.loadedItem.price) ? true : false)
+            },
+            fbName() {
+                return this.$options.filters.fmFacebook(this.loadedShop.fbUrl)
+            },
+            isSaved() {
+                return this.bmItems.find(bmItem => bmItem.url === this.loadedItem.url)
             }
         },
         async fetch({ store, params, error }) {
@@ -298,6 +307,19 @@
                 isModalSaleActive: false, 
                 unit:  1,
                 baseUrl: process.env.baseUrl,
+
+                isModalJoinActive: false
+            }
+        },
+        methods: {
+            async onSave() {
+                if(this.user && !this.isSaved) {
+                    await this.$store.dispatch('addBmItem', this.loadedItem.url)
+                }else if(this.user && this.isSaved) {
+                    await this.$store.dispatch('removeBmItem', this.isSaved.id)
+                }else {
+                    this.isModalJoinActive = true
+                }
             }
         },
         head () {
@@ -305,7 +327,7 @@
                 title: this.loadedItem.title,
                 meta: [
                     { hid: 'description', name: 'description', content: this.loadedItem.description },
-                    { hid: 'og-url', property: 'og:url', content:`${process.env.baseUrl}${this.$route.path}` },
+                    { hid: 'og-url', property: 'og:url', content: `${process.env.baseUrl}${this.$route.path}` },
                     { hid: 'og-title', property: 'og:title', content: this.loadedItem.title },
                     { hid: 'og-description', property: 'og:description', content: this.loadedItem.description },
                     { hid: 'og-image', property: 'og:image', content: this.loadedItem.images[0].url },

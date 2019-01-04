@@ -15,7 +15,7 @@
                             <span> Cửa hàng </span>
                         </template>
                         <div class="columns is-multiline is-variable is-2" style="padding-top: 1rem">
-                            <div class="column is-2" v-for="(shop, i) in loadedShops" :key="i">
+                            <div class="column is-2" v-for="shop in loadedShops" :key="shop.id">
                                 <v-card-shop class="is-hidden-mobile" :shopData="shop" />
                                 <v-card-shop-mobile class="is-hidden-tablet" :shopData="shop" />
                             </div>

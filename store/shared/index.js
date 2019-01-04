@@ -4,7 +4,6 @@ const usersRef = db.ref('users')
 
 export default {
     actions: {
-        // nuxtServerInit should be only used for authentication
         async nuxtServerInit (vuexContext, { req, error }) {
             try {
                 let uid
@@ -36,6 +35,10 @@ export default {
                     ...userObj
                 }
                 vuexContext.commit('setUser', userProfile)
+
+                await vuexContext.dispatch('loadBmShops')
+                await vuexContext.dispatch('loadBmItems')
+                await vuexContext.dispatch('loadCountUnOpenedChats')
             }catch (e) {
                 vuexContext.commit('setAuthError', e)
                 console.log('[ERROR-nuxtServerInit]', e)

@@ -26,16 +26,26 @@
                                 </b-field>
                             </b-field>
                             
-                            <b-field label="Facebook"
-                                :type="$v.shopData.facebook.$error ? `is-danger` : ``" 
-                                :message="!$v.shopData.facebook.url ? `Nhập địa chỉ facebook hợp lệ` : ``">
-                                <b-input
-                                    type="url"
-                                    v-model.trim="shopData.facebook"
-                                    @blur="$v.shopData.facebook.$touch()"
-                                    icon="facebook-box"
-                                    placeholder="Link địa chỉ facebook của cửa hàng hoặc cá nhân">
-                                </b-input>
+                            <b-field grouped>
+                                <b-field label="Facebook" expanded
+                                    :type="$v.shopData.fbUrl.$error ? `is-danger` : ``" 
+                                    :message="!$v.shopData.fbUrl.url ? `Nhập địa chỉ facebook hợp lệ` : ``">
+                                    <b-input
+                                        type="url"
+                                        v-model.trim="shopData.fbUrl"
+                                        @blur="$v.shopData.fbUrl.$touch()"
+                                        icon="facebook-box"
+                                        placeholder="Link địa chỉ facebook của cửa hàng hoặc cá nhân">
+                                    </b-input>
+                                </b-field>
+                                <b-field label="Tên Facebook">
+                                    <b-input
+                                        type="text"
+                                        v-model.trim="shopData.fbName"
+                                        icon="facebook-box"
+                                        placeholder="Tên hiển thị Facebook">
+                                    </b-input>
+                                </b-field>
                             </b-field>
 
                             <b-field label="Số điện thoại*" 
@@ -201,7 +211,8 @@
                 shopData: {
                     title: null,
                     category: 'nong-nghiep',
-                    facebook: null,
+                    fbUrl: null,
+                    fbName: null,
                     address: null,
                     province: 'Hà Nội',
                     phone: null,
@@ -225,7 +236,7 @@
                 category: {
                     required
                 },
-                facebook: {
+                fbUrl: {
                     url
                 },
                 address: {
