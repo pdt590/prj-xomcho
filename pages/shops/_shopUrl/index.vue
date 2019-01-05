@@ -89,7 +89,7 @@
                                     <b-icon icon="share-variant"></b-icon>
                                     <strong>Chia sẻ</strong>
                                 </a>
-                                <a class="button is-info is-rounded is-outlined" :class="{'is-loading': queryLoading}"
+                                <a class="button is-info is-rounded is-outlined"
                                     @click="onSave"
                                     v-if="!user || user && user.id !== loadedShop._creator.id">
                                     <b-icon icon="bookmark" :type="isSaved ? `is-danger` : ``"></b-icon>
@@ -182,7 +182,7 @@
                                     <b-icon icon="share-variant"></b-icon>
                                     <strong>Chia sẻ</strong>
                                 </a>
-                                <a class="button is-info is-rounded is-outlined" :class="{'is-loading': queryLoading}"
+                                <a class="button is-info is-rounded is-outlined"
                                     @click="onSave"
                                     v-if="!user || user && user.id !== loadedShop._creator.id">
                                     <b-icon icon="bookmark" :type="isSaved ? `is-danger` : ``"></b-icon>
@@ -272,7 +272,7 @@
             this.$initFbSDK()
         },
         computed: {
-            ...mapGetters(['user', 'queryLoading', 'bmShops', 'loadedShop', 'loadedItems']),
+            ...mapGetters(['user', 'bmShops', 'loadedShop', 'loadedItems']),
             totalItem() {
                 return this.loadedItems.length
             },

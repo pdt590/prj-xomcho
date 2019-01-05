@@ -217,7 +217,7 @@
                                         <div class="level-left"></div>
                                         <div class="level-right">
                                             <div class="buttons">
-                                                <a class="button is-info is-rounded is-outlined" :class="{'is-loading': queryLoading}"
+                                                <a class="button is-info is-rounded is-outlined"
                                                     @click="onSave"
                                                     v-if="!user || user && user.id !== loadedShop._creator.id">
                                                     <b-icon icon="heart" :type="isSaved ? `is-danger` : ``"></b-icon>
@@ -268,7 +268,7 @@
             this.$initFbSDK()
         },
         computed: {
-            ...mapGetters(['user', 'queryLoading', 'bmItems', 'loadedShop']),
+            ...mapGetters(['user', 'bmItems', 'loadedShop']),
             loadedItem() {
                 return this.$store.getters.loadedItem(this.$route.params.itemUrl)
             },

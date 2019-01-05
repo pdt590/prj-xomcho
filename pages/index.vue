@@ -4,7 +4,7 @@
             <div class="container" >
                 <div class="tile is-ancestor">
                     <div class="tile is-6 is-vertical is-parent">
-                        <div class="tile is-child v-sologan">
+                        <div class="tile is-child v-sologan has-text-centered">
                             <p class="title is-2">
                                 Xóm Chợ
                             </p>
