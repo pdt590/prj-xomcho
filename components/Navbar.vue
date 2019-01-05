@@ -86,7 +86,7 @@
                                 </nuxt-link>
                             </div>
                         </div>
-                        <a href="/" class="navbar-item">Hướng dẫn</a>
+                        <a href="https://www.youtube.com/playlist?list=PLq7CUZMJ2F8Ukt0tLtt0noHlww6RvzIMk" target="_blank" class="navbar-item">Hướng dẫn</a>
                     </div>
                     <div class="navbar-end" style="border-left: 1px solid #D8D8D8">
                         <a href="https://www.facebook.com/XomCho-1646047958892133" target="_blank" class="navbar-item" style="padding-right: 1.5rem; padding-left: 1.5rem"><b-icon icon="facebook"></b-icon></a>

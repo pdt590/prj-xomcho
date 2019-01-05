@@ -2,21 +2,27 @@
     <div>
         <section class="section">
             <div class="container" >
-                <div class="level">
-                    <div class="level-item has-text-centered">
-                        <div>
-                            <p class="title is-2 is-spaced">
+                <div class="tile is-ancestor">
+                    <div class="tile is-6 is-vertical is-parent">
+                        <div class="tile is-child has-text-centered">
+                            <p class="title is-2">
                                 Xóm Chợ
                             </p>
                             <p class="subtitle is-5">
                                 Chợ bán hàng Online
                             </p>
-                            <br>
-                            <nuxt-link class="button is-large is-info is-rounded is-outlined" to="/shops/new-shop">Tạo cửa hàng</nuxt-link>
+                            <nuxt-link class="button is-large is-info is-rounded is-outlined" to="/shops/new-shop">Tạo cửa hàng</nuxt-link> 
+                        </div>
+                        <div class="tile is-child has-text-centered">
+                            <iframe allowfullscreen
+                                src="https://www.youtube.com/embed/xeIkB8XXaVk?autoplay=1">   
+                            </iframe>
                         </div>
                     </div>
-                    <div class="level-item">
-                        <img src="/home.svg" style="max-height: 30rem">
+                    <div class="tile is-parent">
+                        <div class="tile is-child">
+                            <img src="/home.svg" style="max-height: 30rem">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -170,13 +176,26 @@
         border-radius: 4px;
     }
     .carousel-3d-container {
-        z-index: 0;
-        height: 35rem !important;
+        min-height: 80vh !important;
         background-color: #FFF;
         .carousel-3d-slide {
             border: none;
             background-color: #FFF;
-            height: 35rem !important;
+            min-height: 80vh !important;
+        }
+    }
+
+    @media screen and (min-width: 768px) {
+        iframe {
+            width: 20vw;
+            height: 26vh;
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        iframe {
+            width: 90vw;
+            height: 30vh;
         }
     }
 </style>

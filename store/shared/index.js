@@ -35,7 +35,7 @@ export default {
                     ...userObj
                 }
                 vuexContext.commit('setUser', userProfile)
-
+                
                 await vuexContext.dispatch('loadBmShops')
                 await vuexContext.dispatch('loadBmItems')
                 await vuexContext.dispatch('loadCountUnOpenedChats')

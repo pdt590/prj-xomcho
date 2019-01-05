@@ -86,6 +86,11 @@ export default {
                     new Date().getTime() + (2 * 3600 * 1000) // 2h expired time
                 )
                 vuexContext.commit('setUser', userProfile)
+
+                await vuexContext.dispatch('loadBmShops')
+                await vuexContext.dispatch('loadBmItems')
+                await vuexContext.dispatch('loadCountUnOpenedChats')
+
                 vuexContext.commit('setAuthLoading', false)
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
@@ -118,6 +123,11 @@ export default {
             Cookie.remove("uid")
             Cookie.remove("expirationDate")
             vuexContext.commit('setUser', null)
+            
+            vuexContext.commit('setBmShops', [])
+            vuexContext.commit('setBmItems', [])
+            vuexContext.commit('setCountUnOpenedChats', 0)
+
             if(process.client) {
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
