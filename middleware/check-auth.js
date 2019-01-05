@@ -1,3 +1,3 @@
-export default async function( context ) {
-    process.client ? await context.store.dispatch('initAuth') : ``
+export default async function( { store } ) {
+    process.client ? await store.dispatch('initAuth') : ``
 }

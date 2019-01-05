@@ -22,7 +22,7 @@ module.exports = {
 			{ hid: 'og-url', property: 'og:url', content: `${process.env.baseUrl}` },
 			{ hid: 'og-title', property: 'og:title', content: 'Xóm Chợ - Chợ bán hàng Online' },
 			{ hid: 'og-description', property: 'og:description', content: 'Chợ bán hàng Online - Trang tạo cửa hàng bán hàng Online - Công cụ hỗ trợ bán hàng Online' },
-			{ hid: 'og-image', property: 'og:image', content: `${process.env.BASE_URL}/og-image.png`}
+			{ hid: 'og-image', property: 'og:image', content: `${process.env.BASE_URL}/fb-cover-min.png`}
 		],
 		script: [
 			{ src: 'https://connect.facebook.net/vi_VN/all.js' }
