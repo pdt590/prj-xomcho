@@ -4,20 +4,20 @@
             <div class="container" >
                 <div class="tile is-ancestor">
                     <div class="tile is-6 is-vertical is-parent">
-                        <div class="tile is-child has-text-centered">
+                        <div class="tile is-child v-sologan">
                             <p class="title is-2">
                                 Xóm Chợ
                             </p>
                             <p class="subtitle is-5">
-                                Chợ bán hàng Online
+                                Chợ bán hàng Online - Công cụ kinh doanh Online
                             </p>
                             <nuxt-link class="button is-large is-info is-rounded is-outlined" to="/shops/new-shop">Tạo cửa hàng</nuxt-link> 
                         </div>
-                        <div class="tile is-child has-text-centered">
+                        <!-- <div class="tile is-child has-text-centered">
                             <iframe allowfullscreen
                                 src="https://www.youtube.com/embed/xeIkB8XXaVk?autoplay=1">   
                             </iframe>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="tile is-parent">
                         <div class="tile is-child">
@@ -165,6 +165,12 @@
         justify-content: space-between;
         align-items: flex-end;
         margin-bottom: 1.5rem;
+    }
+    .v-sologan {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
     }
     .v-category {
         height: 5vw;

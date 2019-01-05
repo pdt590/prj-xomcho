@@ -87,8 +87,7 @@ export default {
                 )
                 vuexContext.commit('setUser', userProfile)
 
-                await vuexContext.dispatch('loadBmShops')
-                await vuexContext.dispatch('loadBmItems')
+                await vuexContext.dispatch('loadBookmarks')
                 await vuexContext.dispatch('loadCountUnOpenedChats')
 
                 vuexContext.commit('setAuthLoading', false)

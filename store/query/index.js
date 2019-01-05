@@ -263,13 +263,22 @@ export default {
         },
 
         // Bookmark
-        async loadBmShops (vuexContext) {
+        async loadBookmarks (vuexContext) {
             vuexContext.commit('setQueryLoading', true)
             try {
                 const loadedUser = vuexContext.getters.user
                 const userId = loadedUser.id
-                const bmShopsData = await db.ref(`bookmarks/${userId}/shops`).orderByKey().once('value')
-                const bmShopsObj = bmShopsData.val()
+                const bmData = await db.ref('bookmarks').child(userId).orderByKey().once('value')
+                const bmObj = bmData.val()
+                if(!bmObj) {
+                    vuexContext.commit('setBmShops', [])
+                    vuexContext.commit('setBmItems', [])
+                    vuexContext.commit('setQueryLoading', false)
+                    return
+                }
+                const bmShopsObj = bmObj.shops
+                const bmItemsObj = bmObj.items
+                let loadedBmItems = []
                 let loadedBmShops = []
                 for (let key in bmShopsObj) {
                     loadedBmShops.push({
@@ -277,33 +286,18 @@ export default {
                         ...bmShopsObj[key]
                     })
                 }
-                vuexContext.commit('setBmShops', loadedBmShops)
-                vuexContext.commit('setQueryLoading', false)
-            } catch(e) {
-                vuexContext.commit('setQueryLoading', false)
-                console.log('[ERROR-loadbmShops]', e)
-            }
-        },
-
-        async loadBmItems (vuexContext) {
-            vuexContext.commit('setQueryLoading', true)
-            try {
-                const loadedUser = vuexContext.getters.user
-                const userId = loadedUser.id
-                const bmItemsData = await db.ref(`bookmarks/${userId}/items`).orderByKey().once('value')
-                const bmItemsObj = bmItemsData.val()
-                let loadedBmItems = []
                 for (let key in bmItemsObj) {
                     loadedBmItems.push({
                         id: key,
                         ...bmItemsObj[key]
                     })
                 }
+                vuexContext.commit('setBmShops', loadedBmShops)
                 vuexContext.commit('setBmItems', loadedBmItems)
                 vuexContext.commit('setQueryLoading', false)
             } catch(e) {
                 vuexContext.commit('setQueryLoading', false)
-                console.log('[ERROR-loadBmItems]', e)
+                console.log('[ERROR-loadBookmarks]', e)
             }
         },
 
