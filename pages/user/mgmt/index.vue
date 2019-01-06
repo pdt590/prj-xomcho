@@ -49,7 +49,7 @@
                                     <b-icon icon="shopping"></b-icon>
                                     <span> Cửa hàng đã lưu </span>
                                 </template>
-                                <div style="padding-top: 1rem;" v-for="shop in fullBmShops" :key="shop.url">
+                                <div style="padding-top: 1rem;" v-for="shop in loadedBmShops" :key="shop.url">
                                     <v-card-shop-mobile :shopData="shop"/>
                                 </div>
                             </b-tab-item>
@@ -59,7 +59,7 @@
                                     <b-icon icon="shopping"></b-icon>
                                     <span> Sản phẩm đã lưu </span>
                                 </template>
-                                <div style="padding-top: 1rem;" v-for="item in fullBmItems" :key="item.url">
+                                <div style="padding-top: 1rem;" v-for="item in loadedBmItems" :key="item.url">
                                     <v-card-item-mobile :itemData="item"/>
                                 </div>
                             </b-tab-item>
@@ -77,20 +77,25 @@
     export default {
         middleware: 'auth',
         computed: {
-            ...mapGetters(['user', 'queryLoading', 'loadedPersonalShops', 'loadedPersonalItems', 'fullBmShops', 'fullBmItems']),
+            ...mapGetters(['user', 'queryLoading', 'fullBmShops', 'fullBmItems']),
         },
-        async fetch({ store, error}) {
+        async asyncData({ store, error}) {
             try {
-                await store.dispatch('loadPersonalShops')
+                const loadedPersonalShops = await store.dispatch('loadPersonalShops')
+                return {
+                    loadedPersonalShops: loadedPersonalShops
+                }
             }catch(e) {
                 console.log('[ERROR-user/mgmt]', e)
-                error({ statusCode: 500, message: 'Lỗi loadPersonalShops và loadPersonalItems' })
+                error({ statusCode: 500, message: 'Lỗi loadPersonalShops' })
             }
         },
         data() {
             return {
+                loadedPersonalItems: [],
                 loadedBmShops: [],
-                loadedBmItem: [],
+                loadedBmItems: [],
+
                 isItemsLoaded: false,
                 isBmItemsLoaded: false,
                 isBmShopsLoaded: false
@@ -99,13 +104,13 @@
         methods: {
             async onTabChange(tabIndex) {
                 if(tabIndex==1 && !this.isItemsLoaded) {
-                    await this.$store.dispatch('loadPersonalItems')
+                    this.loadedPersonalItems = await this.$store.dispatch('loadPersonalItems')
                     this.isItemsLoaded = true
                 }else if(tabIndex==2 && !this.isBmShopsLoaded) {
-                    await this.$store.dispatch('loadFullBmShops')
+                    this.loadedBmShops = await this.$store.dispatch('loadFullBmShops')
                     this.isBmShopsLoaded = true
                 }else if(tabIndex==3 && !this.isBmItemsLoaded) {
-                    await this.$store.dispatch('loadFullBmItems')
+                    this.loadedBmItems = await this.$store.dispatch('loadFullBmItems')
                     this.isBmItemsLoaded = true
                 }
             }

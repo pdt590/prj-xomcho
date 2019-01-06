@@ -8,8 +8,6 @@ const itemsRef = db.ref('items')
 export default {
     state: {
         queryLoading: false,
-        loadedPersonalShops: [],
-        loadedPersonalItems: [],
         bmShops: [],
         bmItems: [],
         fullBmShops: [],
@@ -18,14 +16,6 @@ export default {
     mutations: {
         setQueryLoading(state, payload) {
             state.queryLoading = payload
-        },
-
-        // Personal
-        setPersonalShops (state, payload) {
-            state.loadedPersonalShops = payload
-        },
-        setPersonalItems(state, payload) {
-            state.loadedPersonalItems = payload
         },
 
         // Bookmark
@@ -67,7 +57,6 @@ export default {
                     loadedShops.push(shopObj)
                 })
                 loadedShops.reverse()
-                vuexContext.commit('setPersonalShops', loadedShops)
                 vuexContext.commit('setQueryLoading', false)
                 return loadedShops
             } catch(e) {
@@ -87,7 +76,6 @@ export default {
                     loadedItems.push(itemObj)
                 })
                 loadedItems.reverse()
-                vuexContext.commit('setPersonalItems', loadedItems)
                 vuexContext.commit('setQueryLoading', false)
                 return loadedItems
             } catch(e) {
@@ -301,6 +289,19 @@ export default {
             }
         },
 
+        async deleteBookmarks (vuexContext, userId) {
+            vuexContext.commit('setQueryLoading', true)
+            try {
+                await db.ref('bookmarks').child(userId).remove()
+                vuexContext.commit('setBmShops', [])
+                vuexContext.commit('setBmItems', [])
+                vuexContext.commit('setQueryLoading', false)
+            } catch(e) {
+                vuexContext.commit('setQueryLoading', false)
+                console.log('[ERROR-loadBookmarks]', e)
+            }
+        },
+
         async loadFullBmShops (vuexContext) {
             vuexContext.commit('setQueryLoading', true)
             try {
@@ -310,8 +311,8 @@ export default {
                     const loadedShop = await vuexContext.dispatch('loadShop', bmShop.url)
                     loadedBmShops.push(loadedShop)
                 }
-                vuexContext.commit('setFullBmShops', loadedBmShops)
                 vuexContext.commit('setQueryLoading', false)
+                return loadedBmShops
             } catch(e) {
                 vuexContext.commit('setQueryLoading', false)
                 console.log('[ERROR-loadFullbmShops]', e)
@@ -327,8 +328,8 @@ export default {
                     const loadedItem = await vuexContext.dispatch('loadItem', bmItem.url)
                     loadedBmItems.push(loadedItem)
                 }
-                vuexContext.commit('setFullBmItems', loadedBmItems)
                 vuexContext.commit('setQueryLoading', false)
+                return loadedBmItems
             } catch(e) {
                 vuexContext.commit('setQueryLoading', false)
                 console.log('[ERROR-loadFullBmItems]', e)
@@ -398,26 +399,12 @@ export default {
             return state.queryLoading
         },
 
-        // Personal
-        loadedPersonalShops(state) {
-            return state.loadedPersonalShops
-        },
-        loadedPersonalItems(state) {
-            return state.loadedPersonalItems
-        },
-
         // Bookmark
         bmShops(state) {
             return state.bmShops
         },
         bmItems(state) {
             return state.bmItems
-        },
-        fullBmShops(state) {
-            return state.fullBmShops
-        },
-        fullBmItems(state) {
-            return state.fullBmItems
         }
     }
 }

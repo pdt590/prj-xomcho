@@ -84,7 +84,7 @@
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
                                     <b-field label="Mật khẩu*"
                                         :type="$v.confirmPasswordForNewEmail.$error || !responseNewEmail ? `is-danger` : ``" 
-                                        :message=" !$v.confirmPasswordForNewEmail.minLen ? `Tối thiểu 6 kí tự`: !responseNewEmail ? `Nhập mật khẩu hợp lệ` : ``">
+                                        :message=" !$v.confirmPasswordForNewEmail.minLen ? `Tối thiểu 6 kí tự`: ``">
                                         <b-input
                                             type="password"
                                             v-model.trim="confirmPasswordForNewEmail"
@@ -93,8 +93,8 @@
                                         </b-input>
                                     </b-field>
                                     <b-field label="Email mới*" 
-                                        :type="$v.userEmail.$error ? `is-danger` : ``" 
-                                        :message="!$v.userEmail.email ? `Nhập email hợp lệ` : !$v.userEmail.isValidEmail ? `` : ``">
+                                        :type="!responseNewEmail ? `is-danger` : ``" 
+                                        :message="!$v.userEmail.email ? `Nhập email hợp lệ` : ``">
                                         <b-input
                                             type="email"
                                             v-model.trim="userEmail"
@@ -239,7 +239,8 @@
                                     <div class="level-right">
                                         <button class="button is-danger is-rounded" 
                                             :class="{'is-loading': authLoading}"
-                                            :disabled="$v.confirmPasswordForDeleting.$invalid" 
+                                            :disabled="$v.confirmPasswordForDeleting.$invalid"
+                                            type="submit"
                                             @click.prevent="onDelete">
                                             Xóa tài khoản
                                         </button>
@@ -256,7 +257,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { isImage, deepCopy } from '~/plugins/util-helpers'
+    import { isImage, deepCopy, authMessage } from '~/plugins/util-helpers'
     import { provinces } from '~/plugins/util-lists'
     import { required, email, numeric, sameAs, not, minLength } from 'vuelidate/lib/validators'
 
@@ -277,7 +278,7 @@
             }
         },
         computed: {
-            ...mapGetters(['authLoading', 'user'])
+            ...mapGetters(['authError', 'authLoading', 'user'])
         },
         data() {
             return {
@@ -365,10 +366,16 @@
                     confirmPassword: this.confirmPasswordForNewEmail,
                     newEmail: this.userEmail
                 })
-                if(!this.responseNewEmail) {
+                if(this.responseNewEmail) {
                     this.$toast.open({
                         duration: 3000,
-                        message: 'Mật khẩu không chính xác',
+                        message: 'Kiểm tra hộp thư mới để kích hoạt tài khoản',
+                        type: 'is-warning'
+                    })
+                }else {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: authMessage(this.authError),
                         type: 'is-danger'
                     })
                     return
@@ -383,7 +390,7 @@
                 if(!this.responseNewPassword) {
                     this.$toast.open({
                         duration: 3000,
-                        message: 'Mật khẩu không chính xác',
+                        message: authMessage(this.authError),
                         type: 'is-danger'
                     })
                     return
@@ -399,7 +406,7 @@
                 if(!this.responseDeleting) {
                     this.$toast.open({
                         duration: 3000,
-                        message: 'Mật khẩu không chính xác',
+                        message: authMessage(this.authError),
                         type: 'is-danger'
                     })
                     return

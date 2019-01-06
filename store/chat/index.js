@@ -262,10 +262,11 @@ export default {
             }
         },
         
-        async deleteChatsByUser (vuexContext, userId) {
+        async deleteChats (vuexContext, userId) {
             vuexContext.commit('setChatLoading', true)
             try {
                 await db.ref('chats').child(userId).remove()
+                vuexContext.commit('setCountUnOpenedChats', 0)
                 vuexContext.commit('setChatLoading', false)
             } catch(e) {
                 console.log('[ERROR-deleteChatsByUser]', e)

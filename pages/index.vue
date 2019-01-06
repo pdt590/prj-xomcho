@@ -9,15 +9,15 @@
                                 Xóm Chợ
                             </p>
                             <p class="subtitle is-5">
-                                Chợ bán hàng Online - Công cụ kinh doanh Online
+                                Chợ bán hàng Online - Công cụ bán hàng Online
                             </p>
                             <nuxt-link class="button is-large is-info is-rounded is-outlined" to="/shops/new-shop">Tạo cửa hàng</nuxt-link> 
                         </div>
-                        <!-- <div class="tile is-child has-text-centered">
+                        <div class="tile is-child has-text-centered">
                             <iframe allowfullscreen
                                 src="https://www.youtube.com/embed/xeIkB8XXaVk?autoplay=1">   
                             </iframe>
-                        </div> -->
+                        </div>
                     </div>
                     <div class="tile is-parent">
                         <div class="tile is-child">

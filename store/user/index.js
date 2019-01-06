@@ -45,7 +45,8 @@ export default {
                     updatedDate: new Date().toISOString()
                 }
                 await usersRef.child(user.uid).set(userProfile)
-                // * persistent storage using cookie (or localstorage or firebase.auth().onAuthStateChanged())
+                // * Persistent storage using cookie (or localstorage 
+                // * firebase.auth().onAuthStateChanged())
                 Cookie.set("uid", user.uid)
                 Cookie.set(
                     "expirationDate",
@@ -75,10 +76,33 @@ export default {
                 const { user } = await firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
                 const userData = await usersRef.child(user.uid).once('value') 
                 const userObj = userData.val()
-                const userProfile = {
-                    id: user.uid,
-                    ...userObj
+                let userProfile = {}
+                // Check in case of restoring email
+                if(payload.email !== userObj.email) {
+                    await usersRef.child(user.uid).update({
+                        email: payload.email,
+                        isActive: true
+                    })
+                    userProfile = {
+                        ...userObj,
+                        id: user.uid,
+                        email: payload.email,
+                        isActive: true
+                    }
+                }else {
+                    userProfile = {
+                        ...userObj,
+                        id: user.uid
+                    }
                 }
+                // Check in case of verifying email
+                if(!userObj.isActive && user.emailVerified) {
+                    await usersRef.child(user.uid).update({
+                        isActive: true
+                    })
+                    userProfile.isActive = true
+                }
+
                 // * persistent storage using cookie (or localstorage or firebase.auth().onAuthStateChanged())
                 Cookie.set("uid", user.uid)
                 Cookie.set(
@@ -106,7 +130,7 @@ export default {
             let uid = Cookie.get("uid")
             let expirationDate = Cookie.get("expirationDate")
             if (new Date().getTime() > +expirationDate || !uid) {
-                console.log("No token or invalid token")
+                //console.log("No token or invalid token")
                 vuexContext.dispatch("logOut")
                 return
             }
@@ -168,6 +192,7 @@ export default {
 
         async updateUserEmail (vuexContext, payload) {
             vuexContext.commit('setAuthLoading', true)
+            vuexContext.commit('clearAuthError')
             try{
                 let user = firebase.auth().currentUser
                 const loadedUser = vuexContext.getters.user
@@ -181,11 +206,14 @@ export default {
                 await user.reauthenticateAndRetrieveDataWithCredential(credential)
                 user = firebase.auth().currentUser // RetrieveData
                 await user.updateEmail(newEmail)
+                await user.sendEmailVerification()
                 await usersRef.child(userId).update({
+                    isActive: false,
                     email: newEmail
                 })
                 vuexContext.commit('setUser', {
                     ...loadedUser,
+                    isActive: false,
                     email: newEmail
                 })
                 vuexContext.commit('setAuthLoading', false)
@@ -202,6 +230,7 @@ export default {
 
         async updateUserPassword (vuexContext, payload) {
             vuexContext.commit('setAuthLoading', true)
+            vuexContext.commit('clearAuthError')
             try{
                 let user = firebase.auth().currentUser
                 const confirmPassword = payload.confirmPassword
@@ -295,11 +324,12 @@ export default {
             }
         },
 
-        async resetUserPassword (vuexContext, comfirmEmail) {
+        async resetUserPassword (vuexContext, comfirmedEmail) {
             vuexContext.commit('setAuthLoading', true)
+            vuexContext.commit('clearAuthError')
             try{
-                const user = firebase.auth()
-                await user.sendPasswordResetEmail(comfirmEmail)
+                const auth = firebase.auth()
+                await auth.sendPasswordResetEmail(comfirmedEmail)
                 vuexContext.commit('setAuthLoading', false)
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
@@ -314,6 +344,7 @@ export default {
 
         async handleResetPassword (vuexContext, payload) {
             vuexContext.commit('setAuthLoading', true)
+            vuexContext.commit('clearAuthError')
             try{
                 const auth = firebase.auth()
                 await auth.confirmPasswordReset(payload.actionCode, payload.newPassword)
@@ -332,19 +363,22 @@ export default {
 
         async handleVerifyEmail (vuexContext, actionCode) {
             vuexContext.commit('setAuthLoading', true)
+            vuexContext.commit('clearAuthError')
             try{
                 const auth = firebase.auth()
                 await auth.applyActionCode(actionCode)
                 // user.reload()
                 const loadedUser = vuexContext.getters.user
-                const userId = loadedUser.id
-                await usersRef.child(userId).update({
-                    isActive: true
-                })
-                vuexContext.commit('setUser', {
-                    ...loadedUser,
-                    isActive: true
-                })
+                if(loadedUser) {
+                    const userId = loadedUser.id
+                    await usersRef.child(userId).update({
+                        isActive: true
+                    })
+                    vuexContext.commit('setUser', {
+                        ...loadedUser,
+                        isActive: true
+                    })
+                }
                 vuexContext.commit('setAuthLoading', false)
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
@@ -357,23 +391,52 @@ export default {
             }
         },
 
+        async handleRecoverEmail (vuexContext, actionCode) {
+            vuexContext.commit('setAuthLoading', true)
+            vuexContext.commit('clearAuthError')
+            try{
+                vuexContext.getters.user ? vuexContext.dispatch('logOut') : ``
+                
+                const auth = firebase.auth()
+                // Confirm the action code is valid
+                const info = await auth.checkActionCode(actionCode)
+                // Get the restored email address.
+                const restoredEmail = info['data']['email']
+                // Revert to the old email
+                await auth.applyActionCode(actionCode)
+                // Reset password
+                await auth.sendPasswordResetEmail(restoredEmail)
+                vuexContext.commit('setAuthLoading', false)
+                return true
+            } catch(e) {
+                vuexContext.commit('setAuthError', e)
+                vuexContext.commit('setAuthLoading', false)
+                console.log('[ERROR-handleRecoverEmail]', e)
+                return false
+            }
+        },
+
         async deleteUser (vuexContext, confirmPassword) {
             vuexContext.commit('setAuthLoading', true)
+            vuexContext.commit('clearAuthError')
             try{
-                let user = firebase.auth().currentUser
                 const loadedUser = vuexContext.getters.user
                 const userId = loadedUser.id
                 await vuexContext.dispatch('deleteItemsByUser', userId)
                 await vuexContext.dispatch('deleteShopsByUser', userId)
-                await vuexContext.dispatch('deleteChatsByUser', userId)
+                await vuexContext.dispatch('deleteChats', userId)
+                await vuexContext.dispatch('deleteBookmarks', userId)
+                await usersRef.child(userId).remove()
+
+                let user = firebase.auth().currentUser
                 const credential = await firebase.auth.EmailAuthProvider.credential(
                     user.email,
                     confirmPassword
                 )
                 await user.reauthenticateAndRetrieveDataWithCredential(credential)
-                user = firebase.auth().currentUser // RetrieveData
+                user = firebase.auth().currentUser
                 await user.delete()
-                await usersRef.child(userId).remove()
+
                 Cookie.remove("uid")
                 Cookie.remove("expirationDate")
                 vuexContext.commit('setUser', null)

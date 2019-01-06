@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <!-- resetPassword -->
         <div class="columns" v-if="mode === `resetPassword`">
             <div class="column is-4 is-offset-4">
                 <form>
@@ -43,10 +44,26 @@
                 </form>
             </div>
         </div>
+
+        <!-- verifyEmail -->
         <div class="has-text-centered" style="padding-top: 5rem" v-else-if="mode === `verifyEmail`">
             <div v-if="!authLoading && emailVerified!==null">
-                <h1 class="title is-3" v-if="emailVerified">Kích hoạt tài khoản thành công</h1>
-                <h1 class="title is-3" v-else>Mã kích hoạt không hợp lệ 😰!</h1>
+                <p class="title is-3" v-if="emailVerified">Kích hoạt tài khoản thành công!</p>
+                <p class="title is-3" v-else>Mã kích hoạt không hợp lệ 😰!</p>
+                <br>
+                <nuxt-link class="subtitle is-4 has-text-link" to="/">Quay vể trang chủ</nuxt-link>
+            </div>
+        </div>
+
+        <!-- verifyEmail -->
+        <div class="has-text-centered" style="padding-top: 5rem" v-else-if="mode === `recoverEmail`">
+            <div v-if="!authLoading && emailRecoverd!==null">
+                <p v-if="emailRecoverd">
+                    <span class="title is-3">Khôi phục email thành công!</span><br>
+                    <span class="title is-3">Kiểm tra hộp thư để đổi mật khẩu</span>
+                </p>
+                <p class="title is-3" v-else>Mã kích hoạt không hợp lệ 😰!</p>
+                <br>
                 <nuxt-link class="subtitle is-4 has-text-link" to="/">Quay vể trang chủ</nuxt-link>
             </div>
         </div>
@@ -56,7 +73,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import { authMessage } from '~/plugins/util-helpers'
-    import { required, sameAs, minLength } from 'vuelidate/lib/validators'
+    import { required, sameAs, minLength, email } from 'vuelidate/lib/validators'
 
     export default {
         validate ( { store } ) {
@@ -64,13 +81,14 @@
             return (user && user.isActive ? false : true)
         },
         async mounted() {
-            // created runs in both Client and Server
             if(this.mode === 'verifyEmail' ) {
                 this.emailVerified = await this.$store.dispatch('handleVerifyEmail', this.actionCode)
+            }else if (this.mode === 'recoverEmail') {
+                this.emailRecoverd = await this.$store.dispatch('handleRecoverEmail', this.actionCode)
             }
         },
         computed: {
-            ... mapGetters(['authError', 'authLoading']),
+            ... mapGetters(['user', 'authError', 'authLoading']),
             mode() {
                 return this.$route.query.mode
             },
@@ -85,10 +103,12 @@
             return {
                 formData: {
                     newPassword: null,
-                    confirmNewPassword: null
+                    confirmNewPassword: null,
                 },
+                restoredEmail: null,
                 response: null,
-                emailVerified: null
+                emailVerified: null,
+                emailRecoverd: null,
             }
         },
         validations: {
@@ -101,7 +121,11 @@
                     required,
                     minlen: minLength(6),
                     isValidPassword: sameAs('newPassword')
-                },
+                }
+            },
+            restoredEmail: {
+                required,
+                email
             }
         },
         methods: {

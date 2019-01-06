@@ -142,7 +142,7 @@ export function authMessage(arg) {
             message = 'Mã xác nhận không hợp lệ'
             break
         default:
-            message = arg
+            message = 'Lỗi'
     }
     return message
 }
