@@ -129,16 +129,17 @@ export default {
         async initAuth (vuexContext) {
             let uid = Cookie.get("uid")
             let expirationDate = Cookie.get("expirationDate")
-            if (new Date().getTime() > +expirationDate || !uid) {
-                //console.log("No token or invalid token")
-                vuexContext.dispatch("logOut")
-                return
+            if(uid) {
+                if (new Date().getTime() > +expirationDate) {
+                    vuexContext.dispatch("logOut")
+                }else {
+                    // re-new expirationDate
+                    Cookie.set(
+                        "expirationDate",
+                        new Date().getTime() + (2 * 3600 * 1000) // 2h expired time
+                    )
+                }
             }
-            // re-new expirationDate
-            Cookie.set(
-                "expirationDate",
-                new Date().getTime() + (2 * 3600 * 1000) // 1h expired time
-            )
         },
         
         async logOut (vuexContext) {

@@ -51,7 +51,7 @@
                 <p class="title is-3" v-if="emailVerified">Kích hoạt tài khoản thành công!</p>
                 <p class="title is-3" v-else>Mã kích hoạt không hợp lệ 😰!</p>
                 <br>
-                <nuxt-link class="subtitle is-4 has-text-link" to="/">Quay vể trang chủ</nuxt-link>
+                <nuxt-link class="subtitle is-4 has-text-link" to="/">Quay về trang chủ</nuxt-link>
             </div>
         </div>
 
@@ -64,7 +64,7 @@
                 </p>
                 <p class="title is-3" v-else>Mã kích hoạt không hợp lệ 😰!</p>
                 <br>
-                <nuxt-link class="subtitle is-4 has-text-link" to="/">Quay vể trang chủ</nuxt-link>
+                <nuxt-link class="subtitle is-4 has-text-link" to="/">Quay về trang chủ</nuxt-link>
             </div>
         </div>
     </div>
