@@ -63,28 +63,6 @@
                                             <option v-for="(category, i) in categories" :key="i" :value="category.id">{{category.name}}</option>
                                         </b-select>
                                     </b-field>
-                                    
-                                    <b-field grouped>
-                                        <b-field label="Facebook" expanded
-                                            :type="$v.shopContent.fbUrl.$error ? `is-danger` : ``" 
-                                            :message="!$v.shopContent.fbUrl.url ? `Nhập địa chỉ facebook hợp lệ` : ``">
-                                            <b-input
-                                                type="url"
-                                                v-model.trim="shopContent.fbUrl"
-                                                @blur="$v.shopContent.fbUrl.$touch()"
-                                                icon="facebook-box"
-                                                placeholder="Link địa chỉ facebook của cửa hàng hoặc cá nhân">
-                                            </b-input>
-                                        </b-field>
-                                        <b-field label="Tên Facebook">
-                                            <b-input
-                                                type="text"
-                                                v-model.trim="shopContent.fbName"
-                                                icon="facebook-box"
-                                                placeholder="Tên hiển thị Facebook">
-                                            </b-input>
-                                        </b-field>
-                                    </b-field>
 
                                     <b-field label="Số điện thoại*" 
                                         :type="$v.shopContent.phone.$error ? `is-danger` : ``" 
@@ -124,6 +102,40 @@
                                         </b-field>
                                     </b-field>
                                     
+                                    <b-field label="Website"
+                                        :type="$v.shopContent.webUrl.$error ? `is-danger` : ``" 
+                                        :message="!$v.shopContent.webUrl.url ? `Nhập website hợp lệ` : ``">
+                                        <b-input
+                                            type="url"
+                                            v-model.trim="shopContent.webUrl"
+                                            @blur="$v.shopContent.webUrl.$touch()"
+                                            icon="web"
+                                            placeholder="Website của cửa hàng hoặc cá nhân">
+                                        </b-input>
+                                    </b-field>
+
+                                    <b-field grouped>
+                                        <b-field label="Facebook" expanded
+                                            :type="$v.shopContent.fbUrl.$error ? `is-danger` : ``" 
+                                            :message="!$v.shopContent.fbUrl.url ? `Nhập địa chỉ facebook hợp lệ` : ``">
+                                            <b-input
+                                                type="url"
+                                                v-model.trim="shopContent.fbUrl"
+                                                @blur="$v.shopContent.fbUrl.$touch()"
+                                                icon="facebook-box"
+                                                placeholder="Link địa chỉ facebook của cửa hàng hoặc cá nhân">
+                                            </b-input>
+                                        </b-field>
+                                        <b-field label="Tên Facebook">
+                                            <b-input
+                                                type="text"
+                                                v-model.trim="shopContent.fbName"
+                                                icon="facebook-box"
+                                                placeholder="Tên hiển thị Facebook">
+                                            </b-input>
+                                        </b-field>
+                                    </b-field>
+
                                     <b-field label="Danh mục sản phẩm*"
                                         :type="$v.shopContent.itemTypes.$error ? `is-danger` : ``">
                                         <b-taginput
@@ -141,7 +153,7 @@
                                             type="textarea"
                                             v-model.trim="shopContent.description"
                                             @blur="$v.shopContent.description.$touch()"
-                                            maxlength="300">
+                                            maxlength="400">
                                         </b-input>
                                     </b-field>
                                 </form>
@@ -369,9 +381,6 @@
                 category: {
                     required
                 },
-                fbUrl: {
-                    url
-                },
                 address: {
                     required
                 },
@@ -384,6 +393,12 @@
                 },
                 email: {
                     email
+                },
+                fbUrl: {
+                    url
+                },
+                webUrl: {
+                    url
                 },
                 itemTypes: {
                     required,

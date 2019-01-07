@@ -59,13 +59,19 @@
                                             </b-icon>&nbsp;&nbsp;<span>{{loadedShop.phone}}</span>
                                         </a>
                                     </li>
-                                    <li v-if="loadedShop.fbUrl">
-                                        <a class="v-list-item" :href="loadedShop.fbUrl" target=_blank>
-                                            <b-icon icon="facebook-box"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.fbName ? loadedShop.fbName : fbName}}</span>
-                                        </a></li>
                                     <li v-if="loadedShop.email">
                                         <a class="v-list-item" :href="`mailto:${loadedShop.email}` + `?Subject=Xin%20Chào%20${loadedShop.title}`">
                                             <b-icon icon="email"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.email}}</span> 
+                                        </a>
+                                    </li>
+                                    <li v-if="loadedShop.webUrl">
+                                        <a class="v-list-item" :href="loadedShop.webUrl" target=_blank>
+                                            <b-icon icon="web"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.webUrl | fmString(30)}}</span>
+                                        </a>
+                                    </li>
+                                    <li v-if="loadedShop.fbUrl">
+                                        <a class="v-list-item" :href="loadedShop.fbUrl" target=_blank>
+                                            <b-icon icon="facebook-box"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.fbName ? loadedShop.fbName : fbName}}</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -163,13 +169,19 @@
                                             </b-icon>&nbsp;&nbsp;<span>{{loadedShop.phone}}</span>
                                         </a>
                                     </li>
-                                    <li v-if="loadedShop.fbUrl">
-                                        <a class="v-list-item" :href="loadedShop.fbUrl" target=_blank>
-                                            <b-icon icon="facebook-box"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.fbName ? loadedShop.fbName : fbName}}</span>
-                                        </a></li>
                                     <li v-if="loadedShop.email">
                                         <a class="v-list-item" :href="`mailto:${loadedShop.email}` + `?Subject=Xin%20Chào%20${loadedShop.title}`">
                                             <b-icon icon="email"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.email}}</span> 
+                                        </a>
+                                    </li>
+                                    <li v-if="loadedShop.webUrl">
+                                        <a class="v-list-item" :href="loadedShop.webUrl" target=_blank>
+                                            <b-icon icon="web"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.webUrl | fmString(30)}}</span>
+                                        </a>
+                                    </li>
+                                    <li v-if="loadedShop.fbUrl">
+                                        <a class="v-list-item" :href="loadedShop.fbUrl" target=_blank>
+                                            <b-icon icon="facebook-box"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.fbName ? loadedShop.fbName : fbName}}</span>
                                         </a>
                                     </li>
                                 </ul>

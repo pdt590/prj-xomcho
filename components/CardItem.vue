@@ -8,7 +8,10 @@
                     </no-ssr>
 				</figure>
 			</nuxt-link>
-            <div class="v-item-pin-new" v-if="isNew">
+            <div class="v-item-pin-soldout" v-if="!itemData.isAvailable">
+                Hết hàng
+            </div>
+            <div class="v-item-pin-new" v-else-if="isNew">
                 Mới
             </div>
             <div class="v-item-pin-sale" v-else-if="isSale">
@@ -106,6 +109,28 @@
 			img {
 				border-top-left-radius: 0.3rem;
 				border-top-right-radius: 0.3rem;
+			}
+            .v-item-pin-soldout {
+				position: absolute;
+				top: 5%;
+				right: -1rem;
+                text-align: center;
+				background-color: rgb(60, 60, 60);
+                color: white;
+                padding: 0.8rem 0;
+                width: 40%;
+                &:before {
+                    content: '';
+                    position: absolute;
+                    width: 0;
+                    height: 0;
+                    border-width: 0.5rem;
+                    border-style: solid;
+                    border-top-color: rgb(60, 60, 60);
+                    border-left-color: rgb(60, 60, 60);
+                    top: 100%;
+                    right: 0;
+                }
 			}
 			.v-item-pin-new {
 				position: absolute;

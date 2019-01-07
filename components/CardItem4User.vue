@@ -16,8 +16,9 @@
 						{{itemData.title}}
 					</nuxt-link>
 				</strong> &bull;
-				<small class="is-uppercase">{{itemData.category}}</small>
-				<b-tag rounded type="is-success" v-if="isNew">Mới</b-tag>
+				<small class="is-uppercase">{{itemCategory}}</small>
+				<b-tag rounded type="is-black" v-if="!itemData.isAvailable">Hết hàng</b-tag>
+				<b-tag rounded type="is-success" v-else-if="isNew">Mới</b-tag>
 				<b-tag rounded type="is-danger" v-else-if="isSale">Giảm {{Math.floor((itemData.oldPrice - itemData.price)*100/itemData.oldPrice)}}%</b-tag>
 				<br class="is-hidden-mobile">
 				<nuxt-link class="has-text-grey" :to="`/shops/${genShopUrl(itemData._shop.title, itemData._shop.id)}`">
@@ -60,8 +61,9 @@
 </template>
 
 <script>
-	import { genUrl } from '~/plugins/util-helpers'
 	import { mapGetters } from 'vuex'
+	import { categories } from '~/plugins/util-lists'
+	import { genUrl } from '~/plugins/util-helpers'
 
 	export default {
 		props: {
@@ -71,6 +73,9 @@
             }
         },
         computed: {
+			itemCategory() {
+                return categories.find(category => category.id === this.itemData.category).name
+            },
             isSale() {
                 return (this.itemData.oldPrice && Number(this.itemData.oldPrice) > Number(this.itemData.price) ? true : false)
             },

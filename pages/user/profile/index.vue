@@ -387,7 +387,13 @@
                     confirmPassword: this.confirmPasswordForNewPassword,
                     newPassword: this.userPassword
                 })
-                if(!this.responseNewPassword) {
+                if(this.responseNewPassword) {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: 'Mật khẩu thay đổi thành công',
+                        type: 'is-success'
+                    })
+                }else {
                     this.$toast.open({
                         duration: 3000,
                         message: authMessage(this.authError),

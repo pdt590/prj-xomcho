@@ -16,7 +16,8 @@
 						{{itemData.title}}
 					</nuxt-link>
 				</strong>
-				<b-tag rounded type="is-success" v-if="isNew">Mới</b-tag>
+				<b-tag rounded type="is-black" v-if="!itemData.isAvailable">Hết hàng</b-tag>
+				<b-tag rounded type="is-success" v-else-if="isNew">Mới</b-tag>
 				<b-tag rounded type="is-danger" v-else-if="isSale">Giảm {{Math.floor((itemData.oldPrice - itemData.price)*100/itemData.oldPrice)}}%</b-tag>
 				<br>
 				<small>

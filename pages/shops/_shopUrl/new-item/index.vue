@@ -94,10 +94,10 @@
                                 </b-field>
                             </b-field>
 
-                            <b-field label="Đơn vị sản phẩm cho giá ở trên" expanded>
+                            <b-field label="Ghi chú" expanded>
                                 <b-input 
-                                    v-model="itemData.unit"
-                                    icon="unity"
+                                    v-model="itemData.note"
+                                    icon="note"
                                     placeholder="ví dụ: 1Kg / 1 cái / 1 mớ rau">
                                 </b-input>
                             </b-field>
@@ -108,7 +108,7 @@
                                     type="textarea"
                                     v-model.trim="itemData.description"
                                     @blur="$v.itemData.description.$touch()"
-                                    maxlength="300">
+                                    maxlength="600">
                                 </b-input>
                             </b-field>
                             
@@ -194,10 +194,11 @@
                     price: null,
                     oldPrice: null,
                     currency: 'đ',
-                    unit: null,
+                    note: null,
                     type: null,
                     description: null,
-                    images: []
+                    images: [],
+                    isAvailable: true
                 },
                 currencies: currencies,
                 previewImages: []

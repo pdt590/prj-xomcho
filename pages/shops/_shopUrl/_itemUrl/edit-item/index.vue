@@ -106,10 +106,10 @@
                                         </b-field>
                                     </b-field>
 
-                                    <b-field label="Đơn vị sản phẩm cho giá ở trên" expanded>
+                                    <b-field label="Ghi chú" expanded>
                                         <b-input 
-                                            v-model="itemContent.unit"
-                                            icon="unity"
+                                            v-model="itemContent.note"
+                                            icon="note"
                                             placeholder="ví dụ: 1Kg / 1 cái / 1 mớ rau">
                                         </b-input>
                                     </b-field>
@@ -120,8 +120,14 @@
                                             type="textarea"
                                             v-model.trim="itemContent.description"
                                             @blur="$v.itemContent.description.$touch()"
-                                            maxlength="300">
+                                            maxlength="600">
                                         </b-input>
+                                    </b-field>
+
+                                    <b-field label="Trạng thái">
+                                        <b-switch v-model="itemContent.isAvailable" type="is-info">
+                                            {{ itemContent.isAvailable ? `Còn hàng` : `Hết hàng` }}
+                                        </b-switch>
                                     </b-field>
                                 </form>
                                 <div class="level is-mobile">

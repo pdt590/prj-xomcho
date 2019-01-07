@@ -35,13 +35,19 @@
                                             </b-icon>&nbsp;&nbsp;<span>{{loadedShop.phone}}</span>
                                         </a>
                                     </li>
-                                    <li v-if="loadedShop.fbUrl">
-                                        <a class="v-list-item" :href="loadedShop.fbUrl" target=_blank>
-                                            <b-icon icon="facebook-box"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.fbName ? loadedShop.fbName : fbName}}</span>
-                                        </a></li>
                                     <li v-if="loadedShop.email">
                                         <a class="v-list-item" :href="`mailto:${loadedShop.email}` + `?Subject=Xin%20Chào%20${loadedShop.title}`">
                                             <b-icon icon="email"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.email}}</span> 
+                                        </a>
+                                    </li>
+                                    <li v-if="loadedShop.webUrl">
+                                        <a class="v-list-item" :href="loadedShop.webUrl" target=_blank>
+                                            <b-icon icon="web"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.webUrl | fmString(30)}}</span>
+                                        </a>
+                                    </li>
+                                    <li v-if="loadedShop.fbUrl">
+                                        <a class="v-list-item" :href="loadedShop.fbUrl" target=_blank>
+                                            <b-icon icon="facebook-box"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.fbName ? loadedShop.fbName : fbName}}</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -98,13 +104,19 @@
                                             </b-icon>&nbsp;&nbsp;<span>{{loadedShop.phone}}</span>
                                         </a>
                                     </li>
-                                    <li v-if="loadedShop.fbUrl">
-                                        <a class="v-list-item" :href="loadedShop.fbUrl" target=_blank>
-                                            <b-icon icon="facebook-box"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.fbName ? loadedShop.fbName : fbName}}</span>
-                                        </a></li>
                                     <li v-if="loadedShop.email">
                                         <a class="v-list-item" :href="`mailto:${loadedShop.email}` + `?Subject=Xin%20Chào%20${loadedShop.title}`">
                                             <b-icon icon="email"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.email}}</span> 
+                                        </a>
+                                    </li>
+                                    <li v-if="loadedShop.webUrl">
+                                        <a class="v-list-item" :href="loadedShop.webUrl" target=_blank>
+                                            <b-icon icon="web"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.webUrl | fmString(30)}}</span>
+                                        </a>
+                                    </li>
+                                    <li v-if="loadedShop.fbUrl">
+                                        <a class="v-list-item" :href="loadedShop.fbUrl" target=_blank>
+                                            <b-icon icon="facebook-box"></b-icon>&nbsp;&nbsp;<span>{{loadedShop.fbName ? loadedShop.fbName : fbName}}</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -134,7 +146,7 @@
                             </div>
                             <div class="column is-7" >
                                 <div class="v-item-description">
-                                    <h4 class="title is-size-4 is-spaced">{{loadedItem.title}}</h4>
+                                    <h4 class="title is-size-4 is-spaced">{{loadedItem.title}} <span class="has-text-danger" v-if="!loadedItem.isAvailable">(Hết hàng)</span></h4>
                                     <b-field grouped group-multiline>
                                         <div class="control" v-if="loadedItem.brand">
                                             <b-taglist attached>
@@ -158,7 +170,7 @@
                                             <li>
                                                 <a v-if="isSale">
                                                     <p class="title is-4 has-text-danger">
-                                                        {{loadedItem.price | fmPrice}} {{loadedItem.currency}}<span class="is-size-5 has-text-dark" v-if="loadedItem.unit">&nbsp;({{loadedItem.unit}})</span>
+                                                        {{loadedItem.price | fmPrice}} {{loadedItem.currency}}<span class="is-size-5 has-text-dark" v-if="loadedItem.note">&nbsp; &bull; {{loadedItem.note}}</span>
                                                     </p>
                                                     <p class="subtitle is-6 has-text-grey-light">
                                                         <strike>{{loadedItem.oldPrice | fmPrice}} {{loadedItem.currency}}</strike>&nbsp;&nbsp;<span>{{Math.floor((loadedItem.oldPrice - loadedItem.price)*-100/loadedItem.oldPrice)}}%</span>
@@ -166,7 +178,7 @@
                                                 </a>
                                                 <a v-else>
                                                     <p class="title is-4 has-text-danger">
-                                                        {{loadedItem.price | fmPrice}} {{loadedItem.currency}}<span class="is-size-5 has-text-dark" v-if="loadedItem.unit">&nbsp;({{loadedItem.unit}})</span>
+                                                        {{loadedItem.price | fmPrice}} {{loadedItem.currency}}<span class="is-size-5 has-text-dark" v-if="loadedItem.note">&nbsp; &bull; {{loadedItem.note}}</span>
                                                     </p>
                                                 </a>
                                             </li>
@@ -184,7 +196,7 @@
                                         </ul>
                                     </div>
                                     <hr>
-                                    <div class="level">
+                                    <div class="level" v-if="loadedItem.isAvailable">
                                         <div class="level-left">
                                             <b-field grouped group-multiline v-if="!user || user && user.id !== loadedItem._creator.id">
                                                 <div class="control">

@@ -25,7 +25,46 @@
                                     </b-select>
                                 </b-field>
                             </b-field>
-                            
+
+                            <b-field label="Email" 
+                                :type="$v.shopData.email.$error ? `is-danger` : ``" 
+                                :message="!$v.shopData.email.email ? `Nhập email hợp lệ` : ``">
+                                <b-input
+                                    type="email"
+                                    v-model.trim="shopData.email"
+                                    @blur="$v.shopData.email.$touch()"
+                                    icon="email">
+                                </b-input>
+                            </b-field>
+
+                            <b-field grouped>
+                                <b-field label="Địa chỉ*" expanded
+                                    :type="$v.shopData.address.$error ? `is-danger` : ``">
+                                    <b-input 
+                                        v-model="shopData.address"
+                                        @blur="$v.shopData.address.$touch()"
+                                        icon="map-marker">
+                                    </b-input>
+                                </b-field>
+                                <b-field label="Tỉnh/Thành*">
+                                    <b-select v-model="shopData.province">
+                                        <option v-for="(province, i) in provinces" :key="i">{{province}}</option>
+                                    </b-select>
+                                </b-field>
+                            </b-field>
+
+                            <b-field label="Website"
+                                :type="$v.shopData.webUrl.$error ? `is-danger` : ``" 
+                                :message="!$v.shopData.webUrl.url ? `Nhập website hợp lệ` : ``">
+                                <b-input
+                                    type="url"
+                                    v-model.trim="shopData.webUrl"
+                                    @blur="$v.shopData.webUrl.$touch()"
+                                    icon="web"
+                                    placeholder="Website của cửa hàng hoặc cá nhân">
+                                </b-input>
+                            </b-field>
+
                             <b-field grouped>
                                 <b-field label="Facebook" expanded
                                     :type="$v.shopData.fbUrl.$error ? `is-danger` : ``" 
@@ -58,33 +97,6 @@
                                     icon="cellphone">
                                 </b-input>
                             </b-field>
-
-                            <b-field label="Email" 
-                                :type="$v.shopData.email.$error ? `is-danger` : ``" 
-                                :message="!$v.shopData.email.email ? `Nhập email hợp lệ` : ``">
-                                <b-input
-                                    type="email"
-                                    v-model.trim="shopData.email"
-                                    @blur="$v.shopData.email.$touch()"
-                                    icon="email">
-                                </b-input>
-                            </b-field>
-
-                            <b-field grouped>
-                                <b-field label="Địa chỉ*" expanded
-                                    :type="$v.shopData.address.$error ? `is-danger` : ``">
-                                    <b-input 
-                                        v-model="shopData.address"
-                                        @blur="$v.shopData.address.$touch()"
-                                        icon="map-marker">
-                                    </b-input>
-                                </b-field>
-                                <b-field label="Tỉnh/Thành*">
-                                    <b-select v-model="shopData.province">
-                                        <option v-for="(province, i) in provinces" :key="i">{{province}}</option>
-                                    </b-select>
-                                </b-field>
-                            </b-field>
                             
                             <b-field label="Danh mục sản phẩm*"
                                 :type="$v.shopData.itemTypes.$error ? `is-danger` : ``">
@@ -103,7 +115,7 @@
                                     type="textarea"
                                     v-model.trim="shopData.description"
                                     @blur="$v.shopData.description.$touch()"
-                                    maxlength="300">
+                                    maxlength="400">
                                 </b-input>
                             </b-field>
                             
@@ -211,12 +223,13 @@
                 shopData: {
                     title: null,
                     category: 'nong-nghiep',
-                    fbUrl: null,
-                    fbName: null,
                     address: null,
                     province: 'Hà Nội',
                     phone: null,
                     email: null,
+                    fbUrl: null,
+                    fbName: null,
+                    webUrl: null,
                     itemTypes: [],
                     description: null,
                     logoImage: null,
@@ -236,9 +249,6 @@
                 category: {
                     required
                 },
-                fbUrl: {
-                    url
-                },
                 address: {
                     required
                 },
@@ -251,6 +261,12 @@
                 },
                 email: {
                     email
+                },
+                fbUrl: {
+                    url
+                },
+                webUrl: {
+                    url
                 },
                 itemTypes: {
                     required

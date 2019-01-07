@@ -280,8 +280,8 @@ export default {
                         ...bmItemsObj[key]
                     })
                 }
-                vuexContext.commit('setBmShops', loadedBmShops)
-                vuexContext.commit('setBmItems', loadedBmItems)
+                vuexContext.commit('setBmShops', loadedBmShops.reverse())
+                vuexContext.commit('setBmItems', loadedBmItems.reverse())
                 vuexContext.commit('setQueryLoading', false)
             } catch(e) {
                 vuexContext.commit('setQueryLoading', false)
@@ -309,6 +309,10 @@ export default {
                 let loadedBmShops = []
                 for (let bmShop of bmShops) {
                     const loadedShop = await vuexContext.dispatch('loadShop', bmShop.url)
+                    if(!loadedShop) {
+                        await vuexContext.dispatch('removeBmShop', bmShop.id)
+                        continue
+                    }
                     loadedBmShops.push(loadedShop)
                 }
                 vuexContext.commit('setQueryLoading', false)
@@ -326,6 +330,10 @@ export default {
                 let loadedBmItems = []
                 for (let bmItem of bmItems) {
                     const loadedItem = await vuexContext.dispatch('loadItem', bmItem.url)
+                    if(!loadedItem) {
+                        await vuexContext.dispatch('removeBmItem', bmItem.id)
+                        continue
+                    }
                     loadedBmItems.push(loadedItem)
                 }
                 vuexContext.commit('setQueryLoading', false)
