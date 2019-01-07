@@ -96,7 +96,6 @@ export function genId_(length) {
 //     for (let i = 0; i < length; i++){
 //         uuid += possible.charAt(Math.floor(Math.random() * possible.length))
 //     }
-    
 //     return title.replace(/\s+/g, '-').toLowerCase() + '-' + uuid
 // }
 
@@ -142,7 +141,7 @@ export function authMessage(arg) {
             message = 'Mã xác nhận không hợp lệ'
             break
         default:
-            message = 'Lỗi'
+            message = 'Có lỗi xảy ra'
     }
     return message
 }

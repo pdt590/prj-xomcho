@@ -106,9 +106,11 @@ export default {
                     ...newShopContent
                 })
                 vuexContext.commit('setShopLoading', false)
+                return true
             } catch(e) {
                 console.log('[ERROR-updateShopContent]', e)
                 vuexContext.commit('setShopLoading', false)
+                return false
             }
         },
 
@@ -135,6 +137,7 @@ export default {
             } catch(e) {
                 console.log('[ERROR-updateShopTitle]', e)
                 vuexContext.commit('setShopLoading', false)
+                return false
             }
         },
 
@@ -156,7 +159,7 @@ export default {
                     })
                     delete loadedShop.logoImage // or loadedShop.logoImage = null
                     vuexContext.commit('setShopLoading', false)
-                    return
+                    return true
                 }
 
                 let logoObject = null
@@ -190,9 +193,11 @@ export default {
                 }
                 vuexContext.commit('setShop', updatedShop)
                 vuexContext.commit('setShopLoading', false)
+                return true
             } catch(e) {
                 console.log('[ERROR-updateShopLogo]', e)
                 vuexContext.commit('setShopLoading', false)
+                return false
             }
         },
 

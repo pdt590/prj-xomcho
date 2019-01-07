@@ -106,7 +106,6 @@
                     confirmNewPassword: null,
                 },
                 restoredEmail: null,
-                response: null,
                 emailVerified: null,
                 emailRecoverd: null,
             }
@@ -130,11 +129,11 @@
         },
         methods: {
             async onResetPassword() {
-                this.response = await this.$store.dispatch('handleResetPassword', {
+                const response = await this.$store.dispatch('handleResetPassword', {
                     actionCode: this.actionCode,
                     newPassword: this.formData.newPassword
                 })
-                if(this.response) {
+                if(response) {
                     this.$router.push("/user/join")
                     this.$toast.open({
                         duration: 3000,

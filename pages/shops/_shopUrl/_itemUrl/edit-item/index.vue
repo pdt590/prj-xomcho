@@ -239,7 +239,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { isImage, deepCopy } from '~/plugins/util-helpers'
+    import { isImage, deepCopy, authMessage } from '~/plugins/util-helpers'
     import { currencies } from '~/plugins/util-lists'
     import { required, email, decimal, sameAs, not } from 'vuelidate/lib/validators'
 
@@ -318,23 +318,60 @@
         },
         methods: {
             async onUpdateContent() {       
-                await this.$store.dispatch('updateItemContent', this.itemContent)
-                this.$router.push(`${this.$route.path}`)
+                const response = await this.$store.dispatch('updateItemContent', this.itemContent)
+                if(response) {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: 'Cập nhật thành công',
+                        type: 'is-success'
+                    })
+                }else {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: authMessage(this.authError),
+                        type: 'is-danger'
+                    })
+                }
             },
             async onUpdateTitle() {
                 const newItemUrl = await this.$store.dispatch('updateItemTitle', {
                     url: this.loadedItem.url,
                     newItemTitle: this.itemTitle
                 })
-                this.$router.push(`/shops/${this.$route.params.shopUrl}/${newItemUrl}/edit-item`)
+                if(newItemUrl) {
+                    this.$router.push(`/shops/${this.$route.params.shopUrl}/${newItemUrl}/edit-item`)
+                    this.$toast.open({
+                        duration: 3000,
+                        message: 'Cập nhật thành công',
+                        type: 'is-success'
+                    })
+                }else {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: authMessage(this.authError),
+                        type: 'is-danger'
+                    })
+                }
             },
             async onUpdateImages() {
-                await this.$store.dispatch('updateItemImages', {
+                const response = await this.$store.dispatch('updateItemImages', {
                     url: this.loadedItem.url,
                     newImages: this.itemImages,
                     oldImages: this.itemOldImages
                 })
-                this.$router.push(`${this.$route.path}`)
+                if(response) {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: 'Cập nhật thành công',
+                        type: 'is-success'
+                    })
+                }else {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: authMessage(this.authError),
+                        type: 'is-danger'
+                    })
+                }
             },
             async onDelete() {
                 await this.$store.dispatch('deleteItem', this.loadedItem.url)

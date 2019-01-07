@@ -18,8 +18,8 @@
                     </b-field>
 
                     <b-field label="Email*" 
-                        :type="$v.formData.email.$error || !responseSignup ? `is-danger` : ``" 
-                        :message="!$v.formData.email.email || !responseSignup ? `Nhập email hợp lệ` : ``">
+                        :type="$v.formData.email.$error || !response ? `is-danger` : ``" 
+                        :message="!$v.formData.email.email || !response ? `Nhập email hợp lệ` : ``">
                         <b-input
                             type="email"
                             v-model.trim="formData.email"
@@ -72,7 +72,7 @@
                     email: '',
                     password: ''
                 },
-                responseSignup: true
+                response: true
             }
         },
         validations: {
@@ -93,8 +93,8 @@
         },
         methods: {
             async onSignup() {
-                this.responseSignup = await this.$store.dispatch('signUserUp', this.formData)
-                if(this.responseSignup) {
+                this.response = await this.$store.dispatch('signUserUp', this.formData)
+                if(this.response) {
                     this.$parent.close()
                     this.$toast.open({
                         duration: 3000,

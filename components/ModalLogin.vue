@@ -7,8 +7,8 @@
                 </header>
                 <section class="modal-card-body">
                     <b-field label="Email" 
-                        :type="$v.formData.email.$error || !responseLogin? `is-danger` : ``" 
-                        :message="!$v.formData.email.email || !responseLogin ? `Nhập email hợp lệ` : ``">
+                        :type="$v.formData.email.$error || !response? `is-danger` : ``" 
+                        :message="!$v.formData.email.email || !response ? `Nhập email hợp lệ` : ``">
                         <b-input
                             type="email"
                             v-model.trim="formData.email"
@@ -63,7 +63,7 @@
                     email: '',
                     password: ''
                 },
-                responseLogin: true
+                response: true
             }
         },
         validations: {
@@ -80,8 +80,8 @@
         },
         methods: {
             async onLogin() {
-                this.responseLogin = await this.$store.dispatch('signUserIn', this.formData)
-                if(this.responseLogin) {
+                this.response = await this.$store.dispatch('signUserIn', this.formData)
+                if(this.response) {
                     this.$parent.close()
                 }else {
                     this.$toast.open({

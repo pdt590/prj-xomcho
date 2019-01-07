@@ -318,7 +318,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { isImage, deepCopy } from '~/plugins/util-helpers'
+    import { isImage, deepCopy, authMessage } from '~/plugins/util-helpers'
     import { provinces, categories } from '~/plugins/util-lists'
     import { required, email, url, numeric, sameAs, not, minLength, maxLength } from 'vuelidate/lib/validators'
 
@@ -419,20 +419,69 @@
         },
         methods: {
             async onUpdateContent() {       
-                await this.$store.dispatch('updateShopContent', this.shopContent)
-                this.$router.push(`${this.$route.path}`)
+                const response = await this.$store.dispatch('updateShopContent', this.shopContent)
+                if(response) {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: 'Cập nhật thành công',
+                        type: 'is-success'
+                    })
+                }else {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: authMessage(this.authError),
+                        type: 'is-danger'
+                    })
+                }
             },
             async onUpdateTitle() {
                 const newShopUrl = await this.$store.dispatch('updateShopTitle', this.shopTitle)
-                this.$router.push(`/shops/${newShopUrl}/edit-shop`)
+                if(newShopUrl) {
+                    this.$router.push(`/shops/${newShopUrl}/edit-shop`)
+                    this.$toast.open({
+                        duration: 3000,
+                        message: 'Cập nhật thành công',
+                        type: 'is-success'
+                    })
+                }else {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: authMessage(this.authError),
+                        type: 'is-danger'
+                    })
+                }
             },
             async onUpdateLogo() {
-                await this.$store.dispatch('updateShopLogo', this.shopLogo)
-                this.$router.push(`${this.$route.path}`)
+                const response = await this.$store.dispatch('updateShopLogo', this.shopLogo)
+                if(response) {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: 'Cập nhật thành công',
+                        type: 'is-success'
+                    })
+                }else {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: authMessage(this.authError),
+                        type: 'is-danger'
+                    })
+                }
             },
             async onUpdateCover() {  
-                await this.$store.dispatch('updateShopCover', this.shopCover)
-                this.$router.push(`${this.$route.path}`)
+                const response = await this.$store.dispatch('updateShopCover', this.shopCover)
+                if(response) {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: 'Cập nhật thành công',
+                        type: 'is-success'
+                    })
+                }else {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: authMessage(this.authError),
+                        type: 'is-danger'
+                    })
+                }
             },
             async onDelete() {
                 await this.$store.dispatch('deleteShop')

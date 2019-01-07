@@ -100,9 +100,11 @@ export default {
                     ...newItemContent
                 })
                 vuexContext.commit('setItemLoading', false)
+                return  true
             } catch(e) {
                 console.log('[ERROR-updateItemContent]', e)
                 vuexContext.commit('setItemLoading', false)
+                return false
             }
         },
 
@@ -126,6 +128,7 @@ export default {
             } catch(e) {
                 console.log('[ERROR-updateItemTitle]', e)
                 vuexContext.commit('setItemLoading', false)
+                return false
             }
         },
 
@@ -177,9 +180,11 @@ export default {
                     ...update
                 })
                 vuexContext.commit('setItemLoading', false)
+                return true
             } catch(e) {
                 console.log('[ERROR-updateItemImages]', e)
                 vuexContext.commit('setItemLoading', false)
+                return false
             }
         },
 
