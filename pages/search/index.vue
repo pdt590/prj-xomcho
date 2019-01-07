@@ -20,7 +20,7 @@
                             </b-select>
                         </b-field>
                         <div class="columns is-multiline is-variable is-1" style="padding-top: 1rem">
-                            <div class="column is-2" v-for="shop in displayedShops" :key="shop.id">
+                            <div class="column is-2" v-for="shop in displayedShops" :key="shop.url">
                                 <v-card-shop class="is-hidden-mobile" :shopData="shop" />
                                 <v-card-shop-mobile class="is-hidden-tablet" :shopData="shop" />
                             </div>
@@ -46,7 +46,7 @@
                             </b-select>
                         </b-field>
                         <div class="columns is-multiline is-variable is-3" style="padding-top: 1rem">
-                            <div class="column is-2" v-for="item in displayedItems" :key="item.id">
+                            <div class="column is-2" v-for="item in displayedItems" :key="item.url">
                                 <v-card-item class="is-hidden-mobile" :itemData="item" />
                                 <v-card-item-mobile class="is-hidden-tablet" :itemData="item" />  
                             </div>

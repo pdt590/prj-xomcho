@@ -176,10 +176,7 @@ export default {
                 const loadedShops = []
                 shopsData.forEach(shopData => {
                     const shopObj = shopData.val()
-                    loadedShops.push({
-                        id: shopData.key,
-                        ...shopObj
-                    })
+                    loadedShops.push(shopObj)
                 })
                 vuexContext.commit('setQueryLoading', false)
                 return loadedShops.reverse()
@@ -196,10 +193,7 @@ export default {
                 const loadedItems = []
                 itemsData.forEach(itemData => {
                     const itemObj = itemData.val()
-                    loadedItems.push({
-                        id: itemData.key,
-                        ...itemObj
-                    })
+                    loadedItems.push(itemObj)
                 })
                 vuexContext.commit('setQueryLoading', false)
                 return loadedItems.reverse()
@@ -217,10 +211,7 @@ export default {
                 const loadedShops = []
                 shopsData.forEach(shopData => {
                     const shopObj = shopData.val()
-                    loadedShops.push({
-                        id: shopData.key,
-                        ...shopObj
-                    })
+                    loadedShops.push(shopObj)
                 })
                 vuexContext.commit('setQueryLoading', false)
                 return loadedShops.reverse()
@@ -237,10 +228,7 @@ export default {
                 const loadedItems = []
                 itemsData.forEach(itemData => {
                     const itemObj = itemData.val()
-                    loadedItems.push({
-                        id: itemData.key,
-                        ...itemObj
-                    })
+                    loadedItems.push(itemObj)
                 })
                 vuexContext.commit('setQueryLoading', false)
                 return loadedItems.reverse()
