@@ -287,7 +287,8 @@
 
                             <b-tab-item label="Xóa cửa hàng">
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
-                                    <b-field label="Nhập tên cửa hàng*" expanded>
+                                    <b-field label="Nhập tên cửa hàng*" 
+                                        :type="!responseDeleting ? `is-danger` : ``">
                                         <b-input
                                             v-model.trim="confirmTitle"
                                             @blur="$v.confirmTitle.$touch()"
@@ -318,7 +319,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { isImage, deepCopy, authMessage } from '~/plugins/util-helpers'
+    import { isImage, deepCopy } from '~/plugins/util-helpers'
     import { provinces, categories } from '~/plugins/util-lists'
     import { required, email, url, numeric, sameAs, not, minLength, maxLength } from 'vuelidate/lib/validators'
 
@@ -360,6 +361,7 @@
                 shopOldCover: null,
 
                 confirmTitle: null,
+                responseDeleting: true
             }
         },
         validations: {
@@ -429,7 +431,7 @@
                 }else {
                     this.$toast.open({
                         duration: 3000,
-                        message: authMessage(this.authError),
+                        message: 'Cập nhật không thành công',
                         type: 'is-danger'
                     })
                 }
@@ -446,7 +448,7 @@
                 }else {
                     this.$toast.open({
                         duration: 3000,
-                        message: authMessage(this.authError),
+                        message: 'Cập nhật không thành công',
                         type: 'is-danger'
                     })
                 }
@@ -462,7 +464,7 @@
                 }else {
                     this.$toast.open({
                         duration: 3000,
-                        message: authMessage(this.authError),
+                        message: 'Cập nhật không thành công',
                         type: 'is-danger'
                     })
                 }
@@ -478,13 +480,21 @@
                 }else {
                     this.$toast.open({
                         duration: 3000,
-                        message: authMessage(this.authError),
+                        message: 'Cập nhật không thành công',
                         type: 'is-danger'
                     })
                 }
             },
             async onDelete() {
-                await this.$store.dispatch('deleteShop')
+                this.responseDeleting = await this.$store.dispatch('deleteShop')
+                if(!this.responseDeleting) {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: 'Xóa cửa hàng không thành công',
+                        type: 'is-danger'
+                    })
+                    return
+                }
                 this.$router.push('/user/mgmt')
             },
             onLogoChange() {

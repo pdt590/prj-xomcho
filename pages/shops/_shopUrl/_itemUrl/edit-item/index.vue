@@ -208,7 +208,8 @@
 
                             <b-tab-item label="Xóa sản phẩm">
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
-                                    <b-field label="Nhập tên sản phẩm*" expanded>
+                                    <b-field label="Nhập tên sản phẩm*" 
+                                        :type="!responseDeleting ? `is-danger` : ``">
                                         <b-input
                                             v-model.trim="confirmTitle"
                                             @blur="$v.confirmTitle.$touch()"
@@ -239,7 +240,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { isImage, deepCopy, authMessage } from '~/plugins/util-helpers'
+    import { isImage, deepCopy } from '~/plugins/util-helpers'
     import { currencies } from '~/plugins/util-lists'
     import { required, email, decimal, sameAs, not } from 'vuelidate/lib/validators'
 
@@ -275,6 +276,7 @@
                 itemOldImages: [],
                 
                 confirmTitle: null,
+                responseDeleting: true
             }
         },
         validations: {
@@ -328,7 +330,7 @@
                 }else {
                     this.$toast.open({
                         duration: 3000,
-                        message: authMessage(this.authError),
+                        message: 'Cập nhật không thành công',
                         type: 'is-danger'
                     })
                 }
@@ -348,7 +350,7 @@
                 }else {
                     this.$toast.open({
                         duration: 3000,
-                        message: authMessage(this.authError),
+                        message: 'Cập nhật không thành công',
                         type: 'is-danger'
                     })
                 }
@@ -368,13 +370,21 @@
                 }else {
                     this.$toast.open({
                         duration: 3000,
-                        message: authMessage(this.authError),
+                        message: 'Cập nhật không thành công',
                         type: 'is-danger'
                     })
                 }
             },
             async onDelete() {
-                await this.$store.dispatch('deleteItem', this.loadedItem.url)
+                this.responseDeleting = await this.$store.dispatch('deleteItem', this.loadedItem.url)
+                if(!this.responseDeleting) {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: 'Xóa sản phẩm không thành công',
+                        type: 'is-danger'
+                    })
+                    return
+                }
                 this.$router.push(`/shops/${this.$route.params.shopUrl}`)
             },
             onFileChange() {

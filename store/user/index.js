@@ -185,9 +185,11 @@ export default {
                 vuexContext.commit('setAuthLoading', false)
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
+                return true
             } catch(e){
                 vuexContext.commit('setAuthLoading', false)
                 console.log('[ERROR-updateUserContent]', e)
+                return false
             }
         },
 
@@ -277,7 +279,7 @@ export default {
                     })
                     delete loadedUser.avatar
                     vuexContext.commit('setAuthLoading', false)
-                    return
+                    return true
                 }
 
                 let avatarObject = null
@@ -319,9 +321,11 @@ export default {
                 vuexContext.commit('setAuthLoading', false)
                 localStorage.setItem('auth-event', '')
                 localStorage.removeItem('auth-event')
+                return true
             } catch(e) {
                 console.log('[ERROR-updateAvatar]', e)
                 vuexContext.commit('setAuthLoading', false)
+                return false
             }
         },
 

@@ -216,7 +216,7 @@ export default {
                     })
                     delete loadedShop.coverImage
                     vuexContext.commit('setShopLoading', false)
-                    return
+                    return true
                 }
 
                 let coverObject = null
@@ -270,9 +270,11 @@ export default {
                 await shopsRef.child(shopId).remove()
                 vuexContext.commit('setShop', null)
                 vuexContext.commit('setShopLoading', false)
+                return true
             } catch(e) {
                 console.log('[ERROR-deleteShop]', e)
                 vuexContext.commit('setShopLoading', false)
+                return false
             }
         },
 

@@ -201,9 +201,11 @@ export default {
                 await itemsRef.child(itemId).remove()
                 vuexContext.commit('removeItem', itemUrl)
                 vuexContext.commit('setItemLoading', false)
+                return true
             } catch(e) {
                 console.log('[ERROR-deleteItem]', e)
                 vuexContext.commit('setItemLoading', false)
+                return false
             }
         },
 

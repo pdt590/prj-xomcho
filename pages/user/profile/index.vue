@@ -121,7 +121,7 @@
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
                                     <b-field label="Mật khẩu cũ*"
                                         :type="$v.confirmPasswordForNewPassword.$error || !responseNewPassword ? `is-danger` : ``" 
-                                        :message="!$v.confirmPasswordForNewPassword.minLen ? `Tối thiểu 6 kí tự` : !responseNewPassword ? `Nhập lại mật khẩu` : ``">
+                                        :message="!$v.confirmPasswordForNewPassword.minLen ? `Tối thiểu 6 kí tự` : ``">
                                         <b-input
                                             type="password"
                                             v-model.trim="confirmPasswordForNewPassword"
@@ -130,7 +130,7 @@
                                         </b-input>
                                     </b-field>
                                     <b-field label="Mật khẩu mới*"
-                                        :type="$v.userPassword.$error ? `is-danger` : ``" 
+                                        :type="$v.userPassword.$error || !responseNewPassword ? `is-danger` : ``" 
                                         :message="!$v.userPassword.minLen ? `Tối thiểu 6 kí tự` : ``">
                                         <b-input
                                             type="password"
@@ -140,7 +140,7 @@
                                         </b-input>
                                     </b-field>
                                     <b-field label="Xác nhận mật khẩu mới*"
-                                        :type="$v.confirmUserPassword.$error ? `is-danger` : ``" 
+                                        :type="$v.confirmUserPassword.$error || !responseNewPassword ? `is-danger` : ``" 
                                         :message="$v.confirmUserPassword.$error ? `Mật khẩu không trùng khớp` : ``">
                                         <b-input
                                             type="password"
@@ -225,7 +225,7 @@
                                 <form style="padding-top: 1rem; padding-bottom: 2rem;">
                                     <b-field label="Mật khẩu*"
                                         :type="$v.confirmPasswordForDeleting.$error || !responseDeleting ? `is-danger` : ``" 
-                                        :message="!$v.confirmPasswordForDeleting.minLen ? `Tối thiểu 6 kí tự` : !responseDeleting ? `Nhập lại mật khẩu` : ``">
+                                        :message="!$v.confirmPasswordForDeleting.minLen ? `Tối thiểu 6 kí tự` : ``">
                                         <b-input
                                             type="password"
                                             v-model.trim="confirmPasswordForDeleting"
@@ -358,8 +358,20 @@
         },
         methods: {
             async onUpdateContent() {       
-                await this.$store.dispatch('updateUserContent', this.userContent)
-                this.$router.push(`${this.$route.path}`)
+                const response = await this.$store.dispatch('updateUserContent', this.userContent)
+                if(response) {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: 'Cập nhật thành công',
+                        type: 'is-success'
+                    })
+                }else {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: 'Cập nhật không thành công',
+                        type: 'is-danger'
+                    })
+                }
             },
             async onUpdateEmail() {
                 this.responseNewEmail = await this.$store.dispatch('updateUserEmail', {
@@ -378,9 +390,7 @@
                         message: authMessage(this.authError),
                         type: 'is-danger'
                     })
-                    return
                 }
-                this.$router.push(`${this.$route.path}`)
             },
             async onUpdatePassword() {
                 this.responseNewPassword = await this.$store.dispatch('updateUserPassword', {
@@ -390,7 +400,7 @@
                 if(this.responseNewPassword) {
                     this.$toast.open({
                         duration: 3000,
-                        message: 'Mật khẩu thay đổi thành công',
+                        message: 'Cập nhật thành công',
                         type: 'is-success'
                     })
                 }else {
@@ -399,13 +409,23 @@
                         message: authMessage(this.authError),
                         type: 'is-danger'
                     })
-                    return
                 }
-                this.$router.push(`${this.$route.path}`)
             },
             async onUpdateAvatar() {  
-                await this.$store.dispatch('updateUserAvatar', this.userAvatar)
-                this.$router.push(`${this.$route.path}`)
+                const response = await this.$store.dispatch('updateUserAvatar', this.userAvatar)
+                if(response) {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: 'Cập nhật thành công',
+                        type: 'is-success'
+                    })
+                }else {
+                    this.$toast.open({
+                        duration: 3000,
+                        message: 'Cập nhật không thành công',
+                        type: 'is-danger'
+                    })
+                }
             },
             async onDelete() {
                 this.responseDeleting = await this.$store.dispatch('deleteUser', this.confirmPasswordForDeleting)
