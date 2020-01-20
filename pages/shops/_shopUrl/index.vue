@@ -373,7 +373,7 @@
                     { hid: 'og-url', property: 'og:url', content: `${process.env.baseUrl}${this.$route.path}` },
                     { hid: 'og-title', property: 'og:title', content: this.loadedShop.title },
                     { hid: 'og-description', property: 'og:description', content: this.loadedShop.description },
-                    { hid: 'og-image', property: 'og:image', content: this.loadedShop.logoImage ? this.loadedShop.logoImage.url : `${process.env.baseUrl}/icon-user.png`},
+                    { hid: 'og-image', property: 'og:image', content: this.loadedShop.logoImage ? this.loadedShop.logoImage.url : `${process.env.baseUrl}/icon-photo.png`},
                 ]
             }
         }

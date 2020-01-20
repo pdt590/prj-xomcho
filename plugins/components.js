@@ -38,13 +38,6 @@ import Vue from 'vue'
 // Vue.component('v-modal-sale', ModalSale)
 // Vue.component('v-modal-image', ModalImage)
 
-// Modal
-Vue.component('v-modal-login', () => import('~/components/ModalLogin'))
-Vue.component('v-modal-signup', () => import('~/components/ModalSignup'))
-Vue.component('v-modal-join', () => import('~/components/ModalJoin'))
-Vue.component('v-modal-sale', () => import('~/components/ModalSale'))
-Vue.component('v-modal-image', () => import('~/components/ModalImage'))
-
 Vue.component('v-logo', () => import('~/components/Logo'))
 Vue.component('v-navbar', () => import('~/components/Navbar'))
 Vue.component('v-navbar-mobile', () => import('~/components/NavbarMobile'))
