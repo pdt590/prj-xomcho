@@ -69,14 +69,14 @@
             async onResetPassword() {
                 this.response = await this.$store.dispatch('resetUserPassword', this.formData.email)
                 if(this.response) {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Kiểm tra hộp thư để thiết lập lại mật khẩu',
                         type: 'is-warning'
                     })
                     this.$router.push('/user/join')
                 }else {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: authMessage(this.authError),
                         type: 'is-danger'

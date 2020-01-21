@@ -165,13 +165,13 @@
                 this.responseSignup = await this.$store.dispatch('signUserUp', this.formDataSignup)
                 if(this.responseSignup) {
                     this.$parent.close()
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Kiểm tra hộp thư để kích hoạt tài khoản',
                         type: 'is-warning'
                     })
                 }else {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: authMessage(this.authError),
                         type: 'is-danger'
@@ -183,7 +183,7 @@
                 if(this.responseLogin) {
                     this.$parent.close()
                 }else {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: authMessage(this.authError),
                         type: 'is-danger'

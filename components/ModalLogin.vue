@@ -84,7 +84,7 @@
                 if(this.response) {
                     this.$parent.close()
                 }else {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: authMessage(this.authError),
                         type: 'is-danger'

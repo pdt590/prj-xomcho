@@ -360,13 +360,13 @@
             async onUpdateContent() {       
                 const response = await this.$store.dispatch('updateUserContent', this.userContent)
                 if(response) {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật thành công',
                         type: 'is-success'
                     })
                 }else {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật không thành công',
                         type: 'is-danger'
@@ -379,13 +379,13 @@
                     newEmail: this.userEmail
                 })
                 if(this.responseNewEmail) {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Kiểm tra hộp thư mới để kích hoạt tài khoản',
                         type: 'is-warning'
                     })
                 }else {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: authMessage(this.authError),
                         type: 'is-danger'
@@ -398,13 +398,13 @@
                     newPassword: this.userPassword
                 })
                 if(this.responseNewPassword) {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật thành công',
                         type: 'is-success'
                     })
                 }else {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: authMessage(this.authError),
                         type: 'is-danger'
@@ -414,13 +414,13 @@
             async onUpdateAvatar() {  
                 const response = await this.$store.dispatch('updateUserAvatar', this.userAvatar)
                 if(response) {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật thành công',
                         type: 'is-success'
                     })
                 }else {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật không thành công',
                         type: 'is-danger'
@@ -430,7 +430,7 @@
             async onDelete() {
                 this.responseDeleting = await this.$store.dispatch('deleteUser', this.confirmPasswordForDeleting)
                 if(!this.responseDeleting) {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: authMessage(this.authError),
                         type: 'is-danger'

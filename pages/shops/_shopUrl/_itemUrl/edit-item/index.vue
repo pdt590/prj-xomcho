@@ -322,13 +322,13 @@
             async onUpdateContent() {       
                 const response = await this.$store.dispatch('updateItemContent', this.itemContent)
                 if(response) {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật thành công',
                         type: 'is-success'
                     })
                 }else {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật không thành công',
                         type: 'is-danger'
@@ -342,13 +342,13 @@
                 })
                 if(newItemUrl) {
                     this.$router.push(`/shops/${this.$route.params.shopUrl}/${newItemUrl}/edit-item`)
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật thành công',
                         type: 'is-success'
                     })
                 }else {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật không thành công',
                         type: 'is-danger'
@@ -362,13 +362,13 @@
                     oldImages: this.itemOldImages
                 })
                 if(response) {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật thành công',
                         type: 'is-success'
                     })
                 }else {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật không thành công',
                         type: 'is-danger'
@@ -378,7 +378,7 @@
             async onDelete() {
                 this.responseDeleting = await this.$store.dispatch('deleteItem', this.loadedItem.url)
                 if(!this.responseDeleting) {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Xóa sản phẩm không thành công',
                         type: 'is-danger'

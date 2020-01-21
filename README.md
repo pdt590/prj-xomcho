@@ -2,6 +2,10 @@
 
 > An eCommercial tool for online shops and more
 
+## Compatibility
+
+- Node v10.18.1
+
 ## Build Setup
 
 ``` bash

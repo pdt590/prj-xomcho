@@ -256,13 +256,13 @@
                 })
                 if(this.response) {
                         this.$parent.close()
-                        this.$toast.open({
+                        this.$buefy.toast.open({
                             duration: 3000,
                             message: 'Gửi tin nhắn thành công',
                             type: 'is-success'
                         })
                     }else {
-                        this.$toast.open({
+                        this.$buefy.toast.open({
                             duration: 3000,
                             message: authMessage(this.authError),
                             type: 'is-danger'

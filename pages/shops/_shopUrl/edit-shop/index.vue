@@ -423,13 +423,13 @@
             async onUpdateContent() {       
                 const response = await this.$store.dispatch('updateShopContent', this.shopContent)
                 if(response) {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật thành công',
                         type: 'is-success'
                     })
                 }else {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật không thành công',
                         type: 'is-danger'
@@ -440,13 +440,13 @@
                 const newShopUrl = await this.$store.dispatch('updateShopTitle', this.shopTitle)
                 if(newShopUrl) {
                     this.$router.push(`/shops/${newShopUrl}/edit-shop`)
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật thành công',
                         type: 'is-success'
                     })
                 }else {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật không thành công',
                         type: 'is-danger'
@@ -456,13 +456,13 @@
             async onUpdateLogo() {
                 const response = await this.$store.dispatch('updateShopLogo', this.shopLogo)
                 if(response) {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật thành công',
                         type: 'is-success'
                     })
                 }else {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật không thành công',
                         type: 'is-danger'
@@ -472,13 +472,13 @@
             async onUpdateCover() {  
                 const response = await this.$store.dispatch('updateShopCover', this.shopCover)
                 if(response) {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật thành công',
                         type: 'is-success'
                     })
                 }else {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Cập nhật không thành công',
                         type: 'is-danger'
@@ -488,7 +488,7 @@
             async onDelete() {
                 this.responseDeleting = await this.$store.dispatch('deleteShop')
                 if(!this.responseDeleting) {
-                    this.$toast.open({
+                    this.$buefy.toast.open({
                         duration: 3000,
                         message: 'Xóa cửa hàng không thành công',
                         type: 'is-danger'
