@@ -6,9 +6,9 @@
                 <div class="card is-hidden-tablet" v-if="loadedShop.coverImage">
                     <div class="card-image">
                         <figure class="image is-16by9">
-                            <no-ssr>
+                            <client-only>
                                 <img class="v-image-cover" v-lazy="loadedShop.coverImage.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
-                            </no-ssr>
+                            </client-only>
                         </figure>
                     </div>
                 </div>
@@ -20,9 +20,9 @@
                             <div class="level">
                                 <div class="level-item">
                                     <figure class="image v-image-border">
-                                        <no-ssr>
+                                        <client-only>
                                             <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
-                                        </no-ssr>
+                                        </client-only>
                                     </figure>
                                 </div>
                             </div>
@@ -133,9 +133,9 @@
                             <div class="level">
                                 <div class="level-item">
                                     <figure class="image v-image-border">
-                                        <no-ssr>
+                                        <client-only>
                                             <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
-                                        </no-ssr>
+                                        </client-only>
                                     </figure>
                                 </div>
                             </div>
@@ -222,9 +222,9 @@
                 <div class="card is-hidden-mobile" v-if="loadedShop.coverImage">
                     <div class="card-image">
                         <figure class="image is-3by1">
-                            <no-ssr>
+                            <client-only>
                                 <img class="v-image-cover" v-lazy="loadedShop.coverImage.url" style='display: none' onload="this.style.display = 'block'" alt="shop_cover">
-                            </no-ssr>
+                            </client-only>
                         </figure>
                     </div>
                 </div>

@@ -88,7 +88,7 @@
                         Xem thêm
                     </nuxt-link>
                 </div>
-                <no-ssr>
+                <client-only>
                     <carousel-3d :disable3d="true" :space="365" :clickable="false" :animationSpeed="300">
                         <slide v-for="(count, id) in 4" :key="id" :index="id">
                             <div class="columns is-multiline is-variable is-1">
@@ -98,7 +98,7 @@
                             </div>
                         </slide>
                     </carousel-3d>
-                </no-ssr>
+                </client-only>
             </div>
         </section>
         <section class="section is-hidden-tablet" style="padding-bottom: 0">
@@ -109,7 +109,7 @@
                         Xem thêm
                     </nuxt-link>
                 </div>
-                <no-ssr>
+                <client-only>
                     <carousel-3d :disable3d="true" :space="365" :clickable="false" :animationSpeed="300">
                         <slide v-for="(count, id) in 4" :key="id" :index="id">
                             <div class="columns is-multiline is-variable is-1">
@@ -119,7 +119,7 @@
                             </div>
                         </slide>
                     </carousel-3d>
-                </no-ssr>
+                </client-only>
             </div>
         </section>
         <!--  -->

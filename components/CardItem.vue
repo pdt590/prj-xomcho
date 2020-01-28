@@ -3,9 +3,9 @@
         <div class="card-image v-card-image">
 			<nuxt-link :to="`/shops/${genShopUrl(itemData._shop.title, itemData._shop.id)}/${itemData.url}`">
 				<figure class="image is-4by3">
-                    <no-ssr>
+                    <client-only>
                         <img class="v-image-card" v-lazy="itemData.images ? itemData.images[0].url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="item_image">
-                    </no-ssr>
+                    </client-only>
 				</figure>
 			</nuxt-link>
             <div class="v-item-pin-soldout" v-if="!itemData.isAvailable">

@@ -19,9 +19,9 @@
                         <b-icon icon="email-outline" :type="countUnOpenedChats ? `is-danger` : ``"></b-icon>
                     </a>
                     <a class="navbar-item" data-target="mobile-menu" @click="onActiveProfile">
-                        <no-ssr v-if="user && !isProfileActive">
+                        <client-only v-if="user && !isProfileActive">
                             <img class="v-nav-avatar-mobile" v-lazy="user.avatar ? user.avatar.url : `/icon-user.png`" style='display: none' onload="this.style.display = 'block'" alt="avatar">
-                        </no-ssr>
+                        </client-only>
                         <b-icon v-else :icon="isProfileActive ? `close-box` : `menu`" :type="isProfileActive ? `is-danger` :  ``"></b-icon>
                     </a>
                 </div>

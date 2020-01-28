@@ -5,7 +5,7 @@
     "author": "Phan Duy Thang",
     "private": true,
     "scripts": {
-        "dev": "cross-env HOST=0.0.0.0 PORT=3000 nuxt",
+        "dev": "cross-env HOST=0.0.0.0 PORT=9000 nuxt",
         "build": "cross-env BASE_URL=https://www.xomcho.net nuxt build",
         "start": "cross-env HOST=0.0.0.0 PORT=3000 nuxt start",
         "generate": "nuxt generate"

@@ -427,12 +427,12 @@ export default {
             try{
                 const loadedUser = vuexContext.getters.user
                 const userId = loadedUser.id
+                const userAvatar = loadedUser.avatar
                 await vuexContext.dispatch('deleteItemsByUser', userId)
                 await vuexContext.dispatch('deleteShopsByUser', userId)
                 await vuexContext.dispatch('deleteChats', userId)
                 await vuexContext.dispatch('deleteBookmarks', userId)
                 await usersRef.child(userId).remove()
-
                 let user = firebase.auth().currentUser
                 const credential = await firebase.auth.EmailAuthProvider.credential(
                     user.email,
@@ -441,7 +441,9 @@ export default {
                 await user.reauthenticateAndRetrieveDataWithCredential(credential)
                 user = firebase.auth().currentUser
                 await user.delete()
-
+                if(userAvatar) {
+                    await firebase.storage().ref('users/' + userAvatar).delete()
+                }
                 Cookie.remove("uid")
                 Cookie.remove("expirationDate")
                 vuexContext.commit('setUser', null)

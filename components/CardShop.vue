@@ -3,9 +3,9 @@
         <div class="card-image v-card-image">
             <nuxt-link :to="`/shops/${shopData.url}`">
                 <figure class="image is-4by3">
-                    <no-ssr>
+                    <client-only>
                         <img class="v-image-card" v-lazy="shopData.logoImage ? shopData.logoImage.url : require(`../assets/images/categories/${shopData.category}.png`)" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
-                    </no-ssr>
+                    </client-only>
                 </figure>
                 <div class="content v-shop-description">
                     <p class="is-size-6 has-text-black has-text-weight-normal" style="line-height: 1.5em;">{{shopData.description | fmString(60)}}</p>

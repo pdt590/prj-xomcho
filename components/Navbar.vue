@@ -47,9 +47,9 @@
                         </div>
                         <div class="navbar-item has-dropdown is-hoverable" v-if="user">
                             <a class="navbar-link">
-                                <no-ssr>
+                                <client-only>
                                     <img class="v-nav-avatar" v-lazy="user.avatar ? user.avatar.url : `/icon-user.png`" style='display: none' onload="this.style.display = 'block'" alt="avatar">
-                                </no-ssr>
+                                </client-only>
                             </a>
                             <div class="navbar-dropdown is-right">
                                 <nuxt-link class="navbar-item" to="/user/profile">
@@ -161,7 +161,7 @@
         }
     }
     .navbar-brand .navbar-item {
-        background: url(/logo.svg) no-repeat center center;
+        background: url(/logo.png) no-repeat center center;
         background-size: cover;
         width: 10rem
     }

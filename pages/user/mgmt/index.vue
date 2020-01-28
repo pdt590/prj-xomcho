@@ -8,9 +8,9 @@
                             <div class="v-username" v-if="user">
                                 <nuxt-link :to="`/user/profile`">
                                     <figure class="image v-image-border">
-                                        <no-ssr>
+                                        <client-only>
                                             <img class="v-user-avatar" v-lazy="user.avatar ? user.avatar.url : `/icon-user.png`" style='display: none' onload="this.style.display = 'block'" alt="user_avatar">
-                                        </no-ssr>
+                                        </client-only>
                                     </figure> 
                                 </nuxt-link> 
                                 <br>

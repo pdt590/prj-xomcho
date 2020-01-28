@@ -9,9 +9,9 @@
                                 <div class="level-item">
                                     <nuxt-link :to="`/shops/${$route.params.shopUrl}`">
                                         <figure class="image v-image-border">
-                                            <no-ssr>
+                                            <client-only>
                                                 <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
-                                            </no-ssr>
+                                            </client-only>
                                         </figure>
                                     </nuxt-link>
                                 </div>
@@ -78,9 +78,9 @@
                                 <div class="level-item">
                                     <nuxt-link :to="`/shops/${$route.params.shopUrl}`">
                                         <figure class="image v-image-border">
-                                            <no-ssr>
+                                            <client-only>
                                                 <img class="v-shop-logo" v-lazy="loadedShop.logoImage ? loadedShop.logoImage.url : `/icon-photo.png`" style='display: none' onload="this.style.display = 'block'" alt="shop_logo">
-                                            </no-ssr>
+                                            </client-only>
                                         </figure>
                                     </nuxt-link>
                                 </div>

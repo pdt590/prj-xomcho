@@ -1,6 +1,5 @@
 import Vue from 'vue'
 
-// import Logo from '~/components/Logo'
 // import NavBar from '~/components/NavBar'
 // import Footer from '~/components/Footer'
 // import ImageFrame from '~/components/ImageFrame'
@@ -18,7 +17,6 @@ import Vue from 'vue'
 // import ModalSale from '~/components/ModalSale'
 // import ModalImage from '~/components/ModalImage'
 
-// Vue.component('v-logo', Logo)
 // Vue.component('v-navbar', NavBar)
 // Vue.component('v-footer', Footer)
 // Vue.component('v-image-frame', ImageFrame)
@@ -38,7 +36,6 @@ import Vue from 'vue'
 // Vue.component('v-modal-sale', ModalSale)
 // Vue.component('v-modal-image', ModalImage)
 
-Vue.component('v-logo', () => import('~/components/Logo'))
 Vue.component('v-navbar', () => import('~/components/Navbar'))
 Vue.component('v-navbar-mobile', () => import('~/components/NavbarMobile'))
 Vue.component('v-footer', () => import('~/components/Footer'))
