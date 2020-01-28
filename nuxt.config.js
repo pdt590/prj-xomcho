@@ -27,7 +27,6 @@ module.exports = {
 			{ hid: 'og-image', property: 'og:image', content: `${process.env.BASE_URL}/fb-cover-min.png`}
 		],
 		script: [
-			{ src: 'https://connect.facebook.net/vi_VN/all.js' }
 		],
 		link: [
 			{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico?v=1' },
@@ -64,7 +63,7 @@ module.exports = {
 
 		{src: '~plugins/util-authListener.js'},
 
-		{src: '~plugins/addon-fc.js'}
+		{src: '~plugins/addon-fc.js', ssr: false}
 	],
 
 	/*
