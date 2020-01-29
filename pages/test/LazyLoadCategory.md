@@ -56,7 +56,7 @@
 
     <script>
         import { mapGetters } from 'vuex'
-        import { sortShopTypes, sortItemTypes, categories } from '~/plugins/util-lists'
+        import { sortShopTypes, sortItemTypes, categories } from '~/libs/lists'
 
         export default {
             computed: {

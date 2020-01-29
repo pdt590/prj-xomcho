@@ -191,8 +191,8 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { authMessage } from '~/plugins/util-helpers'
-    import { genUrl } from '~/plugins/util-helpers'
+    import { authMessage } from '~/libs/helpers'
+    import { genUrl } from '~/libs/helpers'
     import { required, numeric } from 'vuelidate/lib/validators'
 
     export default {

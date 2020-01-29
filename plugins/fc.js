@@ -1,12 +1,12 @@
 import Vue from 'vue'
 
-Vue.prototype.$initFbSdk = () => {
+Vue.prototype.$initFbSDK = () => {
 	window.fbAsyncInit = () => {
 		FB.init({
 			appId: '359102328229283',
 			autoLogAppEvents: true,
 			xfbml: true,
-			version: 'v3.2'
+			version: 'v3.1'
 		})
 	}
 	setTimeout(() => {

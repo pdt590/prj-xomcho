@@ -49,7 +49,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { genUrl } from '~/plugins/util-helpers'
+    import { genUrl } from '~/libs/helpers'
 
     export default {
         props: {

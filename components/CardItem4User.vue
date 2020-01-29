@@ -62,8 +62,8 @@
 
 <script>
 	import { mapGetters } from 'vuex'
-	import { categories } from '~/plugins/util-lists'
-	import { genUrl } from '~/plugins/util-helpers'
+	import { categories } from '~/libs/lists'
+	import { genUrl } from '~/libs/helpers'
 
 	export default {
 		props: {

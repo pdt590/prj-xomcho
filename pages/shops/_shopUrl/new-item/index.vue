@@ -172,8 +172,8 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { isImage} from '~/plugins/util-helpers'
-    import { currencies } from '~/plugins/util-lists'
+    import { isImage} from '~/libs/helpers'
+    import { currencies } from '~/libs/lists'
     import { required, email, decimal, minLength, maxLength } from 'vuelidate/lib/validators' 
 
     export default {

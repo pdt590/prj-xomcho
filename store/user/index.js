@@ -1,6 +1,6 @@
-import firebase from '~/plugins/plugin-firebase'
+import firebase from '~/libs/firebase'
 import Cookie from 'js-cookie'
-import { compressImage } from '~/plugins/util-helpers'
+import { compressImage } from '~/libs/helpers'
 const db = firebase.database()
 const usersRef = db.ref('users')
 

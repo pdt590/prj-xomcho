@@ -240,8 +240,8 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { isImage, deepCopy } from '~/plugins/util-helpers'
-    import { currencies } from '~/plugins/util-lists'
+    import { isImage, deepCopy } from '~/libs/helpers'
+    import { currencies } from '~/libs/lists'
     import { required, email, decimal, sameAs, not } from 'vuelidate/lib/validators'
 
     export default {

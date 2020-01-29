@@ -95,7 +95,7 @@
 <script>
     import { mapGetters } from 'vuex'
     import { required, numeric } from 'vuelidate/lib/validators'
-    import { genId_ } from '~/plugins/util-helpers'
+    import { genId_ } from '~/libs/helpers'
 
     export default {
         middleware: 'auth',

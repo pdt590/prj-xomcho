@@ -319,8 +319,8 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { isImage, deepCopy } from '~/plugins/util-helpers'
-    import { provinces, categories } from '~/plugins/util-lists'
+    import { isImage, deepCopy } from '~/libs/helpers'
+    import { provinces, categories } from '~/libs/lists'
     import { required, email, url, numeric, sameAs, not, minLength, maxLength } from 'vuelidate/lib/validators'
 
     export default {

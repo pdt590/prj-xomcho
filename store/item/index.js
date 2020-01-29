@@ -1,5 +1,5 @@
-import firebase from '~/plugins/plugin-firebase'
-import { genId, genUrl, fetchId, compressImage } from '~/plugins/util-helpers'
+import firebase from '~/libs/firebase'
+import { genId, genUrl, fetchId, compressImage } from '~/libs/helpers'
 const db = firebase.database()
 const itemsRef = db.ref('items')
 

@@ -127,7 +127,7 @@
 </template>
 
 <script>
-    import { categories } from '~/plugins/util-lists'
+    import { categories } from '~/libs/lists'
 
     export default {
         async asyncData({ store, error }) {

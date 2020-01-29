@@ -1,5 +1,5 @@
-import firebase from '~/plugins/plugin-firebase'
-import { genId_ } from '~/plugins/util-helpers'
+import firebase from '~/libs/firebase'
+import { genId_ } from '~/libs/helpers'
 const db = firebase.database()
 
 export default {

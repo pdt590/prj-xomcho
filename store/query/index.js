@@ -1,5 +1,5 @@
-import firebase from '~/plugins/plugin-firebase'
-import { genId } from '~/plugins/util-helpers'
+import firebase from '~/libs/firebase'
+import { genId } from '~/libs/helpers'
 
 const db = firebase.database()
 const shopsRef = db.ref('shops')

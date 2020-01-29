@@ -276,8 +276,8 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { sortItemTypes } from '~/plugins/util-lists'
-    import { deepCopy } from '~/plugins/util-helpers'
+    import { sortItemTypes } from '~/libs/lists'
+    import { deepCopy } from '~/libs/helpers'
 
     export default {
         mounted() {

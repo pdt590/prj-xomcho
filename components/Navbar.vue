@@ -111,7 +111,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { categories } from '~/plugins/util-lists'
+    import { categories } from '~/libs/lists'
 
     export default {
         computed: {

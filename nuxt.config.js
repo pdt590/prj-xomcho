@@ -51,19 +51,17 @@ module.exports = {
 	** Plugins to load before mounting the App
 	*/
 	plugins: [
-		//'~plugins/test.js',
+		// Own plugins    
 		{src: '~plugins/components.js'},
-
-		{src: '~plugins/plugin-firebase.js'},
-		{src: '~plugins/plugin-buefy.js'},
-        {src: '~plugins/plugin-vuelidate.js'},
-		{src: '~plugins/plugin-lazyload.js', ssr: false},
-		{src: '~plugins/plugin-carousel.js', ssr: false},
-        {src: '~plugins/plugin-filter.js'},
-
-		{src: '~plugins/util-authListener.js'},
-
-		{src: '~plugins/addon-fc.js', ssr: false}
+		{src: '~plugins/filters.js'},
+		{src: '~plugins/fc.js', mode: 'client'},
+		{src: '~plugins/ga.js', mode: 'client'},
+		{src: '~plugins/authevent.js', mode: 'client'},
+	
+		{src: '~plugins/buefy.js'},
+		{src: '~plugins/vuelidate.js'},
+		{src: '~plugins/lazyload.js', mode: 'client'},
+		{src: '~plugins/carousel.js', mode: 'client'}
 	],
 
 	/*
@@ -83,7 +81,7 @@ module.exports = {
 	** Global env setting
 	*/
 	env: {
-		baseUrl: process.env.BASE_URL || 'http://localhost:3000'
+		baseUrl: process.env.BASE_URL || 'http://localhost:9000'
 	},
 
 	/*

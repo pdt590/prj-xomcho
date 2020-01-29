@@ -257,8 +257,8 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { isImage, deepCopy, authMessage } from '~/plugins/util-helpers'
-    import { provinces } from '~/plugins/util-lists'
+    import { isImage, deepCopy, authMessage } from '~/libs/helpers'
+    import { provinces } from '~/libs/lists'
     import { required, email, numeric, sameAs, not, minLength } from 'vuelidate/lib/validators'
 
     export default {

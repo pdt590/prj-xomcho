@@ -209,8 +209,8 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import { isImage } from '~/plugins/util-helpers'
-    import { provinces, categories } from '~/plugins/util-lists'
+    import { isImage } from '~/libs/helpers'
+    import { provinces, categories } from '~/libs/lists'
     import { required, email, url, numeric } from 'vuelidate/lib/validators'
     
     export default {
